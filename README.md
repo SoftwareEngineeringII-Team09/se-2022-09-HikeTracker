@@ -15,7 +15,8 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 4. [Database Tables](#database-tables)
    - [Table `Service`](#service)
 5. [React Components APIs](#react-components-apis)
-6. [Mocks](#mocks)
+6. [Testing](#testing)
+7. [Mocks](#mocks)
 
 ## Technologies
 
@@ -55,11 +56,24 @@ The language used is `Javascript` and the framework choosen is `ExpressJS`.
 Here the list of dependencies installed:
 
 ```json
- "dependencies": {
-
+"dependencies": {
+   "cors": "^2.8.5",
+   "dayjs": "^1.11.5",
+   "express": "^4.18.2",
+   "express-validator": "^6.14.2",
+   "morgan": "^1.10.0",
+   "nodemon": "^2.0.20",
+   "sqlite3": "^5.1.2"
 },
-  "devDependencies": {
-
+"devDependencies": {
+   "babel": "^6.23.0",
+   "chai": "^4.3.6",
+   "chai-http": "^4.3.0",
+   "check-code-coverage": "^1.10.0",
+   "jest": "^27.5.1",
+   "mocha": "^9.2.2",
+   "mochawesome": "^7.1.3",
+   "mochawesome-report-generator": "^6.2.0"
 }
 ```
 
@@ -139,5 +153,22 @@ ServiceTime
 | 2         | s2Name      | 20          |
 
 ## React Components APIs
+
+## Testing
+
+### Backend 
+
+The libraries used for testing are `Jest` for unit testing, `Mocha` and `Chai` for integration testing.
+
+To run the unit tests
+```
+npm test
+```
+To run the integration tests
+```
+npm run integration 
+```
+#### Note: to run these commands you must be in `/code/server/`
+
 
 ## Mocks

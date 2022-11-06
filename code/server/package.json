@@ -1,0 +1,46 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "The Official Software Engineering II Team 9 Hike Tracker",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker.git"
+  },
+  "keywords": [
+    "Hike",
+    "Tracking"
+  ],
+  "author": "Team 9",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/issues"
+  },
+  "homepage": "https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.5",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
+    "sqlite3": "^5.1.2"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "check-code-coverage": "^1.10.0",
+    "jest": "^27.5.1",
+    "mocha": "^9.2.2",
+    "mochawesome": "^7.1.3",
+    "mochawesome-report-generator": "^6.2.0"
+  },
+  "scripts": {
+    "integration": "mocha test --runInBand --timeout 5000 --require test/mocha.env.js --exit",
+    "test": "jest --runInBand --coverage"
+  }
+}
