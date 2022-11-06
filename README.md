@@ -56,10 +56,10 @@ Here the list of dependencies installed:
 
 ```json
  "dependencies": {
-   
+
 },
   "devDependencies": {
-   
+
 }
 ```
 
@@ -118,7 +118,6 @@ Get served ticket associated to counterId.
 - `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
-
 
 ## Database Tables
 
