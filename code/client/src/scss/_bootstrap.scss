@@ -1,0 +1,112 @@
+// Toggle global options
+// $enable-gradients: true;
+// $enable-shadows: true;
+
+$font-weight-thin: 100;
+// $font-weight-extralight: 200;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+// $font-weight-semibold: 600;
+$font-weight-bold: 700;
+// $font-weight-extrabold: 800;
+$font-weight-black: 900;
+
+@import './colors';
+
+@import "~bootstrap/scss/functions"; // Required
+@import "~bootstrap/scss/variables"; // Required
+@import "~bootstrap/scss/maps"; // Required
+@import "~bootstrap/scss/mixins"; // Required
+@import "~bootstrap/scss/root"; // Required
+@import "~bootstrap/scss/utilities";
+
+// Merge the maps
+$utilities: map-merge(
+    $utilities,
+    (
+        "font-weight":
+            map-merge(
+                map-get($utilities, "font-weight"),
+                (
+                    values:
+                        map-merge(
+                            map-get(map-get($utilities, "font-weight"), "values"),
+                            (
+                                thin: $font-weight-thin,
+                                light: $font-weight-light,
+                                // extralight: $font-weight-extralight,
+                                medium: $font-weight-medium,
+                                // regular: $font-weight-regular,
+                                // semibold: $font-weight-semibold,
+                                bold: $font-weight-bold,
+                                // extrabold: $font-weight-extrabold,
+                                black: $font-weight-black,
+                            )
+                        ),
+                )
+            ),
+    )
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+// Background colors
+
+.bg-gray-light {
+    background-color: $gray-light !important;
+}
+
+// Buttons
+
+.btn-primary,
+.btn-secondary {
+    font-weight: $font-weight-bold !important;
+    color: $light !important;
+}
+
+// Include any optional Bootstrap CSS as needed
+
+// Layout
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+
+// Content
+@import "~bootstrap/scss/reboot"; // Required
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/tables";
+
+// Forms
+@import "~bootstrap/scss/forms";
+
+// Components
+// @import "~bootstrap/scss/accordion";
+// @import "~bootstrap/scss/alert";
+// @import "~bootstrap/scss/badge";
+// @import "~bootstrap/scss/breadcrumb";
+@import "~bootstrap/scss/buttons";
+// @import "~bootstrap/scss/button-group";
+// @import "~bootstrap/scss/card";
+// @import "~bootstrap/scss/carousel";
+// @import "~bootstrap/scss/close";
+// @import "~bootstrap/scss/dropdown";
+// @import "~bootstrap/scss/list-group";
+// @import "~bootstrap/scss/modal"; // Requires transitions
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar"; // Requires nav
+// @import "~bootstrap/scss/offcanvas";
+// @import "~bootstrap/scss/pagination";
+// @import "~bootstrap/scss/placeholders";
+// @import "~bootstrap/scss/popover";
+// @import "~bootstrap/scss/progress";
+// @import "~bootstrap/scss/spinners";
+// @import "~bootstrap/scss/toasts";
+// @import "~bootstrap/scss/tooltip";
+
+// Helpers and Utils
+@import "~bootstrap/scss/helpers";
+@import "~bootstrap/scss/transitions";
+
+// Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "~bootstrap/scss/utilities/api";
