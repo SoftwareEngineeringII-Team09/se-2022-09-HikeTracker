@@ -41,6 +41,8 @@
   },
   "scripts": {
     "integration": "mocha test --runInBand --timeout 5000 --require test/mocha.env.js --exit",
-    "test": "jest --runInBand --coverage"
+    "test": "jest --runInBand --coverage",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   }
 }

@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  #app services
+
+  frontend:
+    build:
+      context: ./client/
+      target: development
+    volumes:
+      - ./client/:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    links:
+      - backend:server
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+  
+  backend:
+    build:
+      context: ./server/
+      target: development
+    volumes:
+      - ./server/:/app
+      - /app/node_modules
+    ports:
+      - 3001:3001
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+  
+  # test services
+
+  client-tests:
+    profiles: ["test"]
+    stdin_open: true
+    tty: true
+    build:
+      context: ./client/
+      target: test
+    volumes:
+      - ./client/:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: test
+      CHOKIDAR_USEPOLLING: "true"
+
+  server-tests:
+    profiles: ["test"]
+    stdin_open: true
+    tty: true
+    build:
+      context: ./server/
+      target: test
+    volumes:
+      - ./server/:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: test
+      CHOKIDAR_USEPOLLING: "true"
