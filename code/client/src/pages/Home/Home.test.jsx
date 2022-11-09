@@ -6,14 +6,11 @@ import Home from './Home'
 describe("Home", () => {
     it("Home page correctly rendered", () => {
         render(<Home />, { wrapper: MemoryRouter })
-
         expect(screen.getByText("Welcome to Hike Tracker")).toBeInTheDocument();
     })
 
     it("Home page renders a link to navigate to browse hikes route", async () => {
         render(<Home />, { wrapper: MemoryRouter })
-
-        const link = screen.getByRole("link")
-        expect(link.getAttribute("href")).toMatch("/browse")
+        expect(screen.getByRole("link")).toHaveAttribute("href", "/browse")
     })
 })
