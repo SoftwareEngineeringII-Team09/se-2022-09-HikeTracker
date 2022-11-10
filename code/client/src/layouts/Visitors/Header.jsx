@@ -3,11 +3,11 @@ import { Link, useLocation } from "react-router-dom"
 import { Button, Navbar } from "react-bootstrap"
 import { RiMenu3Fill } from 'react-icons/ri'
 
-import logoWhite from '../../assets/logo/logo-white.png'
-import logo from '../../assets/logo/logo-no-background.png'
+import logoWhite from '@assets/logo/logo-white.png'
+import logo from '@assets/logo/logo-no-background.png'
 
-import { navigation } from "../../data"
-import { NavLink } from "../../components/ui-core"
+import navigation from "@data/navigation"
+import { NavLink } from "@components/ui-core"
 
 import MobileSidebar from "./MobileSidebar"
 
@@ -15,9 +15,12 @@ const Header = () => {
     const location = useLocation();
     const [open, setOpen] = useState(false)
 
+    const closeSidebar = () => setOpen(false)
+    const openSidebar = () => setOpen(true)
+
     return (
         <Navbar bg={location.pathname !== "/" ? "light" : ""} className="px-4 px-lg-5 py-4 sticky-top flex justify-content-between align-items-center" style={{ zIndex: 99 }}>
-            <MobileSidebar open={open} setOpen={setOpen} />
+            <MobileSidebar isOpen={open} close={closeSidebar} />
             <Navbar.Brand style={{ width: "auto", height: 90 }}>
                 <Link to="/">
                     <img src={location.pathname !== "/" ? logo : logoWhite} alt="logo" className="h-100" />
@@ -26,7 +29,7 @@ const Header = () => {
             <div className="fw-semibold">
 
                 {/* Sidebar button for mobile devices */}
-                <Button data-testid="mobile-sidebar-toggle" className="d-lg-none" variant={location.pathname !== "/" ? "base-light" : "base"} onClick={() => setOpen(true)}>
+                <Button data-testid="mobile-sidebar-toggle" className="d-lg-none" variant={location.pathname !== "/" ? "base-light" : "base"} onClick={openSidebar}>
                     <RiMenu3Fill />
                 </Button>
 

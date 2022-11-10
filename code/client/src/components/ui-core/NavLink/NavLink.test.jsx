@@ -1,26 +1,33 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
+import { MemoryRouter, Router } from 'react-router-dom'
+const { createMemoryHistory } = require("history");
 
 import NavLink from './NavLink'
 
 const variants = ["link", "button"]
 
 const testProps = {
-    url: "/browse",
-    className: "text-primary-dark",
+    url: "/test/url",
+    className: "test-class",
 }
 
 describe("NavLink component", () => {
     it("Navlink correctly rendered as a link", () => {
         render(<NavLink>I'm a link</NavLink>, { wrapper: MemoryRouter })
-
         expect(screen.getByRole("link", { name: "I'm a link" })).toBeInTheDocument()
     })
 
     it("The url prop correctly set the link href attribute", () => {
-        render(<NavLink url={testProps.url} />, { wrapper: MemoryRouter })
-
+        const history = createMemoryHistory();
+        render(
+            <Router location={history.location} navigator={history}>
+                <NavLink url={testProps.url} />
+            </Router>
+        )
         expect(screen.getByRole("link")).toHaveAttribute("href", testProps.url)
+        userEvent.click(screen.getByRole("link"))
+        expect(history.location.pathname).toBe(testProps.url)
     })
 
     it("A link is rendered when the prop variant is correctly set as link", () => {
