@@ -2,21 +2,91 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 
 ## Table of Contents
 
-1. [Technologies](#technologies)
+1. [Docker Documentation](#docker-documentation)
+   - [Development](#frontend)
+   - [Tests](#backend)
+   - [Deploy on Docker Hub](#backend)
+   - [Pull from Docker Hub](#backend)
+2. [Technologies](#technologies)
    - [Frontend](#frontend)
    - [Backend](#backend)
    - [Database](#backend)
-2. [React Client Application Routes](#react-client-application-routes)
+3. [React Client Application Routes](#react-client-application-routes)
    - [Route `/`](#)
    - [Route `/*`](#1)
-3. [API Server](#api-server)
+4. [API Server](#api-server)
    - [Ticket Routes](#ticket-routes)
      - [`GET /api/tickets/:counterId`](#get-apiticketscounterid)
-4. [Database Tables](#database-tables)
+5. [Database Tables](#database-tables)
    - [Table `Service`](#service)
-5. [React Components APIs](#react-components-apis)
-6. [Testing](#testing)
-7. [Mocks](#mocks)
+6. [React Components APIs](#react-components-apis)
+7. [Testing](#testing)
+8. [Mocks](#mocks)
+
+## Docker Documentation
+
+### Development
+
+This command allows to run both client and server in development mode.
+
+```
+docker-compose up
+```
+
+### Tests
+
+You can run tests in interactive mode with commands:
+
+```
+docker-compose run --rm client-tests
+docker-compose run --rm server-tests
+```
+
+For running both tests and the app (suitable for a fast check, not for the real development):
+
+```
+docker-compose --profile test up
+```
+
+### Production
+
+```
+docker-compose -f docker-compose.prod.yml stop && docker-compose -f docker-compose.prod.yml up --build -d
+```
+
+the ```-f``` flag is for custom docker file path
+
+### Deploy on Docker Hub
+
+Be sure that the .env file is in /server directory
+
+```
+docker login
+docker-compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.prod.yml push
+```
+
+### Pull from Docker Hub
+
+This repo has two images, one for the user interface and one for the server logic. Both images can be pulled with:
+
+```
+docker pull andreadeluca/se_2022_09_hike_tracker:client
+docker pull andreadeluca/se_2022_09_hike_tracker:server
+```
+
+When images are built, you can run them with:
+
+```
+docker run -d -p 3001:3001 --name se09-server andreadeluca/se_2022_09_hike_tracker:server
+docker run -d -p 3000:80 --name se09-client --link se09-server:server andreadeluca/se_2022_09_hike_tracker:client
+```
+The app can be reached on http://localhost:3000
+
+Note:
+
+- the images se09-client depends on the se09-server one, so this must be run first
+- in case of name conflicts, remove the containers with ```docker rm <name>``` and run again the commands above
 
 ## Technologies
 
