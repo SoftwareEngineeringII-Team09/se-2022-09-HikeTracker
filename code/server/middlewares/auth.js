@@ -11,7 +11,7 @@ const LocalStrategy = require('passport-local');
 const createError = require('http-errors');
 
 // Import models/DAOs (Data Access Objects)
-const userModel = require('../models/user.model');
+const userModel = require('../model/User');
 
 // Configuration for passport logging in with local strategy
 exports.useLocal = () => passport.use(new LocalStrategy(function verify(username, password, done) {
@@ -29,7 +29,7 @@ exports.useLocal = () => passport.use(new LocalStrategy(function verify(username
                     return done(new createError.Unauthorized("Nope! Password non corretta... prova di nuovo."));
 
                 // If it's all right, the user is logged in
-                return done(null, { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname, active: user.active });
+                return done(null, { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname, mobile: user.mobile, role: user.role, active: user.active });
             });
         })
         .catch(err => {
@@ -49,7 +49,7 @@ exports.serializeUser = () => passport.serializeUser((user, done) => {
 exports.deserializeUser = () => passport.deserializeUser((id, done) => {
     userModel.getUserById(id)
         .then(user => {
-            done(null, { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname, active: user.active });
+            done(null, { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname, mobile: user.mobile, role: user.role, active: user.active });
         })
         .catch(err => {
             done(err, null);

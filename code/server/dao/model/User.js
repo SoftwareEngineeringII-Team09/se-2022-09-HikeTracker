@@ -12,12 +12,12 @@ const crypto = require('crypto');
 const createError = require('http-errors');
 
 // Import the connection to the DB from the middleware
-const db = require('../db/dbmiddleware'); //sostituire con db corretto 
+const db = require('../db'); 
 
 // Function to get a user by email from the DB
 exports.getUserByEmail = (email) => {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM users WHERE email = ?';
+        const query = 'SELECT * FROM User WHERE email = ?';
         // Access to the DB
         db.get(query, [email], (err, row) => {
             // An error occurs while accessing the DB
@@ -33,7 +33,7 @@ exports.getUserByEmail = (email) => {
 // Function to get a user by id from the DB
 exports.getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM users WHERE id = ?';
+        const query = 'SELECT * FROM User WHERE user_id = ?';
         // Access to the DB
         db.get(query, [id], (err, row) => {
             // An error occurs while accessing the DB
@@ -49,7 +49,7 @@ exports.getUserById = (id) => {
 // This function is used at log-in time to verify username and password.
 exports.getUser = (email, password) => {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT * FROM users WHERE email = ?';
+      const sql = 'SELECT * FROM User WHERE email = ?';
       db.get(sql, [email], (err, row) => {
         if (err) {
           reject(err);
@@ -86,9 +86,9 @@ exports.createUser = (user) => {
                 return;
             }
 
-            const query = 'INSERT INTO users (firstname, lastname, email, password, salt, verification_code, active) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            const query = 'INSERT INTO User (firstname, lastname, email, password, salt, verification_code, mobile, role, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
             // Access to the DB
-            db.run(query, [user.firstname, user.lastname, user.email, hashedPassword, salt, user.verificationCode, 0], function (err) {
+            db.run(query, [user.firstname, user.lastname, user.email, hashedPassword, salt, user.verificationCode, 0, user.role, 0], function (err) {
                 // An error occurs while accessing the DB
                 if (err) reject(new createError.InternalServerError(err.message));
                 // New entry for a user created within the DB, so resolve its id and its email
@@ -101,7 +101,7 @@ exports.createUser = (user) => {
 // Function to update the email verification code for a user, given its registration email
 exports.updateVerificationCode = (data) => {
     return new Promise((resolve, reject) => {
-        const query = 'UPDATE users SET verification_code = ? WHERE email = ?';
+        const query = 'UPDATE User SET verification_code = ? WHERE email = ?';        //   MANCA QUESTO CAMPO NEL DB, NON NECESSARIO PER ORA
         // Access to the DB
         db.run(query, [data.verificationCode, data.email], function (err) {
             // An error occurs while accessing the DB
@@ -117,7 +117,7 @@ exports.updateVerificationCode = (data) => {
 // Function to verify the user registration email by its verification code and to activate its account
 exports.verifyEmail = (data) => {
     return new Promise((resolve, reject) => {
-        const query = 'UPDATE users SET active = ?, verification_code = ? WHERE email = ? and verification_code = ?';
+        const query = 'UPDATE User SET active = ?, verification_code = ? WHERE email = ? and verification_code = ?';      //   MANCA QUESTO CAMPO NEL DB, NON NECESSARIO PER ORA
         // Access to the DB
         db.run(query, [1, undefined, data.email, data.verificationCode], function (err) {
             // An error occurs while accessing the DB

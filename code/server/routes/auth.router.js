@@ -18,8 +18,8 @@ const { validationResult } = require('express-validator');
 const authValidation = require('../validations/authValidation');
 
 // Import models/DAOs (Data Access Objects)
-const userModel = require('../models/user.model');
-const mailModel = require('../models/mail.model');
+const userModel = require('../model/User');
+const mailModel = require('../model/Mail');
 
 // POST /auth/signup
 // Route to create a new entry for a user within the DB and 

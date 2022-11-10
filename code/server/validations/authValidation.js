@@ -9,6 +9,7 @@ exports.signup = [
     check('firstname').isString().notEmpty(),
     check('lastname').isString().notEmpty(),
     check('email').isEmail(),
+    check('mobile').isString().notEmpty(),
     check('password').isStrongPassword({
         minLength: 8,
         minLowercase: 1,

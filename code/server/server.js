@@ -12,7 +12,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
 const { check, validationResult, body, param } = require('express-validator'); // validation middleware
-const userDao = require('./dao-users'); // module for accessing the user table in the DB
+const userDB = require('./db'); // module for accessing the user table in the DB
 
 // import auth middleware to configure authentication functionalities
 const auth = require('./middlewares/auth');
