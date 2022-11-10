@@ -13,7 +13,7 @@ const Home = () => {
             <div style={{ zIndex: 99 }} className="px-4">
                 <div className='mb-5'>
                     <h1 className='text-white fw-black m-0 display-1'>Welcome to Hike Tracker</h1>
-                    <p className='text-white fs-5'>The most powerful platform for hikers, local guides and hut managers</p>
+                    <p className='text-white fs-5'>The most powerful platform for hikers, local guides, hut managers and emergency operators</p>
                 </div>
                 <Link to="/browse">
                     <Button variant='primary-light fw-bold' size='lg'>

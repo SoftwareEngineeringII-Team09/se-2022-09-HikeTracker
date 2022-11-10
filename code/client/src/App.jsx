@@ -10,6 +10,8 @@ const App = () => {
     <Routes location={location} key={location.pathname}>
       <Route element={<Layouts.Visitors />}>
         <Route index path='/' element={<Pages.Home />} />
+        <Route index path='/signup' element={<Pages.Registration />} />
+        <Route index path='/login' element={<Pages.Login />} />
         <Route path='*' element={<Pages.Error />} />
       </Route>
     </Routes>
