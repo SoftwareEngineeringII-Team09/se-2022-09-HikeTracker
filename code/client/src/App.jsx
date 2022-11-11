@@ -1,16 +1,14 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 
+import * as Layouts from './layouts';
 import * as Pages from './pages';
-
-import { BaseLayout } from './layouts';
 
 const App = () => {
   const location = useLocation();
 
-
   return (
     <Routes location={location} key={location.pathname}>
-      <Route element={<BaseLayout />}>
+      <Route element={<Layouts.Visitors />}>
         <Route index path='/' element={<Pages.Home />} />
         <Route path='*' element={<Pages.Error />} />
       </Route>
