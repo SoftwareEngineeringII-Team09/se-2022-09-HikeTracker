@@ -2,16 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "../node_modules/react-toastify/dist/react-toastify";
+import { BrowserRouter } from 'react-router-dom';
+import { useState } from "react";
 
+import AuthContext from './context/authContext';
 import './scss/index.scss';
-import 'react-toastify/dist/ReactToastify.css';
+// import '../node_modules/react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const LoginContextApp = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  return (
+    <AuthContext.Provider value={loggedIn}>
+      <BrowserRouter>
+        <App setLoggedIn={setLoggedIn} />
+      </BrowserRouter>
+    </AuthContext.Provider>
+  )
+}
+
 root.render(
   <React.StrictMode>
     <ToastContainer newestOnTop={false} />
-    <App />
+    <LoginContextApp />
   </React.StrictMode>
 );
 

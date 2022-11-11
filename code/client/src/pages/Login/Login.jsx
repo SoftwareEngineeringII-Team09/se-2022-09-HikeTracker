@@ -1,6 +1,7 @@
 import { Form, Button, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { toast } from "../../../node_modules/react-toastify/dist/react-toastify";
 import api from '../../services/api';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -51,12 +52,12 @@ const LoginForm = (props) => {
                             <Form.Group className="mb-3" controlId="userEmail">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" className={loginValidation.touched.email && loginValidation.errors.email ? 'is-invalid' : ''} placeholder="Your email" {...loginValidation.getFieldProps('email')} />
-                                {loginValidation.touched.email && loginValidation.errors.email && <div class="invalid-feedback d-block">{loginValidation.errors.email}</div>}
+                                {loginValidation.touched.email && loginValidation.errors.email && <div className="invalid-feedback d-block">{loginValidation.errors.email}</div>}
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="userPassword">
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control type="password" className={loginValidation.touched.password && loginValidation.errors.password ? 'is-invalid' : ''} placeholder="Your password" {...loginValidation.getFieldProps('password')} />
-                                {loginValidation.touched.password && loginValidation.errors.password && <div class="invalid-feedback d-block">{loginValidation.errors.password}</div>}
+                                {loginValidation.touched.password && loginValidation.errors.password && <div className="invalid-feedback d-block">{loginValidation.errors.password}</div>}
                             </Form.Group>
                             <Button variant="primary" type="submit" className="p-3 mx-auto d-block my-3">Login</Button>
                         </Form>
