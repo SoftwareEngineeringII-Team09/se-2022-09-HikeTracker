@@ -1,36 +1,68 @@
-import { useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from '../../services/api';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
-const LoginForm = () => {
+const LoginForm = (props) => {
 
-    /* User profile information */
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [validated, setValidated] = useState(false);
+    const navigate = useNavigate();
+
+    /* Login data Validation schema */
+    const validationSchema = Yup.object({
+        email: Yup.string()
+            .email('This is not a valid email address')
+            .required('Insert your email address'),
+        password: Yup.string()
+            .required('Insert your password')
+    });
 
     /* Login submission */
-    const handleSubmit = async () => {
-    //     if (await )
+    const submitLogin = async (values, { setSubmitting }) => {
+        api.login(values)
+            .then(() => {
+                props.setLoggedIn(true);
+                navigate('/');
+            })
+            .catch((error) => {
+                toast.error(error.message, {
+                    theme: "colored"
+                });
+            })
+            .finally(() => {
+                setSubmitting(false);
+            });
     }
 
-    /* Input validaiton */
-
+    const initialValues = {
+        email: '',
+        password: ''
+    }
 
     return (
         <Col className="minWidthForm">
             <h1 className="font-weight-bold text-center pb-4">Login</h1>
-            <Form className="my-2" noValidate validated={validated} onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="userEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <Form.Control.Feedback type="invalid">Please provide a valid email address.</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="userPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Your password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </Form.Group>
-                <Button variant="primary" type="submit" className="p-3 mx-auto d-block my-3">Login</Button>
-            </Form>
+            <Formik className="my-2" initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitLogin}>
+                {
+                    loginValidation =>
+                    (
+                        <Form onSubmit={loginValidation.handleSubmit}>
+                            <Form.Group className="mb-3" controlId="userEmail">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" className={loginValidation.touched.email && loginValidation.errors.email ? 'is-invalid' : ''} placeholder="Your email" {...loginValidation.getFieldProps('email')} />
+                                {loginValidation.touched.email && loginValidation.errors.email && <div class="invalid-feedback d-block">{loginValidation.errors.email}</div>}
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="userPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="password" className={loginValidation.touched.password && loginValidation.errors.password ? 'is-invalid' : ''} placeholder="Your password" {...loginValidation.getFieldProps('password')} />
+                                {loginValidation.touched.password && loginValidation.errors.password && <div class="invalid-feedback d-block">{loginValidation.errors.password}</div>}
+                            </Form.Group>
+                            <Button variant="primary" type="submit" className="p-3 mx-auto d-block my-3">Login</Button>
+                        </Form>
+                    )
+                }
+            </Formik>
         </Col>
     );
 
