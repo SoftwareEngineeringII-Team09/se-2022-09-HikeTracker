@@ -57,6 +57,18 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     background-color: $base-dark !important;
 }
 
+.bg-base-light {
+    background-color: $base-light !important;
+}
+
+.bg-base {
+    background-color: $base !important;
+}
+
+.bg-primary-dark {
+    background-color: $primary-dark !important;
+}
+
 .text-primary-light {
     color: $primary-light !important;
 }
@@ -71,6 +83,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .text-base-dark {
     color: $base-dark !important
+}
+
+.text-base-light {
+    color: $base-light !important
 }
 
 .btn.btn-primary-light {
