@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile.prod
+    image: andreadeluca/se_2022_09_hike_tracker:client-demo1
+    restart: always
+    # production mode is on port 80
+    ports:
+      - 80:80
+    depends_on:
+      - server
+    environment:
+      NODE_ENV: production
+
+  server:
+    build:
+      context: ./server/
+      target: production
+    image: andreadeluca/se_2022_09_hike_tracker:server-demo1
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3001
