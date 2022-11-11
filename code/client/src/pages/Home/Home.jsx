@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-import bg from '../../assets/home_bg.jpg'
+import bg from '@assets/home_bg.jpg'
 
 const Home = () => {
     return (
