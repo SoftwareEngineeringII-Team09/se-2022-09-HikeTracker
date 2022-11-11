@@ -3,15 +3,15 @@ import { Offcanvas, Alert } from "react-bootstrap";
 
 import { RiCloseLine } from 'react-icons/ri'
 
-import { navigation } from "../../data";
-import { NavLink } from "../../components/ui-core";
+import { navigation } from "@data/index";
+import { NavLink } from "@components/ui-core";
 
-const MobileSidebar = ({ open, setOpen }) => {
+const MobileSidebar = ({ isOpen, close }) => {
     return (
-        <Offcanvas show={open} onHide={() => setOpen(false)} placement="end" className="bg-light">
+        <Offcanvas show={isOpen} onHide={close} placement="end" className="bg-light">
             <Offcanvas.Header className="px-4">
                 <Offcanvas.Title className="text-base-dark fs-4">Menu</Offcanvas.Title>
-                <RiCloseLine style={{ width: 32, height: 32 }} onClick={() => setOpen(false)} />
+                <RiCloseLine data-testid="close-button" style={{ width: 32, height: 32 }} onClick={close} />
             </Offcanvas.Header>
             <Offcanvas.Body className="my-5 px-4">
                 <div className="d-flex flex-column align-items-start">
