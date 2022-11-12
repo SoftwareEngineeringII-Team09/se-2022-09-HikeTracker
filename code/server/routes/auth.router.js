@@ -9,7 +9,6 @@ const passport = require('passport');
 // Import the module to generate the verification code
 const randomWords = require('random-words');
 
-// Import the module for creating HTTP errors
 const createError = require('http-errors');
 
 // Import the module for validations
@@ -17,7 +16,6 @@ const { validationResult } = require('express-validator');
 // Import configs for validations
 const authValidation = require('../validations/authValidation');
 
-// Import models/DAOs (Data Access Objects)
 const userModel = require('../model/User');
 const mailModel = require('../model/Mail');
 
@@ -134,9 +132,9 @@ router.put('/verify-email', authValidation.verifyEmail, (req, res) => {
         })
 })
 
-// POST /auth/login/password
+// POST /auth/login
 // Route to perform user login with passport local strategy
-router.post('/login/password', authValidation.login, (req, res, next) => {
+router.post('/login', authValidation.login, (req, res, next) => {
     // Check for validation errors associated with request body
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {

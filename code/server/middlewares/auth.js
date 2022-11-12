@@ -1,6 +1,5 @@
 'use strict';
 
-// Import the module for cryptography
 const crypto = require('crypto');
 
 // Import modules for authentication
@@ -10,7 +9,6 @@ const LocalStrategy = require('passport-local');
 // Import the module for creating HTTP errors
 const createError = require('http-errors');
 
-// Import models/DAOs (Data Access Objects)
 const userModel = require('../model/User');
 
 // Configuration for passport logging in with local strategy
@@ -58,12 +56,10 @@ exports.deserializeUser = () => passport.deserializeUser((id, done) => {
 
 // Check if the user is currently logged in
 exports.withAuth = (req, res, next) => {
-    // If the user is logged in, the server can execute
-    // the requested operation
+    // If the user is logged in, the server can execute the requested operation
     if (req.isAuthenticated()) return next();
 
-    // If the user is not logged in, the server 
-    // does not execute the requested operation and send back an error
+    // If the user is not logged in, the server does not execute the requested operation and send back an error
     const error = new createError.Unauthorized("Not authenticated");
     return res.status(error.statusCode).json({ message: error.message });
 }

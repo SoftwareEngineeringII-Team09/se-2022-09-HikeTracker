@@ -14,12 +14,12 @@ exports.sendVerificationCode = (data) => {
         const mail = {
             from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
             to: data.email,
-            subject: "Welcome to YourBrand! Here your verification code.",
+            subject: "Welcome to HikePiemonte! Here your verification code.",
             html: `
                 <div style="color: #001829; padding: 30px">
                 <h1 style="color: #003052;">YourBrand.</h1>
             
-                <p>Hi, thanks for signing up to YourBrand!</p>
+                <p>Hi, thanks for signing up to HikePiemonte!</p>
             
                 <p>To complete your enrollment and verify your email account,
                 I invite you to insert the verification code you can find here.</p>

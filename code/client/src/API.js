@@ -1,11 +1,9 @@
 import { Hike } from './model/Hike';
 import { Hut } from './model/Hut';
+import axios from "axios";
 
 const SERVER_URL = 'http://localhost:3001/api/';
 
-/**
- * A utility function for parsing the HTTP response.
- */
  function getJson(httpResponsePromise) {
     // server API always return JSON, in case of error the format is the following { error: <message> } 
     return new Promise((resolve, reject) => {
@@ -150,6 +148,33 @@ const logOut = async() => {
   )
 }
 
+//ANCORA DA IMPLEMENTARE
 
-const API = {logIn, getUserInfo, logOut, getHikes, updateHike, deleteHike, addHike, getHike, getFilters};
+const API = {
+
+    browseHike: (hikeId) => {
+      return new Promise((resolve, reject) => {
+        axios.put(`${SERVER_URL}/hikes`)
+              .then(res => resolve(res.data))
+              .catch(err => reject(err));
+      })
+    },
+
+    getHikeDetails: (hikeId) => {
+        return new Promise((resolve, reject) => {
+          axios.get(`${SERVER_URL}/hikes`)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err));
+        })
+    },
+
+    describeHut: (hutId) => {
+      return new Promise((resolve, reject) => {
+        axios.post(`${SERVER_URL}/huts`)
+              .then(res => resolve(res.data))
+              .catch(err => reject(err));
+      })
+    },
+};
+
 export default API;

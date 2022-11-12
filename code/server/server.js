@@ -12,7 +12,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
 const { check, validationResult, body, param } = require('express-validator'); // validation middleware
-const userDB = require('./db'); // module for accessing the user table in the DB
+const userDB = require('./db');
 
 // import auth middleware to configure authentication functionalities
 const auth = require('./middlewares/auth');
@@ -23,6 +23,7 @@ const hutRouter = require('./routes/hut.router');
 const parkingRouter = require('./routes/parkinglot.router');
 const userRouter = require('./routes/user.router');
 const authRouter = require('./routes/auth.router');
+const { use } = require('chai');
 
 // authentication functionalities initialization
 auth.useLocal();
@@ -47,7 +48,7 @@ app.use(passport.authenticate('session'));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000',   
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -60,7 +61,6 @@ app.use("/user", userRouter);
 app.use("/auth", authRouter);
 
 /*** Defining authentication verification middleware ***/
-
 const isLoggedIn = (req, res, next) => {
   if(req.isAuthenticated()) {
     return next();
@@ -95,20 +95,11 @@ app.post('/api/sessions', function(req, res, next) {
           return next(err);
         
         // req.user contains the authenticated user, we send all the user info back
-        // this is coming from userDao.getUser() in LocalStratecy Verify Fn
-        return res.json(req.user); // WARN: returns 200 even if .status(200) is missing?
+        return res.json(req.user);
       });
   })(req, res, next);
 });
 
-
-/*
-// POST /api/sessions 
-// This is an alternative login route. It performs login without sending back an error message.
-app.post('/api/sessions', passport.authenticate('local'), (req, res) => {
-  res.status(201).json(req.user);
-});
-*/
 
 // GET /api/sessions/current
 // This route checks whether the user is logged in or not.
@@ -129,40 +120,38 @@ app.delete('/api/sessions/current', (req, res) => {
 
 
 // GET /api/filters
-// This route returns the list of filters (only "labels" and "ids").
+// This route returns the list of filters 
 app.get('/api/filters', 
 (req, res) => {
   // When the "filters" object is serialized through this method, filter functions are not serialized.
-  res.json(hikeDao.listFilters())
+  res.json(userDB.listFilters())
 });
 
 /*** Hikes APIs ***/
 
 // GET /api/hikes
-// This route returns the HikeLibrary. It handles also "filter=?" query parameter
+// This route returns the Hike list
 app.get('/api/hikes', 
-isLoggedIn,               // check: is the user logged-in?
+isLoggedIn,               // check if the user is logged-in
 (req, res) => {
   // NOTE: user exists for sure otherwise isLoggedIn would fail
   // get hikes that match optional filter in the query
-  hikeDao.listHikes(req.user.id, req.query.filter)
-    // NOTE: "invalid dates" (i.e., missing dates) are set to null during JSON serialization
+  userDB.listHikes(req.user.id, req.query.filter)
     .then(hikes => res.json(hikes))
-    .catch((err) => res.status(500).json(err)); // always return a json and an error message
+    .catch((err) => res.status(500).json(err)); 
 });
 
 // GET /api/hikes/<id>
-// Given a  hikeId, this route returns the associated hike from the library.
+// Given a  hikeId, this route returns the associated hike from the list.
 app.get('/api/hikes/:hikeId', 
-isLoggedIn,                 // check: is the user logged-in?
-[ check('id').isInt() ],    // check: validation
+isLoggedIn,                 
+[ check('id').isInt() ],    //validation
 async (req, res) => {
     try {
-      const result = await hikeDao.getHike(req.user.id, req.params.id);
+      const result = await userDB.getHike(req.user.id, req.params.id);
       if (result.error)
         res.status(404).json(result);
       else
-        // NOTE: "invalid dates" (i.e., missing dates) are set to null during JSON serialization
         res.json(result);
     } catch (err) {
       res.status(500).end();
@@ -171,22 +160,21 @@ async (req, res) => {
 
 
 // POST /api/hikes
-// This route adds a new hike to  hikeLibrary.
+// This route adds a new hike to list.
 app.post('/api/hikes',
 isLoggedIn,
 [
-  check('hikeId').isInt({ min: 0, max: 999 }),
+  check('hikeId').isInt({ min: 0, max: 999 }),    // attributi temporanei
   check('hutId').isInt({ min: 0, max: 999 }),
   check('length').isInt({ min: 0, max: 999 }),
   check('time').isInt({ min: 0, max: 999 }),
 ], 
 async (req, res) => {
-  const errors = validationResult(req).formatWith(errorFormatter); // format error message
+  const errors = validationResult(req).formatWith(errorFormatter); 
   if (!errors.isEmpty()) {
     return res.status(422).json({ error: errors.array().join(", ")  }); // error message is a single string with all error joined together
   }
 
-  // WARN: note that databases does not care and uses lowercase letters
 
   const hike = {
     hikeId: req.body.hikeId,
@@ -197,7 +185,7 @@ async (req, res) => {
   };  
 
   try {
-    const result = await hikeDao.createHike(hike); // NOTE: createHike returns the new created object
+    const result = await userDB.createHike(hike); // createHike returns the new created object
     res.json(result); 
   } catch (err) {
     res.status(503).json({ error: `Database error during the creation of new hike: ${err}` }); 
@@ -215,7 +203,7 @@ isLoggedIn,
     check('time').isInt({ min: 0, max: 999 }),
   ], 
   async (req, res) => {
-    const errors = validationResult(req).formatWith(errorFormatter); // format error message
+    const errors = validationResult(req).formatWith(errorFormatter); 
     if (!errors.isEmpty()) {
       return res.status(422).json({ error: errors.array().join(", ")  }); // error message is a single string with all error joined together
     }
@@ -235,7 +223,7 @@ isLoggedIn,
   
 
   try {
-    const result = await hikeDao.updateHike(req.user.id, hike.hikeId, hike);
+    const result = await userDB.updateHike(req.user.id, hike.hikeId, hike);
     res.json(result); 
   } catch (err) {
     res.status(503).json({ error: `Database error during the update of hike ${req.params.id}: ${err}` });
@@ -244,14 +232,14 @@ isLoggedIn,
 });
 
 // DELETE /api/hikes/<id>
-// Given a hikeId, this route deletes the associated hike from the library.
+// Given a hikeId, this route deletes the associated hike from the list.
 app.delete('/api/hikes/:hikeId', 
 isLoggedIn,
   [ check('hikeId').isInt() ], 
   async (req, res) => {
   try {
-    // NOTE: if there is no hike with the specified hikeId, the delete operation is considered successful.
-    await hikeDao.deleteHike(req.user.id, req.params.id);
+    // if there is no hike with the specified hikeId, the delete operation is considered successful.
+    await userDB.deleteHike(req.user.id, req.params.id);
     res.status(200).json({}); 
   } catch (err) {
     res.status(503).json({ error: `Database error during the deletion of hike ${req.params.id}: ${err} ` });

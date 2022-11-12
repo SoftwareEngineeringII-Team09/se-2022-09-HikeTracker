@@ -3,13 +3,13 @@
 // Import the module for validation checks
 const { check } = require('express-validator');
 
-// Validation checks for the request body of the route that
-// perform the registration of a new user
+// Validation checks for registration of a new user
 exports.signup = [
     check('firstname').isString().notEmpty(),
     check('lastname').isString().notEmpty(),
     check('email').isEmail(),
     check('mobile').isString().notEmpty(),
+    check('role').isString().notEmpty(),
     check('password').isStrongPassword({
         minLength: 8,
         minLowercase: 1,
@@ -19,8 +19,7 @@ exports.signup = [
     }),
 ];
 
-// Validation checks for the request body of the route that
-// perform the login of a user
+// Validation checks for login of a user
 exports.login = [
     check('username').isEmail(),
     check('password').isStrongPassword({
