@@ -20,7 +20,7 @@ const LoginForm = (props) => {
     });
 
     /* Login submission */
-    const submitLogin = async (values, { setSubmitting }) => {
+    const submitLogin = (values, { setSubmitting }) => {
         api.login(values)
             .then(() => {
                 props.setLoggedIn(true);
@@ -34,12 +34,12 @@ const LoginForm = (props) => {
             .finally(() => {
                 setSubmitting(false);
             });
-    }
+    };
 
     const initialValues = {
         email: '',
         password: ''
-    }
+    };
 
     return (
         <Col className="minWidthForm">
@@ -48,7 +48,7 @@ const LoginForm = (props) => {
                 {
                     loginValidation =>
                     (
-                        <Form onSubmit={loginValidation.handleSubmit}>
+                        <Form onSubmit={loginValidation.handleSubmit} data-testid="login">
                             <Form.Group className="mb-3" controlId="userEmail">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control type="email" className={loginValidation.touched.email && loginValidation.errors.email ? 'is-invalid' : ''} placeholder="Your email" {...loginValidation.getFieldProps('email')} />

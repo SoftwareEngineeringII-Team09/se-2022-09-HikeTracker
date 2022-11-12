@@ -4,7 +4,7 @@ import { toast } from "../../../node_modules/react-toastify/dist/react-toastify"
 import api from '../../services/api';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-const Registration = () => {
+const Signup = () => {
 
     /* User Roles */
     const roles = [
@@ -15,7 +15,7 @@ const Registration = () => {
     ];
     const rolesRequiringAdditionalInfo = roles.filter((r) => r.requiresAdditionalInfo).map((r) => r.name);
 
-    /* Registration data Validation schema */
+    /* Signup data Validation schema */
     const phoneRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/
     const validationSchema = Yup.object({
         role: Yup.mixed().oneOf(roles.map((currentRole) => currentRole.name)),
@@ -45,8 +45,8 @@ const Registration = () => {
             .required('Insert your password')
     });
 
-    /* Registration submission */
-    const submitRegistration = async (values, { setSubmitting }) => {
+    /* Signup submission */
+    const submitSignup = async (values, { setSubmitting }) => {
         api.signup(values)
             .then(() => {
                 toast.success(
@@ -77,13 +77,14 @@ const Registration = () => {
     return (
         <Col className="minWidthForm">
             <h1 className="font-weight-bold text-center pb-4">Register</h1>
-            <Formik className="my-2" initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitRegistration}>
+            <Formik className="my-2" initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitSignup}>
                 {
                     validation =>
                     (
                         <Form onSubmit={validation.handleSubmit}>
 
                             <InputGroup className="mb-3">
+                                <Form.Label>Who are you?</Form.Label>
                                 <InputGroup.Text id="user-role">I am a</InputGroup.Text>
                                 <Form.Select aria-label="Select user role" {...validation.getFieldProps('role')} className={validation.touched.role && validation.errors.role ? 'is-invalid' : ''}>
                                     {roles.map((currentRole) => <option key={currentRole.name} value={currentRole.name} id={currentRole.name}>{currentRole.name}</option>)}
@@ -139,4 +140,4 @@ const Registration = () => {
 
 }
 
-export default Registration;
+export default Signup;
