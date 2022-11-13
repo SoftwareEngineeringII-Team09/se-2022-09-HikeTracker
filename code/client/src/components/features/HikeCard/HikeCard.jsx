@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap"
 
 const HikeCard = ({ hike }) => {
     return (
-        <Col xs={12} lg={6} xl={4} >
+        <Col xs={12} lg={6} xl={4}>
             <Link to={`/browse/${hike.id}`} className="text-decoration-none" style={{ color: "currentcolor" }}>
                 <div className='bg-base-light p-4 h-100 rounded-3 d-flex flex-column'>
                     <div className='mb-3'>
@@ -16,16 +16,16 @@ const HikeCard = ({ hike }) => {
 
                     <dl className='d-flex justify-content-between'>
                         <div className='d-flex flex-column'>
-                            <dt className='fs-'>Max elevation</dt>
-                            <dd className='fs- m-0'>{hike.max_elevation} m</dd>
+                            <dt>Max elevation</dt>
+                            <dd className='m-0'>{hike.maxElevation} m</dd>
                         </div>
                         <div className='d-flex flex-column'>
-                            <dt className='fs-'>Length</dt>
-                            <dd className='fs- m-0'>~{hike.length} km</dd>
+                            <dt>Length</dt>
+                            <dd className='m-0'>{hike.length} km</dd>
                         </div>
                         <div className='d-flex flex-column'>
-                            <dt className='fs-'>Ascent</dt>
-                            <dd className='fs- m-0'>~{hike.total_ascent} m</dd>
+                            <dt>Ascent</dt>
+                            <dd className='m-0'>{hike.totalAscent} m</dd>
                         </div>
                     </dl>
                 </div>

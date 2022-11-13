@@ -10,18 +10,14 @@ import { helperFilters } from '@lib/helpers'
 const HikesFilters = ({ filters, setFilters, isOpen, close }) => {
     const [province, setProvince] = useState(0)
     const [city, setCity] = useState(0)
-    const [radius, setRadius] = useState(0)
     const [activeFilters, setActiveFilters] = useState(filters)
 
     const handleFilter = (isActived, category, filter) => {
         const res = { ...activeFilters }
-        if (isActived) {
+        if (isActived)
             res[category] = res[category].filter((item => item !== filter))
-            setActiveFilters(res)
-        } else {
-            res[category].push(filter)
-            setActiveFilters(res)
-        }
+        else res[category].push(filter)
+        setActiveFilters(res)
     }
 
     const handleApply = () => {
@@ -39,7 +35,6 @@ const HikesFilters = ({ filters, setFilters, isOpen, close }) => {
         setActiveFilters(reset)
         setProvince(0)
         setCity(0)
-        setRadius(0)
         close()
     }
 
@@ -51,7 +46,7 @@ const HikesFilters = ({ filters, setFilters, isOpen, close }) => {
             </Offcanvas.Header>
             <Offcanvas.Body className="px-4 d-flex flex-column justify-content-between container">
                 <div>
-                    <GeoAreaFilter location={{ province, city, radius }} setProvince={setProvince} setCity={setCity} />
+                    <GeoAreaFilter location={{ province, city }} setProvince={setProvince} setCity={setCity} />
                     {helperFilters.filtersKeys.map((category, idx_category) => (
                         <div key={idx_category} className="d-flex flex-column align-items-start mb-3">
                             <h4 className="mb-3">{helperFilters.getFilterName(category)}</h4>

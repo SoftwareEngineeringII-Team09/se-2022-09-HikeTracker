@@ -11,7 +11,7 @@ const App = () => {
       <Route element={<Layouts.Visitors />}>
         <Route index path='/' element={<Pages.Home />} />
         <Route path='/browse' element={<Pages.BrowseHikes />} />
-        <Route path='/browse/:hike' element={<Pages.Hike />} />
+        <Route path='/browse/:hikeId' element={<Pages.Hike />} />
       </Route>
       <Route path='*' element={<Pages.Error />} />
     </Routes>

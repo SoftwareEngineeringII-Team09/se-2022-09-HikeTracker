@@ -12,31 +12,28 @@ const dummy = [
         id: 1,
         title: "Sentiero per il Monte Ferra",
         writer: "Mario Rossi",
-        max_elevation: "3094", // From gpx file --> max_elevation,
+        maxElevation: "3094", // From gpx file --> max_elevation,
         description: "Descrizione del Sentiero per il Monte Ferra, in Val Varaita. Partenza da Rifugio Melezè a Bellino, in provincia di Cuneo.",
         difficulty: "Tourist",
         length: "13",
-        total_ascent: "1280",
-        expected_time: {
+        totalAscent: "1280",
+        expectedTime: {
             hours: 5,
             minutes: 30
         },
         province: 2,
         city: 1001,
-        startPoint: {
-            coords: [11.10, 11.10]
-        }
     },
     {
         id: 2,
         title: "Sentiero per Rocca Patanua",
         writer: "Mario Rossi",
-        max_elevation: "2409", // From gpx file --> max_elevation,
+        maxElevation: "2409", // From gpx file --> max_elevation,
         description: "Descrizione del Sentiero per la Rocca Patanua in Val di Susa. Partenza da Prarotto (Condove) in provincia di Torino.",
         difficulty: "Hiker",
         length: "13",
-        total_ascent: "1280",
-        expected_time: {
+        totalAscent: "1280",
+        expectedTime: {
             hours: 4,
             minutes: 30
         },
@@ -47,12 +44,12 @@ const dummy = [
         id: 3,
         title: "Sentiero per il Mont Ziccher",
         writer: "Mario Rossi",
-        max_elevation: "1967", // From gpx file --> max_elevation,
+        maxElevation: "1967", // From gpx file --> max_elevation,
         description: "Descrizione del Sentiero per il Monte Ziccher, nella Val Vigezzo. Partenza dal Rifugio Blitz, nel Verbano-Cusio-Ossola.",
         difficulty: "Professional Hiker",
         length: "13",
-        total_ascent: "1280",
-        expected_time: {
+        totalAscent: "1280",
+        expectedTime: {
             hours: 7,
             minutes: 30
         },
@@ -71,8 +68,8 @@ const BrowseHikes = () => {
 
     useEffect(() => {
         axios.get()
-            .then((res) => { console.log(res) })
-            .catch((err) => console.log(err))
+            .then((res) => { })
+            .catch((err) => { })
             .finally(() => { setHikes(dummy) })
     }, [])
 
@@ -95,7 +92,7 @@ const BrowseHikes = () => {
                         <HikeCard key={idx} hike={hike} />
                     ))}
             </Row >
-        </div >
+        </div>
     )
 }
 
