@@ -1,6 +1,5 @@
 import { Form, InputGroup, Button, Container, Row, Col } from 'react-bootstrap';
-import { toast } from "../../../node_modules/react-toastify/dist/react-toastify";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import api from '../../services/api';
 import { Formik } from 'formik';
 import * as Yup from 'yup';

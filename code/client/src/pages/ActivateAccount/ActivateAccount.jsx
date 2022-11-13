@@ -1,4 +1,4 @@
-import { toast } from "../../../node_modules/react-toastify/dist/react-toastify";
+import { toast } from "react-toastify";
 import { Button, Col, Alert, Spinner } from 'react-bootstrap';
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ const ActivateAccount = () => {
             await api.verifyEmail({ email, token });
             setStatus("success");
         } catch (error) {
+            setStatus("error");
         }
     };
 
@@ -29,7 +30,6 @@ const ActivateAccount = () => {
                 theme: "colored",
             });
         } catch (error) {
-            setStatus("error");
             toast.error("There has been an error generating a new activation link, please try again", {
                 theme: "colored",
             });

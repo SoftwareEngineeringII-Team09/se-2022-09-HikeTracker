@@ -5,7 +5,13 @@ export function login(loginData) {
     return new Promise((resolve, reject) => {
         axios.post(`${SERVER_URL}/auth/login`, loginData)
             .then(res => resolve(res.data))
-            .catch(err => reject(err));
+            .catch(err => {
+                reject({
+                    status: err.response.status,
+                    statusText: err.response.statusText,
+                    message: err.response.data.message
+                });
+            })
     });
 }
 
@@ -13,7 +19,13 @@ export function signup(signupData) {
     return new Promise((resolve, reject) => {
         axios.post(`${SERVER_URL}/auth/signup`, signupData)
             .then(res => resolve(res.data))
-            .catch(err => reject(err));
+            .catch(err => {
+                reject({
+                    status: err.response.status,
+                    statusText: err.response.statusText,
+                    message: err.response.data.message
+                });
+            })
     });
 }
 
@@ -47,4 +59,20 @@ export function sendVerificationCode(email) {
                 });
             });
     });
+}
+
+export function getUserInfo() {
+    return new Promise((resolve, reject) => {
+        axios.get(`${SERVER_URL}/auth/current`)
+            .then(res => {
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject({
+                    status: err.response.status,
+                    statusText: err.response.statusText,
+                    message: err.response.data.message
+                });
+            })
+    })
 }
