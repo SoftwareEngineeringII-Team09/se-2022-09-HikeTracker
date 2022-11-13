@@ -2,7 +2,9 @@
 
 const HikeManager = require("../controllers/HikeManager");
 const { body, param, validationResult } = require("express-validator");
+const fs = require("fs");
 const express = require("express");
+const path = require("path");
 const router = express.Router();
 const gpxParse = require("gpx-parse");
 const multer = require("multer");
@@ -16,15 +18,45 @@ const upload = multer({ storage: storage });
 //from file
 
 router.post("/:id", upload.single("gpx"), async (req, res) => {
-  console.log(JSON.stringify(req.file.originalname));
+  //console.log(JSON.stringify(req.file.originalname));
+
   gpxParse.parseGpxFromFile(
-    `/WORKSPACE/SE2HikeTracker/se-2022-09-HikeTracker/code/server/gpx/${req.file.originalname}`,
-    function (error, data) {
-      //do stuff
-      //console.log(error);
-      //console.log(data.tracks[0].length());
-      //   console.log(data.tracks[0].name);
-      //   // console.log(data.tracks[0].segments);
+    path.join(process.cwd(), "gpx", req.file.originalname),
+    async function (error, data) {
+      //let track_path = `/WORKSPACE/SE2HikeTracker/se-2022-09-HikeTracker/code/server/gpx/${req.file.originalname}`;
+      let track_path = path.join(process.cwd(), "gpx", req.file.originalname);
+      let length = data.tracks[0].length();
+      //console.log(data.tracks[0].name);
+      // console.log(data.tracks[0].segments);
+      let writer_id = req.params.id;
+      console.logwriter_id(writer_id);
+      try {
+        const error = validationResult(req);
+        if (!error.isEmpty())
+          return res.status(422).json({ error: error.array()[0] });
+        const hikeId = await HikeManager.defineHike(
+          writer_id,
+          track_path,
+          req.body.region,
+          req.body.city,
+          req.body.title,
+          length,
+          req.body.expected_time,
+          req.body.ascent,
+          req.body.difficulty,
+          req.body.description,
+          req.body.start_point,
+          req.body.end_point,
+          req.body.reference_point
+        );
+        return res.status(201).json({ hikeId });
+      } catch (exception) {
+        console.log(exception);
+        const errorCode = exception.code ?? 503;
+        const errorMessage =
+          exception.result ?? "Something went wrong, please try again";
+        return res.status(errorCode).json({ error: errorMessage });
+      }
     }
   );
 });
