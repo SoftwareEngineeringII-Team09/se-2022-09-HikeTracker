@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
-const { createMemoryHistory } = require("history");
-import { Router } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import LoginForm from './Login';
 
@@ -11,12 +10,7 @@ describe("<LoginForm />", () => {
     let emailLabel, passwordLabel;
 
     const setup = async () => {
-        const history = createMemoryHistory();
-        render(
-            <Router location={history.location} navigator={history}>
-                <LoginForm />
-            </Router>
-        );
+        render(<MemoryRouter><LoginForm /></MemoryRouter>);
         loginForm = await screen.findByTestId("login");
         emailInput = await screen.findByLabelText("Email");
         emailLabel = await screen.findByText("Email");

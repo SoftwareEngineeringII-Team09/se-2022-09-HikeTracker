@@ -25,7 +25,7 @@ jest.mock("react-bootstrap", () => {
 })
 
 describe("MobileSidebar component", () => {
-    it.each(navigation.mobile)("Link to $url is correctly rendered", (link) => {
+    it.each(navigation.mobile)("Link to $url is correctly rendered", async (link) => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -33,11 +33,11 @@ describe("MobileSidebar component", () => {
             </Router>
         )
         expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.url)
-        userEvent.click(screen.getByRole("link", { name: link.label }))
+        await userEvent.click(screen.getByRole("link", { name: link.label }))
         expect(history.location.pathname).toBe(link.url)
     })
 
-    it("Link to /signup is correctly rendered", () => {
+    it("Link to /signup is correctly rendered", async () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -45,14 +45,14 @@ describe("MobileSidebar component", () => {
             </Router>
         )
         expect(screen.getByRole("link", { name: "Create an account now" })).toHaveAttribute("href", "/signup")
-        userEvent.click(screen.getByRole("link", { name: "Create an account now" }))
+        await userEvent.click(screen.getByRole("link", { name: "Create an account now" }))
         expect(history.location.pathname).toBe("/signup")
     })
 
-    it("Close prop function is called if close button is clicked", () => {
+    it("Close prop function is called if close button is clicked", async () => {
         const close = jest.fn()
         render(<MobileSidebar close={close} />, { wrapper: MemoryRouter })
-        userEvent.click(screen.getByTestId("close-button"))
+        await userEvent.click(screen.getByTestId("close-button"))
         expect(close).toHaveBeenCalledTimes(1)
     })
 })
