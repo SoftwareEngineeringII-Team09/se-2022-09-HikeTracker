@@ -2,24 +2,15 @@
 
 class Point {
   static tableName = "Point";
+
   constructor(
-    point_id,
-    type,
-    parking,
-    hut,
-    name_of_location,
-    latitude,
-    longitude,
-    altitude,
-    city,
-    province,
-    address
+    pointId, type, parking, hut, nameOfLocation, latitude, longitude, altitude, city, province, address
   ) {
-    this.point_id = point_id;
+    this.pointId = pointId;
     this.type = type;
     this.parking = parking;
     this.hut = hut;
-    this.name_of_location = name_of_location;
+    this.nameOfLocation = nameOfLocation;
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
