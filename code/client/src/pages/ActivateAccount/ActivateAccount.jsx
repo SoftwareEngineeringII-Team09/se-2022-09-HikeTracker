@@ -1,0 +1,85 @@
+import { toast } from "../../../node_modules/react-toastify/dist/react-toastify";
+import { Button, Col, Alert, Spinner } from 'react-bootstrap';
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import api from '../../services/api';
+
+const ActivateAccount = () => {
+
+    const [searchParams, _setSearchParams] = useSearchParams();
+    const [status, setStatus] = useState("loading");
+    const email = searchParams.get("email");
+    const token = searchParams.get("token");
+    const navigate = useNavigate();
+
+    /* Activation request */
+    const activateAccount = async () => {
+        try {
+            await api.verifyEmail({ email, token });
+            setStatus("success");
+        } catch (error) {
+        }
+    };
+
+    /* Request new token */
+    const requestNewToken = async () => {
+        try {
+            await api.requestNewToken(email);
+            toast.success("We have sent you a new activation email", {
+                theme: "colored",
+            });
+        } catch (error) {
+            setStatus("error");
+            toast.error("There has been an error generating a new activation link, please try again", {
+                theme: "colored",
+            });
+        }
+    };
+
+    useEffect(() => {
+
+        /* Redirect to Home if activation token or email are missing */
+        if (!token || !email)
+            navigate('/');
+
+        activateAccount();
+    }, []);
+
+    return (
+        <Col>
+            {   /* Waiting for activation results */
+                status === "loading" && <>
+                    <h1>Activating account...</h1>
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </>
+            }
+
+            {   /* Successful activation */
+                status === "success" && <>
+                    <h1>Your account has been activated!</h1>
+                    <Button variant="primary" href="/login">Login</Button>
+                </>
+            }
+
+            {   /* Error in activation */
+                status === "error" && <>
+                    <h1>Activation failed</h1>
+                    <Alert variant="warning">
+                        <Alert.Heading>Something went wrong, but don't worry!</Alert.Heading>
+                        <p>
+                            The activation link you followed was invalid or has expired.
+                            Please click on the button below to receive a new activiation link at your email.
+                        </p>
+                        <hr />
+                        <Button className="mb-0" variant="light" onClick={requestNewToken}>Receive a new activation link</Button>
+                    </Alert>
+                </>
+            }
+        </Col>
+    );
+
+}
+
+export default ActivateAccount;

@@ -10,6 +10,7 @@ const App = (props) => {
         <Route index path='/' element={<Pages.Home />} />
         <Route path='/signup' element={<Pages.Registration />} />
         <Route path='/login' element={<Pages.Login setLoggedIn={props.setLoggedIn} />} />
+        <Route path='/activate' element={<Pages.ActivateAccount />} />
       </Route>
       <Route path='*' element={<Pages.Error />} />
     </Routes>

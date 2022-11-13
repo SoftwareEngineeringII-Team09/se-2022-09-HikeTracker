@@ -93,17 +93,17 @@ describe("<Signup />", () => {
         mobileInput = await screen.findByLabelText("Mobile number");
         mobileLabel = await screen.findByText("Mobile number");
 
-        // /* Name field */
+        /* Name field */
         expect(nameLabel).toBeInTheDocument();
         expect(nameInput).toHaveAttribute("type", "text");
         expect(nameInput).toHaveAttribute("placeholder", "Your name");
 
-        // /* Surname field */
+        /* Surname field */
         expect(surnameLabel).toBeInTheDocument();
         expect(surnameInput).toHaveAttribute("type", "text");
         expect(surnameInput).toHaveAttribute("placeholder", "Your surname");
 
-        // /* Mobile field */
+        /* Mobile field */
         expect(mobileLabel).toBeInTheDocument();
         expect(mobileInput).toHaveAttribute("type", "text");
         expect(mobileInput).toHaveAttribute("placeholder", "Your mobile number");
