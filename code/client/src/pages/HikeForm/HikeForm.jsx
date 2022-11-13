@@ -24,11 +24,11 @@ const HikeForm = () => {
                 </div>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Title:</Form.Label>
+                        <Form.Label htmlFor='title'>Title:</Form.Label>
                         <Form.Control id='title' type='text' required placeholder='Hike title' onChange={event => setTitle(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Province:</Form.Label>
+                        <Form.Label htmlFor='province'>Province:</Form.Label>
                         <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
                             <option value={0}>Select a provice</option>
                             {provinces.map(province => (
@@ -37,7 +37,7 @@ const HikeForm = () => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>City:</Form.Label>
+                        <Form.Label htmlFor='city'>City:</Form.Label>
                         <Form.Select id='city' required onChange={(e) => setCity(parseInt(e.target.value))}>
                             <option value={0}>I want to leave this field empty</option>
                             {cities.filter(city => city.istat_provincia === province).map(city => (
@@ -46,28 +46,28 @@ const HikeForm = () => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Expected time:</Form.Label>
+                        <Form.Label htmlFor='expTime'>Expected time:</Form.Label>
                         <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Difficulty:</Form.Label>
-                        <Form.Select id='Difficulty' required onChange={event => setDifficulty(event.target.value)} >
+                        <Form.Label htmlFor='difficulty'>Difficulty:</Form.Label>
+                        <Form.Select id='difficulty' required onChange={event => setDifficulty(event.target.value)} >
                             <option>Tourist</option>
                             <option>Hiker</option>
                             <option>Master</option>
                         </Form.Select>
                     </Form.Group>
                     <Form.Group required className='mb-2'>
-                        <Form.Label>Description:</Form.Label>
-                        <Form.Control type='text-area' onChange={event => setDescription(event.target.value)} />
+                        <Form.Label htmlFor='description'>Description:</Form.Label>
+                        <Form.Control id="description" type='text-area' onChange={event => setDescription(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Reference points:</Form.Label>
-                        <Form.Control type='text' />
+                        <Form.Label htmlFor='refPoints'>Reference points:</Form.Label>
+                        <Form.Control id="refPoints" type='text' />
                     </Form.Group>
                     <Form.Group required className='mb-2'>
-                        <Form.Label>Insert your gpx file:</Form.Label>
-                        <Form.Control type='file'/>
+                        <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>
+                        <Form.Control id="gpxFIle" type='file'/>
                     </Form.Group>
                     <Button variant='primary-light fw-bold' size='lg' type='submit' className='mb-3'>
                         Create new hike

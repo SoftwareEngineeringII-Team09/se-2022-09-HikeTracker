@@ -8,7 +8,7 @@ import HutList from './HutList'
 describe("Hut list page", () => {
     it("Hut list page correctly rendered", () => {
         render(<HutList />, { wrapper: MemoryRouter })
-        expect(screen.getByText("Your huts")).toBeInTheDocument();
+        expect(screen.getByText("Your huts:")).toBeInTheDocument();
     })
 
     it("Hut list page renders a link to navigate to form to add new hut", () => {

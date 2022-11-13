@@ -19,16 +19,13 @@ describe("Hut form page", () => {
             </Router>
         )
 
-        expect(screen.getByLabelText("Name:")).toHaveAttribute("value", "")
         userEvent.type(screen.getByLabelText("Name:"), 'Rifugio1')
-        expect(screen.getByLabelText("Name:").toHaveValue('Rifugio1'))
+        expect(screen.getByDisplayValue("Rifugio1")).toBeInTheDocument()
 
-        expect(screen.getByLabelText("Address:")).toHaveAttribute("value", "")
         userEvent.type(screen.getByLabelText("Address:"), 'Via{space}Roma{space}1')
-        expect(screen.getByLabelText("Address:").toHaveValue('Via Roma 1'))
+        expect(screen.getByDisplayValue("Via Roma 1")).toBeInTheDocument()
 
-        expect(screen.getByLabelText("Number of beds:")).toHaveAttribute("value", "")
         userEvent.type(screen.getByLabelText("Number of beds:"), '25')
-        expect(screen.getByLabelText("Number of beds:").toHaveValue('25'))
+        expect(screen.getByDisplayValue("25")).toBeInTheDocument()
     })
 })

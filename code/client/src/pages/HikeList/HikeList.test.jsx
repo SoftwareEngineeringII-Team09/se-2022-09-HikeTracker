@@ -8,7 +8,7 @@ import HikeList from './HikeList'
 describe("Hike list page", () => {
     it("Hike list page correctly rendered", () => {
         render(<HikeList />, { wrapper: MemoryRouter })
-        expect(screen.getByText("Your hikes")).toBeInTheDocument();
+        expect(screen.getByText("Your hikes:")).toBeInTheDocument();
     })
 
     it("Hike list page renders a link to navigate to form to add new hike", () => {

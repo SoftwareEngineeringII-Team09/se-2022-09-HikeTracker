@@ -8,28 +8,24 @@ import HikeForm from './HikeForm'
 describe("Page for adding new hike", () => {
     it("Hike form page correctly rendered", () => {
         render(<HikeForm />, { wrapper: MemoryRouter })
-        expect(screen.getByText("Insert Hike data")).toBeInTheDocument();
+        expect(screen.getByText("Insert hike data")).toBeInTheDocument();
     })
 
     it("Hike form page renders a form for inserting data of a new hike", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <Home />
+                <HikeForm />
             </Router>
         )
-        expect(screen.getByLabelText("Title:")).toHaveAttribute("value", "")
+        
         userEvent.type(screen.getByLabelText("Title:"), 'My{space}title!')
-        expect(screen.getByLabelText("Title:").toHaveValue('My title!'))
+        expect(screen.getByDisplayValue("My title!")).toBeInTheDocument()
 
-        expect(screen.getByLabelText("Expected time:")).toHaveAttribute("value", "")
         userEvent.type(screen.getByLabelText("Expected time:"), '0230')
-        expect(screen.getByLabelText("Expected time:").toHaveValue('02:30'))
+        expect(screen.getByDisplayValue("02:30")).toBeInTheDocument()
 
-        expect(screen.getByLabelText("Difficulty:")).toHaveAttribute("value", "Tourist")
-
-        expect(screen.getByLabelText("Description:")).toHaveAttribute("value", "")
         userEvent.type(screen.getByLabelText("Description:"), 'Prova!')
-        expect(screen.getByLabelText("Description:").toHaveValue('Prova!'))
+        expect(screen.getByDisplayValue("Prova!")).toBeInTheDocument()
     })
 })
