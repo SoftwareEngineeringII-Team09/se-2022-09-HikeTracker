@@ -2,12 +2,16 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from '../../services/api';
+import { useContext } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const LoginForm = (props) => {
+import { AuthContext } from '../../contexts/authContext';
+
+const LoginForm = () => {
 
     const navigate = useNavigate();
+    const [userStatus, requestLoginUpdate] = useContext(AuthContext);
 
     /* Login data Validation schema */
     const validationSchema = Yup.object({
@@ -22,7 +26,7 @@ const LoginForm = (props) => {
     const submitLogin = (values, { setSubmitting }) => {
         api.login(values)
             .then(() => {
-                props.setLoggedIn(true);
+                requestLoginUpdate(true);
                 navigate('/');
             })
             .catch((error) => {

@@ -6,32 +6,35 @@ import React from 'react';
 const AuthContext = createContext([{}, () => { }]);
 
 const AuthProvider = ({ children }) => {
-    
+
     const [user, setUser] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [dirty, setDirty] = useState(false);
+    const [dirty, setDirty] = useState(true);
 
     useEffect(() => {
-        api.getUserInfo()
-            .then((data) => {
-                setUser(data);
-                setLoggedIn(true);
-            })
-            .catch((error) => {
-                setLoggedIn(false);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        if (dirty) {
+            api.getUserInfo()
+                .then((data) => {
+                    setUser(data);
+                    setLoggedIn(true);
+                })
+                .catch((error) => {
+                    setUser(null);
+                    setLoggedIn(false);
+                })
+                .finally(() => {
+                    setDirty(false);
+                    setLoading(false);
+                });
+        }
     }, [dirty]);
 
     if (loading) {
         return <Spinner />;
-    }
-    else {
+    } else {
         return (
-            <AuthContext.Provider value={[{ ...user, loggedIn }, setLoggedIn]}>
+            <AuthContext.Provider value={[{ ...user, loggedIn }, setDirty]}>
                 {children}
             </AuthContext.Provider>
         )
