@@ -3,23 +3,33 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 const { createMemoryHistory } = require("history");
 
-import Home from './Home'
+import HikeForm from './HikeForm'
 
-describe("Home page", () => {
-    it("Home page correctly rendered", () => {
-        render(<Home />, { wrapper: MemoryRouter })
-        expect(screen.getByText("Welcome to Hike Tracker")).toBeInTheDocument();
+describe("Page for adding new hike", () => {
+    it("Hike form page correctly rendered", () => {
+        render(<HikeForm />, { wrapper: MemoryRouter })
+        expect(screen.getByText("Insert Hike data")).toBeInTheDocument();
     })
 
-    it("Home page renders a link to navigate to browse hikes route", () => {
+    it("Hike form page renders a form for inserting data of a new hike", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
                 <Home />
             </Router>
         )
-        expect(screen.getByRole("link")).toHaveAttribute("href", "/browse")
-        userEvent.click(screen.getByRole("link"))
-        expect(history.location.pathname).toBe("/browse")
+        expect(screen.getByLabelText("Title:")).toHaveAttribute("value", "")
+        userEvent.type(screen.getByLabelText("Title:"), 'My{space}title!')
+        expect(screen.getByLabelText("Title:").toHaveValue('My title!'))
+
+        expect(screen.getByLabelText("Expected time:")).toHaveAttribute("value", "")
+        userEvent.type(screen.getByLabelText("Expected time:"), '0230')
+        expect(screen.getByLabelText("Expected time:").toHaveValue('02:30'))
+
+        expect(screen.getByLabelText("Difficulty:")).toHaveAttribute("value", "Tourist")
+
+        expect(screen.getByLabelText("Description:")).toHaveAttribute("value", "")
+        userEvent.type(screen.getByLabelText("Description:"), 'Prova!')
+        expect(screen.getByLabelText("Description:").toHaveValue('Prova!'))
     })
 })

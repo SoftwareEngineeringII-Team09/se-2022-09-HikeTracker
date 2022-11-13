@@ -7,6 +7,7 @@ const navigation = {
     desktopGuide: [
         { label: "Browse", url: "/browse", variant: "link" },
         { label: "MyHikes", url: "/hikes", variant: "link" },
+        { label: "MyHuts", url: "/huts", variant: "link" },
         { label: "Account", url: "/account", variant: "link" },
     ],
     mobile: [
@@ -17,6 +18,7 @@ const navigation = {
         { label: "Browse", url: "/browse" },
         { label: "Account", url: "/account" },
         { label: "MyHikes", url: "/hikes" },
+        { label: "MyHuts", url: "/huts" },
     ]
 }
 

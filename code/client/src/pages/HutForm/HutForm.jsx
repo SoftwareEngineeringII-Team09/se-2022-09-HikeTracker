@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
+import provinces from '@data/provinces'
+import cities from '@data/cities'
+
 const HutForm = () => {
     const [name, setName] = useState('');
-    const [position, setPosition] = useState('');
+    const [province, setProvince] = useState('');
+    const [city, setCity] = useState('');
+    const [address, setAddress] = useState('');
     const [beds, setBeds] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [openHour, setOpenHour] = useState(0);
-    const [closeHour, setCloseHour] = useState(0);
-    const [openDays, setOpenDays] = useState([]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -23,37 +24,33 @@ const HutForm = () => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className='mb-2'>
                         <Form.Label>Name:</Form.Label>
-                        <Form.Control type='text' placeholder='Hut name' onChange={event => setName(event.target.value)} />
+                        <Form.Control type='text' required placeholder='Hut name' onChange={event => setName(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Position:</Form.Label>
-                        <Form.Control type='text' onChange={event => setPosition(event.target.value)} />
+                        <Form.Label>Province:</Form.Label>
+                        <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
+                            <option value={0}>Select a provice</option>
+                            {provinces.map(province => (
+                                <option key={province.istat_provincia} value={province.istat_provincia}>{province.provincia}</option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
+                        <Form.Label>City:</Form.Label>
+                        <Form.Select id='city' required onChange={(e) => setCity(parseInt(e.target.value))}>
+                            <option value={0}>I want to leave this field empty</option>
+                            {cities.filter(city => city.istat_provincia === province).map(city => (
+                                <option key={city.codiceistatcomune} value={city.codiceistatcomune}>{city.comune}</option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
+                        <Form.Label>Address:</Form.Label>
+                        <Form.Control type='text' required onChange={event => setAddress(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
                         <Form.Label>Number of beds:</Form.Label>
-                        <Form.Control type='number' min={1} step={1} onChange={event => setBeds(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label>Price per night:</Form.Label>
-                        <Form.Control type='number' min={0.01} step={0.01} onChange={event => setPrice(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label>Open hour:</Form.Label>
-                        <Form.Control type='time' onChange={event => setOpenHour(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label>Close hour:</Form.Label>
-                        <Form.Control type='time' onChange={event => setCloseHour(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label>Open days:</Form.Label>
-                        <Form.Check type='checkbox' label='Monday' onChange={event => {event.target.checked ? openDays.push('Monday') : setOpenDays(openDays => openDays.filter(e => e !== 'Monday'))}} />
-                        <Form.Check type='checkbox' label='Tuesday' onChange={event => {event.target.checked ? openDays.push('Tuesday') : setOpenDays(openDays => openDays.filter(e => e !== 'Tuesday'))}} />
-                        <Form.Check type='checkbox' label='Wednesday' onChange={event => {event.target.checked ? openDays.push('Wednesday') : setOpenDays(openDays => openDays.filter(e => e !== 'Wednesday'))}} />
-                        <Form.Check type='checkbox' label='Thursday' onChange={event => {event.target.checked ? openDays.push('Thursday') : setOpenDays(openDays => openDays.filter(e => e !== 'Thursday'))}} />
-                        <Form.Check type='checkbox' label='Friday' onChange={event => {event.target.checked ? openDays.push('Friday') : setOpenDays(openDays => openDays.filter(e => e !== 'Friday'))}} />
-                        <Form.Check type='checkbox' label='Saturday' onChange={event => {event.target.checked ? openDays.push('Saturday') : setOpenDays(openDays => openDays.filter(e => e !== 'Saturday'))}} />
-                        <Form.Check type='checkbox' label='Sunday' onChange={event => {event.target.checked ? openDays.push('Sunday') : setOpenDays(openDays => openDays.filter(e => e !== 'Sunday'))}} />
+                        <Form.Control type='number' min={1} step={1} required onChange={event => setBeds(event.target.value)} />
                     </Form.Group>
                     <Button variant='primary-light fw-bold' size='lg' type='submit' className='mb-3'>
                         Create new hike
