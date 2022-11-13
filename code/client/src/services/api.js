@@ -1,7 +1,11 @@
-import * as UsersAPI from './users';
+import users from './users';
+import hikes from './hikes'
+import huts from './huts'
 
 const api = {
-    ...UsersAPI
+    ...users,
+    ...hikes,
+    ...huts
 };
 
 export default api;
