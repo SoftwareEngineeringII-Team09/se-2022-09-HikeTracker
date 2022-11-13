@@ -16,7 +16,7 @@ const Signup = () => {
     const rolesRequiringAdditionalInfo = roles.filter((r) => r.requiresAdditionalInfo).map((r) => r.name);
 
     /* Signup data Validation schema */
-    const phoneRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/
+    const mobileRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/
     const validationSchema = Yup.object({
         role: Yup.mixed().oneOf(roles.map((currentRole) => currentRole.name)),
         firstname: Yup.string()
@@ -32,16 +32,17 @@ const Signup = () => {
                 then: Yup.string().required("Please provide your surname")
             }),
         mobile: Yup.string()
-            .matches(phoneRegExp, 'Provide a valid phone number')
+            .matches(mobileRegExp, 'Provide a valid mobile number')
             .when("role", {
                 is: (r) => rolesRequiringAdditionalInfo.includes(r),
-                then: Yup.string().required("Please provide your phone number")
+                then: Yup.string().required("Please provide your mobile number")
             }),
         email: Yup.string()
             .email('This is not a valid email address')
             .required('Insert your email address'),
         password: Yup.string()
             .min(8, 'Please provide a password of at least 8 characters')
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*-+;,.:()'"])/, 'Please provide a password containing at least one lowercase letter, one uppercase letter, one number and one special character')
             .required('Insert your password')
     });
 
@@ -81,12 +82,12 @@ const Signup = () => {
                 {
                     validation =>
                     (
-                        <Form onSubmit={validation.handleSubmit}>
+                        <Form onSubmit={validation.handleSubmit} data-testid="signup">
 
                             <InputGroup className="mb-3">
-                                <Form.Label>Who are you?</Form.Label>
+                                <Form.Label htmlFor="role">Who are you?</Form.Label>
                                 <InputGroup.Text id="user-role">I am a</InputGroup.Text>
-                                <Form.Select aria-label="Select user role" {...validation.getFieldProps('role')} className={validation.touched.role && validation.errors.role ? 'is-invalid' : ''}>
+                                <Form.Select aria-label="Select user role" id="role" {...validation.getFieldProps('role')} className={validation.touched.role && validation.errors.role ? 'is-invalid' : ''}>
                                     {roles.map((currentRole) => <option key={currentRole.name} value={currentRole.name} id={currentRole.name}>{currentRole.name}</option>)}
                                 </Form.Select>
                                 {validation.touched.role && validation.errors.role && <div className="invalid-feedback d-block">{validation.errors.role}</div>}
@@ -123,7 +124,7 @@ const Signup = () => {
                                     </Row>
                                     <Form.Group className="mb-3" controlId="userMobile">
                                         <Form.Label>Mobile number</Form.Label>
-                                        <Form.Control type="text" placeholder="Your phone number" {...validation.getFieldProps('mobile')} className={validation.touched.mobile && validation.errors.mobile ? 'is-invalid' : ''} />
+                                        <Form.Control type="text" placeholder="Your mobile number" {...validation.getFieldProps('mobile')} className={validation.touched.mobile && validation.errors.mobile ? 'is-invalid' : ''} />
                                         {validation.touched.mobile && validation.errors.mobile && <div className="invalid-feedback d-block">{validation.errors.mobile}</div>}
                                     </Form.Group>
                                 </Container>

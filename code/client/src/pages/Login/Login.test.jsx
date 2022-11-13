@@ -73,50 +73,54 @@ describe("<LoginForm />", () => {
         });
     });
 
-    // it("Validates email field", async () => {
+    it("Validates email field", async () => {
 
-    //     expect(emailInput.value).toBe('');
-    //     const invalidEmail = "invalid#email.com";
+        expect(emailInput.value).toBe('');
+        const invalidEmail = "invalid#email.com";
 
-    //     // act(() => {
-    //         /* Enter invalid email */
-    //         await userEvent.type(emailInput, invalidEmail);
+        // act(() => {
+            /* Enter invalid email */
+            await userEvent.type(emailInput, invalidEmail);
 
-    //         /* Wait for the error message to appear */
-    //         await waitFor(async () => {
-    //             /* Check email value */
-    //             expect(emailInput.value).toBe(invalidEmail);
-    //             /* Check for error message */
-    //             const emailError = await screen.findByText("This is not a valid email address");
-    //             expect(emailInput).toHaveClass('is-invalid');
-    //             expect(emailError).toBeInTheDocument();
-    //         }, { interval: 100 });
-    //     // });
-    // });
+            /* Submit the form to trigger form validation */
+            await userEvent.click(submitButton);
 
-    // it("Doesn't show error messages when input is valid", async () => {
+            /* Wait for the error message to appear */
+            await waitFor(async () => {
+                /* Check email value */
+                expect(emailInput.value).toBe(invalidEmail);
+                /* Check for error message */
+                const emailError = await screen.findByText("This is not a valid email address");
+                expect(emailError).toBeInTheDocument();
+                expect(emailInput).toHaveClass('is-invalid');
+            });
+        // });
+    });
 
-    //     expect(emailInput.value).toBe('');
-    //     expect(passwordInput.value).toBe('');
+    it("Doesn't show error messages when input is valid", async () => {
 
-    //     const validEmail = "valid@email.com";
-    //     const password = "p4ssw0rd";
+        expect(emailInput.value).toBe('');
+        expect(passwordInput.value).toBe('');
 
-    //     await act(async () => {
-    //         /* Enter valid input */
-    //         fireEvent.change(emailInput, { target: { value: validEmail } });
-    //         fireEvent.change(passwordInput, { target: { value: password } });
-    //         /* Unfocus the input to trigger form validation */
-    //         fireEvent.focusOut(passwordInput);
+        const validEmail = "valid@email.com";
+        const password = "p4ssw0rd";
 
-    //         await waitFor(() => {
-    //             /* Check data is inserted correctly and no error is shown */
-    //             expect(emailInput.value).toBe(validEmail);
-    //             expect(passwordInput.value).toBe(password);
-    //             expect(emailInput).not.toHaveClass('is-invalid');
-    //             expect(passwordInput).not.toHaveClass('is-invalid');
-    //         });
-    //     });
-    // });
+        // await act(async () => {
+            /* Enter valid input */
+            await userEvent.type(emailInput, validEmail);
+            await userEvent.type(passwordInput, password);
+
+            /* Submit the form to trigger form validation */
+            await userEvent.click(submitButton);
+
+            await waitFor(() => {
+                /* Check data is inserted correctly and no error is shown */
+                expect(emailInput.value).toBe(validEmail);
+                expect(passwordInput.value).toBe(password);
+                expect(emailInput).not.toHaveClass('is-invalid');
+                expect(passwordInput).not.toHaveClass('is-invalid');
+            });
+        // });
+    });
 
 });
