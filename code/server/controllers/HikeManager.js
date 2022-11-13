@@ -140,6 +140,23 @@ class HikeManager {
 
     return Promise.resolve(hike);
   }
+
+  async getGpxTrackById(hikeId) {
+    let exists = await PersistentManager.exists(
+      Hike.tableName,
+      "hike_id",
+      hikeId
+    );
+    if (!exists) {
+      return Promise.reject({
+        code: 404,
+        result: `No available Hike with hike_id = ${hikeId}`,
+      });
+    }
+    let gpxFile = await PersistentManager.loadOneByAttribute(Hike.tableName, "hike_id", hikeId).then(hike => hike.track_path);
+
+    return Promise.resolve(gpxFile);
+  }
 }
 
 module.exports = new HikeManager();
