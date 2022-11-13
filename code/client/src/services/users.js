@@ -1,9 +1,10 @@
+import { SERVER_URL } from "./config";
 import axios from 'axios';
 
-const authentication = {
+const users = {
     signup: (user) => {
         return new Promise((resolve, reject) => {
-            axios.post('/auth/signup', user)
+            axios.post(`${SERVER_URL}/auth/signup`, user)
                 .then(res => {
                     resolve(res.data)
                 })
@@ -19,7 +20,7 @@ const authentication = {
 
     sendVerificationCode: (email) => {
         return new Promise((resolve, reject) => {
-            axios.put('/auth/send-verification-code', email)
+            axios.put(`${SERVER_URL}auth/send-verification-code`, email)
                 .then(() => {
                     resolve();
                 })
@@ -35,7 +36,7 @@ const authentication = {
 
     verifyEmail: (data) => {
         return new Promise((resolve, reject) => {
-            axios.put('/auth/verify-email', data)
+            axios.put(`${SERVER_URL}/auth/verify-email`, data)
                 .then(() => {
                     resolve();
                 })
@@ -98,4 +99,4 @@ const authentication = {
     }
 }
 
-export default authentication;
+export default users;
