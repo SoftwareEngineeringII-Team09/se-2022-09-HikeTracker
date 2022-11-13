@@ -2,13 +2,13 @@
 
 class Hike {
   static tableName = "Hike";
+  
   constructor(
     hike_id,
-    hut_id,
     writer_id,
     track_path,
-    region,
     city,
+    province,
     title,
     length,
     expected_time,
@@ -16,15 +16,13 @@ class Hike {
     difficulty,
     description,
     start_point,
-    end_point,
-    reference_point
+    end_point
   ) {
     this.hike_id = hike_id;
-    this.hut_id = hut_id;
     this.writer_id = writer_id;
     this.track_path = track_path;
-    this.region = region;
     this.city = city;
+    this.province = province;
     this.title = title;
     this.length = length;
     this.expected_time = expected_time;
