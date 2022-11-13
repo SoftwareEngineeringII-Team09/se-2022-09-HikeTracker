@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import * as Layouts from './layouts';
-import * as Pages from './pages';
+
+import * as Layouts from '@layouts';
+import * as Pages from '@pages';
 
 const App = (props) => {
   const location = useLocation();
@@ -11,6 +12,8 @@ const App = (props) => {
         <Route path='/signup' element={<Pages.Registration />} />
         <Route path='/login' element={<Pages.Login />} />
         <Route path='/activate' element={<Pages.ActivateAccount />} />
+        <Route path='/browse' element={<Pages.BrowseHikes />} />
+        <Route path='/browse/:hikeId' element={<Pages.Hike />} />
       </Route>
       <Route path='*' element={<Pages.Error />} />
     </Routes>

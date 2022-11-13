@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
-const { createMemoryHistory } = require("history");
+import { createMemoryHistory } from 'history'
 
 import Header from './Header'
 

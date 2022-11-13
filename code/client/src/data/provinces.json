@@ -1,0 +1,42 @@
+[
+    {
+        "istat_provincia": 1,
+        "provincia": "TORINO",
+        "sigla_prov": "TO"
+    },
+    {
+        "istat_provincia": 2,
+        "provincia": "VERCELLI",
+        "sigla_prov": "VC"
+    },
+    {
+        "istat_provincia": 3,
+        "provincia": "NOVARA",
+        "sigla_prov": "NO"
+    },
+    {
+        "istat_provincia": 4,
+        "provincia": "CUNEO",
+        "sigla_prov": "CN"
+    },
+    {
+        "istat_provincia": 5,
+        "provincia": "ASTI",
+        "sigla_prov": "AT"
+    },
+    {
+        "istat_provincia": 6,
+        "provincia": "ALESSANDRIA",
+        "sigla_prov": "AL"
+    },
+    {
+        "istat_provincia": 96,
+        "provincia": "BIELLA",
+        "sigla_prov": "BI"
+    },
+    {
+        "istat_provincia": 103,
+        "provincia": "VERBANO-CUSIO-OSSOLA",
+        "sigla_prov": "VB"
+    }
+]
