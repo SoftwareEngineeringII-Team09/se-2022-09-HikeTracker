@@ -57,6 +57,22 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     background-color: $base-dark !important;
 }
 
+.bg-base-light {
+    background-color: $base-light !important;
+}
+
+.bg-base {
+    background-color: $base !important;
+}
+
+.bg-primary-dark {
+    background-color: $primary-dark !important;
+}
+
+.bg-primary-light {
+    background-color: $primary-light !important;
+}
+
 .text-primary-light {
     color: $primary-light !important;
 }
@@ -66,11 +82,15 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 }
 
 .text-base {
-    color: $base !important
+    color: $base !important;
 }
 
 .text-base-dark {
-    color: $base-dark !important
+    color: $base-dark !important;
+}
+
+.text-base-light {
+    color: $base-light !important;
 }
 
 .btn.btn-primary-light {
@@ -78,7 +98,13 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 }
 
 .btn.btn-base {
-    color: $base-light !important
+    color: $base-light !important;
+}
+
+@media (min-width: 1200px) {
+    .position-xl-fixed {
+        position: fixed;
+    }
 }
 
 // Layout
