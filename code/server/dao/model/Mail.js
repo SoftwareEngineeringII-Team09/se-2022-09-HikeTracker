@@ -43,7 +43,7 @@ exports.sendVerificationCode = (data) => {
                     })
                     .catch(() => {
                         // If an error occurs with sending the mail, create an HTTP error
-                        reject(new createError.InternalServerError('Mhm... Sembrebbe che il gufo portalettere si sia perso...'));
+                        reject(new createError.InternalServerError('Mhm... It looks like the letter got lost...'));
                     })
             })
             .catch(() => {

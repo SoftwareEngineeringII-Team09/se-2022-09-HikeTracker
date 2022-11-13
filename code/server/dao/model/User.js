@@ -14,7 +14,7 @@ exports.getUserByEmail = (email) => {
         const query = 'SELECT * FROM User WHERE email = ?';
         db.get(query, [email], (err, row) => {
             if (err) reject(new createError.InternalServerError(err.message));
-            else if (!row) reject(new createError.NotFound("Abbiamo controllato, ma non troviamo questa email nei nostri registri..."));
+            else if (!row) reject(new createError.NotFound("We checked, but we can't find this email in our logs ..."));
             else resolve(row);
         })
     })
@@ -85,7 +85,7 @@ exports.updateVerificationCode = (data) => {
         const query = 'UPDATE User SET verification_code = ? WHERE email = ?';        //   MANCA QUESTO CAMPO NEL DB, NON NECESSARIO PER ORA
         db.run(query, [data.verificationCode, data.email], function (err) {
             if (err) reject(new createError.InternalServerError(err.message));
-            else if (this.changes === 0) reject(new createError.NotFound('Abbiamo controllato, ma non troviamo questa email nei nostri registri...'));
+            else if (this.changes === 0) reject(new createError.NotFound('We checked, but we can t find this email in our logs ...'));
             else resolve();
         })
     })
@@ -98,7 +98,7 @@ exports.verifyEmail = (data) => {
         db.run(query, [1, undefined, data.email, data.verificationCode], function (err) {
             if (err) reject(new createError.InternalServerError(err.message));
             // No changes have been made, so wrong verification code given
-            else if (this.changes === 0) reject(new createError.NotAcceptable('Non scherziamo quando diciamo che controlliamo... Codice errato!'));
+            else if (this.changes === 0) reject(new createError.NotAcceptable('We don t joke when we say we check ... Wrong code!'));
             else resolve();
         })
     })

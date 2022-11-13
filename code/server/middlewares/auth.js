@@ -24,7 +24,7 @@ exports.useLocal = () => passport.use(new LocalStrategy(function verify(username
                 // If the given password does not match with the one within the DB
                 // return an error.
                 if (!crypto.timingSafeEqual(user.password, hashedPassword))
-                    return done(new createError.Unauthorized("Nope! Password non corretta... prova di nuovo."));
+                    return done(new createError.Unauthorized("Nope! Wrong password... try again."));
 
                 // If it's all right, the user is logged in
                 return done(null, { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname, mobile: user.mobile, role: user.role, active: user.active });

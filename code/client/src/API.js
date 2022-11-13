@@ -110,43 +110,6 @@ function deleteHike(hike) {
   )
 }
 
-/**
- * This function wants username and password inside a "credentials" object.
- * It executes the log-in.
- */
-const logIn = async (credentials) => {
-  return getJson(fetch(SERVER_URL + 'sessions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    body: JSON.stringify(credentials),
-  })
-  )
-};
-
-/**
- * This function is used to verify if the user is still logged-in.
- * It returns a JSON object with the user info.
- */
-const getUserInfo = async () => {
-  return getJson(fetch(SERVER_URL + 'sessions/current', {
-    credentials: 'include',
-  })
-  )
-};
-
-/**
- * This function destroy the current user's session and execute the log-out.
- */
-const logOut = async() => {
-  return getJson(fetch(SERVER_URL + 'sessions/current', {
-    method: 'DELETE',
-    credentials: 'include'
-  })
-  )
-}
 
 //ANCORA DA IMPLEMENTARE
 
