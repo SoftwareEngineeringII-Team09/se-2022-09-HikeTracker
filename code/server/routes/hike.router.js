@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+
 // Get hike by Id
 router.get('/:hikeId', param("hikeId").isInt({ min: 1 }).toInt().withMessage("Provide a valid hikeId"), async (req, res) => {
   try {
@@ -50,5 +51,6 @@ router.get('/:hikeId/download', param("hikeId").isInt({ min: 1 }).toInt().withMe
     return res.status(errorCode).json({ error: errorMessage })
   }
 })
+
 
 module.exports = router;
