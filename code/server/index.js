@@ -2,9 +2,9 @@
 
 // If the server is not in production, configures usage of
 // .env file for environment variables
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config();
+// }
 
 //import modules
 const express = require('express');
@@ -12,7 +12,6 @@ const logger = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
 const { check, validationResult, body, param } = require('express-validator'); // validation middleware
-const userDB = require('./db');
 const passport = require('passport');
 
 // import auth middleware to configure authentication functionalities
@@ -25,6 +24,11 @@ const parkingRouter = require('./routes/parkinglot.router');
 const userRouter = require('./routes/user.router');
 const authRouter = require('./routes/auth.router');
 const { use } = require('chai');
+
+const SERVER_PORT = 3001;
+const CLIENT_PORT = 3000;
+const API_PREFIX = '/api';
+const PORT = 3001;
 
 // authentication functionalities initialization
 auth.useLocal();
@@ -55,7 +59,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Setting up server routers
-app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);
+// app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
 app.use(`${API_PREFIX}/users`, userRouter);
 app.use(`${API_PREFIX}/huts`, hutRouter);
@@ -130,8 +134,5 @@ app.get('/api/filters',
 
 
 // Activating the server
-const SERVER_PORT = 3001;
-const CLIENT_PORT = 3000;
-const API_PREFIX = '/api';
-const PORT = 3001;
+
 app.listen(PORT, ()=>console.log(`Server running on http://localhost:${PORT}/`));
