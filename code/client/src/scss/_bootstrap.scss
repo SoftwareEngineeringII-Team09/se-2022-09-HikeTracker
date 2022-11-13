@@ -12,7 +12,7 @@ $font-weight-bold: 700;
 // $font-weight-extrabold: 800;
 $font-weight-black: 900;
 
-@import './colors';
+@import "./colors";
 
 @import "~bootstrap/scss/functions"; // Required
 @import "~bootstrap/scss/variables"; // Required
@@ -51,21 +51,61 @@ $utilities: map-merge(
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
-// Background colors
-
-.bg-gray-light {
-    background-color: $gray-light !important;
-}
-
-// Buttons
-
-.btn-primary,
-.btn-secondary {
-    font-weight: $font-weight-bold !important;
-    color: $light !important;
-}
-
 // Include any optional Bootstrap CSS as needed
+
+.bg-base-dark {
+    background-color: $base-dark !important;
+}
+
+.bg-base-light {
+    background-color: $base-light !important;
+}
+
+.bg-base {
+    background-color: $base !important;
+}
+
+.bg-primary-dark {
+    background-color: $primary-dark !important;
+}
+
+.bg-primary-light {
+    background-color: $primary-light !important;
+}
+
+.text-primary-light {
+    color: $primary-light !important;
+}
+
+.text-primary-dark {
+    color: $primary-dark !important;
+}
+
+.text-base {
+    color: $base !important;
+}
+
+.text-base-dark {
+    color: $base-dark !important;
+}
+
+.text-base-light {
+    color: $base-light !important;
+}
+
+.btn.btn-primary-light {
+    color: $primary-dark !important;
+}
+
+.btn.btn-base {
+    color: $base-light !important;
+}
+
+@media (min-width: 1200px) {
+    .position-xl-fixed {
+        position: fixed;
+    }
+}
 
 // Layout
 @import "~bootstrap/scss/containers";
@@ -82,20 +122,20 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 // Components
 // @import "~bootstrap/scss/accordion";
-// @import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/alert";
 // @import "~bootstrap/scss/badge";
 // @import "~bootstrap/scss/breadcrumb";
 @import "~bootstrap/scss/buttons";
 // @import "~bootstrap/scss/button-group";
 // @import "~bootstrap/scss/card";
 // @import "~bootstrap/scss/carousel";
-// @import "~bootstrap/scss/close";
+@import "~bootstrap/scss/close";
 // @import "~bootstrap/scss/dropdown";
 // @import "~bootstrap/scss/list-group";
 // @import "~bootstrap/scss/modal"; // Requires transitions
 @import "~bootstrap/scss/nav";
 @import "~bootstrap/scss/navbar"; // Requires nav
-// @import "~bootstrap/scss/offcanvas";
+@import "~bootstrap/scss/offcanvas";
 // @import "~bootstrap/scss/pagination";
 // @import "~bootstrap/scss/placeholders";
 // @import "~bootstrap/scss/popover";
