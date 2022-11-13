@@ -25,8 +25,8 @@ class HikeManager {
       const writer = await UserManager.getUserById(h.writer_id);
       const startPoint = await PointManager.getPointById(h.start_point);
       const expectedTime = h.expected_time.split(":");
-      const hours = parseInt(expectedTime[0]);
-      const minutes = parseInt(expectedTime[1]);
+      const hours = expectedTime[0];
+      const minutes = expectedTime[1];
 
       const hike = {
         id: h.hike_id,
@@ -103,8 +103,8 @@ class HikeManager {
     }
 
     const expectedTime = hike.expected_time.split(":");
-    const hours = parseInt(expectedTime[0]);
-    const minutes = parseInt(expectedTime[1]);
+    const hours = expectedTime[0];
+    const minutes = expectedTime[1];
 
     const gpx = new gpxParser();
     const gpxString = fs.readFileSync(hike.track_path).toString();
