@@ -1,4 +1,5 @@
 import { SERVER_URL } from "./config";
+
 import axios from 'axios';
 
 const users = {

@@ -242,3 +242,13 @@ npm run integration
 
 
 ## Mocks
+
+
+### Login page
+
+![Login](./doc/mocks/Account/Login.png)
+
+### Registration page
+
+![Registration Hiker](./doc/mocks/Account/Register_default.png)
+![Registration Local Guide](./doc/mocks/Account/Register_additional_info.png)

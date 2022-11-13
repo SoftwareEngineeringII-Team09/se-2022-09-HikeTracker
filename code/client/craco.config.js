@@ -22,5 +22,14 @@ module.exports = {
             '@services': path.resolve(__dirname, 'src/services'),
 
         }
+    },
+    jest: {
+        babel: {
+            addPresets: true,
+            addPlugins: true,
+        },
+        configure: (jestConfig, { env, paths, resolve, rootDir }) => {
+            return jestConfig;
+        },
     }
 }
