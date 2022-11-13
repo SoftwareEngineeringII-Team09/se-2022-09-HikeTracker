@@ -21,32 +21,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 //from file
 
-
-
-
 router.post("/:id", upload.single("gpx"), async (req, res) => {
   let writer_id = req.params.id;
   let gpxString = fs.readFileSync(`gpx/${req.file.originalname}`).toString();
   gpx.parse(gpxString);
-  let ascent = gpx.tracks[0].elevation.max - gpx.tracks[0].elevation.max;
-  let length = gpx.tracks[0].distance.total;
+  let track = gpx.tracks[0];
+  let ascent = track.elevation.max - track.elevation.min;
+  let length = track.distance.total;
   let track_path = "gpx/" + req.file.originalname;
-  let start_pointX = gpx.tracks[0].points[0]["lat"];
-  let start_pointY = gpx.tracks[0].points[0]["lon"];
-  let start_pointA = gpx.tracks[0].points[0]["ele"];
-  let lastNum = gpx.tracks[0].points.length - 1;
-  let end_pointX = gpx.tracks[0].points[lastNum]["lat"];
-  let end_pointY = gpx.tracks[0].points[lastNum]["lon"];
-  let end_pointA = gpx.tracks[0].points[lastNum]["ele"];
-  let max_ele = gpx.tracks[0].elevation.max;
-  let endTime = gpx.tracks[0].points[lastNum]["time"];
-  let startTime = gpx.tracks[0].points[0]["time"];
+  let start_pointX = track.points[0]["lat"];
+  let start_pointY = track.points[0]["lon"];
+  let start_pointA = track.points[0]["ele"];
+  let lastNum = track.points.length - 1;
+  let end_pointX = track.points[lastNum]["lat"];
+  let end_pointY = track.points[lastNum]["lon"];
+  let end_pointA = track.points[lastNum]["ele"];
+  let max_ele = track.elevation.max;
+  let endTime = track.points[lastNum]["time"];
+  let startTime = track.points[0]["time"];
   const StartDate = dayjs(startTime);
   const EndDate = dayjs(endTime);
   let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:MM");
   //let expected_minute = dayjs(EndDate.diff(StartDate, "minute"));
   // console.log(req.body.reference_point[0]);
- try {
+  try {
     const error = validationResult(req);
     if (!error.isEmpty())
       return res.status(422).json({ error: error.array()[0] });
@@ -78,61 +76,68 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
       exception.result ?? "Something went wrong, please try again";
     return res.status(errorCode).json({ error: errorMessage });
   }
-
-
-
-
-
-
-
+});
 
 // Get list of all hikes
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const hikes = await HikeManager.loadAllHikes();
     return res.status(200).json({ hikes });
   } catch (exception) {
     const errorCode = exception.code ?? 500;
-    const errorMessage = exception.result ?? 'Something went wrong, try again';
-    return res.status(errorCode).json({ error: errorMessage })
+    const errorMessage = exception.result ?? "Something went wrong, try again";
+    return res.status(errorCode).json({ error: errorMessage });
   }
-})
+});
 
 // Get hike by Id
-router.get('/:hikeId', param("hikeId").isInt({ min: 1 }).toInt().withMessage("Provide a valid hikeId"), async (req, res) => {
-  try {
-    // Validation of body and/or parameters
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(422).json({ error: errors.array()[0] });
+router.get(
+  "/:hikeId",
+  param("hikeId")
+    .isInt({ min: 1 })
+    .toInt()
+    .withMessage("Provide a valid hikeId"),
+  async (req, res) => {
+    try {
+      // Validation of body and/or parameters
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ error: errors.array()[0] });
 
-    const hike = await HikeManager.loadHikeById(req.params.hikeId);
-    return res.status(200).json({ hike });
-  } catch (exception) {
-    const errorCode = exception.code ?? 500;
-    const errorMessage = exception.result ?? 'Something went wrong, try again';
-    return res.status(errorCode).json({ error: errorMessage })
+      const hike = await HikeManager.loadHikeById(req.params.hikeId);
+      return res.status(200).json({ hike });
+    } catch (exception) {
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
   }
-})
+);
 
 // Download hike gpx track
-router.get('/:hikeId/download', param("hikeId").isInt({ min: 1 }).toInt().withMessage("Provide a valid hikeId"), async (req, res) => {
-  try {
-    // Validation of body and/or parameters
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(422).json({ error: errors.array()[0] });
+router.get(
+  "/:hikeId/download",
+  param("hikeId")
+    .isInt({ min: 1 })
+    .toInt()
+    .withMessage("Provide a valid hikeId"),
+  async (req, res) => {
+    try {
+      // Validation of body and/or parameters
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ error: errors.array()[0] });
 
-    const gpxFile = await HikeManager.getGpxTrackById(req.params.hikeId);
-    return res.download(gpxFile);
-  } catch (exception) {
-    const errorCode = exception.code ?? 500;
-    const errorMessage = exception.result ?? 'Something went wrong, try again';
-    return res.status(errorCode).json({ error: errorMessage })
+      const gpxFile = await HikeManager.getGpxTrackById(req.params.hikeId);
+      return res.download(gpxFile);
+    } catch (exception) {
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
   }
-})
-
- 
-});
+);
 
 module.exports = router;
