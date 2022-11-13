@@ -4,12 +4,12 @@ class Point {
   static tableName = "Point";
 
   constructor(
-    pointId, type, parkingId, hutId, nameOfLocation, latitude, longitude, altitude, city, province, address
+    pointId, type, parking, hut, nameOfLocation, latitude, longitude, altitude, city, province, address
   ) {
     this.pointId = pointId;
     this.type = type;
-    this.parkingId = parkingId;
-    this.hutId = hutId;
+    this.parking = parking;
+    this.hut = hut;
     this.nameOfLocation = nameOfLocation;
     this.latitude = latitude;
     this.longitude = longitude;

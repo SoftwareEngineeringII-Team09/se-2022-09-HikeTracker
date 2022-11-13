@@ -6,15 +6,15 @@ const PersistentManager = require("../dao/PersistentManager");
 class HutManager {
   constructor() { }
 
-  async getHutById(hutId) {
-    let exists = await PersistentManager.exists(Hut.tableName, "hut_id", hutId);
+  async getHutByPointId(pointId) {
+    let exists = await PersistentManager.exists(Hut.tableName, "point_id", pointId);
     if (!exists) {
       return Promise.reject({
         code: 404,
-        result: `No available Hut with hut_id = ${hutId}`,
+        result: `No available Hut with point_id = ${pointId}`,
       });
     }
-    let hut = await PersistentManager.loadOneByAttribute(Hut.tableName, "hut_id", hutId);
+    let hut = await PersistentManager.loadOneByAttribute(Hut.tableName, "point_id", pointId);
 
     return Promise.resolve(new Hut(
       hut.hut_id,

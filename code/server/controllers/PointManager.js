@@ -19,8 +19,8 @@ class PointManager {
     return Promise.resolve(new Point(
       point.point_id,
       point.type,
-      point.parking_id,
-      point.hut_id,
+      point.parking,
+      point.hut,
       point.name_of_location,
       point.latitude,
       point.longitude,

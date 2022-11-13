@@ -13,6 +13,7 @@ class Hike {
     length,
     expected_time,
     ascent,
+    maxElevation,
     difficulty,
     description,
     start_point,
@@ -27,6 +28,7 @@ class Hike {
     this.length = length;
     this.expected_time = expected_time;
     this.ascent = ascent;
+    this.maxElevation = maxElevation;
     this.difficulty = difficulty;
     this.description = description;
     this.start_point = start_point;

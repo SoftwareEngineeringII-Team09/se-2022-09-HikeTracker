@@ -6,15 +6,15 @@ const PersistentManager = require("../dao/PersistentManager");
 class ParkingLotManager {
   constructor() { }
 
-  async getParkingLotById(parkingId) {
-    let exists = await PersistentManager.exists(ParkingLot.tableName, "parking_id", parkingId);
+  async getParkingLotByPointId(pointId) {
+    let exists = await PersistentManager.exists(ParkingLot.tableName, "point_id", pointId);
     if (!exists) {
       return Promise.reject({
         code: 404,
-        result: `No available ParkingLot with parking_id = ${parkingId}`,
+        result: `No available ParkingLot with point_id = ${pointId}`,
       });
     }
-    let parking = await PersistentManager.loadOneByAttribute(ParkingLot.tableName, "parking_id", parkingId);
+    let parking = await PersistentManager.loadOneByAttribute(ParkingLot.tableName, "point_id", pointId);
 
     return Promise.resolve(new ParkingLot(
       parking.parking_id,
