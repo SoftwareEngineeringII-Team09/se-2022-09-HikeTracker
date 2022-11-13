@@ -1,9 +1,9 @@
 "use strict";
 
 const Hut = require("../dao/model/Hut");
-
+const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
-const Position = require("../dao/model/Position");
+
 const PersistentManager = require("../dao/PersistentManager");
 
 class HutManager {
@@ -28,31 +28,34 @@ class HutManager {
       return Promise.reject("404 no writerId found");
     }
 
-    let newPosition = new Position(
+    let newPoint = new Point(
       null,
-      altitude,
+      null,
+      "0",
+      "1",
+      null,
       latitude,
       longitude,
+      altitude,
       city,
       province,
       address
     );
-    let newPositionid = await PersistentManager.store(
-      Position.tableName,
-      newPosition
-    );
+
+    let newPointid = await PersistentManager.store(Point.tableName, newPoint);
+
     let newHut = new Hut(
       null,
       hut_name,
       writer_id,
-      newPositionid,
+      newPointid,
       num_of_beds,
       cost
     );
     let newHutid = await PersistentManager.store(Hut.tableName, newHut);
     let res = {
       hut_id: newHutid,
-      position_id: newPositionid,
+      point_id: newPointid,
     };
 
     return res;
