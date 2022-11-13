@@ -21,6 +21,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 //from file
 
+
+
+
 router.post("/:id", upload.single("gpx"), async (req, res) => {
   let writer_id = req.params.id;
   let gpxString = fs.readFileSync(`gpx/${req.file.originalname}`).toString();
@@ -35,7 +38,7 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
   let end_pointX = gpx.tracks[0].points[lastNum]["lat"];
   let end_pointY = gpx.tracks[0].points[lastNum]["lon"];
   let end_pointA = gpx.tracks[0].points[lastNum]["ele"];
-
+  let max_ele = gpx.tracks[0].elevation.max;
   let endTime = gpx.tracks[0].points[lastNum]["time"];
   let startTime = gpx.tracks[0].points[0]["time"];
   const StartDate = dayjs(startTime);
@@ -43,6 +46,46 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
   let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:MM");
   //let expected_minute = dayjs(EndDate.diff(StartDate, "minute"));
   // console.log(req.body.reference_point[0]);
+ try {
+    const error = validationResult(req);
+    if (!error.isEmpty())
+      return res.status(422).json({ error: error.array()[0] });
+    const hikeId = await HikeManager.defineHike(
+      writer_id,
+      track_path,
+      req.body.province,
+      req.body.city,
+      req.body.title,
+      length,
+      expected_time,
+      ascent,
+      max_ele,
+      req.body.difficulty,
+      req.body.description,
+      start_pointX,
+      start_pointY,
+      start_pointA,
+      end_pointX,
+      end_pointY,
+      end_pointA,
+      req.body.reference_point
+    );
+    return res.status(201).json({ hikeId });
+  } catch (exception) {
+    console.log(exception);
+    const errorCode = exception.code ?? 503;
+    const errorMessage =
+      exception.result ?? "Something went wrong, please try again";
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+
+
+
+
+
+
+
+
 // Get list of all hikes
 router.get('/', async (req, res) => {
   try {
@@ -89,37 +132,7 @@ router.get('/:hikeId/download', param("hikeId").isInt({ min: 1 }).toInt().withMe
   }
 })
 
-  try {
-    const error = validationResult(req);
-    if (!error.isEmpty())
-      return res.status(422).json({ error: error.array()[0] });
-    const hikeId = await HikeManager.defineHike(
-      writer_id,
-      track_path,
-      req.body.province,
-      req.body.city,
-      req.body.title,
-      length,
-      expected_time,
-      ascent,
-      req.body.difficulty,
-      req.body.description,
-      start_pointX,
-      start_pointY,
-      start_pointA,
-      end_pointX,
-      end_pointY,
-      end_pointA,
-      req.body.reference_point
-    );
-    return res.status(201).json({ hikeId });
-  } catch (exception) {
-    console.log(exception);
-    const errorCode = exception.code ?? 503;
-    const errorMessage =
-      exception.result ?? "Something went wrong, please try again";
-    return res.status(errorCode).json({ error: errorMessage });
-  }
+ 
 });
 
 module.exports = router;

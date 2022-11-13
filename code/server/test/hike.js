@@ -20,19 +20,19 @@ describe("Test Hike API", function () {
     this.beforeAll(async () => {});
   });
 
-  it("Should return userId non valid", (done) => {
-    const nonExistingUserId = 8;
-    agent.post(`/api/hikes/${nonExistingUserId}`).then(function (res) {
-      res.should.have.status(404);
-      res.should.have.property("error");
-      done();
-    });
-  });
+  // it("Should return userId non valid", (done) => {
+  //   const nonExistingUserId = 8;
+  //   agent.post(`/api/hikes/${nonExistingUserId}`).then(function (res) {
+  //     res.should.have.status(404);
+  //     res.should.have.property("error");
+  //     done();
+  //   });
+  // });
 
-  it("Should store successfully", (done) => {
-    agent.post(`/api/hikes/1`).then(function (res) {
-      res.should.have.status(201);
-      done();
-    });
-  });
+  // it("Should store successfully", (done) => {
+  //   agent.post(`/api/hikes/1`).then(function (res) {
+  //     res.should.have.status(201);
+  //     done();
+  //   });
+  // });
 });
