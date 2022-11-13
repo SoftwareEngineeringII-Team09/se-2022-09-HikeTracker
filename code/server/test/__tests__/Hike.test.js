@@ -54,4 +54,8 @@ describe("Add Hike", () => {
 
   //   expect(hiketest).toEqual(res);
   //});
+
+  test("Example", async () => {
+    expect(true).toEqual(true);
+  });
 });

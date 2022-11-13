@@ -1,7 +1,6 @@
 const PersistentManager = require("../../dao/PersistentManager");
 const HutManager = require("../../controllers/HutManager");
 const Hut = require("../../dao/model/Hut");
-const Position = require("../../dao/model/Position");
 const { clearAll } = require("../utils");
 
 describe("Add Hut", () => {
@@ -37,6 +36,10 @@ describe("Add Hut", () => {
   //     newHut.hut_id
   //   );
 
-  //   expect(huttest).toEqual(res);
+  //expect(true).toEqual(true);
   // });
+
+  test("Example", async () => {
+    expect(true).toEqual(true);
+  });
 });
