@@ -10,7 +10,7 @@ const HikeCard = ({ hike }) => {
                         <h3 className='fw-bold m-0'>{hike.title}</h3>
                         <span>Created by {hike.writer}</span>
                     </div>
-                    <p className='text-base py-3'>
+                    <p className='text-base py-3 text-truncate'>
                         {hike.description}
                     </p>
 

@@ -140,7 +140,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 // @import "~bootstrap/scss/placeholders";
 // @import "~bootstrap/scss/popover";
 // @import "~bootstrap/scss/progress";
-// @import "~bootstrap/scss/spinners";
+@import "~bootstrap/scss/spinners";
 // @import "~bootstrap/scss/toasts";
 // @import "~bootstrap/scss/tooltip";
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
@@ -7,7 +7,8 @@ import BrowseHikes from './BrowseHikes'
 
 jest.mock('react-bootstrap', () => {
     const Row = (props) => <div>{props.children}</div>
-    return ({ Row })
+    const Spinner = (props) => <div>{props.children}</div>
+    return ({ Row, Spinner })
 })
 
 jest.mock('@lib/helpers', () => ({
@@ -30,10 +31,6 @@ jest.mock('@components/features', () => ({
     }
 }))
 
-jest.mock('axios', () => ({
-    get: () => Promise.resolve({ data: {} })
-}))
-
 describe("BrowseHikes page", () => {
     it("Page is correctly rendered", () => {
         const setOpenMock = jest.fn()
@@ -41,6 +38,7 @@ describe("BrowseHikes page", () => {
 
         const useOpenMock = (useOpen) => [useOpen, setOpenMock]
         const useHikesMock = (useHikes) => [useHikes, setHikesMock]
+
         jest.spyOn(React, 'useState').mockImplementation(useOpenMock, useHikesMock)
 
         jest.spyOn(React, 'useEffect').mockImplementation((f) => f())
@@ -49,7 +47,7 @@ describe("BrowseHikes page", () => {
         expect(screen.getByText('Browse hikes')).toBeInTheDocument()
     })
 
-    it("Filter button open filters sidebar when is clicked", () => {
+    it("Filter button open filters sidebar when is clicked", async () => {
         const setOpenMock = jest.fn()
         const setHikesMock = jest.fn()
 
@@ -60,7 +58,7 @@ describe("BrowseHikes page", () => {
         jest.spyOn(React, 'useEffect').mockImplementation((f) => f())
 
         render(<BrowseHikes />, { wrapper: MemoryRouter })
-        userEvent.click(screen.getByRole('button'))
+        await userEvent.click(screen.getByRole('button'))
         expect(setOpenMock).toHaveBeenCalledTimes(1)
     })
 })
