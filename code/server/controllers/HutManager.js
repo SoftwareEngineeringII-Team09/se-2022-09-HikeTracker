@@ -25,7 +25,7 @@ class HutManager {
       writer_id
     );
     if (!existwriter) {
-      return Promise.reject("404 no writerId found");
+      return Promise.reject("no writerId found");
     }
 
     let newPoint = new Point(
@@ -59,26 +59,35 @@ class HutManager {
     };
 
     return res;
-  
   }
   async getHutByPointId(pointId) {
-    let exists = await PersistentManager.exists(Hut.tableName, "point_id", pointId);
+    let exists = await PersistentManager.exists(
+      Hut.tableName,
+      "point_id",
+      pointId
+    );
     if (!exists) {
       return Promise.reject({
         code: 404,
         result: `No available Hut with point_id = ${pointId}`,
       });
     }
-    let hut = await PersistentManager.loadOneByAttribute(Hut.tableName, "point_id", pointId);
+    let hut = await PersistentManager.loadOneByAttribute(
+      Hut.tableName,
+      "point_id",
+      pointId
+    );
 
-    return Promise.resolve(new Hut(
-      hut.hut_id,
-      hut.hut_name,
-      hut.writer_id,
-      hut.point_id,
-      hut.num_of_beds,
-      hut.cost
-    ));
+    return Promise.resolve(
+      new Hut(
+        hut.hut_id,
+        hut.hut_name,
+        hut.writer_id,
+        hut.point_id,
+        hut.num_of_beds,
+        hut.cost
+      )
+    );
   }
 }
 

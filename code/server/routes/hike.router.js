@@ -25,7 +25,9 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
   let writer_id = req.params.id;
   let gpxString = fs.readFileSync(`gpx/${req.file.originalname}`).toString();
   gpx.parse(gpxString);
+
   let track = gpx.tracks[0];
+  let trackName = track.name;
   let ascent = track.elevation.max - track.elevation.min;
   let length = track.distance.total;
   let track_path = "gpx/" + req.file.originalname;
@@ -43,7 +45,7 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
   const EndDate = dayjs(endTime);
   let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:MM");
   //let expected_minute = dayjs(EndDate.diff(StartDate, "minute"));
-  // console.log(req.body.reference_point[0]);
+
   try {
     const error = validationResult(req);
     if (!error.isEmpty())
@@ -53,7 +55,7 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
       track_path,
       req.body.province,
       req.body.city,
-      req.body.title,
+      req.body.title ? req.body.title : trackName,
       length,
       expected_time,
       ascent,
@@ -89,7 +91,6 @@ router.get("/", async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 });
-
 
 // Get hike by Id
 router.get(
@@ -140,6 +141,5 @@ router.get(
     }
   }
 );
-
 
 module.exports = router;
