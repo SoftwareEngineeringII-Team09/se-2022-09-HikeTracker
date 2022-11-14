@@ -18,7 +18,7 @@ describe("NavLink component", () => {
         expect(screen.getByRole("link", { name: "I'm a link" })).toBeInTheDocument()
     })
 
-    it("The url prop correctly set the link href attribute", () => {
+    it("The url prop correctly set the link href attribute", async () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -26,7 +26,7 @@ describe("NavLink component", () => {
             </Router>
         )
         expect(screen.getByRole("link")).toHaveAttribute("href", testProps.url)
-        userEvent.click(screen.getByRole("link"))
+        await userEvent.click(screen.getByRole("link"))
         expect(history.location.pathname).toBe(testProps.url)
     })
 

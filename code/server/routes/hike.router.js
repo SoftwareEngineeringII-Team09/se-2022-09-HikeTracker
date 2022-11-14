@@ -90,6 +90,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+
 // Get hike by Id
 router.get(
   "/:hikeId",
@@ -139,5 +140,6 @@ router.get(
     }
   }
 );
+
 
 module.exports = router;
