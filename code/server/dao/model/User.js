@@ -1,46 +1,24 @@
 "user strict";
 
 class User {
-  static tableName = "User"
+  static tableName = "User";
 
-  constructor(
-    userId,
-    email,
-    salt,
-    password,
-    firstname,
-    lastname,
-    mobile,
-    role,
-    active
-  ) {
-    this.userId = userId
-    this.email = email
-    this.salt = salt
-    this.password = password
-    this.firstname = firstname
-    this.lastname = lastname
-    this.mobile =  mobile
-    this.role = role
-    this.active = active
+  constructor(userId, email, firstName, lastName, mobile, role, active) {
+    this.user_id = userId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.mobile = mobile;
+    this.role = role;
+    this.active = active;
+    this.email = email;
   }
 }
 
-module.exports = User
-
-
-
-
-
-
-
-
-
-
+module.exports = User;
 
 // class User {
 //   static tableName = "User";
-  
+
 //   constructor(userId, email, firstName, lastName, mobile, role, active) {
 //     this.userId = userId;
 //     this.firstName = firstName;
@@ -86,13 +64,13 @@ module.exports = User
 //           resolve(false);
 //         }
 //         else {
-  
+
 //           const user = { id: row.id, username: row.email, name: row.name };
-  
+
 //           // Check the hashes with an async call, this operation may be CPU-intensive (and we don't want to block the server)
-//           crypto.scrypt(password, row.salt, 32, function (err, hashedPassword) { 
+//           crypto.scrypt(password, row.salt, 32, function (err, hashedPassword) {
 //             if (err) reject(err);
-//             if (!crypto.timingSafeEqual(Buffer.from(row.hash, 'hex'), hashedPassword)) 
+//             if (!crypto.timingSafeEqual(Buffer.from(row.hash, 'hex'), hashedPassword))
 //               resolve(false);
 //             else
 //               resolve(user);
