@@ -41,16 +41,16 @@ const filterHikes = (hikes, filters) => {
                 })
                 // Ascent filter
                 && filters.ascent.some((value) => {
-                    if (!value.min) return hike.total_ascent <= value.max
-                    else if (!value.max) return hike.total_ascent >= value.min
-                    else return hike.total_ascent <= value.max && hike.total_ascent >= value.min
+                    if (!value.min) return hike.totalAscent <= value.max
+                    else if (!value.max) return hike.totalAscent >= value.min
+                    else return hike.totalAscent <= value.max && hike.totalAscent >= value.min
                 })
                 // Roundtrip time filter
                 && filters.roundtrip_time.some((value) => {
-                    if (!value.min) return hike.expected_time.hours < value.max
-                    else if (!value.max) return hike.expected_time.hours >= value.min
-                    else return ((hike.expected_time.hours === value.max && hike.expected_time.minutes <= 0) || hike.expected_time.hours < value.max)
-                        && hike.expected_time.hours >= value.min
+                    if (!value.min) return hike.expectedTime.hours < value.max
+                    else if (!value.max) return parseInt(hike.expectedTime.hours) >= value.min
+                    else return ((parseInt(hike.expectedTime.hours) === value.max && parseInt(hike.expected_time.minutes) <= 0) || parseInt(hike.expectedTime.hours) < value.max)
+                        && parseInt(hike.expectedTime.hours) >= value.min
                 })
                 // Location filter
                 && (!filters.location.city || (filters.location.city && filters.location.city === hike.city))

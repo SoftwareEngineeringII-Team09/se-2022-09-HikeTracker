@@ -6,7 +6,7 @@ import api from '../../services/api';
 
 const ActivateAccount = () => {
 
-    const [searchParams, _setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [status, setStatus] = useState("loading");
     const email = searchParams.get("email");
     const token = searchParams.get("token");
@@ -43,7 +43,7 @@ const ActivateAccount = () => {
             navigate('/');
 
         activateAccount();
-    }, []);
+    }, []); // eslint-disable-line
 
     return (
         <Col>

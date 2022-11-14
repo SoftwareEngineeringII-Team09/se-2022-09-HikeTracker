@@ -49,24 +49,24 @@ const testProps = {
 }
 
 describe("HikesFilters component", () => {
-    it("Filters are closed if close button is clicked", () => {
+    it("Filters are closed if close button is clicked", async () => {
         render(<HikesFilters {...testProps} />, { wrapper: MemoryRouter })
-        userEvent.click(screen.getByTestId('close-button'))
+        await userEvent.click(screen.getByTestId('close-button'))
         expect(testProps.close).toHaveBeenCalledTimes(1)
     })
 
-    it("Filters are updated when apply button is clicked", () => {
+    it("Filters are updated when apply button is clicked", async () => {
         render(<HikesFilters {...testProps} />, { wrapper: MemoryRouter })
-        userEvent.click(screen.getByRole('button', { name: "Apply" }))
+        await userEvent.click(screen.getByRole('button', { name: "Apply" }))
         expect(testProps.setFilters).toHaveBeenCalledTimes(1)
         expect(testProps.close).toHaveBeenCalledTimes(1)
     })
 
-    it("States are resetted when reset button is clicked", () => {
+    it("States are resetted when reset button is clicked", async () => {
         const spy = jest.spyOn(React, 'useState')
         spy.mockImplementation((value) => [value, jest.fn()])
         render(<HikesFilters {...testProps} />, { wrapper: MemoryRouter })
-        userEvent.click(screen.getByRole('button', { name: "Reset" }))
+        await userEvent.click(screen.getByRole('button', { name: "Reset" }))
         expect(testProps.setFilters).toHaveBeenCalledTimes(1)
         expect(testProps.close).toHaveBeenCalledTimes(1)
         expect(spy).toHaveBeenCalledTimes(4)

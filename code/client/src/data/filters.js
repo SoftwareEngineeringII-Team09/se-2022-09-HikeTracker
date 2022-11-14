@@ -4,7 +4,7 @@ const filters = {
         values: [
             "Tourist",
             "Hiker",
-            "Professional Hiker"
+            "Professional hiker"
         ]
     },
     length: {

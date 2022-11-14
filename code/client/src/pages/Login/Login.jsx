@@ -11,7 +11,7 @@ import { AuthContext } from '../../contexts/authContext';
 const LoginForm = () => {
 
     const navigate = useNavigate();
-    const [userStatus, requestLoginUpdate] = useContext(AuthContext);
+    const [, requestLoginUpdate] = useContext(AuthContext);
 
     /* Login data Validation schema */
     const validationSchema = Yup.object({

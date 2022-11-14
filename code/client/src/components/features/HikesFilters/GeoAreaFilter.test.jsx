@@ -77,18 +77,18 @@ describe("GeoAreaFilter components", () => {
         expect(screen.getByTestId("city-select")).not.toHaveAttribute("disabled")
     })
 
-    it("Province select allows user to choose an option and sets province", () => {
+    it("Province select allows user to choose an option and sets province", async () => {
         render(<GeoAreaFilter {...testProps.default} />, { wrapper: MemoryRouter })
         const select = screen.getByTestId("province-select")
-        userEvent.selectOptions(select, within(select).getByRole('option', { name: provinces[0].provincia }))
+        await userEvent.selectOptions(select, within(select).getByRole('option', { name: provinces[0].provincia }))
         expect(testProps.default.setProvince).toHaveBeenCalledTimes(1)
         expect(testProps.default.setProvince).toHaveBeenCalledWith(provinces[0].istat_provincia)
     })
 
-    it("City select allows user to choose an option and sets city", () => {
+    it("City select allows user to choose an option and sets city", async () => {
         render(<GeoAreaFilter {...testProps.provinceSelected} />, { wrapper: MemoryRouter })
         const select = screen.getByTestId("city-select")
-        userEvent.selectOptions(select, within(select).getByRole('option', { name: cities[0].comune }))
+        await userEvent.selectOptions(select, within(select).getByRole('option', { name: cities[0].comune }))
         expect(testProps.provinceSelected.setCity).toHaveBeenCalledTimes(1)
         expect(testProps.provinceSelected.setCity).toHaveBeenCalledWith(cities[0].codiceistatcomune)
     })

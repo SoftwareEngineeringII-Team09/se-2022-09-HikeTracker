@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { SERVER_URL } from "./config";
+// import axios from 'axios';
+// import { SERVER_URL } from "./config";
 
 const huts = {
     // createHut: (data) => {
