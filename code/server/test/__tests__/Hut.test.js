@@ -9,37 +9,39 @@ describe("Add Hut", () => {
   /* Test Teardown */
   afterAll(clearAll);
 
-  // let huttest = new Hut(null, "testname", 1, null, 12, 50);
+  let huttest = new Hut(null, "testname", 1, null, 12, 50);
 
-  // let positiontest = new Position(null, 123, 345, 234, "test", "test", "test");
+  let HutTestInfo = {
+    altitude: 111.11,
+    latitude: 222.22,
+    longitude: 333.33,
+    city: 4,
+    province: 202,
+    address: null,
+  };
 
-  // test("define", async () => {
-  //   let newHut = await HutManager.defineHut(
-  //     huttest.hut_name,
-  //     huttest.writer_id,
-  //     huttest.num_of_beds,
-  //     huttest.cost,
-  //     positiontest.altitude,
-  //     positiontest.latitude,
-  //     positiontest.longitude,
-  //     positiontest.city,
-  //     positiontest.province,
-  //     positiontest.address
-  //   );
+  test("define", async () => {
+    let newHut = await HutManager.defineHut(
+      huttest.hut_name,
+      huttest.writer_id,
+      huttest.num_of_beds,
+      huttest.cost,
+      HutTestInfo.altitude,
+      HutTestInfo.latitude,
+      HutTestInfo.longitude,
+      HutTestInfo.city,
+      HutTestInfo.province,
+      HutTestInfo.address
+    );
 
-  //   huttest.hut_id = newHut.hut_id;
+    huttest.hut_id = newHut.hut_id;
 
-  //   huttest.position_id = newHut.position_id;
-  //   const res = await PersistentManager.loadOneByAttribute(
-  //     "Hut",
-  //     "hut_id",
-  //     newHut.hut_id
-  //   );
+    const res = await PersistentManager.loadOneByAttribute(
+      "Hut",
+      "hut_id",
+      newHut.hut_id
+    );
 
-  //expect(true).toEqual(true);
-  // });
-
-  test("Example", async () => {
     expect(true).toEqual(true);
   });
 });

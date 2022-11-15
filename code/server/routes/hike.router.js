@@ -2,15 +2,10 @@
 
 const HikeManager = require("../controllers/HikeManager");
 const { body, param, validationResult } = require("express-validator");
-const fs = require("fs");
+
 const express = require("express");
 const path = require("path");
-const dayjs = require("dayjs");
 const router = express.Router();
-const duration = require("dayjs/plugin/duration");
-dayjs.extend(duration);
-const gpxParser = require("gpxparser");
-const gpx = new gpxParser();
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: "./gpx",
@@ -19,58 +14,28 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-//from file
 
+//from file
 router.post("/:id", upload.single("gpx"), async (req, res) => {
   let writer_id = req.params.id;
-  let gpxString = fs.readFileSync(`gpx/${req.file.originalname}`).toString();
-  gpx.parse(gpxString);
-  let track = gpx.tracks[0];
-  let ascent = track.elevation.max - track.elevation.min;
-  let length = track.distance.total;
-  let track_path = "gpx/" + req.file.originalname;
-  let start_pointX = track.points[0]["lat"];
-  let start_pointY = track.points[0]["lon"];
-  let start_pointA = track.points[0]["ele"];
-  let lastNum = track.points.length - 1;
-  let end_pointX = track.points[lastNum]["lat"];
-  let end_pointY = track.points[lastNum]["lon"];
-  let end_pointA = track.points[lastNum]["ele"];
-  let max_ele = track.elevation.max;
-  let endTime = track.points[lastNum]["time"];
-  let startTime = track.points[0]["time"];
-  const StartDate = dayjs(startTime);
-  const EndDate = dayjs(endTime);
-  let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:MM");
-  //let expected_minute = dayjs(EndDate.diff(StartDate, "minute"));
-  // console.log(req.body.reference_point[0]);
+  let fileName = req.file.originalname;
   try {
     const error = validationResult(req);
     if (!error.isEmpty())
       return res.status(422).json({ error: error.array()[0] });
     const hikeId = await HikeManager.defineHike(
       writer_id,
-      track_path,
       req.body.province,
       req.body.city,
       req.body.title,
-      length,
-      expected_time,
-      ascent,
-      max_ele,
       req.body.difficulty,
       req.body.description,
-      start_pointX,
-      start_pointY,
-      start_pointA,
-      end_pointX,
-      end_pointY,
-      end_pointA,
-      req.body.reference_point
+      req.body.reference_point,
+      fileName
     );
     return res.status(201).json({ hikeId });
   } catch (exception) {
-    console.log(exception);
+    //console.log(exception);
     const errorCode = exception.code ?? 503;
     const errorMessage =
       exception.result ?? "Something went wrong, please try again";
@@ -89,7 +54,6 @@ router.get("/", async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 });
-
 
 // Get hike by Id
 router.get(
@@ -140,6 +104,5 @@ router.get(
     }
   }
 );
-
 
 module.exports = router;
