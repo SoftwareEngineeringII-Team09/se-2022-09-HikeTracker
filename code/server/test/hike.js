@@ -17,54 +17,64 @@ describe("Test Hike API", function () {
   /* Test Teardown */
   this.afterAll(clearAll);
 
-  // it("Should return userId non valid", (done) => {
-  //   const nonExistingUserId = 8;
-  //   agent
-  //     .post(`/api/hikes/${nonExistingUserId}`)
-  //     .field("province", 4)
-  //     .field("city", 23)
-  //     .field("title", "title")
-  //     .field("difficulty", "hiker")
-  //     .field("description", "thisistest")
-  //     .attach(
-  //       "gpx",
-  //       fs.readFileSync(`gpx/bivacco_berardo.gpx`),
-  //       `bivacco_berardo.gpx`
-  //     )
-  //     .then(function (res) {
-  //       console.log("res");
-  //       res.should.have.status(404);
-
-  //       //res.should.have.property("error");
-  //       done();
-  //     })
-  //     .catch(function (err) {
-  //       console.log("err");
-  //       throw err;
-  //     });
-
-  // });
-
-  it("Should store successfully", (done) => {
-    let testData = {
+  it("Should return userId non valid", (done) => {
+    const nonExistingUserId = 8;
+    const testData = {
       province: 3,
       city: 23,
       title: "title",
       difficulty: "hiker",
       description: "thisistest",
+      reference_point: JSON.stringify({
+        name: "parking",
+        altitude: 1324.22,
+        longitude: 234.33,
+        city: 23,
+        province: 244,
+      }),
+    };
+    agent
+      .post(`/api/hikes/${nonExistingUserId}`)
+      .field(testData)
+      .attach(
+        "gpx",
+        fs.readFileSync(`gpx/rocciamelone.gpx`),
+        `rocciamelone.gpx`
+      )
+      .then(function (res) {
+        res.should.have.status(503);
+        done();
+      })
+      .catch((e) => console.log(e));
+  });
+
+  it("Should store successfully", (done) => {
+    const testData = {
+      province: 3,
+      city: 23,
+      title: "title",
+      difficulty: "hiker",
+      description: "thisistest",
+      reference_point: JSON.stringify({
+        name: "parking",
+        altitude: 1324.22,
+        longitude: 234.33,
+        city: 23,
+        province: 244,
+      }),
     };
     agent
       .post(`/api/hikes/1`)
-      .send(testData)
-      // .attach(
-      //   "gpx",
-      //   fs.readFileSync(`gpx/bivacco_berardo.gpx`),
-      //   `bivacco_berardo.gpx`
-      // )
+      .field(testData)
+      .attach(
+        "gpx",
+        fs.readFileSync(`gpx/rocciamelone.gpx`),
+        `rocciamelone.gpx`
+      )
       .then(function (res) {
-        console.log(res);
         res.should.have.status(201);
         done();
-      });
+      })
+      .catch((e) => console.log(e));
   });
 });

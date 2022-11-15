@@ -4,34 +4,29 @@ const Hike = require("../dao/model/Hike");
 const User = require("../dao/model/User");
 const Hike_Ref = require("../dao/model/Hike_Ref");
 const Point = require("../dao/model/Point");
+const fs = require("fs");
 const PersistentManager = require("../dao/PersistentManager");
 const UserManager = require("../controllers/UserManager");
 const PointManager = require("../controllers/PointManager");
 const ParkingLotManager = require("../controllers/ParkingLotManager");
 const HutManager = require("../controllers/HutManager");
-const fs = require("fs");
 const gpxParser = require("gpxparser");
+const dayjs = require("dayjs");
+const duration = require("dayjs/plugin/duration");
+dayjs.extend(duration);
+
+const gpx = new gpxParser();
 
 class HikeManager {
   async defineHike(
     writer_id,
-    track_path,
     province,
     city,
     title,
-    length,
-    expected_time,
-    ascent,
-    max_ele,
     difficulty,
     description,
-    start_pointX,
-    start_pointY,
-    start_pointA,
-    end_pointX,
-    end_pointY,
-    end_pointA,
-    reference_point
+    reference_point,
+    fileName
   ) {
     const existwriter = await PersistentManager.exists(
       User.tableName,
@@ -41,6 +36,27 @@ class HikeManager {
     if (!existwriter) {
       return Promise.reject("404 no userId found");
     }
+
+    //parser gpx
+    let gpxString = fs.readFileSync(`gpx/${fileName}`).toString();
+    gpx.parse(gpxString);
+    let track = gpx.tracks[0];
+    let track_path = "gpx/" + fileName;
+    let ascent = track.elevation.max - track.elevation.min;
+    let length = track.distance.total;
+    let start_pointX = track.points[0]["lat"];
+    let start_pointY = track.points[0]["lon"];
+    let start_pointA = track.points[0]["ele"];
+    let lastNum = track.points.length - 1;
+    let end_pointX = track.points[lastNum]["lat"];
+    let end_pointY = track.points[lastNum]["lon"];
+    let end_pointA = track.points[lastNum]["ele"];
+    let max_ele = track.elevation.max;
+    let endTime = track.points[lastNum]["time"];
+    let startTime = track.points[0]["time"];
+    const StartDate = dayjs(startTime);
+    const EndDate = dayjs(endTime);
+    let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:MM");
 
     let Startpoint = new Point(
       null,
@@ -90,8 +106,6 @@ class HikeManager {
     );
 
     let newHId = await PersistentManager.store(Hike.tableName, newHike);
-    // console.log(reference_point);
-    // console.log(trackName);
     for (let i = 0; i < reference_point.length; i++) {
       let p = reference_point[i];
 

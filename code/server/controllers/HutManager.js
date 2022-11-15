@@ -25,7 +25,7 @@ class HutManager {
       writer_id
     );
     if (!existwriter) {
-      return Promise.reject("no writerId found");
+      return Promise.reject("No writerId found");
     }
 
     let newPoint = new Point(
