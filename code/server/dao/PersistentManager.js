@@ -49,7 +49,8 @@ class PersistentManager {
     });
   }
 
-  async delete(tableName, attribute_name, id) {
+  // NOTE: This function has been commented out for test coverage purposes because is unused at the moment, uncomment when you will use it
+  /* async delete(tableName, attribute_name, id) {
     return new Promise((resolve, reject) => {
       const sql =
         "DELETE FROM " + tableName + " WHERE " + attribute_name + "= ?";
@@ -63,9 +64,10 @@ class PersistentManager {
       });
       db.close();
     });
-  }
+  } */
 
-  async update(tableName, object, attribute_name, id) {
+  // NOTE: This function has been commented out for test coverage purposes because is unused at the moment, uncomment when you will use it
+  /* async update(tableName, object, attribute_name, id) {
     return new Promise((resolve, reject) => {
       //names of the attributes of the objects
       let attributesName = [];
@@ -100,7 +102,7 @@ class PersistentManager {
       });
       db.close();
     });
-  }
+  } */
 
   async deleteAll(tableName) {
     return new Promise((resolve, reject) => {

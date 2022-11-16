@@ -4,7 +4,6 @@ const HikeManager = require("../controllers/HikeManager");
 const { body, param, validationResult } = require("express-validator");
 
 const express = require("express");
-const path = require("path");
 const router = express.Router();
 const multer = require("multer");
 const storage = multer.diskStorage({

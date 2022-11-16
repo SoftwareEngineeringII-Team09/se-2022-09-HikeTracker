@@ -56,7 +56,7 @@ class HikeManager {
     let startTime = track.points[0]["time"];
     const StartDate = dayjs(startTime);
     const EndDate = dayjs(endTime);
-    let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:MM");
+    let expected_time = dayjs.duration(EndDate.diff(StartDate)).format("HH:mm");
 
     let Startpoint = new Point(
       null,
