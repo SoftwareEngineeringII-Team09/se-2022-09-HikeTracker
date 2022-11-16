@@ -22,12 +22,17 @@
   "homepage": "https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.5",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "gpxparser": "^3.0.8",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "sqlite3": "^5.1.2"
   },
   "devDependencies": {
@@ -41,7 +46,7 @@
     "mochawesome-report-generator": "^6.2.0"
   },
   "scripts": {
-    "integration": "mocha test --runInBand --timeout 5000 --require test/mocha.env.js --exit",
+    "integration": "mocha test --timeout 10000 --require test/mocha.env.js --exit",
     "test": "jest --runInBand --coverage",
     "dev": "nodemon index.js",
     "start": "node index.js"

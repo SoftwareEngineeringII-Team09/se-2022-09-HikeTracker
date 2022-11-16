@@ -39,9 +39,9 @@ describe("Test", () => {
 
     const parkingLoaded = await ParkingLotManager.getParkingLotByPointId(pointId);
 
-    expect(parkingLoaded.parkingName).toEqual(parking.parking_name);
-    expect(parkingLoaded.writerId).toEqual(parking.writer_id);
-    expect(parkingLoaded.pointId).toEqual(pointId);
+    expect(parkingLoaded.parking_name).toEqual(parking.parking_name);
+    expect(parkingLoaded.writer_id).toEqual(parking.writer_id);
+    expect(parkingLoaded.point_id).toEqual(pointId);
   });
 
   test("getParkingLotByPointId with non existing pointId", async () => {

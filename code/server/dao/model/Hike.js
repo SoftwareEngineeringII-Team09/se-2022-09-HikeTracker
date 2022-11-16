@@ -1,8 +1,8 @@
 "user strict";
-
+//15 attributes
 class Hike {
   static tableName = "Hike";
-  
+
   constructor(
     hike_id,
     writer_id,
@@ -28,12 +28,11 @@ class Hike {
     this.length = length;
     this.expected_time = expected_time;
     this.ascent = ascent;
-    this.maxElevation = maxElevation;
+    this.max_elevation = maxElevation;
     this.difficulty = difficulty;
     this.description = description;
     this.start_point = start_point;
-    this.end_point = end_point
-    this.reference_point = reference_point;
+    this.end_point = end_point;
   }
 }
 

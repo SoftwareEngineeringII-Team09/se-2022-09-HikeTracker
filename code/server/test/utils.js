@@ -11,4 +11,8 @@ module.exports.clearAll = async () => {
         // PersistentManager.deleteAll("User"),
         // PersistentManager.deleteAll("sqlite_sequence") 
     ]);
+/*     await PersistentManager.deleteAll("Hut");
+    await PersistentManager.deleteAll("ParkingLot");
+    await PersistentManager.deleteAll("Hike");
+    await PersistentManager.deleteAll("Point"); */
 };
