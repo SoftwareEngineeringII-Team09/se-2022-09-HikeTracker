@@ -28,6 +28,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "gpxparser": "^3.0.8",
+    "jQuery": "^1.7.4",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.20",
     "passport": "^0.6.0",
