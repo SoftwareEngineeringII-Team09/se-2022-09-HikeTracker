@@ -2,10 +2,10 @@
 
 const HikeManager = require("../controllers/HikeManager");
 const { body, param, validationResult } = require("express-validator");
-
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+
 const storage = multer.diskStorage({
   destination: "./gpx",
   filename: function (req, file, callback) {
@@ -14,27 +14,29 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-//from file
-router.post("/:id", upload.single("gpx"), async (req, res) => {
-  let writer_id = req.params.id;
-  let fileName = req.file.originalname;
+// POST a hike 
+router.post("/writers/:writerId", upload.single("gpx"), async (req, res) => {
+  const writerId = req.params.writerId;
+  const fileName = req.file.originalname;
   try {
+    // Validation of body and/or parameters
     const error = validationResult(req);
     if (!error.isEmpty())
       return res.status(422).json({ error: error.array()[0] });
-    const hikeId = await HikeManager.defineHike(
-      writer_id,
-      req.body.province,
-      req.body.city,
+
+    await HikeManager.defineHike(
+      writerId,
       req.body.title,
+      req.body.expectedTime,
       req.body.difficulty,
       req.body.description,
-      req.body.reference_point,
+      req.body.city,
+      req.body.province,
+      req.body.region,
       fileName
     );
-    return res.status(201).json({ hikeId });
+    return res.status(201).end();
   } catch (exception) {
-    //console.log(exception);
     const errorCode = exception.code ?? 503;
     const errorMessage =
       exception.result ?? "Something went wrong, please try again";
@@ -42,7 +44,7 @@ router.post("/:id", upload.single("gpx"), async (req, res) => {
   }
 });
 
-// Get list of all hikes
+// GET the list of all hikes
 router.get("/", async (req, res) => {
   try {
     const hikes = await HikeManager.loadAllHikes();
@@ -54,7 +56,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get hike by Id
+// GET a hike by hikeId
 router.get(
   "/:hikeId",
   param("hikeId")
@@ -79,7 +81,7 @@ router.get(
   }
 );
 
-// Download hike gpx track
+// GET a hike gpx
 router.get(
   "/:hikeId/download",
   param("hikeId")
@@ -93,8 +95,8 @@ router.get(
       if (!errors.isEmpty())
         return res.status(422).json({ error: errors.array()[0] });
 
-      const gpxFile = await HikeManager.getGpxTrackById(req.params.hikeId);
-      return res.download(gpxFile);
+      const gpxPath = await HikeManager.getGpxPath(req.params.hikeId);
+      return res.download(gpxPath);
     } catch (exception) {
       const errorCode = exception.code ?? 500;
       const errorMessage =

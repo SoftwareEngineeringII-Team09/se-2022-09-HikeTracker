@@ -6,26 +6,26 @@ const express = require("express");
 const router = express.Router();
 
 //POST HUT
-router.post("/:id", async (req, res) => {
-  let writer_id = req.params.id;
+router.post("/writers/:writerId", async (req, res) => {
+  const writerId = req.params.writerId;
   try {
     const error = validationResult(req);
     if (!error.isEmpty())
       return res.status(422).json({ error: error.array()[0] });
 
-    const hutId = await HutManager.defineHut(
-      req.body.hut_name,
-      writer_id,
-      req.body.num_of_beds,
-      req.body.cost,
-      req.body.altitude,
-      req.body.latitude,
-      req.body.longitude,
+    await HutManager.defineHut(
+      req.body.hutName,
+      writerId,
       req.body.city,
       req.body.province,
-      req.body.address
+      req.body.region,
+      req.body.numOfBeds,
+      req.body.cost,
+      req.body.latitude,
+      req.body.longitude,
+      req.body.altitude,
     );
-    return res.status(201).json({ hutId });
+    return res.status(201).end();
   } catch (exception) {
     console.log(exception);
     const errorCode = exception.code ?? 503;
