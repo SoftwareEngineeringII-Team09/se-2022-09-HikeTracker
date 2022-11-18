@@ -2,13 +2,16 @@
 
 class Hut {
   static tableName = "Hut";
-
-  constructor(hutId, hutName, writerId, pointId, numOfBeds, cost) {
-    this.hut_id = hutId;
-    this.hut_name = hutName;
-    this.writer_id = writerId;
-    this.point_id = pointId;
-    this.num_of_beds = numOfBeds;
+  
+  constructor(hutId, hutName, pointId, writerId, city, province, region, numOfBeds, cost) {
+    this.hutId = hutId;
+    this.hutName = hutName;
+    this.pointId = pointId;
+    this.writerId = writerId;
+    this.city = city;
+    this.province = province;
+    this.region = region;
+    this.numOfBeds = numOfBeds;
     this.cost = cost;
   }
 }
