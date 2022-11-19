@@ -37,5 +37,6 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
             
       - name: Build and push Docker image
-        run: docker-compose -f docker-compose.prod.yml push
+      - run: docker-compose -f docker-compose.prod.yml build
+      - run: docker-compose -f docker-compose.prod.yml push
         
