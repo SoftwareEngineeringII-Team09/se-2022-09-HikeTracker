@@ -7,9 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
+    name: Docker Deployment
     runs-on: ubuntu-latest
     
     defaults:
@@ -19,5 +18,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build Docker images
+    
     - run: docker-compose -f docker-compose.prod.yml build
     - run: docker-compose -f docker-compose.prod.yml push
