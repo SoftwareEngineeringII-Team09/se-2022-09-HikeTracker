@@ -391,7 +391,98 @@ Get gpx file according to the hike Id.
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 
 
-### **2. Hut Routes**
+### **1.Hike Routes**
+
+#### `POST /api/hikes/:writerId`
+
+Post a new hike associated to the existed writer with an empty of reference point.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a gpx file with a JSON object containing hike information. `
+
+```json
+{
+  "province": 4,
+  "city": 23,
+  "difficulty": "Hiker",
+  "description": "This is description",
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+### **2.Reference Point Routes**
+
+#### `POST /api/hikes/:hikeId`
+
+Post a reference point of specific hike 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+`Body: a JSON object containing reference point information of specific hike.`
+
+```json
+{
+   "referencePoints":[
+      {"name": "refPoint1"},
+      {"name": "refPoint2"},
+      {"name": "refPoint3"},
+   ],
+      "track":[
+         [44.56666,6.5444],
+         [44.56634,6.5334],
+         [44.56634,6.5334],
+   ]
+  
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+### **3. Hut Routes**
 
 #### `POST /api/huts/:writerId`
 
@@ -433,7 +524,60 @@ Post a new hut associated to the existed writer with an empty of reference point
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 
 
+#### `GET /api/huts/`
 
+Get all huts 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a JSON object containing hut information.`
+
+```json
+[{
+   "hutId": 1,
+   "hutName": "Rifugio Blitz",
+   "writerId": " 1",
+   "pointId": 5,
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Dummy refuge"
+   },
+   "endPoint":{
+      "name":"Dummy Refuge"
+   }  
+ }
+,...
+]
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
 
 
 
