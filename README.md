@@ -246,10 +246,10 @@ Hiker,Tour guide (registered user) get all hikes .
    "province": 2,
    "city":1001,
    "startPoint":{
-      "name": "Dummy refuge"
+      "name": "Start point of Trial to Rocca Patanua"
    },
    "endPoint":{
-      "name":"Dummy Refuge"
+      "name":"End point of Trial to Rocca Patanua"
    },
    "referencePoints":[
       {"name": "parking"},
@@ -303,10 +303,10 @@ Vistors (unregistered user) get all hikes .
    "province": 2,
    "city":1001,
    "startPoint":{
-      "name": "Dummy refuge"
+      "name": "Start point of Trial to Rocca Patanua"
    },
    "endPoint":{
-      "name":"Dummy Refuge"
+      "name":"End point of Trial to Rocca Patanua"
    },
    
  }
@@ -357,10 +357,10 @@ Visitors get hike information according to the hike Id.
    "province": 2,
    "city":1001,
    "startPoint":{
-      "name": "Dummy refuge"
+      "name": "Start point of Trial to Rocca Patanua"
    },
    "endPoint":{
-      "name":"Dummy Refuge"
+      "name":" End point of Trial to Rocca Patanua"
    }  
  }
 ,...
@@ -408,10 +408,10 @@ Tour guises get hike information according to the hike Id.
    "province": 2,
    "city":1001,
    "startPoint":{
-      "name": "Dummy refuge"
+      "name": "Start point of Trial to Rocca Patanua"
    },
    "endPoint":{
-      "name":"Dummy Refuge"
+      "name":"Start point of Trial to Rocca Patanua"
    },
    "referencePoint":[
       {"name" : "refPoint1"},
@@ -532,8 +532,12 @@ Post a new hut associated to the existed writer with an empty of reference point
 
 ```json
 {
-  "hut_name": "hutName3",
-  "number_of_beds":7,
+  "hutName": "hutName3",
+  "WriterId":7,
+  "city": 4017,
+  "province":2,
+  "region":1,
+  "numberOfBeds":50,
   "cost":20,
   "altitude":123,
   "longitude":231,
@@ -582,14 +586,16 @@ Get all huts
 [{
    "hutId": 1,
    "hutName": "Rifugio Blitz",
-   "writerId": " 1",
    "pointId": 5,
+   "writerId": " 1",
+   "city":4017,
+   "province":4,
+   "region":1,
    "numOfBeds": "60",
    "cost": 60,
    "latitude": 46.147128,
    "longitude":8.534505,
-   "altitude":1265.850139,
-      
+   "altitude":1265.850139,     
  }
 ,...
 ]
