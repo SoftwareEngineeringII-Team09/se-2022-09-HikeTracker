@@ -12,19 +12,19 @@ const Details = ({ hike }) => {
                 <span>{helperLocation.getLocationFullName(hike.province, hike.city)}</span>
             </div>
             <p>{hike.description}</p>
-            <div className='my-5 d-flex flex-column flex-lg-row justify-content-between'>
+            <div className='mt-5 d-flex flex-column flex-lg-row justify-content-between'>
                 {[
                     { label: "Start", ...hike.startPoint },
                     { label: "End", ...hike.endPoint }
                 ].map((point, idx) => (
-                    <div key={idx} className="d-flex align-items-center mb-3 w-100 w-lg-50">
-                        <h4 className='me-2 m-0'>{point.label} point |</h4>
+                    <div key={idx} className="mb-5 w-100 w-lg-50 px-lg-3">
+                        <h4 className='me-2 m-0'>{point.label} point</h4>
                         <p className='m-0'>{point.name}</p>
                     </div>
                 ))}
             </div>
             <div className='d-flex flex-column flex-lg-row justify-content-between'>
-                <div className='w-100 w-lg-50 mb-5'>
+                <div className='w-100 w-lg-50 mb-5 px-lg-3'>
                     <h4>Reference points</h4>
                     <div className='d-flex flex-column'>
                         {hike.referencePoints.map((point, idx) => (
@@ -32,7 +32,7 @@ const Details = ({ hike }) => {
                         ))}
                     </div>
                 </div>
-                <div className='w-100 w-lg-50'>
+                <div className='w-100 w-lg-50 px-lg-3'>
                     <h4 className='mb-3'>Useful info</h4>
                     <dl className='d-flex flex-column justify-content-between'>
                         {[

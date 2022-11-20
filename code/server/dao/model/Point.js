@@ -11,22 +11,16 @@ class Point {
     nameOfLocation,
     latitude,
     longitude,
-    altitude,
-    city,
-    province,
-    address
+    altitude
   ) {
-    this.point_id = pointId;
+    this.pointId = pointId;
     this.type = type;
     this.parking = parking;
     this.hut = hut;
-    this.name_of_location = nameOfLocation;
+    this.nameOfLocation = nameOfLocation;
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
-    this.city = city;
-    this.province = province;
-    this.address = address;
   }
 }
 

@@ -15,9 +15,9 @@ describe("FilterRadioButton component", () => {
         expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
-    it("Component execute onClick function when is clicked", () => {
+    it("Component execute onClick function when is clicked", async () => {
         render(<FilterRadioButton {...testProps} />, { wrapper: MemoryRouter })
-        userEvent.click(screen.getByRole('button'))
+        await userEvent.click(screen.getByRole('button'))
         expect(testProps.onClick).toHaveBeenCalledTimes(1)
     })
 })

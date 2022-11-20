@@ -49,23 +49,7 @@ class PersistentManager {
     });
   }
 
-  async delete(tableName, attribute_name, id) {
-    return new Promise((resolve, reject) => {
-      const sql =
-        "DELETE FROM " + tableName + " WHERE " + attribute_name + "= ?";
-      const db = new sqlite.Database(this.dbName, (err) => {
-        if (err) reject(err);
-      });
-      db.get("PRAGMA foreign_keys = ON");
-      db.run(sql, id, (err) => {
-        if (err) reject(err);
-        resolve();
-      });
-      db.close();
-    });
-  }
-
-  async update(tableName, object, attribute_name, id) {
+  async update(tableName, object, attributeName, value) {
     return new Promise((resolve, reject) => {
       //names of the attributes of the objects
       let attributesName = [];
@@ -86,16 +70,32 @@ class PersistentManager {
         " SET " +
         attributesName.join(",") +
         " WHERE " +
-        attribute_name +
+        attributeName +
         " = ?";
 
       const db = new sqlite.Database(this.dbName, (err) => {
         if (err) reject(err);
       });
       db.get("PRAGMA foreign_keys = ON");
-      db.run(sql, [...attributesValue, id], (err) => {
+      db.run(sql, [...attributesValue, value], (err) => {
         if (err) reject(err);
 
+        resolve();
+      });
+      db.close();
+    });
+  }
+
+  async delete(tableName, attributeName, value) {
+    return new Promise((resolve, reject) => {
+      const sql =
+        "DELETE FROM " + tableName + " WHERE " + attributeName + "= ?";
+      const db = new sqlite.Database(this.dbName, (err) => {
+        if (err) reject(err);
+      });
+      db.get("PRAGMA foreign_keys = ON");
+      db.run(sql, value, (err) => {
+        if (err) reject(err);
         resolve();
       });
       db.close();
@@ -140,9 +140,9 @@ class PersistentManager {
     });
   }
 
-  async exists(tableName, parameter_name, value) {
+  async exists(tableName, attributeName, value) {
     try {
-      let row = await this.loadOneByAttribute(tableName, parameter_name, value);
+      let row = await this.loadOneByAttribute(tableName, attributeName, value);
       if (row) {
         return true;
       } else {
@@ -153,10 +153,10 @@ class PersistentManager {
     }
   }
 
-  async loadOneByAttribute(tableName, parameter_name, value) {
+  async loadOneByAttribute(tableName, attributeName, value) {
     return new Promise((resolve, reject) => {
       const sql =
-        "SELECT * FROM " + tableName + " WHERE " + parameter_name + "= ?";
+        "SELECT * FROM " + tableName + " WHERE " + attributeName + "= ?";
       const db = new sqlite.Database(this.dbName, (err) => {
         if (err) reject(err);
       });
@@ -169,10 +169,10 @@ class PersistentManager {
     });
   }
 
-  async loadAllByAttribute(tableName, parameter_name, value) {
+  async loadAllByAttribute(tableName, attributeName, value) {
     return new Promise((resolve, reject) => {
       const sql =
-        "SELECT * FROM " + tableName + " WHERE " + parameter_name + "= ?";
+        "SELECT * FROM " + tableName + " WHERE " + attributeName + "= ?";
       const db = new sqlite.Database(this.dbName, (err) => {
         if (err) reject(err);
       });

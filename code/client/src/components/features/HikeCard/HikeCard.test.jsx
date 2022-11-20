@@ -39,7 +39,7 @@ describe("HikeCard component", () => {
             expect(screen.getByText(item.value)).toBeInTheDocument()
         })
 
-    it("User is able to navigate to hike details when the card is clicked", () => {
+    it("User is able to navigate to hike details when the card is clicked", async () => {
         const history = createMemoryHistory()
         render(
             <Router location={history.location} navigator={history}>
@@ -47,7 +47,7 @@ describe("HikeCard component", () => {
             </Router>
         )
         expect(screen.getByRole("link")).toHaveAttribute("href", expected.url)
-        userEvent.click(screen.getByRole("link"))
+        await userEvent.click(screen.getByRole("link"))
         expect(history.location.pathname).toBe(expected.url)
     })
 })
