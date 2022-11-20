@@ -218,7 +218,7 @@ Post a new hike associated to the existed writer with an empty of reference poin
 
 #### `GET /api/hikes/`
 
-Get all hikes .
+Hiker,Tour guide (registered user) get all hikes .
 
 **Request header:** none
 
@@ -258,7 +258,8 @@ Get all hikes .
    ],
    "track":[
       [44.56666,6.5444],
-      [44.56634,6.5334],...
+      [44.56634,6.5334],
+      [44.56634,6.5334],
       ]
 	}
 ,...
@@ -274,13 +275,63 @@ Get all hikes .
 
 #### `GET /api/hikes/`
 
-Get all hikes.
+Vistors (unregistered user) get all hikes .
+
+**Request header:** none
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Vistor`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Dummy refuge"
+   },
+   "endPoint":{
+      "name":"Dummy Refuge"
+   },
+   
+ }
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+#### `GET /api/hikes/:hikeId`
+
+Visitors get hike information according to the hike Id.
 
 **Request header:**
 
 `Content-Type: application/json`
 
-`Params: none`
+`Params: req.params.counterId to retrieve the id of the counter.`
 
 **Response body**
 
@@ -316,9 +367,16 @@ Get all hikes.
 ]
 ```
 
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
 #### `GET /api/hikes/:hikeId`
 
-Get hike information according to the hike Id.
+Tour guises get hike information according to the hike Id.
 
 **Request header:**
 
@@ -331,7 +389,7 @@ Get hike information according to the hike Id.
 `HTTP status code 200 OK`
 
 **Permission allowed**
-`Visitor???????????????????`
+`Tour guide`
 
 ```json
 [{
@@ -354,7 +412,17 @@ Get hike information according to the hike Id.
    },
    "endPoint":{
       "name":"Dummy Refuge"
-   }  
+   },
+   "referencePoint":[
+      {"name" : "refPoint1"},
+      {"name" : "refPoint2"},
+      {"name" : "refPoint3"},
+   ],
+   "track" : [
+      [12.33434, 453.12335],
+      [12.45345, 234.12325],
+      [12.343254, 123.12312]
+   ]
  }
 ,...
 ]
@@ -365,6 +433,9 @@ Get hike information according to the hike Id.
 - `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
 
 
 #### `GET /api/:hikeId/download` 
@@ -391,47 +462,6 @@ Get gpx file according to the hike Id.
 **Error responses**
 
 - `HTTP status code 500 Internal Server Error` (generic server error)
-- `HTTP status code 404 Not Found` (resource not found error)
-- `HTTP status code 422 Unprocessable Entity` (validation error)
-
-
-### **1.Hike Routes**
-
-#### `POST /api/hikes/:writerId`
-
-Post a new hike associated to the existed writer with an empty of reference point.
-
-**Request body:**
-
-`Content-Type: application/json`
-
-`Params: req.params.writerId to retrieve the id of the writer.`
-
-`Body: a gpx file with a JSON object containing hike information. `
-
-```json
-{
-  "province": 4,
-  "city": 23,
-  "difficulty": "Hiker",
-  "description": "This is description",
-}
-```
-
-**Response header**
-
-`HTTP status code 201 Created(success)`
-
-**Response body**
-`none`
-
-**Permission allowed**
-`Tour Guide, Manager`
-
-
-**Error responses**
-
-- `HTTP status code 503 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 
@@ -538,7 +568,15 @@ Get all huts
 
 `Params: req.params.writerId to retrieve the id of the writer.`
 
-`Body: a JSON object containing hut information.`
+`Body: none`
+
+
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
 
 ```json
 [{
@@ -546,36 +584,19 @@ Get all huts
    "hutName": "Rifugio Blitz",
    "writerId": " 1",
    "pointId": 5,
-   "description": "This is description",
-   "difficulty": "Hiker",
-   "length": 12,
-   "total_ascent":1290,
-   "expected_time":{
-      "hours":5,
-      "minutes":30
-   },
-   "province": 2,
-   "city":1001,
-   "startPoint":{
-      "name": "Dummy refuge"
-   },
-   "endPoint":{
-      "name":"Dummy Refuge"
-   }  
+   "numOfBeds": "60",
+   "cost": 60,
+   "latitude": 46.147128,
+   "longitude":8.534505,
+   "altitude":1265.850139,
+      
  }
 ,...
 ]
 ```
 
-**Response header**
-
-`HTTP status code 201 Created(success)`
-
-**Response body**
-`none`
-
 **Permission allowed**
-`Tour Guide, Manager`
+All
 
 **Error responses**
 
