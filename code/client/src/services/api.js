@@ -3,8 +3,8 @@ import hikes from './hikes'
 import huts from './huts'
 
 const api = {
-    hikes: hikes,
-    ...users,
+    hikes,
+    users,
     ...huts
 };
 
