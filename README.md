@@ -595,7 +595,18 @@ Get all huts
    "cost": 60,
    "latitude": 46.147128,
    "longitude":8.534505,
-   "altitude":1265.850139,     
+   "altitude":1265.850139, 
+   "schedule":[
+      {"day":1,
+      "openingTime": 8,
+      "closeTime":22,
+      },
+       {"day":2,
+      "openingTime": 8,
+      "closeTime":22,
+      },...
+   ] 
+   
  }
 ,...
 ]
