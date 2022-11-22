@@ -2,6 +2,7 @@
 
 const Hut = require("../dao/model/Hut");
 const Point = require("../dao/model/Point");
+const User = require("../dao/model/User");
 const PointManager = require("./PointManager");
 const UserManager = require("./UserManager");
 const PersistentManager = require("../dao/PersistentManager");
@@ -15,7 +16,7 @@ class HutManager {
    */
    async storeHut(newHut) {
     // Check that foreign key pointId exists
-    const pointExists = await PointManager.existsPoint("pointId", newHut.pointId);
+    const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
       return Promise.reject({
         code: 404,
@@ -23,7 +24,7 @@ class HutManager {
       });
     }
     // Check that foreign key writerId exists
-    const writerExists = await UserManager.existsUser("userId", newHut.writerId);
+    const writerExists = await PersistentManager.exists(User.tableName, "userId", newHut.writerId);
     if (!writerExists) {
       return Promise.reject({
         code: 404,
@@ -50,7 +51,7 @@ class HutManager {
       });
     }
     // Check that foreign key pointId exists
-    const pointExists = await PointManager.existsPoint("pointId", newHut.pointId);
+    const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
       return Promise.reject({
         code: 404,
@@ -58,7 +59,7 @@ class HutManager {
       });
     }
     // Check that foreign key writerId exists
-    const writerExists = await UserManager.existsUser("userId", newHut.writerId);
+    const writerExists = await PersistentManager.exists(User.tableName, "userId", newHut.writerId);
     if (!writerExists) {
       return Promise.reject({
         code: 404,

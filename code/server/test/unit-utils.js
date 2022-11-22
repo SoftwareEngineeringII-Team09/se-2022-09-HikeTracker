@@ -9,6 +9,9 @@ const HikeRefPoint = require("../dao/model/HikeRefPoint");
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
 const HikeManager = require("../controllers/HikeManager");
+const ParkingLotManager = require("../controllers/ParkingLotManager");
+const PointManager = require("../controllers/PointManager");
+const HikeRefPointManager = require("../controllers/HikeRefPointManager");
 
 /* Reset DB content */
 exports.clearAll = async function () {
@@ -173,7 +176,133 @@ exports.testGetGpxPath = function (itShould, hikeId, expectedGpxPath = undefined
 /*****************************************************************************************************
 *              ParkingLot
 *****************************************************************************************************/
+exports.testStoreParkingLot = function (itShould, newParkingLot, expectedRejectionCode = undefined) {
+	test(`Should ${itShould}`, async () => {
+		if (!expectedRejectionCode) {
+			const res = await ParkingLotManager.storeParkingLot(newParkingLot);
+			const storedParkingLot = await PersistentManager.loadAll(ParkingLot.tableName).then(parkingLots => parkingLots[0]);
 
+			expect(res).toEqual(newParkingLot.parkingLotId);
+			expect(storedParkingLot).toEqual(newParkingLot);
+		}
+		else {
+			await expect(ParkingLotManager.storeParkingLot(newParkingLot)).rejects.toHaveProperty("code", expectedRejectionCode);
+		}
+	});
+}
+
+exports.testExistsParkingLot = function (itShould, attributeName, value, expectedResult) {
+	test(`Should ${itShould}`, async () => {
+		const res = await ParkingLotManager.existsParkingLot(attributeName, value);
+
+		expect(res).toEqual(expectedResult);
+	})
+}
+
+exports.testLoadOneByAttributeParkingLot = function (itShould, attributeName, value, expectedRejectionCode = undefined) {
+	test(`Should ${itShould}`, async () => {
+		if (!expectedRejectionCode) {
+			const res = await ParkingLotManager.loadOneByAttributeParkingLot(attributeName, value);
+
+			expect(res[attributeName]).toEqual(value);
+		} else {
+			await expect(ParkingLotManager.loadOneByAttributeParkingLot(attributeName, value)).rejects.toHaveProperty("code", expectedRejectionCode);
+		}
+	})
+}
+
+exports.testDefineParkingLot = function (itShould, writerId, parkingLotName, latitude, longitude, altitude, expectedRejectionCode = undefined) {
+	test(`Should ${itShould}`, async () => {
+		if (!expectedRejectionCode) {
+			await ParkingLotManager.defineParkingLot(writerId, parkingLotName, latitude, longitude, altitude);
+			const definedParkingLot = await PersistentManager.loadAll(ParkingLot.tableName).then(parkingLots => parkingLots[0]);
+			const definedParkingLotPoint = await PersistentManager.loadAll(Point.tableName).then(points => points[0]);
+
+			expect(definedParkingLot.writerId).toEqual(writerId);
+			expect(definedParkingLot.parkingLotName).toEqual(parkingLotName);
+			expect(definedParkingLotPoint.latitude).toEqual(latitude);
+			expect(definedParkingLotPoint.longitude).toEqual(longitude);
+			expect(definedParkingLotPoint.altitude).toEqual(altitude);
+		} else {
+			await expect(ParkingLotManager.defineParkingLot(writerId, parkingLotName, latitude, longitude, altitude)).rejects.toHaveProperty("code", expectedRejectionCode);
+		}
+	})
+}
+
+
+/*****************************************************************************************************
+*              Point
+*****************************************************************************************************/
+exports.testStorePoint = function (itShould, newPoint, expectedRejectionCode = undefined) {
+	test(`Should ${itShould}`, async () => {
+		if (!expectedRejectionCode) {
+			const res = await PointManager.storePoint(newPoint);
+			const storedPoint = await PersistentManager.loadAll(Point.tableName).then(points => points[0]);
+
+			expect(res).toEqual(newPoint.pointId);
+			expect(storedPoint).toEqual(newPoint);
+		}
+		else {
+			await expect(PointManager.storePoint(newPoint)).rejects.toHaveProperty("code", expectedRejectionCode);
+		}
+	});
+}
+
+exports.testExistsPoint = function (itShould, attributeName, value, expectedResult) {
+	test(`Should ${itShould}`, async () => {
+		const res = await PointManager.existsPoint(attributeName, value);
+
+		expect(res).toEqual(expectedResult);
+	})
+}
+
+exports.testLoadOneByAttributePoint = function (itShould, attributeName, value, expectedRejectionCode = undefined) {
+	test(`Should ${itShould}`, async () => {
+		if (!expectedRejectionCode) {
+			const res = await PointManager.loadOneByAttributePoint(attributeName, value);
+
+			expect(res[attributeName]).toEqual(value);
+		} else {
+			await expect(PointManager.loadOneByAttributePoint(attributeName, value)).rejects.toHaveProperty("code", expectedRejectionCode);
+		}
+	})
+}
+
+
+/*****************************************************************************************************
+*              HikeRefPoint
+*****************************************************************************************************/
+exports.testStoreHikeRefPoint = function (itShould, newHikeRefPoint, expectedRejectionCode = undefined) {
+	test(`Should ${itShould}`, async () => {
+		if (!expectedRejectionCode) {
+			await HikeRefPointManager.storeHikeRefPoint(newHikeRefPoint);
+			const storedHikeRefPoint = await PersistentManager.loadAll(HikeRefPoint.tableName).then(hikeRefPoints => hikeRefPoints[0]);
+
+			expect(storedHikeRefPoint).toEqual(newHikeRefPoint);
+		}
+		else {
+			await expect(HikeRefPointManager.storeHikeRefPoint(newHikeRefPoint)).rejects.toHaveProperty("code", expectedRejectionCode);
+		}
+	});
+}
+
+exports.testExistsHikeRefPoint = function (itShould, attributeName, value, expectedResult) {
+	test(`Should ${itShould}`, async () => {
+		const res = await HikeRefPointManager.existsHikeRefPoint(attributeName, value);
+
+		expect(res).toEqual(expectedResult);
+	})
+}
+
+exports.testLoadAllByAttributeHikeRefPoint = function (itShould, attributeName, value) {
+	test(`Should ${itShould}`, async () => {
+		const res = await HikeRefPointManager.loadAllByAttributeHikeRefPoint(attributeName, value).then(hikeRefPoints => hikeRefPoints.length);
+
+		for (const r in res) {
+			expect(r[attributeName]).toEqual(value);
+		}
+	})
+}
 
 
 /*****************************************************************************************************

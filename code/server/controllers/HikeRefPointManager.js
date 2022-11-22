@@ -1,6 +1,8 @@
 "use strict";
 
 const HikeRefPoint = require("../dao/model/HikeRefPoint");
+const Hike = require("../dao/model/Hike");
+const Point = require("../dao/model/Point");
 const PersistentManager = require("../dao/PersistentManager");
 const PointManager = require("./PointManager");
 
@@ -11,9 +13,9 @@ class HikeRefPointManager {
    * @param {HikeRefPoint} newHikeRefPoint 
    * @returns a Promise with the rowId value of the stored hikeRefPoint 
    */
-   /* async storeHikeRefPoint(newHikeRefPoint) {
+   async storeHikeRefPoint(newHikeRefPoint) {
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeRefPoint.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeRefPoint.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -21,7 +23,7 @@ class HikeRefPointManager {
       });
     }
     // Check that foreign key pointId exists
-    const refPointExists = await PointManager.existsPoint("pointId", newHikeRefPoint.pointId);
+    const refPointExists = await PersistentManager.exists(Point.tableName, "pointId", newHikeRefPoint.pointId);
     if (!refPointExists) {
       return Promise.reject({
         code: 404,
@@ -30,7 +32,7 @@ class HikeRefPointManager {
     }
 
     return PersistentManager.store(HikeRefPoint.tableName, newHikeRefPoint);
-  } */
+  }
 
   /**
    * Update a hikeRefPoint
@@ -48,7 +50,7 @@ class HikeRefPointManager {
       });
     }
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeRefPoint.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeRefPoint.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -56,7 +58,7 @@ class HikeRefPointManager {
       });
     }
     // Check that foreign key pointId exists
-    const refPointExists = await PointManager.existsPoint("pointId", newHikeRefPoint.pointId);
+    const refPointExists = await PersistentManager.exists(Point.tableName, "pointId", newHikeRefPoint.pointId);
     if (!refPointExists) {
       return Promise.reject({
         code: 404,
