@@ -188,7 +188,7 @@ Any other route is matched by this one where the application shows an error.
 
 ### **1.Hike Routes**
 
-#### `POST /api/hikes/:writerId`
+#### `POST /api/hikes/writers/:writerId`
 
 Post a new hike associated to the existed writer with an empty of reference point.
 
@@ -482,7 +482,7 @@ Get gpx file according to the hike Id.
 
 ### **2.Reference Point Routes**
 
-#### `POST /api/hikes/:hikeId`
+#### `POST /api/hikes/refPoints/:hikeId`
 
 Post a reference point of specific hike 
 
@@ -499,12 +499,12 @@ Post a reference point of specific hike
    "referencePoints":[
       {"name": "refPoint1"},
       {"name": "refPoint2"},
-      {"name": "refPoint3"},
+      {"name": "refPoint3"}
    ],
       "track":[
-         [44.56666,6.5444],
-         [44.56634,6.5334],
-         [44.56634,6.5334],
+         [44.56666,6.5444,1978.786291],
+         [44.56634,6.5334,1891.73755],
+         [44.56634,6.5334,1525.3]
    ]
   
 }
