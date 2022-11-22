@@ -3,6 +3,7 @@
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const PersistentManager = require("../dao/PersistentManager");
 const HutManager = require("./HutManager");
+const Hut = require("../dao/model/Hut");
 
 class HutDailyScheduleManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -13,7 +14,7 @@ class HutDailyScheduleManager {
    */
    /* async storeHutDailySchedule(newHutDailySchedule) {
     // Check that foreign key hutId exists
-    const hutExists = await HutManager.existsHut("hutId", newHutDailySchedule.hutId);
+    const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHutDailySchedule.hutId);
     if (!hutExists) {
       return Promise.reject({
         code: 404,
@@ -40,7 +41,7 @@ class HutDailyScheduleManager {
       });
     }
     // Check that foreign key hutId exists
-    const hutExists = await HutManager.existsHut("hutId", newHutDailySchedule.hutId);
+    const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHutDailySchedule.hutId);
     if (!hutExists) {
       return Promise.reject({
         code: 404,

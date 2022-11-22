@@ -2,8 +2,8 @@
 
 const ParkingLot = require("../dao/model/ParkingLot");
 const Point = require("../dao/model/Point");
+const User = require("../dao/model/User");
 const PointManager = require("./PointManager");
-const UserManager = require("./UserManager");
 const PersistentManager = require("../dao/PersistentManager");
 
 class ParkingLotManager {
@@ -15,7 +15,7 @@ class ParkingLotManager {
    */
    async storeParkingLot(newParkingLot) {
     // Check that foreign key pointId exists
-    const pointExists = await PointManager.existsPoint("pointId", newParkingLot.pointId);
+    const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newParkingLot.pointId);
     if (!pointExists) {
       return Promise.reject({
         code: 404,
@@ -23,7 +23,7 @@ class ParkingLotManager {
       });
     }
     // Check that foreign key writerId exists
-    const writerExists = await UserManager.existsUser("userId", newParkingLot.writerId);
+    const writerExists = await PersistentManager.exists(User.tableName, "userId", newParkingLot.writerId);
     if (!writerExists) {
       return Promise.reject({
         code: 404,
@@ -41,7 +41,7 @@ class ParkingLotManager {
    * @param {any} value 
    * @returns a Promise without any value if the parking lot exists, a rejected Promise with an object containing code and result otherwise
    */
-  async updateParkingLot(newParkingLot, attributeName, value) {
+  /* async updateParkingLot(newParkingLot, attributeName, value) {
     const exists = await this.existsParkingLot(attributeName, value);
     if (!exists) {
       return Promise.reject({
@@ -50,7 +50,7 @@ class ParkingLotManager {
       });
     }
     // Check that foreign key pointId exists
-    const pointExists = await PointManager.existsPoint("pointId", newParkingLot.pointId);
+    const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newParkingLot.pointId);
     if (!pointExists) {
       return Promise.reject({
         code: 404,
@@ -58,7 +58,7 @@ class ParkingLotManager {
       });
     }
     // Check that foreign key writerId exists
-    const writerExists = await UserManager.existsUser("userId", newParkingLot.writerId);
+    const writerExists = await PersistentManager.exists(User.tableName, "userId", newParkingLot.writerId);
     if (!writerExists) {
       return Promise.reject({
         code: 404,
@@ -67,7 +67,7 @@ class ParkingLotManager {
     }
 
     return PersistentManager.update(ParkingLot.tableName, newParkingLot, attributeName, value);
-  }
+  } */
 
   /**
    * Delete a parking lot
@@ -75,25 +75,25 @@ class ParkingLotManager {
    * @param {any} value 
    * @returns a Promise without any value
    */
-  async deleteParkingLot(attributeName, value) {
+  /* async deleteParkingLot(attributeName, value) {
     return PersistentManager.delete(ParkingLot.tableName, attributeName, value);
-  }
+  } */
 
   /**
    * Delete all parking lots
    * @returns a Promise without any value
    */
-  async deleteAllParkingLot() {
+  /* async deleteAllParkingLot() {
     return PersistentManager.deleteAll(ParkingLot.tableName);
-  }
+  } */
 
   /**
    * Load all parking lots 
    * @returns a Promise with the list of all parking lots
    */
-  async loadAllParkingLot() {
+  /* async loadAllParkingLot() {
     return PersistentManager.loadAll(ParkingLot.tableName);
-  }
+  } */
 
   /**
    * Check if the parking lot exists
@@ -129,9 +129,9 @@ class ParkingLotManager {
    * @param {any} value 
    * @returns a Promise with the list of parking lots that satisfy the condition  
    */
-  async loadAllByAttributeParkingLot(attributeName, value) {
+  /* async loadAllByAttributeParkingLot(attributeName, value) {
     return PersistentManager.loadAllByAttribute(ParkingLot.tableName, attributeName, value);
-  }
+  } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 
@@ -140,7 +140,7 @@ class ParkingLotManager {
   async defineParkingLot(
     writerId,
     parkingLotName,
-    latitude  ,
+    latitude,
     longitude,
     altitude
   ) {
