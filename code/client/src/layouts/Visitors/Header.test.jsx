@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
+import { AuthContext } from '../../contexts/authContext'
 
 import Header from './Header'
 
@@ -33,12 +34,32 @@ describe("Header component", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <Header />
+                <AuthContext.Provider value={[{ loggedIn: false, role: "Visitor" }]}>
+                    <Header />
+                </AuthContext.Provider>
             </Router>
         )
         expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.url)
         await userEvent.click(screen.getByRole("link", { name: link.label }))
         expect(history.location.pathname).toBe(link.url)
+    })
+
+    it.each(navigation.desktop)("Links to login/registration are not shown to logged-in users", async (link) => {
+        const history = createMemoryHistory();
+        render(
+            <Router location={history.location} navigator={history}>
+                <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
+                    <Header />
+                </AuthContext.Provider>
+            </Router>
+        )
+        if (link.users.includes("Hiker") || link.users.includes("All")) {
+            expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.url)
+            await userEvent.click(screen.getByRole("link", { name: link.label }))
+            expect(history.location.pathname).toBe(link.url)
+        } else {
+            expect(screen.queryByRole("link", { name: link.label })).not.toBeInTheDocument()
+        }
     })
 
     it("Logo is correctly rendered as a link to home", async () => {

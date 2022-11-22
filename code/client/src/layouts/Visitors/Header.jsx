@@ -1,3 +1,4 @@
+import { AuthContext } from '../../contexts/authContext'
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Button, Navbar } from "react-bootstrap"
@@ -34,13 +35,21 @@ const Header = () => {
                 </Button>
 
                 {/* Navigation for desktop devices */}
-                <div className="d-none d-lg-flex align-items-center">
-                    {navigation.desktop.map((link, idx) => (
-                        <NavLink key={idx} url={link.url} variant={link.variant} className={`${location.pathname !== "/" ? "text-primary-dark" : "text-primary-light"} ps-5`}>
-                            {link.label}
-                        </NavLink>
-                    ))}
-                </div>
+                <AuthContext.Consumer>
+                    {([{role}]) => (
+                        <div className="d-none d-lg-flex align-items-center">
+                            {
+                                navigation.desktop
+                                    .filter((link) => link.users.includes(role) || link.users.includes("All")) // Show links depending on user role
+                                    .map((link, idx) => (
+                                        <NavLink key={idx} url={link.url} variant={link.variant} className={`${location.pathname !== "/" ? "text-primary-dark" : "text-primary-light"} ps-5`}>
+                                            {link.label}
+                                        </NavLink>
+                                    ))
+                            }
+                        </div>
+                    )}
+                </AuthContext.Consumer>
             </div>
         </Navbar>
     )

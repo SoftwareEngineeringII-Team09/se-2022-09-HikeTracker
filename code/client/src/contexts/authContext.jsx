@@ -7,7 +7,7 @@ const AuthContext = createContext([{}, () => { }]);
 
 const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({ role: "Visitor" });
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [dirty, setDirty] = useState(true);
@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
                     setLoggedIn(true);
                 })
                 .catch((error) => {
-                    setUser(null);
+                    setUser({ role: "Visitor" });
                     setLoggedIn(false);
                 })
                 .finally(() => {
