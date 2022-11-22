@@ -23,20 +23,18 @@ const LoginForm = () => {
     });
 
     /* Login submission */
-    const submitLogin = (values, { setSubmitting }) => {
-        api.login(values)
-            .then(() => {
-                requestLoginUpdate(true);
-                navigate('/');
-            })
-            .catch((error) => {
-                toast.error(error.message, {
-                    theme: "colored"
-                });
-            })
-            .finally(() => {
-                setSubmitting(false);
+    const submitLogin = async (values, { setSubmitting }) => {
+        try {
+            await api.users.login(values);
+            requestLoginUpdate(true);
+            navigate('/');
+        } catch (error) {
+            toast.error(error.message, {
+                theme: "colored"
             });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const initialValues = {

@@ -8,13 +8,13 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 
 1. [Docker Documentation](#docker-documentation)
    - [Development](#frontend)
-   - [Tests](#backend)
-   - [Deploy on Docker Hub](#backend)
-   - [Pull from Docker Hub](#backend)
+   - [Tests](#tests)
+   - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
+   - [Pull from Docker Hub](#Pull-from-Docker-Hub)
 2. [Technologies](#technologies)
    - [Frontend](#frontend)
    - [Backend](#backend)
-   - [Database](#backend)
+   - [Database](#database)
 3. [React Client Application Routes](#react-client-application-routes)
    - [Route `/`](#)
    - [Route `/*`](#1)
@@ -104,23 +104,35 @@ Here the list of dependencies installed:
 "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "react-toastify": "^9.1.1",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
 },
 "devDependencies": {
+    "@craco/craco": "^7.0.0",
+    "@testing-library/dom": "^8.19.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/react-toastify": "^4.1.0",
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.3",
     "bootstrap": "^5.2.2",
+    "classnames": "^2.3.2",
+    "cypress": "^11.1.0",
+    "cypress-dark": "^1.8.3",
+    "history": "^5.3.0",
+    "leaflet": "^1.9.2",
     "postcss-preset-env": "^7.8.2",
+    "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.5.0",
     "react-icons": "^4.6.0",
+    "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
-    "react-toastify": "^9.1.1",
     "sass": "^1.55.0"
-}
+},
 ```
 
 ### Backend

@@ -1,13 +1,13 @@
 import { toast } from "react-toastify";
 import { Button, Col, Alert, Spinner } from 'react-bootstrap';
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
+import React from 'react';
 import api from '../../services/api';
 
 const ActivateAccount = () => {
 
     const [searchParams] = useSearchParams();
-    const [status, setStatus] = useState("loading");
+    const [status, setStatus] = React.useState("loading");
     const email = searchParams.get("email");
     const token = searchParams.get("token");
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const ActivateAccount = () => {
     /* Activation request */
     const activateAccount = async () => {
         try {
-            await api.verifyEmail({ email, token });
+            await api.users.verifyEmail({ email, token });
             setStatus("success");
         } catch (error) {
             setStatus("error");
@@ -36,7 +36,7 @@ const ActivateAccount = () => {
         }
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
 
         /* Redirect to Home if activation token or email are missing */
         if (!token || !email)
