@@ -427,3 +427,7 @@ npm run integration
 
 ![Registration Hiker](./doc/mocks/Account/Register_default.png)
 ![Registration Local Guide](./doc/mocks/Account/Register_additional_info.png)
+
+### Select Start/Arrival points
+
+![Select Hike Endpoints](./doc/mocks/Update%20Hikes/SelectEndpoints.jpg)
