@@ -1,13 +1,17 @@
 const PersistentManager = require("../../dao/PersistentManager");
 const UserManager = require("../../controllers/UserManager");
-const { clearAll } = require("../utils");
+const Utils = require("../unit-utils");
 
 describe("Test", () => {
-
   /* Test Setup */
-  beforeAll(clearAll);
-  /* Test Teardown */
-  afterAll(clearAll);
+	beforeAll(async () => {
+		await Utils.clearAll();
+	});
+
+	/* Test Teardown */
+	afterAll(async () => {
+		await Utils.clearAll();
+	});
 
   test("Example", async () => {
     expect(true).toEqual(true);

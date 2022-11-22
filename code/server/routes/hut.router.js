@@ -5,8 +5,20 @@ const { body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 
-//POST HUT
-router.post("/writers/:writerId", async (req, res) => {
+// POST a hut
+router.post(
+  "/writers/:writerId", 
+  param("writerId").isInt({ min: 0 }),
+  body("hutName").isString(), 
+  body("city").isInt({ min: 0 }), 
+  body("province").isInt({ min: 0 }), 
+  body("region").isInt({ min: 0 }),
+  body("numOfBeds").isInt({ min: 0 }),
+  body("cost").isFloat({ min: 0 }), 
+  body("latitude").isFloat({ min: 0 }),
+  body("longitude").isFloat({ min: 0 }),
+  body("altitude").isFloat({ min: 0 }), 
+  async (req, res) => {
   const writerId = req.params.writerId;
   try {
     const error = validationResult(req);
@@ -27,7 +39,6 @@ router.post("/writers/:writerId", async (req, res) => {
     );
     return res.status(201).end();
   } catch (exception) {
-    console.log(exception);
     const errorCode = exception.code ?? 503;
     const errorMessage =
       exception.result ?? "Something went wrong, please try again";

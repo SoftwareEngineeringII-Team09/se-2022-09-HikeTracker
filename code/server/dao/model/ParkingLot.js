@@ -3,9 +3,9 @@
 class ParkingLot {
   static tableName = "ParkingLot";
   
-  constructor(parkingId, parkingName, pointId, writerId) {
-    this.parkingId = parkingId;
-    this.parkingName = parkingName;
+  constructor(parkingLotId, parkingLotName, pointId, writerId) {
+    this.parkingLotId = parkingLotId;
+    this.parkingLotName = parkingLotName;
     this.pointId = pointId;
     this.writerId = writerId;
   }

@@ -54,18 +54,10 @@ class PointManager {
 
   /**
    * Load all points 
-   * @returns a resolved Promise with the list of points in case Point table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all points
    */
-  /* async loadAllRowsPoint() {
-    const points = await PersistentManager.loadAllRows(Point.tableName);
-    if (points.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "Point table is empty"
-      });
-    }
-
-    return Promise.resolve(points);
+  /* async loadAllPoint() {
+    return PersistentManager.loadAll(Point.tableName);
   } */
 
   /**
@@ -100,18 +92,10 @@ class PointManager {
    * Load all points by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of points in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of points that satisfy the condition  
    */
   /* async loadAllByAttributePoint(attributeName, value) {
-    const points = await PersistentManager.loadAllByAttribute(Point.tableName, attributeName, value);
-    if (points.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available points with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(points);
+    return PersistentManager.loadAllByAttribute(Point.tableName, attributeName, value);
   } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 

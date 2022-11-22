@@ -89,18 +89,10 @@ class HutManager {
 
   /**
    * Load all huts 
-   * @returns a resolved Promise with the list of huts in case Hut table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all huts
    */
-  /* async loadAllRowsHut() {
-    const huts = await PersistentManager.loadAllRows(Hut.tableName);
-    if (huts.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "Hut table is empty"
-      });
-    }
-
-    return Promise.resolve(huts);
+  /* async loadAllHut() {
+    return PersistentManager.loadAll(Hut.tableName);
   } */
 
   /**
@@ -135,18 +127,10 @@ class HutManager {
    * Load all huts by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of huts in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of huts that satisfy the condition  
    */
   /* async loadAllByAttributeHut(attributeName, value) {
-    const huts = await PersistentManager.loadAllByAttribute(Hut.tableName, attributeName, value);
-    if (huts.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available huts with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(huts);
+    return PersistentManager.loadAllByAttribute(Hut.tableName, attributeName, value);
   } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 
