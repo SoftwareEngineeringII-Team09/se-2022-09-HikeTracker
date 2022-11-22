@@ -88,18 +88,10 @@ class HikeHutManager {
 
   /**
    * Load all hikeHuts 
-   * @returns a resolved Promise with the list of hikeHuts in case HikeHut table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all hikeHuts
    */
-  /* async loadAllRowsHikeHut() {
-    const hikeHuts = await PersistentManager.loadAllRows(HikeHut.tableName);
-    if (hikeHuts.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "HikeHut table is empty"
-      });
-    }
-
-    return Promise.resolve(hikeHuts);
+  /* async loadAllHikeHut() {
+    return PersistentManager.loadAll(HikeHut.tableName);    
   } */
 
   /**
@@ -134,18 +126,10 @@ class HikeHutManager {
    * Load all hikeHuts by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of hikeHuts in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of hikeHuts that satisfy the condition   
    */
   /* async loadAllByAttributeHikeHut(attributeName, value) {
-    const hikeHuts = await PersistentManager.loadAllByAttribute(HikeHut.tableName, attributeName, value);
-    if (hikeHuts.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available hikeHuts with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(hikeHuts);
+    return PersistentManager.loadAllByAttribute(HikeHut.tableName, attributeName, value);
   } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 

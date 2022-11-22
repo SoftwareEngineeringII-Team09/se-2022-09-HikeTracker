@@ -1,8 +1,10 @@
-import { Form, InputGroup, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, InputGroup, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { toast } from "react-toastify";
 import api from '../../services/api';
+import { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+
 const Signup = () => {
 
     /* User Roles */
@@ -12,20 +14,36 @@ const Signup = () => {
         { name: "Hut Worker", requiresAdditionalInfo: true },
         { name: "Emergency Operator", requiresAdditionalInfo: true },
     ];
+    const [successfulSignup, setSuccessfulSignup] = useState(false);
+    const [registrationEmail, setRegistrationEmail] = useState("");
     const rolesRequiringAdditionalInfo = roles.filter((r) => r.requiresAdditionalInfo).map((r) => r.name);
 
+    /* Request new token */
+    const requestNewToken = async () => {
+        try {
+            await api.users.sendVerificationCode(registrationEmail);
+            toast.success("We have sent you a new activation email", {
+                theme: "colored",
+            });
+        } catch (error) {
+            toast.error("There has been an error generating a new activation link, please try again", {
+                theme: "colored",
+            });
+        }
+    };
+
     /* Signup data Validation schema */
-    const mobileRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/
+    const mobileRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/;
     const validationSchema = Yup.object({
         role: Yup.mixed().oneOf(roles.map((currentRole) => currentRole.name)),
         firstname: Yup.string()
-            .max(40, 'Must be 40 characters or less')
+            .max(40, 'First name must be 40 characters or less')
             .when("role", {
                 is: (r) => rolesRequiringAdditionalInfo.includes(r),
                 then: Yup.string().required("Please provide your name")
             }),
         lastname: Yup.string()
-            .max(40, 'Must be 40 characters or less')
+            .max(40, 'Last name must be 40 characters or less')
             .when("role", {
                 is: (r) => rolesRequiringAdditionalInfo.includes(r),
                 then: Yup.string().required("Please provide your surname")
@@ -46,24 +64,21 @@ const Signup = () => {
     });
 
     /* Signup submission */
-    const submitSignup = async (values, { setSubmitting }) => {
-        api.signup(values)
-            .then(() => {
-                toast.success(
-                    "Your account has been created, we have sent you an email to confirm your account", {
-                    theme: "colored",
-                    autoClose: false
-                });
-            })
-            .catch((error) => {
-                toast.error(error.message, {
-                    theme: "colored"
-                });
-            })
-            .finally(() => {
-                setSubmitting(false);
+    const submitSignup = async (values, { setSubmitting, resetForm }) => {
+        try {
+            await api.users.signup(values);
+            setRegistrationEmail(values.email);
+            setSuccessfulSignup(true);
+            /* Clear form inputs */
+            resetForm();
+        } catch (error) {
+            toast.error(error.message, {
+                theme: "colored"
             });
-    }
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     const initialValues = {
         role: 'Hiker',
@@ -72,7 +87,7 @@ const Signup = () => {
         mobile: '',
         email: '',
         password: ''
-    }
+    };
 
     return (
         <Col className="minWidthForm">
@@ -82,9 +97,8 @@ const Signup = () => {
                     validation =>
                     (
                         <Form onSubmit={validation.handleSubmit} data-testid="signup">
-
+                            <Form.Label htmlFor="role">Who are you?</Form.Label>
                             <InputGroup className="mb-3">
-                                <Form.Label htmlFor="role">Who are you?</Form.Label>
                                 <InputGroup.Text id="user-role">I am a</InputGroup.Text>
                                 <Form.Select aria-label="Select user role" id="role" {...validation.getFieldProps('role')} className={validation.touched.role && validation.errors.role ? 'is-invalid' : ''}>
                                     {roles.map((currentRole) => <option key={currentRole.name} value={currentRole.name} id={currentRole.name}>{currentRole.name}</option>)}
@@ -128,13 +142,25 @@ const Signup = () => {
                                     </Form.Group>
                                 </Container>
                             }
-                            <Button variant="primary" type="submit" className="p-3 mx-auto d-block my-3" disabled={validation.isValidating}>
+                            <Button variant="primary" type="submit" className="p-3 mx-auto d-block my-3">
                                 Register
                             </Button>
                         </Form>
                     )
                 }
             </Formik>
+            {
+                successfulSignup &&
+                <Alert variant="success">
+                    <Alert.Heading>Welcome!</Alert.Heading>
+                    <p>
+                        Your account has been created, we have sent you an email to activate your account.
+                        If you didn't receive it, please check your spam folder, or click the button below to resend it.
+                    </p>
+                    <hr />
+                    <Button className="mb-0" variant="light" onClick={requestNewToken}>Receive a new activation link</Button>
+                </Alert>
+            }
         </Col>
     );
 

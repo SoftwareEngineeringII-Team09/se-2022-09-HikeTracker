@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (dirty) {
-            api.getUserInfo()
+            api.users.getUserInfo()
                 .then((data) => {
                     setUser(data);
                     setLoggedIn(true);

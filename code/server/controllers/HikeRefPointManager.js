@@ -87,18 +87,10 @@ class HikeRefPointManager {
 
   /**
    * Load all hikeRefPoints 
-   * @returns a resolved Promise with the list of hikeRefPoints in case HikeRefPoint table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all hikeRefPoints
    */
-  /* async loadAllRowsHikeRefPoint() {
-    const hikeRefPoints = await PersistentManager.loadAllRows(HikeRefPoint.tableName);
-    if (hikeRefPoints.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "HikeRefPoint table is empty"
-      });
-    }
-
-    return Promise.resolve(hikeRefPoints);
+  /* async loadAllHikeRefPoint() {
+    return PersistentManager.loadAll(HikeRefPoint.tableName);
   } */
 
   /**
@@ -133,18 +125,10 @@ class HikeRefPointManager {
    * Load all hikeRefPoints by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of hikeRefPoints in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a resolved Promise with the list of hikeRefPoints that satisfy the condition  
    */
   async loadAllByAttributeHikeRefPoint(attributeName, value) {
-    const hikeRefPoints = await PersistentManager.loadAllByAttribute(HikeRefPoint.tableName, attributeName, value);
-    if (hikeRefPoints.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available hikeRefPoints with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(hikeRefPoints);
+    return PersistentManager.loadAllByAttribute(HikeRefPoint.tableName, attributeName, value);
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
 

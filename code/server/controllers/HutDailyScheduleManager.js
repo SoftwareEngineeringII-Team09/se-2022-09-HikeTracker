@@ -71,18 +71,10 @@ class HutDailyScheduleManager {
 
   /**
    * Load all hut daily schedules 
-   * @returns a resolved Promise with the list of hut daily schedules in case HutDailySchedule table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all hut daily schedules
    */
-  /* async loadAllRowsHutDailySchedule() {
-    const hutDailySchedules = await PersistentManager.loadAllRows(HutDailySchedule.tableName);
-    if (hutDailySchedules.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "HutDailySchedule table is empty"
-      });
-    }
-
-    return Promise.resolve(hutDailySchedules);
+  /* async loadAllHutDailySchedule() {
+    return PersistentManager.loadAll(HutDailySchedule.tableName);
   } */
 
   /**
@@ -117,18 +109,10 @@ class HutDailyScheduleManager {
    * Load all hut daily schedules by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of hut daily schedules in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of hut daily schedules that satisfy the condition  
    */
   /* async loadAllByAttributeHutDailySchedule(attributeName, value) {
-    const hutDailySchedules = await PersistentManager.loadAllByAttribute(HutDailySchedule.tableName, attributeName, value);
-    if (hutDailySchedules.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available hut daily schedules with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(hutDailySchedules);
+    return PersistentManager.loadAllByAttribute(HutDailySchedule.tableName, attributeName, value);
   } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 
