@@ -6,7 +6,7 @@ class Point {
   constructor(
     pointId,
     type,
-    parking,
+    parkingLot,
     hut,
     nameOfLocation,
     latitude,
@@ -15,7 +15,7 @@ class Point {
   ) {
     this.pointId = pointId;
     this.type = type;
-    this.parking = parking;
+    this.parkingLot = parkingLot;
     this.hut = hut;
     this.nameOfLocation = nameOfLocation;
     this.latitude = latitude;

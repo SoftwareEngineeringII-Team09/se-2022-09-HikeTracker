@@ -119,7 +119,7 @@ class PersistentManager {
     });
   }
 
-  loadAllRows(tableName) {
+  loadAll(tableName) {
     return new Promise((resolve, reject) => {
       const sql = "SELECT * FROM " + tableName;
       const db = new sqlite.Database(this.dbName, (err) => {
@@ -177,9 +177,9 @@ class PersistentManager {
         if (err) reject(err);
       });
       db.get("PRAGMA foreign_keys = ON");
-      db.all(sql, value, (err, row) => {
+      db.all(sql, value, (err, rows) => {
         if (err) reject(err);
-        resolve(row);
+        resolve(rows);
       });
       db.close();
     });

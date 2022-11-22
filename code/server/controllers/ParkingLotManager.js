@@ -1,6 +1,7 @@
 "use strict";
 
 const ParkingLot = require("../dao/model/ParkingLot");
+const Point = require("../dao/model/Point");
 const PointManager = require("./PointManager");
 const UserManager = require("./UserManager");
 const PersistentManager = require("../dao/PersistentManager");
@@ -88,18 +89,10 @@ class ParkingLotManager {
 
   /**
    * Load all parking lots 
-   * @returns a resolved Promise with the list of parking lots in case ParkingLot table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all parking lots
    */
-  async loadAllRowsParkingLot() {
-    const parkingLots = await PersistentManager.loadAllRows(ParkingLot.tableName);
-    if (parkingLots.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "ParkingLot table is empty"
-      });
-    }
-
-    return Promise.resolve(parkingLots);
+  async loadAllParkingLot() {
+    return PersistentManager.loadAll(ParkingLot.tableName);
   }
 
   /**
@@ -134,24 +127,46 @@ class ParkingLotManager {
    * Load all parking lots by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of parking lots in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of parking lots that satisfy the condition  
    */
   async loadAllByAttributeParkingLot(attributeName, value) {
-    const parkingLots = await PersistentManager.loadAllByAttribute(ParkingLot.tableName, attributeName, value);
-    if (parkingLots.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available parking lots with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(parkingLots);
+    return PersistentManager.loadAllByAttribute(ParkingLot.tableName, attributeName, value);
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
-  // Insert other functions you need here
+  // Define a new parking lot
+  async defineParkingLot(
+    writerId,
+    parkingLotName,
+    latitude  ,
+    longitude,
+    altitude
+  ) {
+    // Defining parking lot point
+    const newPoint = new Point(
+      null,
+      "parking lot",
+      1,
+      0,
+      null,
+      latitude,
+      longitude,
+      altitude
+    );
+    const newPointId = await PointManager.storePoint(newPoint);
+
+    // Defining parking lot
+    const newParkingLot = new ParkingLot(
+      null,
+      parkingLotName,
+      newPointId,
+      writerId
+    ); 
+
+    return this.storeParkingLot(newParkingLot);
+  }
 }
 
 module.exports = new ParkingLotManager();
