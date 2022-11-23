@@ -31,6 +31,22 @@ const hikes = {
   //         axios.post(`${SERVER_URL}/hikes`, {})
   //     })
   //   }
+
+  getPotentialStartPoints: (hikeId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialStartPoints`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+    })
+  },
+
+  getPotentialArrivalPoints: (hikeId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialArrivalPoints`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+    })
+  },
 }
 
 export default hikes
