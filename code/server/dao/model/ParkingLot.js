@@ -2,12 +2,12 @@
 
 class ParkingLot {
   static tableName = "ParkingLot";
-
-  constructor(parkingId, parkingName, writerId, pointId) {
-    this.parkingId = parkingId;
-    this.parkingName = parkingName;
-    this.writerId = writerId;
+  
+  constructor(parkingLotId, parkingLotName, pointId, writerId) {
+    this.parkingLotId = parkingLotId;
+    this.parkingLotName = parkingLotName;
     this.pointId = pointId;
+    this.writerId = writerId;
   }
 }
 

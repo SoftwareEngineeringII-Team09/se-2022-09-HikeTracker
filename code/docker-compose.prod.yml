@@ -5,7 +5,7 @@ services:
     build:
       context: ./client/
       dockerfile: Dockerfile.prod
-    image: andreadeluca/se_2022_09_hike_tracker:client-demo1
+    image: andreadeluca/se_2022_09_hike_tracker:client
     restart: always
     # production mode is on port 80
     ports:
@@ -19,7 +19,7 @@ services:
     build:
       context: ./server/
       target: production
-    image: andreadeluca/se_2022_09_hike_tracker:server-demo1
+    image: andreadeluca/se_2022_09_hike_tracker:server
     restart: always
     environment:
       NODE_ENV: production

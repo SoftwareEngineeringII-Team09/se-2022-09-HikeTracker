@@ -23,11 +23,11 @@ const HutForm = () => {
                 </div>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Name:</Form.Label>
-                        <Form.Control type='text' required placeholder='Hut name' onChange={event => setName(event.target.value)} />
+                        <Form.Label htmlFor="name">Name:</Form.Label>
+                        <Form.Control id="name" type='text' required placeholder='Hut name' onChange={event => setName(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Province:</Form.Label>
+                        <Form.Label htmlFor="province">Province:</Form.Label>
                         <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
                             <option value={0}>Select a provice</option>
                             {provinces.map(province => (
@@ -36,7 +36,7 @@ const HutForm = () => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>City:</Form.Label>
+                        <Form.Label htmlFor="city">City:</Form.Label>
                         <Form.Select id='city' required onChange={(e) => setCity(parseInt(e.target.value))}>
                             <option value={0}>I want to leave this field empty</option>
                             {cities.filter(city => city.istat_provincia === province).map(city => (
@@ -45,12 +45,12 @@ const HutForm = () => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Address:</Form.Label>
-                        <Form.Control type='text' required onChange={event => setAddress(event.target.value)} />
+                        <Form.Label htmlFor="address">Address:</Form.Label>
+                        <Form.Control id="address" type='text' required onChange={event => setAddress(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label>Number of beds:</Form.Label>
-                        <Form.Control type='number' min={1} step={1} required onChange={event => setBeds(event.target.value)} />
+                        <Form.Label htmlFor="numberOfBeds">Number of beds:</Form.Label>
+                        <Form.Control id="numberOfBeds" type='number' min={1} step={1} required onChange={event => setBeds(event.target.value)} />
                     </Form.Group>
                     <Button variant='primary-light fw-bold' size='lg' type='submit' className='mb-3'>
                         Create new hike
