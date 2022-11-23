@@ -11,7 +11,7 @@ describe("Home page", () => {
         expect(screen.getByText("Welcome to Hike Tracker")).toBeInTheDocument();
     })
 
-    it("Home page renders a link to navigate to browse hikes route", () => {
+    it("Home page renders a link to navigate to browse hikes route", async () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -19,7 +19,7 @@ describe("Home page", () => {
             </Router>
         )
         expect(screen.getByRole("link")).toHaveAttribute("href", "/browse")
-        userEvent.click(screen.getByRole("link"))
+        await userEvent.click(screen.getByRole("link"))
         expect(history.location.pathname).toBe("/browse")
     })
 })
