@@ -11,7 +11,7 @@ describe("Hut form page", () => {
         expect(screen.getByText("Insert hut data")).toBeInTheDocument();
     })
 
-    it("Hut form page renders a form for inserting data of a new hut", () => {
+    it("Hut form page renders a form for inserting data of a new hut", async () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -20,12 +20,12 @@ describe("Hut form page", () => {
         )
 
         userEvent.type(screen.getByLabelText("Name:"), 'Rifugio1')
-        expect(screen.getByDisplayValue("Rifugio1")).toBeInTheDocument()
+        await expect(screen.getByDisplayValue("Rifugio1")).toBeInTheDocument()
 
         userEvent.type(screen.getByLabelText("Address:"), 'Via{space}Roma{space}1')
-        expect(screen.getByDisplayValue("Via Roma 1")).toBeInTheDocument()
+        await expect(screen.getByDisplayValue("Via Roma 1")).toBeInTheDocument()
 
         userEvent.type(screen.getByLabelText("Number of beds:"), '25')
-        expect(screen.getByDisplayValue("25")).toBeInTheDocument()
+        await expect(screen.getByDisplayValue("25")).toBeInTheDocument()
     })
 })
