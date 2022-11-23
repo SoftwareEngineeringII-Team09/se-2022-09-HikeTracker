@@ -551,7 +551,7 @@ Post a new hut associated to the existed writer with an empty of reference point
   "region":1,
   "numberOfBeds":50,
   "cost":20,
-  "altitude":123,
+  "latitude":123,
   "longitude":231,
   "altitude":343.234234,
 }
@@ -599,7 +599,6 @@ Get all huts
    "hutId": 1,
    "hutName": "Rifugio Blitz",
    "pointId": 5,
-   "writerId": " 1",
    "city":4017,
    "province":4,
    "region":1,
@@ -610,11 +609,11 @@ Get all huts
    "altitude":1265.850139, 
    "schedule":[
       {"day":1,
-      "openingTime": 8,
+      "openTime": 8,
       "closeTime":22,
       },
        {"day":2,
-      "openingTime": 8,
+      "openTime": 8,
       "closeTime":22,
       },...
    ] 

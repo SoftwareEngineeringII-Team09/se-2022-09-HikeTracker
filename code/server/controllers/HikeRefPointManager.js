@@ -1,10 +1,10 @@
 "use strict";
 
 const HikeRefPoint = require("../dao/model/HikeRefPoint");
+const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
 const PersistentManager = require("../dao/PersistentManager");
 const PointManager = require("./PointManager");
-const HikeManager = require("./HikeManager");
 
 class HikeRefPointManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -15,7 +15,8 @@ class HikeRefPointManager {
    */
   async storeHikeRefPoint(newHikeRefPoint) {
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike(
+    const hikeExists = await PersistentManager.exists(
+      Hike.tableName,
       "hikeId",
       newHikeRefPoint.hikeId
     );
@@ -26,7 +27,8 @@ class HikeRefPointManager {
       });
     }
     // Check that foreign key pointId exists
-    const refPointExists = await PointManager.existsPoint(
+    const refPointExists = await PersistentManager.exists(
+      Point.tableName,
       "pointId",
       newHikeRefPoint.pointId
     );
@@ -56,7 +58,7 @@ class HikeRefPointManager {
       });
     }
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeRefPoint.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeRefPoint.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -64,7 +66,7 @@ class HikeRefPointManager {
       });
     }
     // Check that foreign key pointId exists
-    const refPointExists = await PointManager.existsPoint("pointId", newHikeRefPoint.pointId);
+    const refPointExists = await PersistentManager.exists(Point.tableName, "pointId", newHikeRefPoint.pointId);
     if (!refPointExists) {
       return Promise.reject({
         code: 404,

@@ -3,6 +3,8 @@
 const HikeParkingLot = require("../dao/model/HikeParkingLot");
 const PersistentManager = require("../dao/PersistentManager");
 const ParkingLotManager = require("./ParkingLotManager");
+const Hike = require("../dao/model/Hike");
+const ParkingLot = require("../dao/model/ParkingLot");
 
 class HikeParkingLotManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -13,7 +15,7 @@ class HikeParkingLotManager {
    */
    /* async storeHikeParkingLot(newHikeParkingLot) {
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeParkingLot.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeParkingLot.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -21,7 +23,7 @@ class HikeParkingLotManager {
       });
     }
     // Check that foreign key parkingId exists
-    const parkingLotExists = await ParkingLotManager.existsParkingLot("parkingId", newHikeParkingLot.parkingId);
+    const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newHikeParkingLot.parkingId);
     if (!parkingLotExists) {
       return Promise.reject({
         code: 404,
@@ -48,7 +50,7 @@ class HikeParkingLotManager {
       });
     }
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeParkingLot.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeParkingLot.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -56,7 +58,7 @@ class HikeParkingLotManager {
       });
     }
     // Check that foreign key parkingId exists
-    const parkingLotExists = await ParkingLotManager.existsParkingLot("parkingId", newHikeParkingLot.parkingId);
+    const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newHikeParkingLot.parkingId);
     if (!parkingLotExists) {
       return Promise.reject({
         code: 404,

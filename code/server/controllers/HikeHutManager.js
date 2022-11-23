@@ -1,9 +1,9 @@
 "use strict";
 
 const HikeHut = require("../dao/model/HikeHut");
+const Hike = require("../dao/model/Hike");
+const Hut = require("../dao/model/Hut");
 const PersistentManager = require("../dao/PersistentManager");
-const HikeManager = require("./HikeManager");
-const HutManager = require("./HutManager");
 
 class HikeHutManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -14,7 +14,7 @@ class HikeHutManager {
    */
   /* async storeHikeHut(newHikeHut) {
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeHut.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -22,7 +22,7 @@ class HikeHutManager {
       });
     }
     // Check that foreign key hutId exists
-    const hutExists = await HutManager.existsHut("hutId", newHikeHut.hutId);
+    const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHikeHut.hutId);
     if (!hutExists) {
       return Promise.reject({
         code: 404,
@@ -49,7 +49,7 @@ class HikeHutManager {
       });
     }
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeHut.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -57,7 +57,7 @@ class HikeHutManager {
       });
     }
     // Check that foreign key hutId exists
-    const hutExists = await HutManager.existsHut("hutId", newHikeHut.hutId);
+    const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHikeHut.hutId);
     if (!hutExists) {
       return Promise.reject({
         code: 404,

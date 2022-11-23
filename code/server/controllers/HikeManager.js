@@ -6,6 +6,7 @@ const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
 const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
+const User = require("../dao/model/User");
 const PersistentManager = require("../dao/PersistentManager");
 const UserManager = require("./UserManager");
 const PointManager = require("./PointManager");
@@ -25,7 +26,8 @@ class HikeManager {
    */
   async storeHike(newHike) {
     // Check that foreign key writerId exists
-    const writerExists = await UserManager.existsUser(
+    const writerExists = await PersistentManager.exists(
+      User.tableName,
       "userId",
       newHike.writerId
     );
@@ -36,7 +38,8 @@ class HikeManager {
       });
     }
     // Check that foreign key startPoint exists
-    const startPointExists = await PointManager.existsPoint(
+    const startPointExists = await PersistentManager.exists(
+      Point.tableName,
       "pointId",
       newHike.startPoint
     );
@@ -47,7 +50,8 @@ class HikeManager {
       });
     }
     // Check that foreign key endPoint exists
-    const endPointExists = await PointManager.existsPoint(
+    const endPointExists = await PersistentManager.exists(
+      Point.tableName,
       "pointId",
       newHike.endPoint
     );
@@ -77,7 +81,8 @@ class HikeManager {
       });
     }
     // Check that foreign key writerId exists
-    const writerExists = await UserManager.existsUser(
+    const writerExists = await PersistentManager.exists(
+      User.tableName,
       "userId",
       newHike.writerId
     );
@@ -88,7 +93,8 @@ class HikeManager {
       });
     }
     // Check that foreign key startPoint exists
-    const startPointExists = await PointManager.existsPoint(
+    const startPointExists = await PersistentManager.exists(
+      Point.tableName,
       "pointId",
       newHike.startPoint
     );
@@ -99,7 +105,8 @@ class HikeManager {
       });
     }
     // Check that foreign key endPoint exists
-    const endPointExists = await PointManager.existsPoint(
+    const endPointExists = await PersistentManager.exists(
+      Point.tableName,
       "pointId",
       newHike.endPoint
     );
@@ -151,7 +158,6 @@ class HikeManager {
    * @returns a resolved Promise with true value in case the hike exists, a resolved Promise with false value otherwise
    */
   async existsHike(attributeName, value) {
-    console.log("???????");
     return PersistentManager.exists(Hike.tableName, attributeName, value);
   }
 
