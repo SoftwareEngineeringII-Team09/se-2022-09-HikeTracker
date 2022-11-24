@@ -54,7 +54,7 @@ const HikeForm = () => {
                         <Form.Select id='difficulty' required onChange={event => setDifficulty(event.target.value)} >
                             <option>Tourist</option>
                             <option>Hiker</option>
-                            <option>Master</option>
+                            <option>Professional hiker</option>
                         </Form.Select>
                     </Form.Group>
                     <Form.Group required className='mb-2'>

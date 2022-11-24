@@ -10,6 +10,9 @@ const HutForm = () => {
     const [city, setCity] = useState('');
     const [address, setAddress] = useState('');
     const [beds, setBeds] = useState(0);
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+    const [altitude, setAltitude] = useState(0);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -49,11 +52,23 @@ const HutForm = () => {
                         <Form.Control id="address" type='text' required onChange={event => setAddress(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
+                        <Form.Label htmlFor="latitude">Latitude:</Form.Label>
+                        <Form.Control id="latitude" type='number' min={-90} max={90} step={0.0000001} required onChange={event => setLatitude(event.target.value)} />
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
+                        <Form.Label htmlFor="longitude">Longitude:</Form.Label>
+                        <Form.Control id="longitude" type='number' min={-180} max={180} step={0.0000001} required onChange={event => setLongitude(event.target.value)} />
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
+                        <Form.Label htmlFor="altitude">Altitude: (m)</Form.Label>
+                        <Form.Control id="altitude" type='number' min={0} max={8000} step={1} required onChange={event => setAltitude(event.target.value)} />
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
                         <Form.Label htmlFor="numberOfBeds">Number of beds:</Form.Label>
                         <Form.Control id="numberOfBeds" type='number' min={1} step={1} required onChange={event => setBeds(event.target.value)} />
                     </Form.Group>
                     <Button variant='primary-light fw-bold' size='lg' type='submit' className='mb-3'>
-                        Create new hike
+                        Create new hut
                     </Button>
                 </Form>
             </div>

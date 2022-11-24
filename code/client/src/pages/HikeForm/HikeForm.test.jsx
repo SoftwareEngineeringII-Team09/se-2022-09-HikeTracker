@@ -19,7 +19,7 @@ describe("Page for adding new hike", () => {
             </Router>
         )
         
-        await userEvent.type(screen.getByLabelText("Title:"), 'My{space}title!')
+        await userEvent.type(screen.getByLabelText("Title:"), 'My title!')
         expect(screen.getByDisplayValue("My title!")).toBeInTheDocument()
 
         await userEvent.type(screen.getByLabelText("Expected time:"), '0230')
