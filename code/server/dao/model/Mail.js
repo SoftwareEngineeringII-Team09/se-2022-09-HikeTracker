@@ -22,16 +22,22 @@ exports.sendVerificationCode = (data) => {
                 <p>Hi, thanks for signing up to HikePiemonte!</p>
             
                 <p>To complete your enrollment and verify your email account,
-                I invite you to insert the verification code you can find here.</p>
+                click the link below.</p>
+
+                <a href='http://localhost:3000/activate?email=$userEmail&token=$activationToken'>Activate your account</a>
             
-                <div style="background-color: #f8f8f8; padding: 20px; margin-top: 50px; margin-bottom: 50px;">
-                    <h3>${data.verificationCode}</h3>
-                </div>
+                
                 
                 <p style="line-height: 0px">The YourBrand. Team</p>
                 <p style="line-height: 10px">Best regards!</p>
                 </div>`,
         };
+
+        // VERIFICATION CODE REPLACED BY LINK
+        //<div style="background-color: #f8f8f8; padding: 20px; margin-top: 50px; margin-bottom: 50px;">
+          //          <h3>${data.verificationCode}</h3>
+            //    </div>
+
 
         // Verify that the transporter is working
         transporter.verify()
