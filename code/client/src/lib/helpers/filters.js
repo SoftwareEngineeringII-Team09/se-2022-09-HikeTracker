@@ -1,64 +1,60 @@
-import filters from '@data/filters'
+import { isPointWithinRadius } from 'geolib'
 
-const defaultFilters = {
-    difficulty: [...filters.difficulty.values],
-    length: [...filters.length.values],
-    ascent: [...filters.ascent.values],
-    roundtrip_time: [...filters.roundtrip_time.values],
-    location: {
-        province: 0,
-        city: 0
+export const __DEFAULT_FILTERS = {
+    difficulty: { tourist: true, hiker: true, professional: true },
+    length: { min: 1, max: 15 },
+    totalAscent: { min: 200, max: 1000 },
+    expectedTime: { min: 2.5, max: 5 },
+    geoArea: {
+        location: {
+            province: 0,
+            city: 0
+        },
+        position: {
+            radius: 0,
+            point: {
+                lat: 0,
+                lng: 0
+            }
+        }
     }
 }
 
-const filtersKeys = Object.keys(filters)
+const getProvince = (filters) => parseInt(filters.geoArea.location.province)
+const getLat = (filters) => filters.geoArea.position.point.lat
+const getLng = (filters) => filters.geoArea.position.point.lng
 
-const getFilterName = (category) => {
-    return category.replace(category[0], category[0].toUpperCase()).replace("_", " ")
-}
+export const haveGeoAreaConflict = (filters) => getProvince(filters) && getLat(filters) && getLng(filters)
 
-const getFilterValues = (category) => {
-    return filters[category].values
-}
+export const filterHikes = (hikes, filters, active) => {
+    const { difficulty, length, totalAscent, expectedTime } = filters
+    const { province, city } = filters.geoArea.location
+    const { radius, point } = filters.geoArea.position
 
-const getFilterLabel = (category, filter) => {
-    if (filters[category].type === "select") return filter
-    else return !filter.min ? `Less than ${filter.max}${filters[category].unit}` :
-        !filter.max ? `More than ${filter.min}${filters[category].unit}` :
-            `Between ${filter.min}${filters[category].unit} and ${filter.max}${filters[category].unit}`
-}
-
-const filterHikes = (hikes, filters) => {
-    if (filters.active)
+    if (active)
         return hikes.filter(hike => {
-            // Difficulty filter
-            return filters.difficulty.includes(hike.difficulty)
+            return (
+                // Difficulty filter
+                difficulty[hike.difficulty.split(' ')[0].toLowerCase()]
                 // Length filter
-                && filters.length.some((value) => {
-                    if (!value.min) return hike.length <= value.max
-                    else if (!value.max) return hike.length >= value.min
-                    else return hike.length <= value.max && hike.length >= value.min
-                })
+                && (hike.length >= length.min && hike.length <= length.max)
                 // Ascent filter
-                && filters.ascent.some((value) => {
-                    if (!value.min) return hike.totalAscent <= value.max
-                    else if (!value.max) return hike.totalAscent >= value.min
-                    else return hike.totalAscent <= value.max && hike.totalAscent >= value.min
-                })
+                && (hike.totalAscent >= totalAscent.min && hike.length <= totalAscent.max)
                 // Roundtrip time filter
-                && filters.roundtrip_time.some((value) => {
-                    if (!value.min) return hike.expectedTime.hours < value.max
-                    else if (!value.max) return parseInt(hike.expectedTime.hours) >= value.min
-                    else return ((parseInt(hike.expectedTime.hours) === value.max && parseInt(hike.expected_time.minutes) <= 0) || parseInt(hike.expectedTime.hours) < value.max)
-                        && parseInt(hike.expectedTime.hours) >= value.min
-                })
+                && ((parseInt(hike.expectedTime.hours) + parseInt(hike.expectedTime.minutes) / 60) >= expectedTime.min
+                    && (parseInt(hike.expectedTime.hours) + parseInt(hike.expectedTime.minutes) / 60) <= expectedTime.max)
                 // Location filter
-                && (!filters.location.city || (filters.location.city && filters.location.city === hike.city))
-                && (!filters.location.province || (filters.location.province && filters.location.province === hike.province))
+                && (!city || (city && parseInt(city) === hike.city))
+                && (!province || (province && parseInt(province) === hike.province))
+                // Position filter
+                && ((!point.lat && !point.lng) || (isPointWithinRadius(
+                    { latitude: hike.startPoint.coords[0], longitude: hike.startPoint.coords[1] },
+                    { latitude: point.lat, longitude: point.lng },
+                    radius * 1000
+                )))
+            )
         })
     else return hikes
 }
 
-const helperFilters = { defaultFilters, filtersKeys, getFilterName, getFilterValues, getFilterLabel, filterHikes }
-
-export default helperFilters
+export const isFilteredHikesArrayEmpty = (hikes, filters, active) => !filterHikes(hikes, filters, active).length

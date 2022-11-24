@@ -1,0 +1,1 @@
+export { default as FiltersSchema } from './FiltersSchema'
