@@ -2,17 +2,15 @@
 
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const PersistentManager = require("../dao/PersistentManager");
-const HutManager = require("./HutManager");
-const Hut = require("../dao/model/Hut");
 
 class HutDailyScheduleManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
    * Store a new hut daily schedule
-   * @param {HutDailySchedule} newHutDailySchedule 
-   * @returns a Promise with the rowId value of the stored hut daily schedule 
+   * @param {HutDailySchedule} newHutDailySchedule
+   * @returns a Promise with the rowId value of the stored hut daily schedule
    */
-   /* async storeHutDailySchedule(newHutDailySchedule) {
+  /* async storeHutDailySchedule(newHutDailySchedule) {
     // Check that foreign key hutId exists
     const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHutDailySchedule.hutId);
     if (!hutExists) {
@@ -27,9 +25,9 @@ class HutDailyScheduleManager {
 
   /**
    * Update a hut daily schedule
-   * @param {HutDailySchedule} newHutDailySchedule 
-   * @param {String} attributeName 
-   * @param {any} value 
+   * @param {HutDailySchedule} newHutDailySchedule
+   * @param {String} attributeName
+   * @param {any} value
    * @returns a Promise without any value if the hutDailySchedule exists, a rejected Promise with an object containing code and result otherwise
    */
   /* async updateHutDailySchedule(newHutDailySchedule, attributeName, value) {
@@ -54,8 +52,8 @@ class HutDailyScheduleManager {
 
   /**
    * Delete a hut daily schedule
-   * @param {String} attributeName 
-   * @param {any} value 
+   * @param {String} attributeName
+   * @param {any} value
    * @returns a Promise without any value
    */
   /* async deleteHutDailySchedule(attributeName, value) {
@@ -71,7 +69,7 @@ class HutDailyScheduleManager {
   } */
 
   /**
-   * Load all hut daily schedules 
+   * Load all hut daily schedules
    * @returns a Promise with the list of all hut daily schedules
    */
   /* async loadAllHutDailySchedule() {
@@ -81,18 +79,22 @@ class HutDailyScheduleManager {
   /**
    * Check if the hut daily schedule exists
    * @param {String} attributeName
-   * @param {any} value  
-   * @returns a resolved Promise with true value in case the hut daily schedule exists, a resolved Promise with false value otherwise   
+   * @param {any} value
+   * @returns a resolved Promise with true value in case the hut daily schedule exists, a resolved Promise with false value otherwise
    */
   async existsHutDailySchedule(attributeName, value) {
-    return PersistentManager.exists(HutDailySchedule.tableName, attributeName, value);
+    return PersistentManager.exists(
+      HutDailySchedule.tableName,
+      attributeName,
+      value
+    );
   }
 
   /**
    * Load one hut daily schedule by attribute
-   * @param {String} attributeName 
-   * @param {any} value 
-   * @returns a resolved Promise with the hut daily schedule in case there is one, a rejected Promise with an object containing code and result otherwise  
+   * @param {String} attributeName
+   * @param {any} value
+   * @returns a resolved Promise with the hut daily schedule in case there is one, a rejected Promise with an object containing code and result otherwise
    */
   /* async loadOneByAttributeHutDailySchedule(attributeName, value) {
     const exists = await this.existsHutDailySchedule(attributeName, value);
@@ -108,15 +110,18 @@ class HutDailyScheduleManager {
 
   /**
    * Load all hut daily schedules by attribute
-   * @param {String} attributeName 
-   * @param {any} value 
-   * @returns a Promise with the list of hut daily schedules that satisfy the condition  
+   * @param {String} attributeName
+   * @param {any} value
+   * @returns a Promise with the list of hut daily schedules that satisfy the condition
    */
-  /* async loadAllByAttributeHutDailySchedule(attributeName, value) {
-    return PersistentManager.loadAllByAttribute(HutDailySchedule.tableName, attributeName, value);
-  } */
+  async loadAllByAttributeHutDailySchedule(attributeName, value) {
+    return PersistentManager.loadAllByAttribute(
+      HutDailySchedule.tableName,
+      attributeName,
+      value
+    );
+  }
   /* ------------------------------------------------------------------------------------------------------------------- */
-
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Insert other functions you need here

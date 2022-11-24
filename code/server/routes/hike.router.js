@@ -1,6 +1,7 @@
 "use strict";
 
 const HikeManager = require("../controllers/HikeManager");
+const HikeRefPointManager = require("../controllers/HikeRefPointManager");
 const { check, body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
@@ -14,13 +15,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// POST a hike 
+// POST a hike
 router.post(
   "/writers/:writerId",
   param("writerId").isInt({ min: 0 }),
   upload.single("gpx"),
   async (req, res) => {
     const writerId = req.params.writerId;
+
     const fileName = req.file.originalname;
     try {
       // Validation of body and/or parameters
@@ -46,7 +48,36 @@ router.post(
         exception.result ?? "Something went wrong, please try again";
       return res.status(errorCode).json({ error: errorMessage });
     }
-  });
+  }
+);
+
+router.post(
+  "/refPoints/:hikeId",
+  param("hikeId").isInt({ min: 0 }),
+  async (req, res) => {
+    const hikeId = req.params.hikeId;
+    try {
+      // Validation of body and/or parameters
+      const error = validationResult(req);
+      if (!error.isEmpty())
+        return res.status(422).json({ error: error.array()[0] });
+
+      await HikeRefPointManager.defineRefPoints(
+        hikeId,
+        req.body.referencePoints,
+        req.body.track
+      );
+
+      return res.status(201).end();
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
 
 // GET the list of all hikes
 router.get("/", async (req, res) => {

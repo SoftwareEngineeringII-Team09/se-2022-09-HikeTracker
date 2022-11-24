@@ -185,11 +185,159 @@ Any other route is matched by this one where the application shows an error.
 
 ## API Server
 
-### **Ticket Routes**
 
-#### `GET /api/tickets/:counterId`
+### **1.Hike Routes**
 
-Get served ticket associated to counterId.
+#### `POST /api/hikes/writers/:writerId`
+
+Post a new hike associated to the existed writer with an empty of reference point.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a gpx file with a JSON object containing hike information. `
+
+```json
+{
+  "province": 4,
+  "city": 23,
+  "difficulty": "Hiker",
+  "description": "This is description",
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+#### `GET /api/hikes/`
+
+Hiker,Tour guide (registered user) get all hikes .
+
+**Request header:** none
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Hiker`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":"End point of Trial to Rocca Patanua"
+   },
+   "referencePoints":[
+      {"name": "parking"},
+      {"name": "refuge"},
+      {"name": "fountain"},
+   ],
+   "track":[
+      [44.56666,6.5444],
+      [44.56634,6.5334],
+      [44.56634,6.5334],
+      ]
+	}
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/hikes/`
+
+Vistors (unregistered user) get all hikes .
+
+**Request header:** none
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Vistor`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":"End point of Trial to Rocca Patanua"
+   },
+   
+ }
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+#### `GET /api/hikes/:hikeId`
+
+Visitors get hike information according to the hike Id.
 
 **Request header:**
 
@@ -201,16 +349,34 @@ Get served ticket associated to counterId.
 
 `HTTP status code 200 OK`
 
+**Permission allowed**
+`Visitor`
+
 ```json
-{
-	"ticket": {
-		"TicketId": 5,
-		"CreateTime": "2022-10-19 17:42:50",
-		"ServiceId": 1,
-		"Status": "issued",
-		"CounterId": 1
-	}
-}
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":" End point of Trial to Rocca Patanua"
+   }  
+ }
+,...
+]
 ```
 
 **Error responses**
@@ -218,6 +384,257 @@ Get served ticket associated to counterId.
 - `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/hikes/:hikeId`
+
+Tour guises get hike information according to the hike Id.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.counterId to retrieve the id of the counter.`
+
+**Response body**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Tour guide`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":"Start point of Trial to Rocca Patanua"
+   },
+   "referencePoint":[
+      {"name" : "refPoint1"},
+      {"name" : "refPoint2"},
+      {"name" : "refPoint3"},
+   ],
+   "track" : [
+      [12.33434, 453.12335],
+      [12.45345, 234.12325],
+      [12.343254, 123.12312]
+   ]
+ }
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+
+#### `GET /api/:hikeId/download` 
+
+Get gpx file according to the hike Id.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+**Response body**
+
+`HTTP status code 200 OK`
+`file requested from frontend`
+
+**Permission allowed**
+`Hiker` , `Tour Guide`
+
+
+
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+### **2.Reference Point Routes**
+
+#### `POST /api/hikes/refPoints/:hikeId`
+
+Post a reference point of specific hike 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+`Body: a JSON object containing reference point information of specific hike.`
+
+```json
+{
+   "referencePoints":[
+      {"name": "refPoint1"},
+      {"name": "refPoint2"},
+      {"name": "refPoint3"}
+   ],
+      "track":[
+         [44.56666,6.5444,1978.786291],
+         [44.56634,6.5334,1891.73755],
+         [44.56634,6.5334,1525.3]
+   ]
+  
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+### **3. Hut Routes**
+
+#### `POST /api/huts/:writerId`
+
+Post a new hut associated to the existed writer with an empty of reference point.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a JSON object containing hut information.`
+
+```json
+{
+  "hutName": "hutName3",
+  "WriterId":7,
+  "city": 4017,
+  "province":2,
+  "region":1,
+  "numberOfBeds":50,
+  "cost":20,
+  "latitude":123,
+  "longitude":231,
+  "altitude":343.234234,
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/huts/`
+
+Get all huts 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: none`
+
+
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+```json
+[{
+   "hutId": 1,
+   "hutName": "Rifugio Blitz",
+   "pointId": 5,
+   "city":4017,
+   "province":4,
+   "region":1,
+   "numOfBeds": "60",
+   "cost": 60,
+   "latitude": 46.147128,
+   "longitude":8.534505,
+   "altitude":1265.850139, 
+   "schedule":[
+      {"day":1,
+      "openTime": 8,
+      "closeTime":22,
+      },
+       {"day":2,
+      "openTime": 8,
+      "closeTime":22,
+      },...
+   ] 
+   
+ }
+,...
+]
+```
+
+**Permission allowed**
+All
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
 
 ## Database Tables
 

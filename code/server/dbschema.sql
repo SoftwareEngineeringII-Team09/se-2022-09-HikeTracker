@@ -201,6 +201,20 @@ VALUES(5, 17);
 INSERT INTO "HikeRefPoint"("hikeId", "pointId")
 VALUES(6, 18);
 
+/* HutDailySchedule data */
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(1, 1,"9:00","18:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(1, 2,"9:00","18:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(1, 7,"9:00","13:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(2, 2,"9:00","18:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(3, 2,"10:00","21:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(3, 5,"8:15","18:00");
+
 
 
 
