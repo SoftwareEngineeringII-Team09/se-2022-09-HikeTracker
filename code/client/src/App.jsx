@@ -17,6 +17,7 @@ const App = (props) => {
         <Route index path='/' element={<Pages.Home />} />
         <Route path='/browse' element={<Pages.BrowseHikes />} />
         <Route path='/browse/:hikeId' element={<Pages.Hike />} />
+        <Route path='/hikes/updateEndpoints' element={<Pages.UpdateHikeEndpoints />} />
       </Route>
       <Route path='*' element={<Pages.Error />} />
     </Routes>

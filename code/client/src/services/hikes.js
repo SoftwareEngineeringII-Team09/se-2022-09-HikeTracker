@@ -39,6 +39,14 @@ const hikes = {
         .catch(err => reject(err));
     })
   },
+
+  updateHikeEndpoints: (hikeId, points) => {
+    return new Promise((resolve, reject) => {
+      axios.put(`${SERVER_URL}/hikes/${hikeId}/startEndPoints`, points)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+    })
+  },
 }
 
 export default hikes
