@@ -21,14 +21,11 @@ const Position = ({ isOpen, close }) => {
 
     useEffect(() => {
         if (!point.lat && !point.lng)
-            navigator.permissions.query({ name: "geolocation" })
-                .then(() => {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => setPosition(pos.coords),
-                        (err) => {
-                            setError(err.message)
-                            toast.error(err.message, { theme: 'colored' })
-                        })
+            navigator.geolocation.getCurrentPosition(
+                (pos) => setPosition(pos.coords),
+                (err) => {
+                    setError(err.message)
+                    toast.error(err.message, { theme: 'colored' })
                 })
     }, [point.lat, point.lng])
 
