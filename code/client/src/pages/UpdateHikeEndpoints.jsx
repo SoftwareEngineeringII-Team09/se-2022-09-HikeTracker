@@ -19,17 +19,15 @@ const UpdateHikeEndpoints = () => {
         Promise.all([
             /* Retrieve hike information */
             getHikeDetails(hikeId),
-            /* Retrieve huts and parking lots close to start point */
-            api.hikes.potentialStartPoints(hikeId),
-            /* Retrieve huts and parking lots close to end point */
-            api.hikes.potentialEndPoints(hikeId)
+            /* Retrieve huts and parking lots close to start/end point */
+            api.hikes.getPotentialPoints(hikeId),
         ])
             .then((results) => {
                 setHike(results[0]);
                 setPotentialPoints(
                     /* Add type "start" or "end" to each point */
-                    results[1].map((point) => ({ ...point, type: 'start' }))
-                        .join(results[2].map((point) => ({ ...point, type: 'end' })))
+                    results[1].potentialStartPoints.map((point) => ({ ...point, type: 'start' }))
+                        .join(results[1].potentialEndPoints.map((point) => ({ ...point, type: 'end' })))
                 );
                 setStartPoint(results[0].startPoint);
                 setEndPoint(results[0].endPoint);

@@ -32,17 +32,9 @@ const hikes = {
   //     })
   //   }
 
-  getPotentialStartPoints: (hikeId) => {
+  getPotentialPoints: (hikeId) => {
     return new Promise((resolve, reject) => {
-      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialStartPoints`)
-        .then(res => resolve(res.data))
-        .catch(err => reject(err));
-    })
-  },
-
-  getPotentialArrivalPoints: (hikeId) => {
-    return new Promise((resolve, reject) => {
-      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialArrivalPoints`)
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialStartEndPoints`)
         .then(res => resolve(res.data))
         .catch(err => reject(err));
     })
