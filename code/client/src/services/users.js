@@ -37,7 +37,7 @@ const users = {
     sendVerificationCode: (email) => {
         return new Promise(async (resolve, reject) => {
             try {
-                await axios.put(`${SERVER_URL}/auth/send-verification-code`, email);
+                await axios.put(`${SERVER_URL}/auth/send-verification-code`, {email});
                 resolve();
             } catch (err) {
                 reject({
@@ -52,7 +52,7 @@ const users = {
     verifyEmail: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
-                await axios.put(`${SERVER_URL}/auth/verify-email`, data)
+                await axios.put(`${SERVER_URL}/auth/verify-email`, data);
                 resolve();
             } catch (err) {
                 reject({

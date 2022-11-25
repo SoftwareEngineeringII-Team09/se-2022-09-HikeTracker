@@ -7,7 +7,7 @@ const navigation = {
     mobile: [
         { label: "Browse", url: "/browse", users: ["All"] },
         { label: "Login", url: "/login", users: ["Visitor"] },
-        { label: "Register", url: "/logsignupin", users: ["Visitor"] },
+        { label: "Register", url: "/signup", users: ["Visitor"] },
     ]
 }
 

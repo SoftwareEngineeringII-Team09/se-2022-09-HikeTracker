@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
-import { Offcanvas, Alert } from "react-bootstrap";
-
+import { Offcanvas, Alert, Button } from "react-bootstrap";
 import { RiCloseLine } from 'react-icons/ri'
 
 import { navigation } from "@data/index";
 import { NavLink } from "@components/ui-core";
 
-const MobileSidebar = ({ isOpen, close }) => {
+const MobileSidebar = ({ isOpen, close, isLoggedIn, handleLogout }) => {
     return (
         <Offcanvas show={isOpen} onHide={close} placement="end" className="bg-light">
             <Offcanvas.Header className="px-4">
@@ -20,6 +19,12 @@ const MobileSidebar = ({ isOpen, close }) => {
                             {link.label}
                         </NavLink>
                     ))}
+                    {   
+                        isLoggedIn &&
+                        <Button variant="danger-light" className="fw-bold px-4" onClick={handleLogout}>
+                            Logout
+                        </Button>
+                    }
                     <Alert variant="primary" className="w-100 mt-5">
                         <Alert.Heading className="fw-bold text-primary-dark">No account yet?</Alert.Heading>
                         What are you waiting for? It's so easy... {" "}
