@@ -1,18 +1,24 @@
 import * as Yup from 'yup'
 
-import { __PROVINCES, getCitiesForProvince } from '@lib/helpers/location'
+import { __REGIONS, getProvincesForRegion, getCitiesForProvince } from '@lib/helpers/location'
 
 const FiltersSchema = Yup.object().shape({
     geoArea: Yup.object().shape({
         location: Yup.object().shape({
-            province: Yup.number().oneOf(
-                [...Object.values(__PROVINCES)
-                    .map(prov => prov.istat_provincia), 0],
+            region: Yup.number().oneOf(
+                [...Object.values(__REGIONS)
+                    .map(reg => reg.regione), 0],
                 "Value must match with one of selectable ones"),
+            province: Yup.number().test('Province is within the selected region', 'Value must match with one of selectable ones',
+                (value, ctx) => (
+                    getProvincesForRegion(ctx.parent.region)
+                        .map(p => p.provincia)
+                        .includes(value)) || value === 0
+            ),
             city: Yup.number().test('City is within the selected province', 'Value must match with one of selectable ones',
                 (value, ctx) => (
                     getCitiesForProvince(ctx.parent.province)
-                        .map(c => c.codiceistatcomune)
+                        .map(c => c.comune)
                         .includes(value)) || value === 0
             )
         }),

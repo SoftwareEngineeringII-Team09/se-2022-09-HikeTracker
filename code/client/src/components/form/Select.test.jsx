@@ -137,13 +137,6 @@ describe('Select component', () => {
             .toBe("")
     })
 
-    it("Default option has value set to 0 if it is not set", () => {
-        setup.default()
-        expect(within(screen.getByRole('combobox'))
-            .getByRole('option'))
-            .toHaveAttribute('value', "0")
-    })
-
     it("Default option label is correctly set", () => {
         setup.customDefaultOption()
         expect(within(screen.getByRole('combobox'))

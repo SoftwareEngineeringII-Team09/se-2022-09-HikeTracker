@@ -7,6 +7,7 @@ export const __DEFAULT_FILTERS = {
     expectedTime: { min: 2.5, max: 5 },
     geoArea: {
         location: {
+            region: 0,
             province: 0,
             city: 0
         },
@@ -20,15 +21,15 @@ export const __DEFAULT_FILTERS = {
     }
 }
 
-const getProvince = (filters) => parseInt(filters.geoArea.location.province)
+const getRegion = (filters) => parseInt(filters.geoArea.location.region)
 const getLat = (filters) => filters.geoArea.position.point.lat
 const getLng = (filters) => filters.geoArea.position.point.lng
 
-export const haveGeoAreaConflict = (filters) => getProvince(filters) && getLat(filters) && getLng(filters)
+export const haveGeoAreaConflict = (filters) => getRegion(filters) && getLat(filters) && getLng(filters)
 
 export const filterHikes = (hikes, filters, active) => {
     const { difficulty, length, totalAscent, expectedTime } = filters
-    const { province, city } = filters.geoArea.location
+    const { region, province, city } = filters.geoArea.location
     const { radius, point } = filters.geoArea.position
 
     if (active)
@@ -44,8 +45,9 @@ export const filterHikes = (hikes, filters, active) => {
                 && ((parseInt(hike.expectedTime.hours) + parseInt(hike.expectedTime.minutes) / 60) >= expectedTime.min
                     && (parseInt(hike.expectedTime.hours) + parseInt(hike.expectedTime.minutes) / 60) <= expectedTime.max)
                 // Location filter
-                && (!city || (city && parseInt(city) === hike.city))
-                && (!province || (province && parseInt(province) === hike.province))
+                && (!parseInt(city) || (parseInt(city) && parseInt(city) === hike.city))
+                && (!parseInt(province) || (parseInt(province) && parseInt(province) === hike.province))
+                && (!parseInt(region) || (parseInt(region) && parseInt(region) === hike.region))
                 // Position filter
                 && ((!point.lat && !point.lng) || (isPointWithinRadius(
                     { latitude: hike.startPoint.coords[0], longitude: hike.startPoint.coords[1] },

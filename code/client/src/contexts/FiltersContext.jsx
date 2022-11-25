@@ -10,12 +10,13 @@ export const FiltersProvider = ({ children }) => {
     const [filters, setFilters] = useState(__DEFAULT_FILTERS)
 
     const handleApply = (filters) => {
-        if (haveGeoAreaConflict(filters))
+        if (haveGeoAreaConflict(filters)) {
             toast.error('Just one between location and position can be set', { theme: 'colored' })
-        else {
-            setFilters(filters)
-            setActive(true)
+            return false
         }
+        setFilters(filters)
+        setActive(true)
+        return true
     }
 
     const handleReset = () => {

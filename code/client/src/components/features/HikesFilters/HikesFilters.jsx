@@ -9,8 +9,8 @@ const HikesFilters = ({ isOpen, close }) => {
     const { apply, reset } = useContext(FiltersContext)
 
     const handleSubmit = (filters) => {
-        apply(filters)
-        close()
+        if (apply(filters))
+            close()
     }
 
     const handleReset = () => {
