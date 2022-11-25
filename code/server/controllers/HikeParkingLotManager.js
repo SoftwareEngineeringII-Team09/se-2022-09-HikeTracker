@@ -3,6 +3,8 @@
 const HikeParkingLot = require("../dao/model/HikeParkingLot");
 const PersistentManager = require("../dao/PersistentManager");
 const ParkingLotManager = require("./ParkingLotManager");
+const Hike = require("../dao/model/Hike");
+const ParkingLot = require("../dao/model/ParkingLot");
 
 class HikeParkingLotManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -13,7 +15,7 @@ class HikeParkingLotManager {
    */
    /* async storeHikeParkingLot(newHikeParkingLot) {
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeParkingLot.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeParkingLot.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -21,7 +23,7 @@ class HikeParkingLotManager {
       });
     }
     // Check that foreign key parkingId exists
-    const parkingLotExists = await ParkingLotManager.existsParkingLot("parkingId", newHikeParkingLot.parkingId);
+    const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newHikeParkingLot.parkingId);
     if (!parkingLotExists) {
       return Promise.reject({
         code: 404,
@@ -48,7 +50,7 @@ class HikeParkingLotManager {
       });
     }
     // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeParkingLot.hikeId);
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeParkingLot.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
@@ -56,7 +58,7 @@ class HikeParkingLotManager {
       });
     }
     // Check that foreign key parkingId exists
-    const parkingLotExists = await ParkingLotManager.existsParkingLot("parkingId", newHikeParkingLot.parkingId);
+    const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newHikeParkingLot.parkingId);
     if (!parkingLotExists) {
       return Promise.reject({
         code: 404,
@@ -87,18 +89,10 @@ class HikeParkingLotManager {
 
   /**
    * Load all hikeParkingLots 
-   * @returns a resolved Promise with the list of hikeParkingLots in case HikeParkingLot table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all hikeParkingLots
    */
-  /* async loadAllRowsHikeParkingLot() {
-    const hikeParkingLots = await PersistentManager.loadAllRows(HikeParkingLot.tableName);
-    if (hikeParkingLots.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "HikeParkingLot table is empty"
-      });
-    }
-
-    return Promise.resolve(hikeParkingLots);
+  /* async loadAllHikeParkingLot() {
+    return PersistentManager.loadAll(HikeParkingLot.tableName);
   } */
 
   /**
@@ -133,18 +127,10 @@ class HikeParkingLotManager {
    * Load all hikeParkingLots by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of hikeParkingLots in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of hikeParkingLots that satisfy the condition  
    */
   /* async loadAllByAttributeHikeParkingLot(attributeName, value) {
-    const hikeParkingLots = await PersistentManager.loadAllByAttribute(HikeParkingLot.tableName, attributeName, value);
-    if (hikeParkingLots.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available hikeParkingLots with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(hikeParkingLots);
+    return PersistentManager.loadAllByAttribute(HikeParkingLot.tableName, attributeName, value);
   } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 
