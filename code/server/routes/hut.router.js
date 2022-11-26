@@ -8,10 +8,9 @@ const auth = require("../middlewares/auth");
 
 // POST a hut
 router.post(
-  "/", 
+  "/",
   auth.withAuth,
   auth.withRole(["Local Guide"]),
-  param("writerId").isInt({ min: 0 }),
   body("hutName").isString(),
   body("city").isInt({ min: 0 }),
   body("province").isInt({ min: 0 }),
@@ -51,16 +50,20 @@ router.post(
 );
 
 // GET the list of all huts
-router.get("/", async (req, res) => {
-  try {
-    const hikes = await HutManager.getAllHuts();
-    return res.status(200).json(hikes);
-  } catch (exception) {
-    console.log(exception);
-    const errorCode = exception.code ?? 500;
-    const errorMessage = exception.result ?? "Something went wrong, try again";
-    return res.status(errorCode).json({ error: errorMessage });
-  }
-});
+router.get(
+  "/", 
+  auth.withAuth,
+  auth.withRole(["Hiker"]), 
+  async (req, res) => {
+    try {
+      const hikes = await HutManager.getAllHuts();
+      return res.status(200).json(hikes);
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 500;
+      const errorMessage = exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  });
 
 module.exports = router;

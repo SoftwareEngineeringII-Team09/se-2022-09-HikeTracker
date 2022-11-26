@@ -9,13 +9,13 @@ const auth = require('../middlewares/auth')
 // POST a parking lot 
 router.post("/",
   auth.withAuth,
-  auth.withRole(['Local Guide']),
+  auth.withRole(["Local Guide"]),
   body("parkingLotName").isString(),
   body("latitude").isFloat({ min: 0 }),
   body("longitude").isFloat({ min: 0 }),
-  body("altitude").isFloat({ min: 0 }), 
+  body("altitude").isFloat({ min: 0 }),
   async (req, res) => {
-    const writerId = req.params.writerId;
+    const writerId = req.user.userId;
     try {
       // Validation of body and/or parameters
       const error = validationResult(req);

@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 router.post(
   "/",
   auth.withAuth,
-  auth.withRole(['Local Guide']),
+  auth.withRole(["Local Guide"]),
   upload.single("gpx"),
   async (req, res) => {
     const writerId = req.user.userId;
@@ -147,7 +147,7 @@ router.get(
 router.get(
   "/:hikeId/potentialStartEndPoints",
   auth.withAuth,
-  auth.withRole(['Local Guide']),
+  auth.withRole(["Local Guide"]),
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
@@ -176,7 +176,7 @@ router.get(
 router.put(
   "/:hikeId/startEndPoints",
   auth.withAuth,
-  auth.withRole(['Local Guide']),
+  auth.withRole(["Local Guide"]),
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
