@@ -26,7 +26,7 @@ jobs:
         envkey_DEBUG: false
         envkey_NODEMAILER_EMAIL: ${{ secrets.NODEMAILER_EMAIL }}
         envkey_NODEMAILER_PASSWORD: ${{ secrets.NODEMAILER_PASSWORD }}
-        directory: code
+        directory: ../../code
         file_name: .env
         fail_on_empty: false
 
