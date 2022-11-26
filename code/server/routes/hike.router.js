@@ -53,7 +53,9 @@ router.post(
 );
 
 router.post(
-  "/refPoints/:hikeId",
+  "/:hikeId/refPoints",
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   param("hikeId").isInt({ min: 0 }),
   async (req, res) => {
     const hikeId = req.params.hikeId;
