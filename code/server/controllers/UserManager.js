@@ -2,11 +2,74 @@
 
 const User = require("../dao/model/User");
 const PersistentManager = require("../dao/PersistentManager");
-const crypto = require('crypto')
+const crypto = require('crypto');
+const transporter = require("../middlewares/mail");
 
 class UserManager {
-  constructor() { }
+  costructor() { }
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
+  /**
+   * Store a new user
+   * @param {User} newUser 
+   * @returns a Promise with the userId value of the stored user
+   */
+  async storeUser(newUser) {
+    const users = await this.loadAllUser();
+    if (users.some(u => u.email === newUser.email)) {
+      return Promise.reject({
+        code: 409,
+        result: `A user with email = ${newUser.email} already exists`
+      });
+    }
+
+    return PersistentManager.store(User.tableName, newUser);
+  }
+
+  /**
+   * Update a user
+   * @param {User} newUser 
+   * @param {String} attributeName 
+   * @param {any} value 
+   * @returns a Promise without any value if the user exists, a rejected Promise with an object containing code and result otherwise
+   */
+  async updateUser(newUser, attributeName, value) {
+    const exists = await this.existsUser(attributeName, value);
+    if (!exists) {
+      return Promise.reject({
+        code: 404,
+        result: `No available user with ${attributeName} = ${value}`
+      });
+    }
+
+    return PersistentManager.update(User.tableName, newUser, attributeName, value);
+  }
+
+  /**
+   * Delete a user
+   * @param {String} attributeName 
+   * @param {any} value 
+   * @returns a Promise without any value
+   */
+  async deleteUser(attributeName, value) {
+    return PersistentManager.delete(User.tableName, attributeName, value);
+  }
+
+  /**
+   * Delete all users
+   * @returns a Promise without any value
+   */
+  async deleteAllUser() {
+    return PersistentManager.deleteAll(User.tableName);
+  }
+
+  /**
+   * Load all users 
+   * @returns a Promise with the list of all users
+   */
+  async loadAllUser() {
+    return PersistentManager.loadAll(User.tableName);
+  }
+
   /**
    * Check if the user exists
    * @param {String} attributeName
@@ -34,88 +97,129 @@ class UserManager {
 
     return PersistentManager.loadOneByAttribute(User.tableName, attributeName, value);
   }
+
+  /**
+   * Load all users by attribute
+   * @param {String} attributeName 
+   * @param {any} value 
+   * @returns a Promise with the list of users that satisfy the condition  
+   */
+  async loadAllByAttributeUser(attributeName, value) {
+    return PersistentManager.loadAllByAttribute(User.tableName, attributeName, value);
+  }
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
-  async getUserByEmail(userEmail) {
-    let exists = await PersistentManager.exists(User.tableName, "email", userEmail);
-    if (!exists) {
-      return Promise.reject({
-        code: 404,
-        result: `No available user with email = ${userEmail}`,
-      });
-    }
-    let user = await PersistentManager.loadOneByAttribute(User.tableName, "email", userEmail);
+  // Function to create a new entry for a user within the DB
+  async defineUser(
+    role,
+    firstname,
+    lastname,
+    mobile,
+    email,
+    password,
+    verificationCode
+  ) {
+    return new Promise((resolve, reject) => {
+      const salt = crypto.randomBytes(16);
 
-    return Promise.resolve(new User(
-      user.userId,
-      user.email,
-      user.salt,
-      user.password,
-      user.firstname,
-      user.lastname,
-      user.mobile,
-      user.role,
-      user.active
-    ));
-  }
-
-  async getUser(email, password) {
-    let exists = await PersistentManager.exists(User.tableName, "email", userEmail);
-    if (!exists) {
-      return Promise.reject({
-        code: 404,
-        result: `No available user with email = ${userEmail}`,
-      });
-    }
-    let user = await PersistentManager.loadOneByAttribute(User.tableName, "email", userEmail);
-
-    crypto.scrypt(password, user.salt, 32, function (err, hashedPassword) {
-      if (err) Promise.reject({
-        code: 500,
-        result: `Error with crypto`
-      });
-      if (!crypto.timingSafeEqual(Buffer.from(user.password, 'hex'), hashedPassword))
-        Promise.resolve(false);
-      else
-        Promise.resolve(new User(
-          user.userId,
-          user.email,
-          user.firstname,
-          user.lastname,
-          user.mobile,
-          user.role,
-          user.active))
+      crypto.pbkdf2(password, salt, 310000, 32, 'sha256', async (err, hashedPassword) => {
+        if (err) {
+          reject();
+        }
+        const newUser = new User(null, email, salt.toString("hex"), hashedPassword.toString("hex"), verificationCode, firstname, lastname, mobile, role, 0);
+        this.storeUser(newUser)
+        .then(() => resolve())
+        .catch((err) => reject(err));
     });
-  }
+  });
+}
 
-  async createUser(user) {
-    const salt = crypto.randomBytes(16);
-    // Generate the hashed password to store it within the DB.
-    crypto.pbkdf2(user.password, salt, 310000, 32, 'sha256', function (err, hashedPassword) {
-      if (err) {
-        Promise.reject({
+  // Send the email verification code associated with a user account that is not activated yet
+  async sendVerificationCode(email, verificationCode) {
+  return new Promise((resolve, reject) => {
+    // Mail template for sending the verification code
+    const mail = {
+      from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
+      to: email,
+      subject: "Welcome to HikePiemonte! Here your verification code.",
+      html: `
+              <div style="color: #001829; padding: 30px">
+              <h1 style="color: #003052;">HikeTracker</h1>
+          
+              <p>Hi, thanks for signing up to HikeTracker!</p>
+          
+              <p>To complete your enrollment and verify your email account,
+              I invite you to insert the verification code you can find here.</p>
+          
+              <div style="background-color: #f8f8f8; padding: 20px; margin-top: 50px; margin-bottom: 50px;">
+                  <h3>${verificationCode}</h3>
+              </div>
+              
+              <p style="line-height: 0px">The HikeTracker Team</p>
+              <p style="line-height: 10px">Best regards!</p>
+              </div>`,
+    };
+
+    // Verify that the transporter is working
+    transporter.verify()
+      .then(() => {
+        // If it is working, send mail
+        transporter.sendMail(mail)
+          .then(() => {
+            resolve();
+          })
+          .catch((err) => {
+            // reject if an error occurs with sending the mail
+            const error = {
+              code: 500,
+              result: "Error while sending email!"
+            }
+            reject(error);
+          })
+      })
+      .catch((err) => {
+        const error = {
           code: 500,
-          result: `Error with crypto`
-        })
-      }
+          result: "Transporter not working!"
+        }
+        reject(error);
+      })
+  })
+}
 
-      PersistentManager.store(User.tableName, new User(
-        null,
-        user.email,
-        salt,
-        hashedPassword,
-        user.firstname,
-        user.lastname,
-        user.mobile,
-        user.role,
-        true
-      ))
-        .then((userId) => ({ userId: userId, email: email }))
-        .catch(() => ({ code: 500, result: `Error in createUser` }))
-    });
+  // Function to update the email verification code for a user, given its registration email
+  async updateVerificationCode(email, verificationCode) {
+  const oldUser = await this.loadOneByAttributeUser("email", email);
+  const newUser = { ...oldUser, verificationCode: verificationCode };
+  await this.updateUser(newUser, "email", email);
+}
+
+  // Function to verify the user registration email by its verification code and to activate its account
+  async verifyEmail(email, verificationCode) {
+  const error = {
+    code: 406,
+    result: "Wrong code!"
+  };
+
+  const userByEmail = await this.loadOneByAttributeUser("email", email);
+  const userByVerificationCode = await this.loadOneByAttributeUser("verificationCode", verificationCode).catch((exception) => {
+    if (exception.code === 404) {
+      return Promise.reject(error);
+    }
+    if (exception.code !== 404) {
+      return Promise.reject(exception);
+    }
+  });
+
+  if (userByEmail.userId !== userByVerificationCode.userId) {
+    return Promise.reject(error);
   }
+
+  return this.updateUser({ ...userByEmail, active: 1, verificationCode: null }, "userId", userByEmail.userId);
+}
+
 }
 
 module.exports = new UserManager();
