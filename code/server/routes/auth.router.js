@@ -19,7 +19,7 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 		}
 		const verificationCode = randomWords({ exactly: 3, join: "-" });
 
-		const user = await UserManager.defineUser(
+		const userId = await UserManager.defineUser(
 			req.body.role,
 			req.body.firstname,
 			req.body.lastname,
@@ -28,9 +28,9 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 			req.body.password,
 			verificationCode
 		);
-		await UserManager.sendVerificationCode(req.body.email, verificationCode);
+		await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
 
-		return res.status(200).json(user);
+		return res.status(200).json(userId);
 	} catch (exception) {
 		const errorCode = exception.code ?? 500;
 		const errorMessage =
@@ -50,8 +50,9 @@ router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (
 		}
 		const verificationCode = randomWords({ exactly: 3, join: "-" });
 
-		await UserManager.updateVerificationCode(req.body.email, verificationCode);
-		await UserManager.sendVerificationCode(req.body.email, verificationCode);
+		await UserManager.updateVerificationCode(req.body.userId, verificationCode);
+		const email = await UserManager.loadOneByAttributeUser("userId", req.body.userId);
+		await UserManager.sendVerificationCode(email, req.body.userId, verificationCode);
 
 		return res.status(200).end();
 	} catch (exception) {
@@ -71,7 +72,7 @@ router.put('/verifyEmail', authValidation.verifyEmail, async (req, res) => {
 			return res.status(422).json({ error: errors.array()[0] });
 		}
 
-		await UserManager.verifyEmail(req.body.email, req.body.token);
+		await UserManager.verifyEmail(req.body.userId, req.body.token);
 
 		return res.status(200).end();
 	} catch (exception) {

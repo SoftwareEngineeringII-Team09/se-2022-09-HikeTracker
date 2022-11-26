@@ -130,95 +130,80 @@ class UserManager {
         }
         const newUser = new User(null, email, salt.toString("hex"), hashedPassword.toString("hex"), verificationCode, firstname, lastname, mobile, role, 0);
         this.storeUser(newUser)
-        .then(() => resolve())
-        .catch((err) => reject(err));
+          .then((userId) => resolve(userId))
+          .catch((err) => reject(err));
+      });
     });
-  });
-}
+  }
 
   // Send the email verification code associated with a user account that is not activated yet
-  async sendVerificationCode(email, verificationCode) {
-  return new Promise((resolve, reject) => {
-    // Mail template for sending the verification code
-    const mail = {
-      from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
-      to: email,
-      subject: "Welcome to HikePiemonte! Here your verification code.",
-      html: `
+  async sendVerificationCode(email, userId, verificationCode) {
+    return new Promise((resolve, reject) => {
+      // Mail template for sending the verification code
+      const mail = {
+        from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
+        to: email,
+        subject: "Welcome to HikePiemonte! Here your verification code.",
+        html: `
               <div style="color: #001829; padding: 30px">
               <h1 style="color: #003052;">HikeTracker</h1>
           
               <p>Hi, thanks for signing up to HikeTracker!</p>
           
               <p>To complete your enrollment and verify your email account,
-              I invite you to insert the verification code you can find here.</p>
-          
-              <div style="background-color: #f8f8f8; padding: 20px; margin-top: 50px; margin-bottom: 50px;">
-                  <h3>${verificationCode}</h3>
-              </div>
+              I invite you to <a href="http://localhost:3000/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
               
               <p style="line-height: 0px">The HikeTracker Team</p>
               <p style="line-height: 10px">Best regards!</p>
               </div>`,
-    };
+      };
 
-    // Verify that the transporter is working
-    transporter.verify()
-      .then(() => {
-        // If it is working, send mail
-        transporter.sendMail(mail)
-          .then(() => {
-            resolve();
-          })
-          .catch((err) => {
-            // reject if an error occurs with sending the mail
-            const error = {
-              code: 500,
-              result: "Error while sending email!"
-            }
-            reject(error);
-          })
-      })
-      .catch((err) => {
-        const error = {
-          code: 500,
-          result: "Transporter not working!"
-        }
-        reject(error);
-      })
-  })
-}
-
-  // Function to update the email verification code for a user, given its registration email
-  async updateVerificationCode(email, verificationCode) {
-  const oldUser = await this.loadOneByAttributeUser("email", email);
-  const newUser = { ...oldUser, verificationCode: verificationCode };
-  await this.updateUser(newUser, "email", email);
-}
-
-  // Function to verify the user registration email by its verification code and to activate its account
-  async verifyEmail(email, verificationCode) {
-  const error = {
-    code: 406,
-    result: "Wrong code!"
-  };
-
-  const userByEmail = await this.loadOneByAttributeUser("email", email);
-  const userByVerificationCode = await this.loadOneByAttributeUser("verificationCode", verificationCode).catch((exception) => {
-    if (exception.code === 404) {
-      return Promise.reject(error);
-    }
-    if (exception.code !== 404) {
-      return Promise.reject(exception);
-    }
-  });
-
-  if (userByEmail.userId !== userByVerificationCode.userId) {
-    return Promise.reject(error);
+      // Verify that the transporter is working
+      transporter.verify()
+        .then(() => {
+          // If it is working, send mail
+          transporter.sendMail(mail)
+            .then(() => {
+              resolve();
+            })
+            .catch(() => {
+              // reject if an error occurs with sending the mail
+              const error = {
+                code: 500,
+                result: "Error while sending email!"
+              }
+              reject(error);
+            })
+        })
+        .catch(() => {
+          const error = {
+            code: 500,
+            result: "Transporter not working!"
+          }
+          reject(error);
+        })
+    })
   }
 
-  return this.updateUser({ ...userByEmail, active: 1, verificationCode: null }, "userId", userByEmail.userId);
-}
+  // Function to update the email verification code for a user, given its registration email
+  async updateVerificationCode(userId, verificationCode) {
+    const oldUser = await this.loadOneByAttributeUser("userId", userId);
+    const newUser = { ...oldUser, verificationCode: verificationCode };
+    await this.updateUser(newUser, "userId", userId);
+  }
+
+  // Function to verify the user registration email by its verification code and to activate its account
+  async verifyEmail(userId, verificationCode) {
+    const user = await this.loadOneByAttributeUser("userId", userId);
+    if (user.verificationCode !== verificationCode) {
+      return Promise.reject({
+        code: 406,
+        result: "Wrong code!"
+      });
+    }
+
+    return this.updateUser({ ...user, active: 1, verificationCode: null }, "userId", userId);
+  }
 
 }
 
