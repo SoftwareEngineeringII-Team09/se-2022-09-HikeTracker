@@ -26,11 +26,11 @@ const hikes = {
     })
   },
 
-  //   createHike: (data) => {
-  //     return new Promise((resolve, reject) => {
-  //         axios.post(`${SERVER_URL}/hikes`, {})
-  //     })
-  //   }
+  createHike: (data, writer) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${SERVER_URL}/hikes/${writer}`, data)
+    })
+  }
 }
 
 export default hikes

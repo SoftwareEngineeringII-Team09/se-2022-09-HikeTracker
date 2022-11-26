@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import api from '@services/api';
+import { useNavigate } from "react-router-dom";
 
 import provinces from '@data/provinces'
 import cities from '@data/cities'
@@ -11,10 +14,37 @@ const HikeForm = () => {
     const [expectedTime, setExpectedTime] = useState(0);
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
-    const [referencePoints, setReferencePoints] = useState([]);
-    const handleSubmit = (event) => {
+    const [gpxFile, setGpxFile] = useState(null);
+    const navigate = useNavigate();
+
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-    }
+
+        const data = new FormData();
+        data.append('file', gpxFile);
+        data.append('title', title);
+        data.append('city', city);
+        data.append('expectedTime', expectedTime);
+        data.append('difficulty', difficulty);
+        data.append('description', description);
+        const user = await api.users.getUserInfo();
+
+        api.hikes.createHike(data, user.id)
+            .then((res) => {
+                // Success message
+                toast.success("Hike created successfully", {
+                    theme: "colored"
+                });
+                // Redirect to the newly created hike
+                navigate('/browse/' + res.data.hikeId);
+            })
+            .catch((error) => {
+                toast.error(error.message, {
+                    theme: "colored",
+                });
+            });
+    };
 
     return (
         <>
@@ -59,17 +89,13 @@ const HikeForm = () => {
                     </Form.Group>
                     <Form.Group required className='mb-2'>
                         <Form.Label htmlFor='description'>Description:</Form.Label>
-                        <Form.Control id="description" type='text-area' onChange={event => setDescription(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='refPoints'>Reference points:</Form.Label>
-                        <Form.Control id="refPoints" type='text' />
+                        <Form.Control id="description" required type='text-area' onChange={event => setDescription(event.target.value)} />
                     </Form.Group>
                     <Form.Group required className='mb-2'>
                         <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>
-                        <Form.Control id="gpxFIle" type='file'/>
+                        <Form.Control id="gpxFile" type='file' required />
                     </Form.Group>
-                    <Button variant='primary-light fw-bold' size='lg' type='submit' className='mb-3'>
+                    <Button variant='primary-light fw-bold my-3 mx-auto d-block' size='lg' type='submit' className='mb-3'>
                         Create new hike
                     </Button>
                 </Form>
