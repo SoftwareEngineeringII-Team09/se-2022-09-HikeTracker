@@ -14,8 +14,6 @@ const App = (props) => {
         <Route path='/activate' element={<Pages.ActivateAccount />} />
         <Route path='/browse' element={<Pages.BrowseHikes />} />
         <Route path='/browse/:hikeId' element={<Pages.Hike />} />
-      </Route>
-      <Route element={<Layouts.Guides />}>
         <Route path='/hikes' element={<Pages.HikeList />} />
         <Route path='/hikes/add' element={<Pages.HikeForm />} />
         <Route path='/huts' element={<Pages.HutList />} />
