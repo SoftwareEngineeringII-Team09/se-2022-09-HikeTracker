@@ -4,10 +4,12 @@ const ParkingLotManager = require("../controllers/ParkingLotManager");
 const { body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
+const auth = require('../middlewares/auth')
 
 // POST a parking lot 
-router.post("/writers/:writerId",
-  param("writerId").isInt({ min: 0 }),
+router.post("/",
+  auth.withAuth,
+  auth.withRole(['Local Guide']),
   body("parkingLotName").isString(),
   body("latitude").isFloat({ min: 0 }),
   body("longitude").isFloat({ min: 0 }),

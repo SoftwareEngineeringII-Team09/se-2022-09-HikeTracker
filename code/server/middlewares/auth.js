@@ -9,13 +9,21 @@ const UserManager = require('../controllers/UserManager');
 exports.useLocal = () => passport.use(new LocalStrategy(function verify(username, password, done) {
 	// get user by email from the DB
 	UserManager.loadOneByAttributeUser("email", username).then(user => {
+		if (!user.active) {
+			const error = {
+				code: 401,
+				result: "You have to verify your email!",
+			}
+			return done(error);
+		}
+
 		// if the user exists, check for password matching
 		crypto.pbkdf2(password, Buffer.from(user.salt, "hex"), 310000, 32, 'sha256', function (err, hashedPassword) {
 			// An error occurs with pbkdf2 or crypto
 			if (err) {
 				const error = {
 					code: 500,
-					result: "Internal server error with crypto",
+					result: "Internal server error with crypto!",
 				}
 				return done(error);
 			}
@@ -67,6 +75,19 @@ exports.withAuth = (req, res, next) => {
 	// If the user is not logged in, the server 
 	// does not execute the requested operation and send back an error
 	const errorCode = 401;
-	const errorMessage = "The user is not authorized";
+	const errorMessage = "The user is not authenticated";
 	return res.status(errorCode).json({ error: errorMessage });
 }
+
+exports.withRole = function (roles) {
+	return (req, res, next) => {
+		if (roles.some(r => r === req.user.role)) return next();
+
+		// If the role not match, the server 
+		// does not execute the requested operation and send back an error
+		const errorCode = 401;
+		const errorMessage = "The user is not authorized";
+		return res.status(errorCode).json({ error: errorMessage });
+	}
+}
+

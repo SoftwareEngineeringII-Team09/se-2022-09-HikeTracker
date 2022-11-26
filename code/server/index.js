@@ -2,9 +2,9 @@
 
 // If the server is not in production, configures usage of
 // .env file for environment variables
-// if (process.env.NODE_ENV !== 'production') {
-//   require('dotenv').config();
-// }
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 //import modules
 const express = require("express");
@@ -17,6 +17,11 @@ const passport = require("passport");
 const auth = require("./middlewares/auth");
 
 // import routers
+let testRouter;
+if(process.env.NODE_ENV === "test") {
+  testRouter = require("./routes/test.router");
+}
+
 const authRouter = require("./routes/auth.router");
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
@@ -57,6 +62,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Setting up server routers
+if(process.env.NODE_ENV === "test")
+  app.use(`${API_PREFIX}/tests`, testRouter)
+
 // app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
 app.use(`${API_PREFIX}/users`, userRouter);
@@ -66,7 +74,7 @@ app.use(`${API_PREFIX}/auth`, authRouter);
 
 // Activating the server
 app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}/`)
+  console.log(`Server running in ${process.env.NODE_ENV || "development"} on http://localhost:${PORT}/`)
 );
 
 module.exports = app;

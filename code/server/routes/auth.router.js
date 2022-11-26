@@ -28,7 +28,7 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 			req.body.password,
 			verificationCode
 		);
-		// await UserManager.sendVerificationCode(req.body.email, verificationCode);
+		await UserManager.sendVerificationCode(req.body.email, verificationCode);
 
 		return res.status(200).json(user);
 	} catch (exception) {
@@ -51,7 +51,7 @@ router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (
 		const verificationCode = randomWords({ exactly: 3, join: "-" });
 
 		await UserManager.updateVerificationCode(req.body.email, verificationCode);
-		// await UserManager.sendVerificationCode(req.body.email, verificationCode);
+		await UserManager.sendVerificationCode(req.body.email, verificationCode);
 
 		return res.status(200).end();
 	} catch (exception) {
@@ -131,7 +131,7 @@ router.delete('/logout', (req, res, next) => {
 // Route to get the current session of a user, if he is logged in
 router.get('/current', (req, res) => {
 	// If the user is authenticated and logged in, the server sends back user data as response
-	if (req.isAuthenticated()) return res.status(200).json(req.user);
+	if (req.isAuthenticated()) return res.status(200).json({ userId: req.user.userId, email: req.user.email, firstname: req.user.firstname, lastname: req.user.lastname, mobile: req.user.mobile, role: req.user.role, active: req.user.active });
 
 	// User is not authenticated and logged in
 	const errorCode = 401;

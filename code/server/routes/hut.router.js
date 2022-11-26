@@ -4,10 +4,13 @@ const HutManager = require("../controllers/HutManager");
 const { body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
+const auth = require("../middlewares/auth");
 
 // POST a hut
 router.post(
   "/writers/:writerId", 
+  auth.withAuth,
+  auth.withRole(['Local Guide']),
   param("writerId").isInt({ min: 0 }),
   body("hutName").isString(), 
   body("city").isInt({ min: 0 }), 
@@ -45,4 +48,5 @@ router.post(
     return res.status(errorCode).json({ error: errorMessage });
   }
 });
+
 module.exports = router;

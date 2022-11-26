@@ -5,6 +5,7 @@ const { body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const auth = require("../middlewares/auth");
 
 const storage = multer.diskStorage({
   destination: "./gpx",
@@ -16,11 +17,12 @@ const upload = multer({ storage: storage });
 
 // POST a hike 
 router.post(
-  "/writers/:writerId",
-  param("writerId").isInt({ min: 0 }),
+  "/",
+  auth.withAuth,
+  auth.withRole(['Local Guide']),
   upload.single("gpx"),
   async (req, res) => {
-    const writerId = req.params.writerId;
+    const writerId = req.user.userId;
     const fileName = req.file.originalname;
     try {
       // Validation of body and/or parameters
@@ -88,6 +90,7 @@ router.get(
 // GET a hike gpx
 router.get(
   "/:hikeId/download",
+  auth.withAuth,
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
@@ -113,6 +116,8 @@ router.get(
 // GET potential start and end points
 router.get(
   "/:hikeId/potentialStartEndPoints",
+  auth.withAuth,
+  auth.withRole(['Local Guide']),
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
@@ -140,6 +145,8 @@ router.get(
 // PUT new start and/or end point for the hike
 router.put(
   "/:hikeId/startEndPoints",
+  auth.withAuth,
+  auth.withRole(['Local Guide']),
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()

@@ -129,25 +129,26 @@ class UserManager {
           reject();
         }
         const newUser = new User(null, email, salt.toString("hex"), hashedPassword.toString("hex"), verificationCode, firstname, lastname, mobile, role, 0);
-        await this.storeUser(newUser);
-        resolve();
-      });
+        this.storeUser(newUser)
+        .then(() => resolve())
+        .catch((err) => reject(err));
     });
-  }
+  });
+}
 
   // Send the email verification code associated with a user account that is not activated yet
   async sendVerificationCode(email, verificationCode) {
-    return new Promise((resolve, reject) => {
-      // Mail template for sending the verification code
-      const mail = {
-        from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
-        to: email,
-        subject: "Welcome to HikePiemonte! Here your verification code.",
-        html: `
+  return new Promise((resolve, reject) => {
+    // Mail template for sending the verification code
+    const mail = {
+      from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
+      to: email,
+      subject: "Welcome to HikePiemonte! Here your verification code.",
+      html: `
               <div style="color: #001829; padding: 30px">
-              <h1 style="color: #003052;">YourBrand.</h1>
+              <h1 style="color: #003052;">HikeTracker</h1>
           
-              <p>Hi, thanks for signing up to HikePiemonte!</p>
+              <p>Hi, thanks for signing up to HikeTracker!</p>
           
               <p>To complete your enrollment and verify your email account,
               I invite you to insert the verification code you can find here.</p>
@@ -156,61 +157,68 @@ class UserManager {
                   <h3>${verificationCode}</h3>
               </div>
               
-              <p style="line-height: 0px">The YourBrand. Team</p>
+              <p style="line-height: 0px">The HikeTracker Team</p>
               <p style="line-height: 10px">Best regards!</p>
               </div>`,
-      };
+    };
 
-      // Verify that the transporter is working
-      transporter.verify()
-        .then(() => {
-          // If it is working, send mail
-          transporter.sendMail(mail)
-            .then(() => {
-              resolve();
-            })
-            .catch((err) => {
-              // reject if an error occurs with sending the mail
-              reject(err);
-            })
-        })
-        .catch((err) => {
-          // reject if the transporter is not working
-          reject(err);
-        })
-    })
-  }
+    // Verify that the transporter is working
+    transporter.verify()
+      .then(() => {
+        // If it is working, send mail
+        transporter.sendMail(mail)
+          .then(() => {
+            resolve();
+          })
+          .catch((err) => {
+            // reject if an error occurs with sending the mail
+            const error = {
+              code: 500,
+              result: "Error while sending email!"
+            }
+            reject(error);
+          })
+      })
+      .catch((err) => {
+        const error = {
+          code: 500,
+          result: "Transporter not working!"
+        }
+        reject(error);
+      })
+  })
+}
 
   // Function to update the email verification code for a user, given its registration email
   async updateVerificationCode(email, verificationCode) {
-    const oldUser = await this.loadOneByAttributeUser("email", email);
-    const newUser = { ...oldUser, verificationCode: verificationCode };
-    await this.updateUser(newUser, "email", email);
-  }
+  const oldUser = await this.loadOneByAttributeUser("email", email);
+  const newUser = { ...oldUser, verificationCode: verificationCode };
+  await this.updateUser(newUser, "email", email);
+}
 
   // Function to verify the user registration email by its verification code and to activate its account
   async verifyEmail(email, verificationCode) {
-    const error = {
-      code: 406,
-      result: "Wrong code!"
-    };
+  const error = {
+    code: 406,
+    result: "Wrong code!"
+  };
 
-    const userByEmail = await this.loadOneByAttributeUser("email", email);
-    const userByVerificationCode = await this.loadOneByAttributeUser("verificationCode", verificationCode).catch((exception) => {
-      if (exception.code === 404) {
-        return Promise.reject(error);
-      }
-      if (exception.code !== 404) {
-        return Promise.reject(exception);
-      }
-    });
-
-    if (userByEmail.userId !== userByVerificationCode.userId) {
+  const userByEmail = await this.loadOneByAttributeUser("email", email);
+  const userByVerificationCode = await this.loadOneByAttributeUser("verificationCode", verificationCode).catch((exception) => {
+    if (exception.code === 404) {
       return Promise.reject(error);
     }
+    if (exception.code !== 404) {
+      return Promise.reject(exception);
+    }
+  });
 
-    return this.updateUser({ ...userByEmail, active: 1, verificationCode: null }, "userId", userByEmail.userId);
+  if (userByEmail.userId !== userByVerificationCode.userId) {
+    return Promise.reject(error);
   }
+
+  return this.updateUser({ ...userByEmail, active: 1, verificationCode: null }, "userId", userByEmail.userId);
+}
 
 }
 

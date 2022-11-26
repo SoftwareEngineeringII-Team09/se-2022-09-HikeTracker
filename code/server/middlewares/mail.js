@@ -2,11 +2,12 @@
 
 // Import the module for creating a mail transporter
 const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 
 // Create nodemailer transporter associated with the email account
 // used to send mails to users
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: "hotmail",
     auth: {
         user: process.env.NODEMAILER_EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
