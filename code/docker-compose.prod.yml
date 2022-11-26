@@ -23,4 +23,6 @@ services:
     restart: always
     environment:
       NODE_ENV: production
+      NODEMAILER_EMAIL: ${NODEMAILER_EMAIL}
+      NODEMAILER_PASSWORD: ${NODEMAILER_PASSWORD}
       PORT: 3001
