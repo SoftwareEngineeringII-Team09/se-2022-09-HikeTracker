@@ -118,7 +118,13 @@ CREATE TABLE IF NOT EXISTS "HikeRefPoint" (
 /* Default data */
 /* User table data */
 INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
-VALUES (1, "test@polito.it", "343cd4a74ae1e4ec", "17e4c86a11f6d9412a89853127f9ae2c", "verificationCode", "Mario", "Rossi", "390123456789", "local guide", 0);
+VALUES (1, "testHiker@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, NULL, NULL, NULL, "Hiker", 1);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (2, "testLocalGuide@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, "Mario", "Rossi", "390123456789", "Local Guide", 1);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (3, "testHutWorker@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, "Sara", "Rossi", "399876543210", "Hut Worker", 1);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (4, "testEmergencyOperator@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, NULL, NULL, NULL, "Emergency Operator", 1);
 
 /* Point table data */
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
