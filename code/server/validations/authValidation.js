@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 // Validation checks for the request body of the route that
 // perform the registration of a new user
 exports.signup = [
-    check("role").isString(),
+    check("role").isString().notEmpty(),
     check("firstname").optional().isString(),
     check("lastname").optional().isString(),
     check("mobile").optional().isString(),
@@ -24,18 +24,18 @@ exports.signup = [
 // perform the login of a user
 exports.login = [
     check("username").isEmail(),
-    check("password").isString(),
+    check("password").isString().notEmpty(),
 ];
 
 // Validation checks for the request body of the route that
 // sends by email the verification code
 exports.sendVerificationCode = [
-    check("email").isEmail(),
+    check("userId").isInt({ min: 1 }),
 ]
 
 // Validation checks for the request body of the route that
 // verifies the registration email of a user and activates his account
 exports.verifyEmail = [
-    check("email").isEmail(),
+    check("userId").isInt({ min: 1 }),
     check("token").isString().notEmpty(),
 ]
