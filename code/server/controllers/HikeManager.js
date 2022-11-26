@@ -24,8 +24,8 @@ class HikeManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
    * Store a new hike
-   * @param {Hike} newHike 
-   * @returns a Promise with the hikeId value of the stored hike 
+   * @param {Hike} newHike
+   * @returns a Promise with the hikeId value of the stored hike
    */
   async storeHike(newHike) {
     // Check if foreign key writerId exists
@@ -33,7 +33,7 @@ class HikeManager {
     if (!writerExists) {
       return Promise.reject({
         code: 404,
-        result: `No available writer with userId = ${newHike.writerId}`
+        result: `No available writer with userId = ${newHike.writerId}`,
       });
     }
     // Check if foreign key startPoint exists
@@ -41,7 +41,7 @@ class HikeManager {
     if (!startPointExists) {
       return Promise.reject({
         code: 404,
-        result: `No available startPoint with pointId = ${newHike.startPoint}`
+        result: `No available startPoint with pointId = ${newHike.startPoint}`,
       });
     }
     // Check if foreign key endPoint exists
@@ -49,7 +49,7 @@ class HikeManager {
     if (!endPointExists) {
       return Promise.reject({
         code: 404,
-        result: `No available endPoint with pointId = ${newHike.endPoint}`
+        result: `No available endPoint with pointId = ${newHike.endPoint}`,
       });
     }
 
@@ -58,9 +58,9 @@ class HikeManager {
 
   /**
    * Update a hike
-   * @param {Hike} newHike 
-   * @param {String} attributeName 
-   * @param {any} value 
+   * @param {Hike} newHike
+   * @param {String} attributeName
+   * @param {any} value
    * @returns a Promise without any value if the hike exists, a rejected Promise with an object containing code and result otherwise
    */
   async updateHike(newHike, attributeName, value) {
@@ -68,7 +68,7 @@ class HikeManager {
     if (!exists) {
       return Promise.reject({
         code: 404,
-        result: `No available hike with ${attributeName} = ${value}`
+        result: `No available hike with ${attributeName} = ${value}`,
       });
     }
     // Check if foreign key writerId exists
@@ -76,7 +76,7 @@ class HikeManager {
     if (!writerExists) {
       return Promise.reject({
         code: 404,
-        result: `No available writer with userId = ${newHike.writerId}`
+        result: `No available writer with userId = ${newHike.writerId}`,
       });
     }
     // Check if foreign key startPoint exists
@@ -84,7 +84,7 @@ class HikeManager {
     if (!startPointExists) {
       return Promise.reject({
         code: 404,
-        result: `No available startPoint with pointId = ${newHike.startPoint}`
+        result: `No available startPoint with pointId = ${newHike.startPoint}`,
       });
     }
     // Check if foreign key endPoint exists
@@ -92,17 +92,22 @@ class HikeManager {
     if (!endPointExists) {
       return Promise.reject({
         code: 404,
-        result: `No available endPoint with pointId = ${newHike.startPoint}`
+        result: `No available endPoint with pointId = ${newHike.startPoint}`,
       });
     }
 
-    return PersistentManager.update(Hike.tableName, newHike, attributeName, value);
+    return PersistentManager.update(
+      Hike.tableName,
+      newHike,
+      attributeName,
+      value
+    );
   }
 
   /**
    * Delete a hike
-   * @param {String} attributeName 
-   * @param {any} value 
+   * @param {String} attributeName
+   * @param {any} value
    * @returns a Promise without any value
    */
   async deleteHike(attributeName, value) {
@@ -118,7 +123,7 @@ class HikeManager {
   }
 
   /**
-   * Load all hikes 
+   * Load all hikes
    * @returns a Promise with the list of all hikes
    */
   async loadAllHike() {
@@ -128,8 +133,8 @@ class HikeManager {
   /**
    * Check if the hike exists
    * @param {String} attributeName
-   * @param {any} value  
-   * @returns a resolved Promise with true value in case the hike exists, a resolved Promise with false value otherwise   
+   * @param {any} value
+   * @returns a resolved Promise with true value in case the hike exists, a resolved Promise with false value otherwise
    */
   async existsHike(attributeName, value) {
     return PersistentManager.exists(Hike.tableName, attributeName, value);
@@ -137,33 +142,40 @@ class HikeManager {
 
   /**
    * Load one hike by attribute
-   * @param {String} attributeName 
-   * @param {any} value 
-   * @returns a resolved Promise with the hike in case there is one, a rejected Promise with an object containing code and result otherwise  
+   * @param {String} attributeName
+   * @param {any} value
+   * @returns a resolved Promise with the hike in case there is one, a rejected Promise with an object containing code and result otherwise
    */
   async loadOneByAttributeHike(attributeName, value) {
     const exists = await this.existsHike(attributeName, value);
     if (!exists) {
       return Promise.reject({
         code: 404,
-        result: `No available hike with ${attributeName} = ${value}`
+        result: `No available hike with ${attributeName} = ${value}`,
       });
     }
 
-    return PersistentManager.loadOneByAttribute(Hike.tableName, attributeName, value);
+    return PersistentManager.loadOneByAttribute(
+      Hike.tableName,
+      attributeName,
+      value
+    );
   }
 
   /**
    * Load all hikes by attribute
-   * @param {String} attributeName 
-   * @param {any} value 
-   * @returns a Promise with the list of hikes that satisfy the condition  
+   * @param {String} attributeName
+   * @param {any} value
+   * @returns a Promise with the list of hikes that satisfy the condition
    */
   async loadAllByAttributeHike(attributeName, value) {
-    return PersistentManager.loadAllByAttribute(Hike.tableName, attributeName, value);
+    return PersistentManager.loadAllByAttribute(
+      Hike.tableName,
+      attributeName,
+      value
+    );
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
-
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Define a new hike
@@ -178,7 +190,7 @@ class HikeManager {
     region,
     fileName
   ) {
-    // Parse the gpx to extract: length, ascent, maxElevation, startPoint, endPoint 
+    // Parse the gpx to extract: length, ascent, maxElevation, startPoint, endPoint
     let gpxString = fs.readFileSync(`gpx/${fileName}`).toString();
     gpx.parse(gpxString);
     const track = gpx.tracks[0];
@@ -190,56 +202,68 @@ class HikeManager {
     const trackPath = `gpx/${fileName}`;
 
     // Store the startPoint and retrieve the startPointId
-    const startPointId = await PointManager.storePoint(new Point(
-      null,
-      "start point",
-      0,
-      0,
-      `Start point of ${title}`,
-      startPoint.lat,
-      startPoint.lon,
-      startPoint.ele
-    ));
+    const startPointId = await PointManager.storePoint(
+      new Point(
+        null,
+        "start point",
+        0,
+        0,
+        `Start point of ${title}`,
+        startPoint.lat,
+        startPoint.lon,
+        startPoint.ele
+      )
+    );
 
     // Store the endPoint and retrieve the startPointId
-    const endPointId = await PointManager.storePoint(new Point(
-      null,
-      "end point",
-      0,
-      0,
-      `End point of ${title}`,
-      endPoint.lat,
-      endPoint.lon,
-      endPoint.ele
-    ));
+    const endPointId = await PointManager.storePoint(
+      new Point(
+        null,
+        "end point",
+        0,
+        0,
+        `End point of ${title}`,
+        endPoint.lat,
+        endPoint.lon,
+        endPoint.ele
+      )
+    );
 
-    return this.storeHike(new Hike(
-      null,
-      title,
-      writerId,
-      trackPath,
-      city,
-      province,
-      region,
-      length,
-      expectedTime,
-      ascent,
-      maxElevation,
-      difficulty,
-      description,
-      startPointId,
-      endPointId
-    ));
+    return this.storeHike(
+      new Hike(
+        null,
+        title,
+        writerId,
+        trackPath,
+        city,
+        province,
+        region,
+        length,
+        expectedTime,
+        ascent,
+        maxElevation,
+        difficulty,
+        description,
+        startPointId,
+        endPointId
+      )
+    );
   }
 
-  // Return the list of all the hikes 
+  // Return the list of all the hikes
   async getAllHikes() {
     let hikes = await this.loadAllHike();
 
     hikes = await Promise.all(
       hikes.map(async (h) => {
-        const writer = await UserManager.loadOneByAttributeUser("userId", h.writerId);
-        const startPoint = await PointManager.loadOneByAttributePoint("pointId", h.startPoint);
+        const writer = await UserManager.loadOneByAttributeUser(
+          "userId",
+          h.writerId
+        );
+        const startPoint = await PointManager.loadOneByAttributePoint(
+          "pointId",
+          h.startPoint
+        );
         const expectedTime = h.expectedTime.split(":");
         const hours = expectedTime[0];
         const minutes = expectedTime[1];
@@ -275,36 +299,60 @@ class HikeManager {
   // Load a hike by hikeId
   async getHikeById(hikeId) {
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
-    const writer = await UserManager.loadOneByAttributeUser("userId", hike.writerId);
-    let startPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
-    let endPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
+    const writer = await UserManager.loadOneByAttributeUser(
+      "userId",
+      hike.writerId
+    );
+    let startPoint = await PointManager.loadOneByAttributePoint(
+      "pointId",
+      hike.startPoint
+    );
+    let endPoint = await PointManager.loadOneByAttributePoint(
+      "pointId",
+      hike.endPoint
+    );
 
     if (startPoint.hut) {
-      const hutName = await HutManager.loadOneByAttributeHut("pointId", startPoint.pointId)
-        .then((hut) => hut.hutName);
+      const hutName = await HutManager.loadOneByAttributeHut(
+        "pointId",
+        startPoint.pointId
+      ).then((hut) => hut.hutName);
       startPoint.nameOfLocation = hutName;
     } else if (startPoint.parking) {
-      const parkingName = await ParkingLotManager.loadOneByAttributeParkingLot("pointId", startPoint.pointId)
-        .then((parking) => parking.parkingName);
+      const parkingName = await ParkingLotManager.loadOneByAttributeParkingLot(
+        "pointId",
+        startPoint.pointId
+      ).then((parking) => parking.parkingName);
       startPoint.nameOfLocation = parkingName;
     }
 
     if (endPoint.hutId) {
-      const hutName = await HutManager.loadOneByAttributeHut("pointId", endPoint.pointId)
-        .then((hut) => hut.hutName);
+      const hutName = await HutManager.loadOneByAttributeHut(
+        "pointId",
+        endPoint.pointId
+      ).then((hut) => hut.hutName);
       endPoint.nameOfLocation = hutName;
     } else if (endPoint.parkingId) {
-      const parkingName = await ParkingLotManager.loadOneByAttributeParkingLot("pointId", endPoint.pointId)
-        .then((parking) => parking.parkingName);
+      const parkingName = await ParkingLotManager.loadOneByAttributeParkingLot(
+        "pointId",
+        endPoint.pointId
+      ).then((parking) => parking.parkingName);
       endPoint.nameOfLocation = parkingName;
     }
 
-    // Retrieving reference points     
-    let referencePoints = await HikeRefPointManager.loadAllByAttributeHikeRefPoint("hikeId", hike.hikeId)
+    // Retrieving reference points
+    let referencePoints =
+      await HikeRefPointManager.loadAllByAttributeHikeRefPoint(
+        "hikeId",
+        hike.hikeId
+      );
     if (referencePoints.length !== 0) {
       referencePoints = await Promise.all(
         referencePoints.map(async (rp) => {
-          const point = await PointManager.loadOneByAttributePoint("pointId", rp.pointId);
+          const point = await PointManager.loadOneByAttributePoint(
+            "pointId",
+            rp.pointId
+          );
           return {
             name: point.nameOfLocation,
             coords: [point.longitude, point.latitude],
@@ -313,7 +361,7 @@ class HikeManager {
       );
     }
 
-    // Retrieving expected time  
+    // Retrieving expected time
     const expectedTime = hike.expectedTime.split(":");
     const hours = expectedTime[0];
     const minutes = expectedTime[1];
@@ -359,7 +407,9 @@ class HikeManager {
 
   // Return path of a gpx file by hikeId
   async getGpxPath(hikeId) {
-    const gpxPath = await this.loadOneByAttributeHike("hikeId", hikeId).then(hike => hike.trackPath);
+    const gpxPath = await this.loadOneByAttributeHike("hikeId", hikeId).then(
+      (hike) => hike.trackPath
+    );
 
     return Promise.resolve(gpxPath);
   }

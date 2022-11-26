@@ -1,16 +1,35 @@
+![tests workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/tests.yml/badge.svg)
+![sonarcloud analysis workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/sonarcloud.yml/badge.svg)
+![docker build workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-build.yml/badge.svg)
+![docker release workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-release.yml/badge.svg)
+
+---
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=bugs)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+
+---
+
 This project has been developed by Team-09 for the course of "Software Engineering II", attended during the academic year 2022/23 at Politecnico di Torino, Master's Degree in Computer Engineering.
 
 ## Table of Contents
 
 1. [Docker Documentation](#docker-documentation)
    - [Development](#frontend)
-   - [Tests](#backend)
-   - [Deploy on Docker Hub](#backend)
-   - [Pull from Docker Hub](#backend)
+   - [Tests](#tests)
+   - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
+   - [Pull from Docker Hub](#Pull-from-Docker-Hub)
 2. [Technologies](#technologies)
    - [Frontend](#frontend)
    - [Backend](#backend)
-   - [Database](#backend)
+   - [Database](#database)
 3. [React Client Application Routes](#react-client-application-routes)
    - [Route `/`](#)
    - [Route `/*`](#1)
@@ -100,23 +119,35 @@ Here the list of dependencies installed:
 "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "react-toastify": "^9.1.1",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
 },
 "devDependencies": {
+    "@craco/craco": "^7.0.0",
+    "@testing-library/dom": "^8.19.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/react-toastify": "^4.1.0",
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.3",
     "bootstrap": "^5.2.2",
+    "classnames": "^2.3.2",
+    "cypress": "^11.1.0",
+    "cypress-dark": "^1.8.3",
+    "history": "^5.3.0",
+    "leaflet": "^1.9.2",
     "postcss-preset-env": "^7.8.2",
+    "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.5.0",
     "react-icons": "^4.6.0",
+    "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
-    "react-toastify": "^9.1.1",
     "sass": "^1.55.0"
-}
+},
 ```
 
 ### Backend
@@ -169,11 +200,159 @@ Any other route is matched by this one where the application shows an error.
 
 ## API Server
 
-### **Ticket Routes**
 
-#### `GET /api/tickets/:counterId`
+### **1.Hike Routes**
 
-Get served ticket associated to counterId.
+#### `POST /api/hikes/writers/:writerId`
+
+Post a new hike associated to the existed writer with an empty of reference point.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a gpx file with a JSON object containing hike information. `
+
+```json
+{
+  "province": 4,
+  "city": 23,
+  "difficulty": "Hiker",
+  "description": "This is description",
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+#### `GET /api/hikes/`
+
+Hiker,Tour guide (registered user) get all hikes .
+
+**Request header:** none
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Hiker`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":"End point of Trial to Rocca Patanua"
+   },
+   "referencePoints":[
+      {"name": "parking"},
+      {"name": "refuge"},
+      {"name": "fountain"},
+   ],
+   "track":[
+      [44.56666,6.5444],
+      [44.56634,6.5334],
+      [44.56634,6.5334],
+      ]
+	}
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/hikes/`
+
+Vistors (unregistered user) get all hikes .
+
+**Request header:** none
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Vistor`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":"End point of Trial to Rocca Patanua"
+   },
+   
+ }
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+#### `GET /api/hikes/:hikeId`
+
+Visitors get hike information according to the hike Id.
 
 **Request header:**
 
@@ -185,16 +364,34 @@ Get served ticket associated to counterId.
 
 `HTTP status code 200 OK`
 
+**Permission allowed**
+`Visitor`
+
 ```json
-{
-	"ticket": {
-		"TicketId": 5,
-		"CreateTime": "2022-10-19 17:42:50",
-		"ServiceId": 1,
-		"Status": "issued",
-		"CounterId": 1
-	}
-}
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":" End point of Trial to Rocca Patanua"
+   }  
+ }
+,...
+]
 ```
 
 **Error responses**
@@ -202,6 +399,257 @@ Get served ticket associated to counterId.
 - `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/hikes/:hikeId`
+
+Tour guises get hike information according to the hike Id.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.counterId to retrieve the id of the counter.`
+
+**Response body**
+
+`HTTP status code 200 OK`
+
+**Permission allowed**
+`Tour guide`
+
+```json
+[{
+   "id": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "max_elevation": "3094",
+   "description": "This is description",
+   "difficulty": "Hiker",
+   "length": 12,
+   "total_ascent":1290,
+   "expected_time":{
+      "hours":5,
+      "minutes":30
+   },
+   "province": 2,
+   "city":1001,
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua"
+   },
+   "endPoint":{
+      "name":"Start point of Trial to Rocca Patanua"
+   },
+   "referencePoint":[
+      {"name" : "refPoint1"},
+      {"name" : "refPoint2"},
+      {"name" : "refPoint3"},
+   ],
+   "track" : [
+      [12.33434, 453.12335],
+      [12.45345, 234.12325],
+      [12.343254, 123.12312]
+   ]
+ }
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+
+#### `GET /api/:hikeId/download` 
+
+Get gpx file according to the hike Id.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+**Response body**
+
+`HTTP status code 200 OK`
+`file requested from frontend`
+
+**Permission allowed**
+`Hiker` , `Tour Guide`
+
+
+
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
+### **2.Reference Point Routes**
+
+#### `POST /api/hikes/refPoints/:hikeId`
+
+Post a reference point of specific hike 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+`Body: a JSON object containing reference point information of specific hike.`
+
+```json
+{
+   "referencePoints":[
+      {"name": "refPoint1"},
+      {"name": "refPoint2"},
+      {"name": "refPoint3"}
+   ],
+      "track":[
+         [44.56666,6.5444,1978.786291],
+         [44.56634,6.5334,1891.73755],
+         [44.56634,6.5334,1525.3]
+   ]
+  
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+### **3. Hut Routes**
+
+#### `POST /api/huts/:writerId`
+
+Post a new hut associated to the existed writer with an empty of reference point.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a JSON object containing hut information.`
+
+```json
+{
+  "hutName": "hutName3",
+  "WriterId":7,
+  "city": 4017,
+  "province":2,
+  "region":1,
+  "numberOfBeds":50,
+  "cost":20,
+  "latitude":123,
+  "longitude":231,
+  "altitude":343.234234,
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`none`
+
+**Permission allowed**
+`Tour Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/huts/`
+
+Get all huts 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: none`
+
+
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+```json
+[{
+   "hutId": 1,
+   "hutName": "Rifugio Blitz",
+   "pointId": 5,
+   "city":4017,
+   "province":4,
+   "region":1,
+   "numOfBeds": "60",
+   "cost": 60,
+   "latitude": 46.147128,
+   "longitude":8.534505,
+   "altitude":1265.850139, 
+   "schedule":[
+      {"day":1,
+      "openTime": 8,
+      "closeTime":22,
+      },
+       {"day":2,
+      "openTime": 8,
+      "closeTime":22,
+      },...
+   ] 
+   
+ }
+,...
+]
+```
+
+**Permission allowed**
+All
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+
+
 
 ## Database Tables
 
