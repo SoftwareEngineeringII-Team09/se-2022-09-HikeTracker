@@ -55,7 +55,7 @@
     "integration": "mocha test --timeout 10000 --require test/mocha.env.js --exit",
     "test": "NODE_ENV=test jest --runInBand --coverage",
     "dev": "set NODE_ENV=development && nodemon index.js",
-    "start": "NODE_ENV=development node index.js",
+    "start": "node index.js",
     "start:test": "NODE_ENV=test node index.js"
   }
 }
