@@ -25,8 +25,7 @@ jobs:
  
     steps:
     - name: Make envfile
-      run: |
-        echo "${{ secrets.ENV_FILE }}" > .env
+      run: echo "${{ secrets.ENV_FILE }}" > .env
       
   push_to_registry:
     name: Push Docker images to Docker Hub
