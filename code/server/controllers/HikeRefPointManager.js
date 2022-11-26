@@ -14,7 +14,7 @@ class HikeRefPointManager {
    * @returns a Promise with the rowId value of the stored hikeRefPoint 
    */
    async storeHikeRefPoint(newHikeRefPoint) {
-    // Check that foreign key hikeId exists
+    // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeRefPoint.hikeId);
     if (!hikeExists) {
       return Promise.reject({
@@ -22,7 +22,7 @@ class HikeRefPointManager {
         result: `No available hike with hikeId = ${newHikeRefPoint.hikeId}`
       });
     }
-    // Check that foreign key pointId exists
+    // Check if foreign key pointId exists
     const refPointExists = await PersistentManager.exists(Point.tableName, "pointId", newHikeRefPoint.pointId);
     if (!refPointExists) {
       return Promise.reject({
@@ -49,7 +49,7 @@ class HikeRefPointManager {
         result: `No available hikeRefPoint with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key hikeId exists
+    // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeRefPoint.hikeId);
     if (!hikeExists) {
       return Promise.reject({
@@ -57,7 +57,7 @@ class HikeRefPointManager {
         result: `No available hike with hikeId = ${newHikeRefPoint.hikeId}`
       });
     }
-    // Check that foreign key pointId exists
+    // Check if foreign key pointId exists
     const refPointExists = await PersistentManager.exists(Point.tableName, "pointId", newHikeRefPoint.pointId);
     if (!refPointExists) {
       return Promise.reject({

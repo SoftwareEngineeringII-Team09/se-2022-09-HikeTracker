@@ -13,7 +13,7 @@ class HutDailyScheduleManager {
    * @returns a Promise with the rowId value of the stored hut daily schedule 
    */
    /* async storeHutDailySchedule(newHutDailySchedule) {
-    // Check that foreign key hutId exists
+    // Check if foreign key hutId exists
     const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHutDailySchedule.hutId);
     if (!hutExists) {
       return Promise.reject({
@@ -40,7 +40,7 @@ class HutDailyScheduleManager {
         result: `No available hut daily schedule with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key hutId exists
+    // Check if foreign key hutId exists
     const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHutDailySchedule.hutId);
     if (!hutExists) {
       return Promise.reject({

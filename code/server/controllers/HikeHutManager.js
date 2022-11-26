@@ -13,7 +13,7 @@ class HikeHutManager {
    * @returns a Promise with the rowId value of the stored hikeHut 
    */
   /* async storeHikeHut(newHikeHut) {
-    // Check that foreign key hikeId exists
+    // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
       return Promise.reject({
@@ -21,7 +21,7 @@ class HikeHutManager {
         result: `No available hike with hikeId = ${newHikeHut.hikeId}`
       });
     }
-    // Check that foreign key hutId exists
+    // Check if foreign key hutId exists
     const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHikeHut.hutId);
     if (!hutExists) {
       return Promise.reject({
@@ -48,7 +48,7 @@ class HikeHutManager {
         result: `No available hikeHut with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key hikeId exists
+    // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
       return Promise.reject({
@@ -56,7 +56,7 @@ class HikeHutManager {
         result: `No available hike with hikeId = ${newHikeHut.hikeId}`
       });
     }
-    // Check that foreign key hutId exists
+    // Check if foreign key hutId exists
     const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHikeHut.hutId);
     if (!hutExists) {
       return Promise.reject({
@@ -128,9 +128,9 @@ class HikeHutManager {
    * @param {any} value 
    * @returns a Promise with the list of hikeHuts that satisfy the condition   
    */
-  /* async loadAllByAttributeHikeHut(attributeName, value) {
+  async loadAllByAttributeHikeHut(attributeName, value) {
     return PersistentManager.loadAllByAttribute(HikeHut.tableName, attributeName, value);
-  } */
+  }
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 
