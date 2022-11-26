@@ -18,6 +18,10 @@ on:
 jobs:
   create-envfile:
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: code
  
     steps:
     - name: Make envfile
@@ -26,7 +30,6 @@ jobs:
         envkey_DEBUG: false
         envkey_NODEMAILER_EMAIL: ${{ secrets.NODEMAILER_EMAIL }}
         envkey_NODEMAILER_PASSWORD: ${{ secrets.NODEMAILER_PASSWORD }}
-        directory: ../../code
         file_name: .env
         fail_on_empty: false
 
