@@ -20,7 +20,6 @@ module.exports = {
             '@lib': path.resolve(__dirname, 'src/lib'),
             '@pages': path.resolve(__dirname, 'src/pages'),
             '@services': path.resolve(__dirname, 'src/services'),
-
         }
     },
     jest: {

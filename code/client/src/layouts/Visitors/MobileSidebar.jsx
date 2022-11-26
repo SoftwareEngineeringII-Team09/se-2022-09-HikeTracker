@@ -3,7 +3,7 @@ import { Offcanvas, Alert } from "react-bootstrap";
 
 import { RiCloseLine } from 'react-icons/ri'
 
-import { navigation } from "@data/index";
+import navigation from "@data/navigation";
 import { NavLink } from "@components/ui-core";
 
 const MobileSidebar = ({ isOpen, close }) => {

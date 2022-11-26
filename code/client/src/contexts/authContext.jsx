@@ -32,15 +32,17 @@ const AuthProvider = ({ children }) => {
         }
     }, [dirty]);
 
-    if (loading) {
-        return <Spinner />;
-    } else {
-        return (
-            <AuthContext.Provider value={[{ ...user, loggedIn }, setDirty]}>
-                {children}
-            </AuthContext.Provider>
-        )
-    }
+    if (loading) return (
+        <div role="status" className='h-100vh position-absolute top-50 start-50' >
+            <Spinner animation="border" variant="primary-dark" />
+        </div>
+    )
+    else return (
+        <AuthContext.Provider value={[{ ...user, loggedIn }, setDirty]}>
+            {children}
+        </AuthContext.Provider>
+    )
+
 }
 
 export { AuthContext, AuthProvider };
