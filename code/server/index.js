@@ -24,7 +24,6 @@ if (process.env.NODE_ENV === "test") {
 }
 
 const authRouter = require("./routes/auth.router");
-
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
@@ -62,9 +61,10 @@ app.use(session({
 }))
 
 // Creating the session
+//app.use(express.cookieParser('your secret option here'));
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(passport.authenticate("session"));
+app.use(passport.authenticate("session"));
 
 // Setting up server routers
 if (process.env.NODE_ENV === "test")
