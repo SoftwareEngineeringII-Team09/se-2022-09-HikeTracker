@@ -153,7 +153,7 @@ class ParkingLotManager {
       null,
       latitude,
       longitude,
-      altitude
+      2000.0
     );
     const newPointId = await PointManager.storePoint(newPoint);
 
