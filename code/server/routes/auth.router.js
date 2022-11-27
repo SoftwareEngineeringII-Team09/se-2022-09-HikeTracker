@@ -9,7 +9,7 @@ const authValidation = require("../validations/authValidation");
 const UserManager = require("../controllers/UserManager");
 
 // POST /auth/signup
-// Route to create a new entry for a user within the DB and 
+// Route to create a new entry for a user within the DB and
 // to perform an account registration
 router.post("/signup", authValidation.signup, async (req, res) => {
 	try {

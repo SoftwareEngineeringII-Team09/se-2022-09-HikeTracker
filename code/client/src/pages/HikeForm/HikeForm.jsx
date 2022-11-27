@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
 
-
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
@@ -14,7 +13,6 @@ const HikeForm = () => {
     const [province, setProvince] = useState(0);
     const [city, setCity] = useState(0);
     const [region, setRegion] = useState(0);
-    const [expectedTime, setExpectedTime] = useState(0);
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
     const [gpxFile, setGpxFile] = useState(null);
@@ -30,7 +28,6 @@ const HikeForm = () => {
         data.append('province', province);
         data.append('region', region);
         data.append('city', city);
-        data.append('expectedTime', expectedTime);
         data.append('difficulty', difficulty);
         data.append('description', description);
 
@@ -44,7 +41,6 @@ const HikeForm = () => {
                 navigate('/browse/' + res.hikeId);
             })
             .catch((error) => {
-                console.log(error)
                 toast.error(error.message, {
                     theme: "colored",
                 });
@@ -68,7 +64,7 @@ const HikeForm = () => {
                         <Form.Control id='title' type='text' required placeholder='Hike title' onChange={event => setTitle(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='region'>Region:</Form.Label>
+                        <Form.Label htmlFor="region">Region:</Form.Label>
                         <Form.Select id='region' required onChange={(e) => setRegion(parseInt(e.target.value))}>
                             <option value={0}>Select a region</option>
                             {regions.map(region => (
@@ -95,10 +91,6 @@ const HikeForm = () => {
                                 <option key={city.comune} value={city.comune}>{city.nome}</option>
                             ))}
                         </Form.Select>
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='expTime'>Expected time:</Form.Label>
-                        <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
                         <Form.Label htmlFor='difficulty'>Difficulty:</Form.Label>
