@@ -1,8 +1,10 @@
+import { CLIENT_URL } from "../../src/services/config";
+
 describe('Login', () => {
 
-  beforeEach(() => {
+  before(() => {
     // Reset and seed the database prior to every test
-    // TODO: cy.exec('npm run db:reset && npm run db:seed');
+    cy.clearAll();
   });
 
   it('Shows error to non existing user', () => {
@@ -12,7 +14,7 @@ describe('Login', () => {
     const password = 'password';
 
     /* Fill out the login form and submit it  */
-    cy.get('input[name="email"]').type(username);
+    cy.get('input[name="username"]').type(username);
     cy.get('input[name="password"]').type(password);
     cy.get('button[type="submit"]').click();
 
@@ -21,21 +23,23 @@ describe('Login', () => {
     
   });
 
-  it('Shows error to non existing user', () => {
+  it('Redirects user upon successful signup', () => {
+
+    cy.addLocalGuide();
     cy.visit('/login');
 
-    const username = 'test@email.com';
-    const password = 'password';
+    const username = 'testLocalGuide@email.com';
+    const password = 'Password1234.';
 
     /* Fill out the login form and submit it  */
-    cy.get('input[name="email"]').type(username);
+    cy.get('input[name="username"]').type(username);
     cy.get('input[name="password"]').type(password);
     cy.get('button[type="submit"]').click();
 
     /* Check user is redirected to homepage */
-    // TODO: cy.url().should('eq', '/');
+    cy.url().should('eq', `${CLIENT_URL}`);
 
     /* Check session cookie has been set */
-    // TODO: cy.getCookie('your-session-cookie').should('exist')
+    cy.getCookie('connect.sid').should('exist')
   });
 });
