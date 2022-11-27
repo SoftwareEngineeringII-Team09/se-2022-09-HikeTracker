@@ -49,17 +49,17 @@ class UserManager {
    * @param {any} value 
    * @returns a Promise without any value
    */
-  async deleteUser(attributeName, value) {
+  /* async deleteUser(attributeName, value) {
     return PersistentManager.delete(User.tableName, attributeName, value);
-  }
+  } */
 
   /**
    * Delete all users
    * @returns a Promise without any value
    */
-  async deleteAllUser() {
+  /* async deleteAllUser() {
     return PersistentManager.deleteAll(User.tableName);
-  }
+  } */
 
   /**
    * Load all users 
@@ -103,9 +103,9 @@ class UserManager {
    * @param {any} value 
    * @returns a Promise with the list of users that satisfy the condition  
    */
-  async loadAllByAttributeUser(attributeName, value) {
+  /* async loadAllByAttributeUser(attributeName, value) {
     return PersistentManager.loadAllByAttribute(User.tableName, attributeName, value);
-  }
+  } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 

@@ -7,7 +7,7 @@ const Utils = require("../unit-utils");
 
 /* Some useful data to use for tests */
 const testGpx = "rocciamelone.gpx";
-const testUser = { userId: 1, email: "test@email.it", salt: "testSalt", password: "testPassword", firstname: "testFirstname", lastname: "testLastname", mobile: "390123456789", role: "testRole", active: 0 };
+const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
 const testRefPoint1 = new Point(1, "reference point", 0, 0, "testRefPointName1", 10.0, 10.0, 10.0);
 const testRefPoint2 = new Point(2, "reference point", 0, 0, "testRefPointName2", 20.0, 20.0, 20.0);
 const testRefPoint3 = new Point(3, "reference point", 0, 0, "testRefPointName3", 30.0, 30.0, 30.0);
@@ -47,6 +47,8 @@ describe("Test storeHikeRefPoint", () => {
 	});
 
 	Utils.testStoreHikeRefPoint("store the hikeRefPoint", testHikeRefPoint1);
+	Utils.testStoreHikeRefPoint("reject because of not existing hikeId foreign key", { ...testHikeRefPoint1, hikeId: notExistingHikeRefPoint.hikeId }, 404);
+	Utils.testStoreHikeRefPoint("reject because of not existing pointId foreign key", { ...testHikeRefPoint1, pointId: notExistingHikeRefPoint.pointId }, 404);
 })
 
 

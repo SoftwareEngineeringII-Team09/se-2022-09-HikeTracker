@@ -52,6 +52,7 @@ router.post(
   }
 );
 
+// POST the list of reference points for a given hike
 router.post(
   "/:hikeId/refPoints",
   auth.withAuth,
