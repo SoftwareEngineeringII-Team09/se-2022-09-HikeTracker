@@ -1,38 +1,40 @@
 "user strict";
-//15 attributes
+
 class Hike {
   static tableName = "Hike";
 
   constructor(
-    hike_id,
-    writer_id,
-    track_path,
+    hikeId,
+    title,
+    writerId,
+    trackPath,
     city,
     province,
-    title,
+    region,
     length,
-    expected_time,
+    expectedTime,
     ascent,
     maxElevation,
     difficulty,
     description,
-    start_point,
-    end_point
+    startPoint,
+    endPoint
   ) {
-    this.hike_id = hike_id;
-    this.writer_id = writer_id;
-    this.track_path = track_path;
+    this.hikeId = hikeId;
+    this.title = title;
+    this.writerId = writerId;
+    this.trackPath = trackPath;
     this.city = city;
     this.province = province;
-    this.title = title;
+    this.region = region;
     this.length = length;
-    this.expected_time = expected_time;
+    this.expectedTime = expectedTime;
     this.ascent = ascent;
-    this.max_elevation = maxElevation;
+    this.maxElevation = maxElevation;
     this.difficulty = difficulty;
     this.description = description;
-    this.start_point = start_point;
-    this.end_point = end_point;
+    this.startPoint = startPoint;
+    this.endPoint = endPoint;
   }
 }
 

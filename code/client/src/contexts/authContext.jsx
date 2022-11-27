@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext } from 'react';
 import { Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify'
 import api from '../services/api';
 import React from 'react';
 
@@ -7,7 +8,7 @@ const AuthContext = createContext([{}, () => { }]);
 
 const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({ role: "Visitor" });
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [dirty, setDirty] = useState(true);
@@ -20,9 +21,10 @@ const AuthProvider = ({ children }) => {
                     setUser(data);
                     setLoggedIn(true);
                 })
-                .catch(() => {
+                .catch((err) => {
                     setUser(null);
                     setLoggedIn(false);
+                    toast.error(err.message, { theme: 'colored' })
                 })
                 .finally(() => {
                     setDirty(false);

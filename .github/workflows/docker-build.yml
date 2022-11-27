@@ -1,0 +1,37 @@
+name: Build Docker Images CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  create-envfile:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: code
+ 
+    steps:
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_DEBUG: false
+        envkey_NODEMAILER_EMAIL: ${{ secrets.NODEMAILER_EMAIL }}
+        envkey_NODEMAILER_PASSWORD: ${{ secrets.NODEMAILER_PASSWORD }}
+        file_name: .env
+        fail_on_empty: false
+
+  build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: code
+
+    steps:
+    - name: Build Docker images
+      uses: actions/checkout@v3
+      
+    - run: docker-compose -f docker-compose.prod.yml build

@@ -2,9 +2,11 @@ import { useState, useContext } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Button, Navbar } from "react-bootstrap"
 import { RiMenu3Fill } from 'react-icons/ri'
+import { toast } from 'react-toastify'
 
 import logoWhite from '@assets/logo/logo-white.png'
 import logo from '@assets/logo/logo-no-background.png'
+import api from '@services/api'
 
 import { AuthContext } from '@contexts/authContext'
 
@@ -18,12 +20,23 @@ const Header = () => {
     const location = useLocation();
     const [open, setOpen] = useState(false)
 
+    const [{role, loggedIn}, updateAuth] = useContext(AuthContext)
     const closeSidebar = () => setOpen(false)
     const openSidebar = () => setOpen(true)
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        api.users.logout()
+            .then(async () => {
+                await updateAuth()
+                navigate('/')
+            })
+            .catch(() => toast.error("There has been an error, try again later", { theme: 'colored' }))
+    };
 
     return (
         <Navbar bg={location.pathname !== "/" ? "light" : ""} className="px-4 px-lg-5 py-4 sticky-top flex justify-content-between align-items-center" style={{ zIndex: 99 }}>
-            <MobileSidebar isOpen={open} close={closeSidebar} />
+            <MobileSidebar isOpen={open} close={closeSidebar} isLoggedIn={loggedIn} handleLogout={handleLogout}/>
             <Navbar.Brand style={{ width: "auto", height: 90 }}>
                 <Link to="/">
                     <img src={location.pathname !== "/" ? logo : logoWhite} alt="logo" className="h-100" />

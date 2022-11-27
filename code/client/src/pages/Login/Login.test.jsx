@@ -1,7 +1,31 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import { toast } from "react-toastify";
+import api from '../../services/api';
 import LoginForm from './Login';
+import axios from 'axios';
+
+
+/* Mocking the login api and libraries */
+jest.mock('../../services/api');
+
+jest.mock("axios");
+
+const mockedUsedNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockedUsedNavigate
+}));
+
+jest.mock('react-toastify', () => {
+    return {
+        toast: {
+            error: jest.fn()
+        }
+    };
+});
+
 
 describe("<LoginForm />", () => {
 
@@ -20,6 +44,8 @@ describe("<LoginForm />", () => {
 
     /* Retrieve form fields */
     beforeEach(setup);
+
+    /* UNIT TESTS */
 
     it("Correctly renders Login form", () => {
 
@@ -100,6 +126,7 @@ describe("<LoginForm />", () => {
         await userEvent.type(emailInput, validEmail);
         await userEvent.type(passwordInput, password);
 
+
         /* Mock login api call */
         api.users.login.mockResolvedValue({});
 
@@ -147,6 +174,61 @@ describe("<LoginForm />", () => {
         /* Check the form is submitted */
         await waitFor(() => {
             expect(loginForm).toHaveFormValues({
+                email: validEmail,
+                password: password
+            });
+        });
+
+        /* Check the login function is called */
+        await waitFor(() => {
+            expect(api.users.login).toHaveBeenCalledTimes(1);
+            expect(api.users.login).toHaveBeenCalledWith({
+                email: validEmail,
+                password: password
+            });
+        });
+
+        /* Check the user is redirected to the homepage */
+        await waitFor(() => {
+            expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+            expect(mockedUsedNavigate).toHaveBeenCalledWith('/');
+        });
+
+    });
+
+    it("Submits the form with valid input for a non-existent user", async () => {
+
+        expect(emailInput.value).toBe('');
+        expect(passwordInput.value).toBe('');
+
+        const mockWrongCredentialsError = "The credentials you provided are not correct";
+        const validEmail = "valid@email.com";
+        const password = "p4ssw0rd";
+
+        /* Mock login api call => Reject */
+        axios.post.mockResolvedValueOnce({});
+        api.users.login.mockRejectedValue({
+            message: mockWrongCredentialsError
+        });
+
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(passwordInput, password);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            /* Check data is inserted correctly and no error is shown */
+            expect(emailInput.value).toBe(validEmail);
+            expect(passwordInput.value).toBe(password);
+            expect(emailInput).not.toHaveClass('is-invalid');
+            expect(passwordInput).not.toHaveClass('is-invalid');
+        });
+
+        /* Check the form is submitted */
+        await waitFor(() => {
+            expect(loginForm).toHaveFormValues({
                 username: validEmail,
                 password: password
             });
@@ -160,6 +242,7 @@ describe("<LoginForm />", () => {
                 password: password
             });
         });
+
 
         /* Check the user is redirected to the homepage */
         await waitFor(() => {
@@ -211,5 +294,18 @@ describe("<LoginForm />", () => {
                 password: password
             });
         });
+
+        /* Check error toast is shown to the user */
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledTimes(1);
+            expect(toast.error).toHaveBeenCalledWith(mockWrongCredentialsError, { "theme": "colored" });
+        });
+
+        /* Check the user is not redirected to the homepage */
+        await waitFor(() => {
+            expect(mockedUsedNavigate).toHaveBeenCalledTimes(0);
+        });
+
     });
+
 });

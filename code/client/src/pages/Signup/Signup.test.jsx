@@ -1,8 +1,27 @@
-import { render, screen, waitFor } from '@testing-library/react'
-const { createMemoryHistory } = require("history");
-import userEvent from '@testing-library/user-event'
-import { Router } from 'react-router-dom'
-import Signup from './Signup'
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router-dom';
+import { toast } from "react-toastify";
+import api from '../../services/api';
+import Signup from './Signup';
+import axios from 'axios';
+import React from 'react';
+
+
+/* Mocking the signup api and libraries */
+jest.mock('../../services/api');
+
+jest.mock("axios");
+
+jest.mock('react-toastify', () => {
+    return {
+        toast: {
+            success: jest.fn(),
+            error: jest.fn()
+        }
+    };
+});
 
 describe("<Signup />", () => {
 
@@ -163,6 +182,139 @@ describe("<Signup />", () => {
         // });
     });
 
+    it("Requires mobile field for certain roles", async () => {
+
+        await userEvent.selectOptions(roleInput, "Hut Worker");
+
+        /* Get mobile field */
+        mobileInput = await screen.findByLabelText("Mobile number");
+
+        /* Write nothing in the mobile field */
+        await userEvent.clear(mobileInput);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Check mobile value */
+        expect(mobileInput.value).toBe('');
+
+        /* Wait for the error message to appear */
+        const mobileError = await screen.findByText("Please provide your mobile number");
+        expect(mobileError).toBeInTheDocument();
+        expect(mobileInput).toHaveClass('is-invalid');
+    });
+
+    it("Validates mobile field", async () => {
+
+        await userEvent.selectOptions(roleInput, "Hut Worker");
+
+        /* Get mobile field */
+        mobileInput = await screen.findByLabelText("Mobile number");
+
+        expect(mobileInput.value).toBe('');
+
+        const invalidMobile = "invalidMobile";
+
+        /* Enter invalid mobile */
+        await userEvent.type(mobileInput, invalidMobile);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Wait for the error message to appear */
+        await waitFor(async () => {
+            /* Check mobile value */
+            expect(mobileInput.value).toBe(invalidMobile);
+            /* Check for error message */
+            const mobileError = await screen.findByText("Provide a valid mobile number");
+            expect(mobileError).toBeInTheDocument();
+            expect(mobileInput).toHaveClass('is-invalid');
+        });
+    });
+
+    it("Validates correct mobile field", async () => {
+
+        await userEvent.selectOptions(roleInput, "Hut Worker");
+
+        /* Get mobile field */
+        mobileInput = await screen.findByLabelText("Mobile number");
+
+        expect(mobileInput.value).toBe('');
+
+        const validMobile = "+39 3921234567";
+
+        /* Enter invalid mobile */
+        await userEvent.type(mobileInput, validMobile);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Wait for the error message to appear */
+        await waitFor(async () => {
+            /* Check mobile value */
+            expect(mobileInput.value).toBe(validMobile);
+            /* Check for error message */
+            expect(mobileInput).not.toHaveClass('is-invalid');
+        });
+    });
+
+    it("Requires name and surname fields for certain roles", async () => {
+
+        await userEvent.selectOptions(roleInput, "Hut Worker");
+
+        /* Get name/surname fields */
+        nameInput = await screen.findByLabelText("Name");
+        surnameInput = await screen.findByLabelText("Surname");
+
+        /* Write nothing in the name/surname fields */
+        await userEvent.clear(nameInput);
+        await userEvent.clear(surnameInput);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Check values */
+        expect(nameInput.value).toBe('');
+        expect(surnameInput.value).toBe('');
+
+        /* Wait for the error message to appear */
+        const nameError = await screen.findByText("Please provide your name");
+        const surnameError = await screen.findByText("Please provide your surname");
+        expect(nameError).toBeInTheDocument();
+        expect(nameInput).toHaveClass('is-invalid');
+        expect(surnameError).toBeInTheDocument();
+        expect(surnameInput).toHaveClass('is-invalid');
+    });
+
+    it("Requires name and surname to be not too long", async () => {
+
+        await userEvent.selectOptions(roleInput, "Hut Worker");
+        const veryLongName = "This is a very long name that should not be accepted";
+
+        /* Get name/surname fields */
+        nameInput = await screen.findByLabelText("Name");
+        surnameInput = await screen.findByLabelText("Surname");
+
+        /* Write nothing in the name/surname fields */
+        await userEvent.type(nameInput, veryLongName);
+        await userEvent.type(surnameInput, veryLongName);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Check values */
+        expect(nameInput.value).toBe(veryLongName);
+        expect(surnameInput.value).toBe(veryLongName);
+
+        /* Wait for the error message to appear */
+        const nameError = await screen.findByText("First name must be 40 characters or less");
+        const surnameError = await screen.findByText("Last name must be 40 characters or less");
+        expect(nameError).toBeInTheDocument();
+        expect(nameInput).toHaveClass('is-invalid');
+        expect(surnameError).toBeInTheDocument();
+        expect(surnameInput).toHaveClass('is-invalid');
+    });
+
     it("Checks inserted password is strong", async () => {
 
         expect(emailInput.value).toBe('');
@@ -171,7 +323,6 @@ describe("<Signup />", () => {
         const validEmail = "valid@email.com";
         const password = "p4ssw0rd";
 
-        // await act(async () => {
         /* Enter valid input */
         await userEvent.type(emailInput, validEmail);
         await userEvent.type(passwordInput, password);
@@ -181,13 +332,13 @@ describe("<Signup />", () => {
 
         await waitFor(async () => {
             /* Check data is inserted correctly and no error is shown */
-            expect(passwordInput.value).toBe(password);
             expect(passwordInput).toHaveClass('is-invalid');
-            /* Check for error message */
-            const passwordError = await screen.findByText("Please provide a password containing at least one lowercase letter, one uppercase letter, one number and one special character");
-            expect(passwordError).toBeInTheDocument();
+            expect(passwordInput.value).toBe(password);
         });
-        // });
+
+        /* Check for error message */
+        const passwordError = await screen.findByText("Please provide a password containing at least one lowercase letter, one uppercase letter, one number and one special character");
+        expect(passwordError).toBeInTheDocument();
     });
 
     it("Doesn't show error messages when input is valid", async () => {
@@ -198,7 +349,9 @@ describe("<Signup />", () => {
         const validEmail = "valid@email.com";
         const password = "Secure!p4ssw0rd";
 
-        // await act(async () => {
+        /* Mock signup api call */
+        api.users.signup.mockResolvedValue({});
+
         /* Enter valid input */
         await userEvent.type(emailInput, validEmail);
         await userEvent.type(passwordInput, password);
@@ -213,9 +366,7 @@ describe("<Signup />", () => {
             expect(emailInput).not.toHaveClass('is-invalid');
             expect(passwordInput).not.toHaveClass('is-invalid');
         });
-        // });
     });
-
 
     /* INTEGRATION TESTS */
 
@@ -314,8 +465,8 @@ describe("<Signup />", () => {
 
         /* Mock signup api call */
         axios.post.mockResolvedValueOnce({});
-        api.users.signup.mockRejectedValue(mockUnsuccessfulRegistrationMessage);
 
+        api.users.signup.mockRejectedValue(mockUnsuccessfulRegistrationMessage);
         /* Enter valid input */
         await userEvent.type(emailInput, validEmail);
         await userEvent.type(nameInput, firstname);

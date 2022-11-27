@@ -3,8 +3,9 @@ import { SERVER_URL } from "./config";
 import axios from 'axios';
 
 const users = {
+
     signup: (user) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             axios.post(`${SERVER_URL}/auth/signup`, user)
                 .then(() => resolve())
                 .catch(err => reject(err.response.data.error));
@@ -28,9 +29,8 @@ const users = {
     },
 
     verifyEmail: (data) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             axios.put(`${SERVER_URL}/auth/verify-email`, data)
-
                 .then(() => resolve())
                 .catch(err => reject(err.response.data.error));
         });
@@ -51,6 +51,6 @@ const users = {
                 .catch(err => reject(err.response.data.error));
         });
     }
-}
+};
 
 export default users;

@@ -2,252 +2,648 @@ const PersistentManager = require("../../dao/PersistentManager");
 const HikeManager = require("../../controllers/HikeManager");
 const Point = require("../../dao/model/Point");
 const Hike = require("../../dao/model/Hike");
-const { clearAll } = require("../utils");
+const User = require("../../dao/model/User");
+const Utils = require("../unit-utils");
 
-describe("Test defineHike()", () => {
+/* Some useful data to use for tests */
+const testGpx = "rocciamelone.gpx";
+const testUser = {
+  userId: 1,
+  email: "test@email.it",
+  salt: "testSalt",
+  password: "testPassword",
+  firstname: "testFirstname",
+  lastname: "testLastname",
+  mobile: "390123456789",
+  role: "testRole",
+  active: 0,
+};
+const testStartPoint1 = new Point(
+  1,
+  "start point",
+  0,
+  0,
+  "Start point of testHike1",
+  10.0,
+  10.0,
+  10.0
+);
+const testEndPoint1 = new Point(
+  2,
+  "end point",
+  0,
+  0,
+  "End point of testHike1",
+  20.0,
+  20.0,
+  20.0
+);
+const testStartPoint2 = new Point(
+  3,
+  "start point",
+  0,
+  0,
+  "Start point of testHike2",
+  30.0,
+  30.0,
+  30.0
+);
+const testEndPoint2 = new Point(
+  4,
+  "end point",
+  0,
+  0,
+  "End point of testHike2",
+  40.0,
+  40.0,
+  40.0
+);
+const testStartPoint3 = new Point(
+  5,
+  "start point",
+  0,
+  0,
+  "Start point of testHike3",
+  50.0,
+  50.0,
+  50.0
+);
+const testEndPoint3 = new Point(
+  6,
+  "end point",
+  0,
+  0,
+  "End point of testHike3",
+  60.0,
+  60.0,
+  60.0
+);
+const testHike1 = new Hike(
+  1,
+  "testTitle1",
+  testUser.userId,
+  `gpx/${testGpx}`,
+  1,
+  1,
+  1,
+  10.0,
+  "01:01",
+  10.0,
+  10.0,
+  "testDifficulty1",
+  "testDescription1",
+  testStartPoint1.pointId,
+  testEndPoint1.pointId
+);
+const testHike2 = new Hike(
+  2,
+  "testTitle2",
+  testUser.userId,
+  `gpx/${testGpx}`,
+  2,
+  2,
+  2,
+  20.0,
+  "02:02",
+  20.0,
+  20.0,
+  "testDifficulty2",
+  "testDescription2",
+  testStartPoint2.pointId,
+  testEndPoint2.pointId
+);
+const testHike3 = new Hike(
+  3,
+  "testTitle3",
+  testUser.userId,
+  `gpx/${testGpx}`,
+  3,
+  3,
+  3,
+  30.0,
+  "03:03",
+  30.0,
+  30.0,
+  "testDifficulty3",
+  "testDescription3",
+  testStartPoint3.pointId,
+  testEndPoint3.pointId
+);
+const testHikes = [testHike1, testHike2, testHike3];
+const notExistingHike = testHike1.hikeId + testHike2.hikeId + testHike3.hikeId;
+const notExistingPoint =
+  testStartPoint1.pointId +
+  testStartPoint2.pointId +
+  testStartPoint3.pointId +
+  testEndPoint1.pointId +
+  testEndPoint2.pointId +
+  testEndPoint3.pointId;
+const notExistingUser = testUser.userId + 1;
+const expectedGetAllHikesProperties = [
+  "hikeId",
+  "title",
+  "writer",
+  "city",
+  "province",
+  "region",
+  "length",
+  "expectedTime",
+  "ascent",
+  "maxElevation",
+  "difficulty",
+  "description",
+  "startPoint",
+];
+const expectedGetHikeByIdProperties = [
+  "hikeId",
+  "title",
+  "writer",
+  "city",
+  "province",
+  "region",
+  "length",
+  "expectedTime",
+  "ascent",
+  "maxElevation",
+  "difficulty",
+  "description",
+  "startPoint",
+  "endPoint",
+  "referencePoints",
+  "track",
+];
+
+/*****************************************************************************************************
+ *              storeHike()
+ *****************************************************************************************************/
+describe("Test storeHike", () => {
   /* Test Setup */
-  beforeAll(clearAll);
-  /* Test Teardown */
-  afterAll(clearAll);
-
-  const hiketest = {
-    writer_id: 1,
-    track_path: "gpx/rocciamelone.gpx",
-    city: 4017,
-    province: 4,
-    title: "Monte Ferra",
-    length: 13.0,
-    expected_time: "01:20",
-    ascent: 237.7,
-    max_elevation: 3094.14,
-    difficulty: "Professional hiker",
-    description: "Hike description",
-    start_point: null,
-    end_point: null,
-  };
-
-  const hikeMoreInfo = {
-    start_pointX: 111,
-    start_pointY: 234,
-    start_pointA: 343,
-    end_pointX: 234.44,
-    end_pointY: 111.33,
-    end_pointA: 45.0,
-    reference_point: [
-      {
-        name: "parking",
-        altitude: 1324.22,
-        longitude: 234.33,
-        city: 23,
-        province: 244,
-      },
-      {
-        name: "fountain",
-        altitude: 1324.22,
-        longitude: 234.33,
-        city: 23,
-        province: 244,
-      },
-    ],
-  };
-
-  const startPoint = {
-    type: "start point",
-    parking: 0,
-    hut: 0,
-    name_of_location: `Start point of ${hiketest.title}`,
-    latitude: hikeMoreInfo.start_pointX,
-    longitude: hikeMoreInfo.start_pointY,
-    altitude: hikeMoreInfo.start_pointA,
-    city: hiketest.city,
-    province: hiketest.province,
-    address: null,
-  };
-
-  const endPoint = {
-    type: "end point",
-    parking: 0,
-    hut: 0,
-    name_of_location: `End point of ${hiketest.title}`,
-    latitude: hikeMoreInfo.end_pointX,
-    longitude: hikeMoreInfo.end_pointY,
-    altitude: hikeMoreInfo.end_pointA,
-    city: hiketest.city,
-    province: hiketest.province,
-    address: null,
-  };
-
-  test("Define a new hike", async () => {
-    let resIds = await HikeManager.defineHike(
-      hiketest.writer_id,
-      hiketest.province,
-      hiketest.city,
-      hiketest.title,
-      hiketest.difficulty,
-      hiketest.description,
-      hikeMoreInfo.reference_point,
-      'rocciamelone.gpx'
-    );
-
-    //1: check point table 2 position added
-    let startPointId = resIds.StartPointId;
-    let endPointId = resIds.EndPointId;
-    const startRes = await PersistentManager.loadOneByAttribute(
-      "Point",
-      "point_id",
-      startPointId
-    );
-    startPoint["point_id"] = startPointId;
-    // expect(startRes).toEqual(startPoint);
-
-    const endRes = await PersistentManager.loadOneByAttribute(
-      "Point",
-      "point_id",
-      endPointId
-    );
-    endPoint["point_id"] = endPointId;
-    // expect(endRes).toEqual(endPoint);
-
-    // //2: check hike table
-    hiketest.hike_id = resIds.newHikeid;
-    hiketest.title = `Trail to ${hiketest.title}`;
-    hiketest.latitude = resIds.latitude;
-    hiketest.longitude = resIds.longitude;
-    hiketest.altitude = resIds.altitude;
-    hiketest.start_point = startPointId;
-    hiketest.end_point = endPointId;
-
-    const res = await PersistentManager.loadOneByAttribute(
-      "Hike",
-      "hike_id",
-      resIds.newHikeid
-    );
-    // res.max_elevation = 3094.14; 
-
-    expect(hiketest.writer_id).toEqual(res.writer_id);
-    expect(hiketest.track_path).toEqual(res.track_path);
-    expect(hiketest.city).toEqual(res.city);
-    expect(hiketest.province).toEqual(res.province);
-    expect(hiketest.title).toEqual(res.title);
+  jest.setTimeout(20000);
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+    ]);
   });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testStoreHike("store the hike", testHike1);
+  Utils.testStoreHike(
+    "reject because of not existing startPoint foreign key",
+    { ...testHike1, startPoint: notExistingPoint },
+    404
+  );
+  Utils.testStoreHike(
+    "reject because of not existing endPoint foreign key",
+    { ...testHike1, endPoint: notExistingPoint },
+    404
+  );
+  Utils.testStoreHike(
+    "reject because of not existing writerId foreign key",
+    { ...testHike1, writerId: notExistingUser },
+    404
+  );
 });
 
-describe("Test load hikes", () => {
+/*****************************************************************************************************
+ *              updateHike()
+ *****************************************************************************************************/
+describe("Test updateHike", () => {
   /* Test Setup */
-  beforeAll(clearAll);
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
   /* Test Teardown */
-  afterAll(clearAll);
-
-  const hike = {
-    writer_id: 1,
-    track_path: "gpx/monte_ferra.gpx",
-    city: 4017,
-    province: 4,
-    title: "Trail to Monte Ferra",
-    length: 13.0,
-    expected_time: "01:20",
-    ascent: 237.7,
-    max_elevation: 3094.14,
-    difficulty: "Professional hiker",
-    description: "Hike description",
-    start_point: 1,
-    end_point: 2
-  };
-
-  const point = {
-    type: "start point",
-    parking: 0,
-    hut: 0,
-    name_of_location: "Start point of Trial to Monte Ferra",
-    latitude: 44.5742508675903,
-    longitude: 6.98268919251859,
-    altitude: 1757.43,
-    city: 4017,
-    province: 4,
-    address: "address"
-  };
-
-  const emptyListOfHikes = {
-    code: 404,
-    result: "Hikes table is empty"
-  };
-
-  test("loadAllHikes", async () => {
-    let hikes = [];
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.store(Point.tableName, point);
-    hikes.push(await PersistentManager.store(Hike.tableName, hike));
-    hikes.push(await PersistentManager.store(Hike.tableName, hike));
-    hikes.push(await PersistentManager.store(Hike.tableName, hike));
-
-    const hikesList = await HikeManager.loadAllHikes();
-
-    expect(hikesList.length).toEqual(hikes.length);
+  afterAll(async () => {
+    await Utils.clearAll();
   });
 
-  test("loadAllHikes with empty hikes", async () => {
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.deleteAll(Hike.tableName);
+  Utils.testUpdateHike(
+    "update the hike",
+    { ...testHike1, title: "updatedTitle" },
+    "hikeId",
+    testHike1.hikeId
+  );
+  Utils.testUpdateHike(
+    "reject because of not existing hike with attributeName = value",
+    { ...testHike1, title: "updatedTitle" },
+    "hikeId",
+    notExistingHike,
+    404
+  );
+  Utils.testUpdateHike(
+    "reject because of not existing writerId foreign key",
+    { ...testHike1, writerId: notExistingUser },
+    "hikeId",
+    testHike1.hikeId,
+    404
+  );
+  Utils.testUpdateHike(
+    "reject because of not existing startPoint foreign key",
+    { ...testHike1, startPoint: notExistingPoint },
+    "hikeId",
+    testHike1.hikeId,
+    404
+  );
+  Utils.testUpdateHike(
+    "reject because of not existing endPoint foreign key",
+    { ...testHike1, endPoint: notExistingPoint },
+    "hikeId",
+    testHike1.hikeId,
+    404
+  );
+});
 
-    const hikesList = HikeManager.loadAllHikes();
-
-    expect(hikesList).rejects.toEqual(emptyListOfHikes);
-  })
-
-  test("loadHikeById", async () => {
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.store(Point.tableName, point);
-    const hikeId = await PersistentManager.store(Hike.tableName, hike);
-
-    const hikeLoaded = await HikeManager.loadHikeById(hikeId);
-
-    expect(hikeLoaded.id).toEqual(hikeId);
-    expect(hikeLoaded.title).toEqual(hike.title);
-    expect(hikeLoaded.maxElevation).toEqual(hike.max_elevation);
-    expect(hikeLoaded.description).toEqual(hike.description);
-    expect(hikeLoaded.difficulty).toEqual(hike.difficulty);
-    expect(hikeLoaded.length).toEqual(hike.length);
-    expect(hikeLoaded.totalAscent).toEqual(hike.ascent);
-    expect(hikeLoaded.province).toEqual(hike.province);
-    expect(hikeLoaded.city).toEqual(hike.city);
+/*****************************************************************************************************
+ *              deleteHike()
+ *****************************************************************************************************/
+describe("Test deleteHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
   });
 
-  test("loadHikeById with non existing hikeId", async () => {
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.store(Point.tableName, point);
-    const hikeId = await PersistentManager.store(Hike.tableName, hike);
-    const expectedError = {
-      code: 404,
-      result: `No available Hike with hike_id = ${hikeId+1}`,
-    };
-
-    const hikeLoaded = HikeManager.loadHikeById(hikeId+1);
-
-    expect(hikeLoaded).rejects.toEqual(expectedError);
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
   });
 
-  test("getGpxTrackById", async () => {
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.store(Point.tableName, point);
-    const hikeId = await PersistentManager.store(Hike.tableName, hike);
+  Utils.testDeleteHike(
+    "delete the hikes with attributeName = value",
+    "hikeId",
+    testHike1.hikeId
+  );
+});
 
-    const gpx = await HikeManager.getGpxTrackById(hikeId);
-
-    expect(gpx).toEqual(hike.track_path);
+/*****************************************************************************************************
+ *              deleteAllHike()
+ *****************************************************************************************************/
+describe("Test deleteAllHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
   });
 
-  test("getGpxTrackById with non existing hikeId", async () => {
-    await PersistentManager.store(Point.tableName, point);
-    await PersistentManager.store(Point.tableName, point);
-    const hikeId = await PersistentManager.store(Hike.tableName, hike);
-    const expectedError = {
-      code: 404,
-      result: `No available Hike with hike_id = ${hikeId+1}`,
-    };
-
-    const gpx = HikeManager.getGpxTrackById(hikeId+1);
-
-    expect(gpx).rejects.toEqual(expectedError);
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
   });
+
+  Utils.testDeleteAllHike("delete all hikes");
+});
+
+/*****************************************************************************************************
+ *              loadAllHike()
+ *****************************************************************************************************/
+describe("Test loadAllHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testLoadAllHike("load all hikes", testHikes.length);
+});
+
+/*****************************************************************************************************
+ *              existsHike()
+ *****************************************************************************************************/
+describe("Test existsHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testExistsHike("return true", "hikeId", testHike1.hikeId, true);
+  Utils.testExistsHike("return false", "hikeId", notExistingHike, false);
+});
+
+/*****************************************************************************************************
+ *              loadOneByAttributeHike()
+ *****************************************************************************************************/
+describe("Test loadOneByAttributeHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testLoadOneByAttributeHike(
+    "load a hike by attribute",
+    "hikeId",
+    testHike1.hikeId
+  );
+  Utils.testLoadOneByAttributeHike(
+    "return 404 for non existing hike",
+    "hikeId",
+    notExistingHike,
+    404
+  );
+});
+
+/*****************************************************************************************************
+ *              loadAllByAttributeHike()
+ *****************************************************************************************************/
+describe("Test loadAllByAttributeHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testLoadAllByAttributeHike(
+    "load all hikes by attribute",
+    "writerId",
+    testUser.userId
+  );
+});
+
+/*****************************************************************************************************
+ *              defineHike()
+ *****************************************************************************************************/
+describe("Test defineHike", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+
+    await Promise.all([
+      PersistentManager.store(User.tableName, testUser),
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+    // TODO: insert here if you need other test teardown function calls
+  });
+
+  Utils.testDefineHike(
+    "define hike",
+    testHike1.writerId,
+    testHike1.title,
+    testHike1.expectedTime,
+    testHike1.difficulty,
+    testHike1.description,
+    testHike1.city,
+    testHike1.province,
+    testHike1.region,
+    testGpx
+  );
+
+  Utils.testDefineHike(
+    "return 404 because of not existing writerId foreign key",
+    notExistingUser,
+    testHike1.title,
+    testHike1.expectedTime,
+    testHike1.difficulty,
+    testHike1.description,
+    testHike1.city,
+    testHike1.province,
+    testHike1.region,
+    testGpx,
+    404
+  );
+});
+
+/*****************************************************************************************************
+ *              getAllHikes()
+ *****************************************************************************************************/
+describe("Test getAllHikes", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testGetAllHikes(
+    "get all hikes",
+    testHikes.length,
+    expectedGetAllHikesProperties
+  );
+});
+
+/*****************************************************************************************************
+ *              getHikeById()
+ *****************************************************************************************************/
+describe("Test getHikeById", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testGetHikeByHikeId(
+    "get a hike by hikeId",
+    testHike1.hikeId,
+    expectedGetHikeByIdProperties,
+    undefined
+  );
+  Utils.testGetHikeByHikeId(
+    "return 404 because of not existing hike with hikeId = hikeId",
+    notExistingHike,
+    undefined,
+    404
+  );
+});
+
+/*****************************************************************************************************
+ *              getGpxPath()
+ *****************************************************************************************************/
+describe("Test getGpxPath", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testStartPoint2),
+      PersistentManager.store(Point.tableName, testEndPoint2),
+      PersistentManager.store(Point.tableName, testStartPoint3),
+      PersistentManager.store(Point.tableName, testEndPoint3),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+      PersistentManager.store(Hike.tableName, testHike2),
+      PersistentManager.store(Hike.tableName, testHike3),
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testGetGpxPath(
+    "get a gpx path by hikeId",
+    testHike1.hikeId,
+    testHike1.trackPath,
+    undefined
+  );
+  Utils.testGetGpxPath(
+    "return 404 because of not existing hike with hikeId = hikeId",
+    notExistingHike,
+    undefined,
+    404
+  );
 });
