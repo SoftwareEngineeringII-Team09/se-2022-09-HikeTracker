@@ -13,16 +13,15 @@ const testHut = {
     city: 0,
     altitude: 500,
     cost: 50,
-    numOfBeds: 5
+    numOfBeds: 51
 }
 
 const expected = {
     base: [
-        { label: "name", value: testHut.name },
         { label: "location", value: `c${testHut.city}, p${testHut.province}` },
         { label: "altitude", value: /500 m/i },
         { label: "cost", value: /50 €/i },
-        { label: "numOfBeds", value: /5/i }
+        { label: "numOfBeds", value: /51/i }
     ]
 }
 
