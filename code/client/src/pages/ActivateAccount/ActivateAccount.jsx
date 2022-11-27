@@ -5,17 +5,16 @@ import React from 'react';
 import api from '../../services/api';
 
 const ActivateAccount = () => {
-
     const [searchParams] = useSearchParams();
     const [status, setStatus] = React.useState("loading");
-    const email = searchParams.get("email");
+    const userId = searchParams.get("id");
     const token = searchParams.get("token");
     const navigate = useNavigate();
 
     /* Activation request */
     const activateAccount = async () => {
         try {
-            await api.users.verifyEmail({ email, token });
+            await api.users.verifyEmail({ userId, token });
             setStatus("success");
         } catch (error) {
             setStatus("error");
@@ -25,7 +24,7 @@ const ActivateAccount = () => {
     /* Request new token */
     const requestNewToken = async () => {
         try {
-            await api.requestNewToken(email);
+            await api.users.sendVerificationCode(userId);
             toast.success("We have sent you a new activation email", {
                 theme: "colored",
             });
@@ -38,9 +37,11 @@ const ActivateAccount = () => {
 
     React.useEffect(() => {
 
-        /* Redirect to Home if activation token or email are missing */
-        if (!token || !email)
+        /* Redirect to Home if activation token or userId are missing */
+        if (!token || !userId) {
             navigate('/');
+            toast.error("There has been an error with your activtion link, please try again", {theme: 'colored'})
+        }
 
         activateAccount();
     }, []); // eslint-disable-line

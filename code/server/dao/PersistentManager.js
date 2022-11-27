@@ -3,7 +3,7 @@ const sqlite = require("sqlite3");
 
 class PersistentManager {
   constructor() {
-    this.dbName = "DB.db";
+    this.dbName = process.env.NODE_ENV === "test" ? "DB.test.db" : "DB.db";
   }
 
   store(tableName, object) {
@@ -48,6 +48,7 @@ class PersistentManager {
       db.close();
     });
   }
+
 
   async update(tableName, object, attributeName, value) {
     return new Promise((resolve, reject) => {

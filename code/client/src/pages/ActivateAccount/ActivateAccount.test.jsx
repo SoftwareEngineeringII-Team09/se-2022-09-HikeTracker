@@ -12,7 +12,7 @@ import { act } from 'react-dom/test-utils';
 jest.mock('../../services/api');
 jest.mock("axios");
 
-const mockEmail = "mock@email.com";
+const mockUserId = 5;
 const mockToken = "mockToken12345";
 
 jest.mock('react-router-dom', () => ({
@@ -21,7 +21,7 @@ jest.mock('react-router-dom', () => ({
         get: (param) => {
             const values = {
                 token: mockToken,
-                email: mockEmail
+                id: mockUserId
             }
             return values[param];
         }
@@ -33,7 +33,7 @@ describe("<ActivateAccount />", () => {
 
     const setup = async () => {
         act(() => {
-            const route = `/activate?email=${mockEmail}&token=${mockToken}`;
+            const route = `/activate?id=${mockUserId}&token=${mockToken}`;
             const history = createMemoryHistory({ initialEntries: [route] });
             render(
                 <Router location={history.location} navigator={history}>
@@ -60,7 +60,7 @@ describe("<ActivateAccount />", () => {
                 /* Check if api call was made */
                 expect(api.users.verifyEmail).toHaveBeenCalledTimes(1);
                 expect(api.users.verifyEmail).toHaveBeenCalledWith({
-                    "email": mockEmail,
+                    "userId": mockUserId,
                     "token": mockToken
                 });
             });

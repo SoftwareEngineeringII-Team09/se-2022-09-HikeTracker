@@ -14,7 +14,7 @@ class HikeParkingLotManager {
    * @returns a Promise with the rowId value of the stored hikeParkingLot 
    */
    /* async storeHikeParkingLot(newHikeParkingLot) {
-    // Check that foreign key hikeId exists
+    // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeParkingLot.hikeId);
     if (!hikeExists) {
       return Promise.reject({
@@ -22,7 +22,7 @@ class HikeParkingLotManager {
         result: `No available hike with hikeId = ${newHikeParkingLot.hikeId}`
       });
     }
-    // Check that foreign key parkingId exists
+    // Check if foreign key parkingId exists
     const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newHikeParkingLot.parkingId);
     if (!parkingLotExists) {
       return Promise.reject({
@@ -49,7 +49,7 @@ class HikeParkingLotManager {
         result: `No available hikeParkingLot with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key hikeId exists
+    // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeParkingLot.hikeId);
     if (!hikeExists) {
       return Promise.reject({
@@ -57,7 +57,7 @@ class HikeParkingLotManager {
         result: `No available hike with hikeId = ${newHikeParkingLot.hikeId}`
       });
     }
-    // Check that foreign key parkingId exists
+    // Check if foreign key parkingId exists
     const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newHikeParkingLot.parkingId);
     if (!parkingLotExists) {
       return Promise.reject({
@@ -129,9 +129,9 @@ class HikeParkingLotManager {
    * @param {any} value 
    * @returns a Promise with the list of hikeParkingLots that satisfy the condition  
    */
-  /* async loadAllByAttributeHikeParkingLot(attributeName, value) {
+  async loadAllByAttributeHikeParkingLot(attributeName, value) {
     return PersistentManager.loadAllByAttribute(HikeParkingLot.tableName, attributeName, value);
-  } */
+  }
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 

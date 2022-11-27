@@ -1,9 +1,16 @@
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
 
-const TrackMap = ({ start, end, track }) => {
+const TrackMap = ({ start, end, references, track }) => {
     return (
         <div className="track-map mb-5 mb-xl-0">
             <MapContainer center={start.coords} zoom={13} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
+                {references.map(ref => (
+                    <Marker position={ref.coords}>
+                        <Popup>
+                            <span className='fw-bold'>{ref.name}</span>
+                        </Popup>
+                    </Marker>
+                ))}
                 <Marker position={start.coords}>
                     <Popup>
                         <span className='fw-bold'>Start point</span>
@@ -17,7 +24,7 @@ const TrackMap = ({ start, end, track }) => {
                     </Popup>
                 </Marker>
                 <Polyline pathOptions={{ color: "red" }} positions={track} />
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
             </MapContainer>
         </div>
     )

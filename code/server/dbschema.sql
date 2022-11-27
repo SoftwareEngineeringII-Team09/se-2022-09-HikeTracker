@@ -2,12 +2,13 @@
 DROP TABLE IF EXISTS "User";
 CREATE TABLE IF NOT EXISTS "User" (
 	"userId" INTEGER NOT NULL UNIQUE CHECK(typeof(userId) == "integer"),
-	"email" TEXT NOT NULL CHECK(typeof(email) == "text"),
+	"email" TEXT NOT NULL UNIQUE CHECK(typeof(email) == "text"),
     "salt" TEXT NOT NULL CHECK(typeof(salt) == "text"),
     "password" TEXT NOT NULL CHECK(typeof(password) == "text"),
-    "firstname" TEXT NOT NULL CHECK(typeof(firstname) == "text"),
-    "lastname" TEXT NOT NULL CHECK(typeof(lastname) == "text"),
-    "mobile" TEXT NOT NULL CHECK(typeof(mobile) == "text"),
+    "verificationCode" TEXT CHECK(typeof(verificationCode) == "text" OR (verificationCode) == NULL),
+    "firstname" TEXT CHECK(typeof(firstname) == "text" OR typeof(firstname) == NULL),
+    "lastname" TEXT CHECK(typeof(lastname) == "text" OR typeof(lastname) == NULL),
+    "mobile" TEXT CHECK(typeof(mobile) == "text" OR typeof(mobile) == NULL),
     "role" TEXT NOT NULL CHECK(typeof(role) == "text"),
     "active" INTEGER NOT NULL CHECK(typeof(active) == "integer"),
     PRIMARY KEY("userId")
@@ -116,8 +117,14 @@ CREATE TABLE IF NOT EXISTS "HikeRefPoint" (
 
 /* Default data */
 /* User table data */
-INSERT INTO "User"("userId", "email", "salt", "password", "firstname", "lastname", "mobile", "role", "active")
-VALUES (1, "test@polito.it", "343cd4a74ae1e4ec", "17e4c86a11f6d9412a89853127f9ae2c", "Mario", "Rossi", "390123456789", "local guide", 0);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (1, "testHiker@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, NULL, NULL, NULL, "Hiker", 1);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (2, "testLocalGuide@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, "Mario", "Rossi", "390123456789", "Local Guide", 1);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (3, "testHutWorker@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, "Sara", "Rossi", "399876543210", "Hut Worker", 1);
+INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
+VALUES (4, "testEmergencyOperator@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, NULL, NULL, NULL, "Emergency Operator", 1);
 
 /* Point table data */
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
@@ -156,7 +163,16 @@ INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "l
 VALUES (17, "reference point", 0, 0, "Max elevation point of Trial to Monte Cristetto", 44.989283, 7.281253, 1525.3);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
 VALUES (18, "reference point", 0, 0, "Max elevation point of Trial to Bivacco Berardo", 44.6483261045069, 7.07202368415892, 2702.88);
-	
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
+VALUES (19, "parking lot", 1, 0, NULL, 44.5799508675903, 6.98408919299859, 1757.43);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
+VALUES (20, "parking lot", 1, 0, NULL, 44.5749908675903, 6.98998919251859, 1757.43);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
+VALUES (21, "parking lot", 1, 0, NULL, 44.5749939993593, 6.98269703999564, 1809.34); 
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
+VALUES (22, "hut", 0, 1, NULL, 44.5799639433993, 6.98994703154964, 1809.34); 
+
+
 /* Hike table data */		
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
 VALUES (1, "Trail to Monte Ferra", 1, "gpx/monte_ferra.gpx", 4017, 4, 1, 13.0, "01:20", 237.7, 3094.14, "Professional hiker", "Leaving the car in the large parking lot, we pass the Melezè Refuge and enter the small group of houses above the church of Sant''Anna, leaving behind the imposing building of the Excelsior holiday home. We take the clearly visible path which, with numerous hairpin bends, climbs rapidly on the grassy side up to a plateau where there are some ruins called Grange Reisassa. Here we find a crossroads with signs for Monte Ferra on the right and the hill of Fiutrusa on the left. We continue towards Monte ferra which now looks majestic in front of us, but still too far away. We gain altitude by reaching Lake Reisassa which can still be frozen at the beginning of the season. At this point we just have to go up the very steep path that winds through the debris until we reach the rocky ridge, where we turn left (westbound) and walk it up to the small iron cross placed to indicate our destination. The return path is the same as that of the ascent. NOTES: Poles are essential especially in the descent from Monte Ferra to Lake Reisassa. The only point of support is the Melezè refuge at the beginning of the itinerary (we recommend that you contact the hotel directly to check days and opening times).", 1, 2); 
@@ -178,6 +194,8 @@ INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province",
 VALUES (2, "Rifugio Blitz", 5, 1, 103024, 103, 1, 60, 60.0);
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost")
 VALUES (3, "Rifugio Aleve'", 11, 1, 4172, 4, 1, 60, 50.0);
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost")
+VALUES (4, "Monte Ferra Hut'", 22, 1, 4172, 4, 1, 60, 50.0);
 
 /* HikeHut data */
 INSERT INTO "HikeHut"("hikeId", "hutId")
@@ -186,6 +204,24 @@ INSERT INTO "HikeHut"("hikeId", "hutId")
 VALUES (3, 2);
 INSERT INTO "HikeHut"("hikeId", "hutId")
 VALUES (6, 3);
+INSERT INTO "HikeHut"("hikeId", "hutId")
+VALUES (1, 4);
+
+/* ParkingLot table data */
+INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId")
+VALUES (1, "Monte Ferra Parking 1", 19, 1);
+INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId")
+VALUES (2, "Monte Ferra Parking 2", 20, 1);
+INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId")
+VALUES (3, "Monte Ferra Parking 3", 21, 1);
+
+/* HikeParkingLot data */
+INSERT INTO "HikeParkingLot"("hikeId", "parkingLotId")
+VALUES (1, 1);
+INSERT INTO "HikeParkingLot"("hikeId", "parkingLotId")
+VALUES (1, 2);
+INSERT INTO "HikeParkingLot"("hikeId", "parkingLotId")
+VALUES (1, 3);
 
 /* HikeRefPoint data */
 INSERT INTO "HikeRefPoint"("hikeId", "pointId")
@@ -200,6 +236,20 @@ INSERT INTO "HikeRefPoint"("hikeId", "pointId")
 VALUES(5, 17);
 INSERT INTO "HikeRefPoint"("hikeId", "pointId")
 VALUES(6, 18);
+
+/* HutDailySchedule data */
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(1, 1,"9:00","18:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(1, 2,"9:00","18:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(1, 7,"9:00","13:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(2, 2,"9:00","18:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(3, 2,"10:00","21:00");
+INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
+VALUES(3, 5,"8:15","18:00");
 
 
 

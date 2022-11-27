@@ -1,2 +1,1 @@
-export { Visitors } from './Visitors'
-export { Guides } from './Guides'
+export { default as Layout } from './Layout'

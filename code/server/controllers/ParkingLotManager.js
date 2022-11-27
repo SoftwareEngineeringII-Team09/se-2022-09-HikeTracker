@@ -14,7 +14,7 @@ class ParkingLotManager {
    * @returns a Promise with the parkingId value of the stored parkingId 
    */
    async storeParkingLot(newParkingLot) {
-    // Check that foreign key pointId exists
+    // Check if foreign key pointId exists
     const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newParkingLot.pointId);
     if (!pointExists) {
       return Promise.reject({
@@ -22,7 +22,7 @@ class ParkingLotManager {
         result: `No available point with pointId = ${newParkingLot.pointId}`
       });
     }
-    // Check that foreign key writerId exists
+    // Check if foreign key writerId exists
     const writerExists = await PersistentManager.exists(User.tableName, "userId", newParkingLot.writerId);
     if (!writerExists) {
       return Promise.reject({
@@ -49,7 +49,7 @@ class ParkingLotManager {
         result: `No available parking lot with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key pointId exists
+    // Check if foreign key pointId exists
     const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newParkingLot.pointId);
     if (!pointExists) {
       return Promise.reject({
@@ -57,7 +57,7 @@ class ParkingLotManager {
         result: `No available point with pointId = ${newParkingLot.pointId}`
       });
     }
-    // Check that foreign key writerId exists
+    // Check if foreign key writerId exists
     const writerExists = await PersistentManager.exists(User.tableName, "userId", newParkingLot.writerId);
     if (!writerExists) {
       return Promise.reject({

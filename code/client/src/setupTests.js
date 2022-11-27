@@ -17,3 +17,15 @@ Object.defineProperty(window, 'matchMedia', {
         dispatchEvent: jest.fn(),
     })),
 });
+
+const mockPermisions = {
+    query: () => Promise.resolve(),
+}
+
+const mockGeolocation = {
+    getCurrentPosition: jest.fn(),
+    watchPosition: jest.fn()
+}
+
+global.navigator.permissions = mockPermisions
+global.navigator.geolocation = mockGeolocation

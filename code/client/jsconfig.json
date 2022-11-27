@@ -1,17 +1,18 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-          "@assets/*": ["src/assets/*"],
-          "@components/*": ["src/components/*"],
-          "@contexts/*": ["src/contexts/*"],
-          "@data/*": ["src/data/*"],
-          "@hooks/*": ["src/hooks/*"],
-          "@layouts/*": ["src/layouts/*"],
-          "@lib/*": ["src/lib/*"],
-          "@pages/*": ["src/pages/*"],
-          "@services/*": ["src/services/*"]
-        }
-    },
-    "include": ["./src/**/*.js"]
+  "compilerOptions": {
+    "baseUrl": ".",
+      "paths": {
+        "@assets/*": ["src/assets/*"],
+        "@components/*": ["src/components/*"],
+        "@contexts/*": ["src/contexts/*"],
+        "@data/*": ["src/data/*"],
+        "@hooks/*": ["src/hooks/*"],
+        "@layouts/*": ["src/layouts/*"],
+        "@lib/*": ["src/lib/*"],
+        "@pages/*": ["src/pages/*"],
+        "@services/*": ["src/services/*"]
+      }
+  },
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.{js,jsx}"]
 }

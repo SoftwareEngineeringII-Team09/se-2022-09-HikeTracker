@@ -1,4 +1,4 @@
-import { helperLocation } from '@lib/helpers'
+import { getLocationFullName } from '@lib/helpers/location'
 
 const Details = ({ hike }) => {
     return (
@@ -9,7 +9,7 @@ const Details = ({ hike }) => {
                     Created by <span className='fw-bold'>{hike.writer}</span>{" "}
                     for <span className='fw-bold bg-primary-light px-3 fs-6 py-1 rounded-pill'>{hike.difficulty}</span>
                 </h5>
-                <span>{helperLocation.getLocationFullName(hike.province, hike.city)}</span>
+                <span>{getLocationFullName(hike.province, hike.city)}</span>
             </div>
             <p>{hike.description}</p>
             <div className='mt-5 d-flex flex-column flex-lg-row justify-content-between'>

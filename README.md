@@ -1,13 +1,28 @@
 ![tests workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/tests.yml/badge.svg)
+![sonarcloud analysis workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/sonarcloud.yml/badge.svg)
 ![docker build workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-build.yml/badge.svg)
 ![docker release workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-release.yml/badge.svg)
+
+---
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=bugs)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+
+---
 
 This project has been developed by Team-09 for the course of "Software Engineering II", attended during the academic year 2022/23 at Politecnico di Torino, Master's Degree in Computer Engineering.
 
 ## Table of Contents
 
 1. [Docker Documentation](#docker-documentation)
-   - [Development](#frontend)
+   - [Development](#development)
    - [Tests](#tests)
    - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
    - [Pull from Docker Hub](#Pull-from-Docker-Hub)
@@ -17,10 +32,10 @@ This project has been developed by Team-09 for the course of "Software Engineeri
    - [Database](#database)
 3. [React Client Application Routes](#react-client-application-routes)
    - [Route `/`](#)
-   - [Route `/*`](#1)
+   - [Route `/*`](#)
 4. [API Server](#api-server)
-   - [Ticket Routes](#ticket-routes)
-     - [`GET /api/tickets/:counterId`](#get-apiticketscounterid)
+   <!-- - [Ticket Routes](#ticket-routes)
+     - [`GET /api/tickets/:counterId`](#get-apiticketscounterid) -->
 5. [Database Tables](#database-tables)
    - [Table `Service`](#service)
 6. [React Components APIs](#react-components-apis)
@@ -123,16 +138,21 @@ Here the list of dependencies installed:
     "classnames": "^2.3.2",
     "cypress": "^11.1.0",
     "cypress-dark": "^1.8.3",
+    "cypress-file-upload": "^5.0.8",
+    "geolib": "^3.3.3",
     "history": "^5.3.0",
     "leaflet": "^1.9.2",
+    "leaflet-topography": "^0.2.1",
     "postcss-preset-env": "^7.8.2",
     "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.5.0",
     "react-icons": "^4.6.0",
     "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
-    "sass": "^1.55.0"
-},
+    "regenerator-runtime": "^0.13.11",
+    "sass": "^1.55.0",
+    "yup-password": "^0.2.2"
+}
 ```
 
 ### Backend
@@ -143,23 +163,36 @@ Here the list of dependencies installed:
 
 ```json
 "dependencies": {
-   "cors": "^2.8.5",
-   "dayjs": "^1.11.5",
-   "express": "^4.18.2",
-   "express-validator": "^6.14.2",
-   "morgan": "^1.10.0",
-   "nodemon": "^2.0.20",
-   "sqlite3": "^5.1.2"
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
+    "dayjs": "^1.11.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^6.14.2",
+    "geodist": "^0.2.1",
+    "gpxparser": "^3.0.8",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.8.0",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "random-words": "^1.2.0",
+    "sqlite3": "^5.1.2",
+    "supertest": "^6.3.1"
 },
-"devDependencies": {
-   "babel": "^6.23.0",
-   "chai": "^4.3.6",
-   "chai-http": "^4.3.0",
-   "check-code-coverage": "^1.10.0",
-   "jest": "^27.5.1",
-   "mocha": "^9.2.2",
-   "mochawesome": "^7.1.3",
-   "mochawesome-report-generator": "^6.2.0"
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "check-code-coverage": "^1.10.0",
+    "jest": "^27.5.1",
+    "mocha": "^9.2.2",
+    "mochawesome": "^7.1.3",
+    "mochawesome-report-generator": "^6.2.0"
 }
 ```
 
@@ -183,33 +216,73 @@ _This route is unprotected from the user authentication. Moreover, it is unreach
 
 Any other route is matched by this one where the application shows an error.
 
+### `/login`
+
+_Login form route_
+
+Visitors can insert their credentials to login and access the full functionalities of their account.
+
+_This route is reachable only by users that are not already logged in._
+
+### `/signup`
+
+_Signup form route_
+
+Visitors can provide their personal data to create a new user account.
+The account will have to be verified by clicking a verification link sent to the email used in the registration process.
+
+_This route is reachable only by users that are not logged in._
+
+### `/activate`
+
+_Account activation route_
+
+Visitors are redirected to this page by clicking on the activation link provided in the email they receive upon registration. An automatic requests is made to activate the user account as soon as the page loads.
+
+Route parameters:
+- id: The identifier of the account to activate
+- token: the randomly generated string needed to confirm the possession of the email address used during the registration process.
+
+_This route is reachable only by users that are not logged in._
+
 ## API Server
 
-### **Ticket Routes**
+### **Registration and Authentication Routes** 
 
-#### `GET /api/tickets/:counterId`
+#### `POST /api/auth/signup`
 
-Get served ticket associated to counterId.
+Register a new user.
 
 **Request header:**
 
 `Content-Type: application/json`
 
-`Params: req.params.counterId to retrieve the id of the counter.`
+**Request body:**
 
-**Response body**
-
-`HTTP status code 200 OK`
+A JSON containing user information. `firstname`, `lastname` and `mobile` are necessary only when `role` is _Hut Worker_ or _Local Guide_.
 
 ```json
 {
-	"ticket": {
-		"TicketId": 5,
-		"CreateTime": "2022-10-19 17:42:50",
-		"ServiceId": 1,
-		"Status": "issued",
-		"CounterId": 1
-	}
+  "email": "mariorossi@email.com",
+  "password": "Password",
+  "role": "Local Guide",
+  "firstname": "Mario",
+  "lastname": "Rossi",
+  "mobile": "391234567890"
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+The userId of the created user.
+
+```json
+{
+   5
 }
 ```
 
@@ -219,182 +292,683 @@ Get served ticket associated to counterId.
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 
+
+#### `PUT /api/auth/sendVerificationCode`
+
+Generate and send by email a new verification code for the user to activate his account.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+**Request body:**
+
+A JSON containing the `userId` of the user.
+
+```json
+{
+  "userId": 5
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+`None`
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `PUT /api/auth/verifyEmail`
+
+Verify the registered user to activate his account.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+**Request body:**
+
+A JSON containing the `userId` of the user and the received `token`.
+
+```json
+{
+  "userId": 5,
+  "token": "random-token"
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+`None`
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `POST /api/auth/login/password`
+
+Perform user login.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+**Request body:**
+
+A JSON containing the `username` and the `password` of the user.
+
+```json
+{
+  "username": "mariorossi@email.com",
+  "password": "Password1234."
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+```json
+{
+   "userId": 5,
+   "email": "mariorossi@email.com",
+   "firstname": "Mario",
+   "lastname": "Rossi",
+   "mobile": "391234567890",
+   "role": "Local Guide",
+   "active": 1
+}
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `DELETE /api/auth/logout`
+
+Perform user logout.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+**Request body:**
+
+`None`
+
+**Response header**
+
+`HTTP status code 204 No Content (success).`
+
+**Response body**
+
+`None`
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+
+
+#### `GET /api/auth/current`
+
+Get the current session of a user.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+**Request body:**
+
+`None`
+
+**Response header**
+
+`HTTP status code 200 OK(success)`
+
+**Response body**
+
+`None`
+
+**Error responses**
+
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+### **Hike Routes**
+
+#### `POST /api/hikes`
+
+Post a new hike.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+**Request body:**
+
+A gpx file with a JSON object containing hike information.
+
+```json
+{
+  "province": 4,
+  "city": 23,
+  "difficulty": "Hiker",
+  "description": "This is description",
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+
+```json
+{
+  "province": 4,
+  "city": 23,
+  "difficulty": "Hiker",
+  "description": "This is description",
+}
+```
+
+**Permission allowed**
+
+`Local Guide`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+#### `GET /api/hikes/`
+
+Get all the hikes.
+
+**Request header:** 
+
+`None`
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Request body**
+
+```json
+[
+   {
+      "hikeId": 1,
+      "title": "Trail for Mont Ferra",
+      "writer": " Mario Rossi",
+      "city": 1,
+      "province": 1,
+      "region": 1,
+      "length": 13,
+      "expectedTime":{
+         "hours": "05",
+         "minutes": "30"
+      },
+      "ascent": 1290,
+      "maxElevation": 3094,
+      "difficulty": "Hiker",
+      "description": "This is the description",
+      "startPoint": {
+         "coords": [
+            44.125215216512,
+            7.5734655851987
+         ]
+      },
+	}
+   ,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+
+
+#### `GET /api/hikes/:hikeId`
+
+Get a hike by hikeId.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId`
+
+**Request body**
+
+`None`
+
+**Response header**
+
+`HTTP status code 200 OK`
+
+**Response body**
+
+```json
+{
+   "hikeId": 1,
+   "title": "Trail for Mont Ferra",
+   "writer": " Mario Rossi",
+   "city": 1001,
+   "province": 2,
+   "region": 1,
+   "length": 12,
+   "expectedTime":{
+      "hours": "05",
+      "minutes": "30"
+   },
+   "ascent": 1290,
+   "maxElevation": 3094.13,
+   "difficulty": "Hiker",
+   "description": "This is description",
+   "startPoint":{
+      "name": "Start point of Trial to Rocca Patanua",
+      "coords": [
+         44.125215216512,
+         7.5734655851987
+      ]
+   },
+   "endPoint":{
+      "name":" End point of Trial to Rocca Patanua",
+      "coords": [
+         45.678595216512,
+         7.5678955851987
+      ]
+   },
+   "referencePoints": {
+      "name": "Max elevation point of Trial to Monte Ferra",
+      "coords": [
+         44.459115216512,
+         7.3987655851987
+      ]
+   },
+   "track": [
+      [
+         44.591215216512,
+         7.53219555851987
+      ],
+      [
+         45.37899215216512,
+         7.210521655851987
+      ],
+      ...
+   ]
+}
+```
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/:hikeId/download` 
+
+Get gpx file according to the hike Id.
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+**Response body**
+
+`HTTP status code 200 OK`
+`file requested from frontend`
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `POST /api/hikes/refPoints/:hikeId`
+
+Post a reference point of specific hike 
+
+**Request header:**
+
+`Content-Type: application/json`
+
+`Params: req.params.hikeId to retrieve the id of the hike.`
+
+**Request body:**
+
+JSON object containing reference point information of specific hike.
+
+```json
+{
+   "referencePoints":[
+      {"name": "refPoint1"},
+      {"name": "refPoint2"},
+      {"name": "refPoint3"}
+   ],
+      "track":[
+         [44.56666,6.5444,1978.786291],
+         [44.56634,6.5334,1891.73755],
+         [44.56634,6.5334,1525.3]
+   ]
+  
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`None`
+
+**Permission allowed**
+`Local Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+### **Hut Routes**
+
+#### `POST /api/huts`
+
+Post a new hut associated to the existed writer with an empty of reference point.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Params: req.params.writerId to retrieve the id of the writer.`
+
+`Body: a JSON object containing hut information.`
+
+```json
+{
+  "hutName": "hutName3",
+  "WriterId":7,
+  "city": 4017,
+  "province":2,
+  "region":1,
+  "numberOfBeds":50,
+  "cost":20,
+  "latitude":123,
+  "longitude":231,
+  "altitude":343.234234,
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`None`
+
+**Permission allowed**
+`Local Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `GET /api/huts/`
+
+Get all huts 
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Body: none`
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+
+```json
+[{
+   "hutId": 1,
+   "hutName": "Rifugio Blitz",
+   "pointId": 5,
+   "city":4017,
+   "province":4,
+   "region":1,
+   "numOfBeds": "60",
+   "cost": 60,
+   "latitude": 46.147128,
+   "longitude":8.534505,
+   "altitude":1265.850139, 
+   "schedule":[
+      {"day":1,
+      "openTime": 8,
+      "closeTime":22,
+      },
+       {"day":2,
+      "openTime": 8,
+      "closeTime":22,
+      },...
+   ] 
+   
+ }
+,...
+]
+```
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+### **ParkingLot Routes**
+
+#### `POST /api/parkingLots`
+
+Post a new parking lot.
+
+**Request body:**
+
+`Content-Type: application/json`
+
+`Body: a JSON object containing hut information.`
+
+```json
+{
+  "parkingLotName": "hutName3",
+  "latitude":123,
+  "longitude":231,
+  "altitude":343.234234,
+}
+```
+
+**Response header**
+
+`HTTP status code 201 Created(success)`
+
+**Response body**
+`None`
+
+**Permission allowed**
+`Local Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
 ## Database Tables
 
-### `1. User`
+### `User`
 
-It contains info about user.
+It contains info about users.
 
 ```
-user_id
+userId
 email
 salt
 password
+verificationCode
 firstname
 lastname
 mobile
 role
-active(0/1)
+active
 ```
 
-#### Preloaded Data
+#### Preloaded Users
 
-| ServiceId | email | salt | password |firstname|lastname|mobile|role|active|
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |
-| 1         | test@polito.it     | 343cd4a74ae1e4ec          |17e4c86a11f6d9412a89853127f9ae2c|testname|testlastname|390123456789|guide|0|
+| email                           | password      | role               |
+| :------------------------------ | :------------ | :----------------- |
+| testHiker@email.com             | Password1234. | Hiker              |
+| testLocalGuide@email.com        | Password1234. | Local Guide        |
+| testHutWorker@email.com         | Password1234. | Hut Worker         |
+| testEmergencyOperator@email.com | Password1234. | Emergency Operator |
 
+### `Hike`
 
-#### Preloaded User 
-| email | password |
-| :-------- | :---------- |
-|  test@polito.it         | password  |
-
-
-### `2. Hike`
-
-It contains info about hiking path.
+It contains info about hikes.
 
 ```
-hike_id
-hut_id
-writer_id
-track_path
-region
-city
+hikeId
 title
-length(km)
-expected_time
-ascent(m)
-difficulty(easy/medium/hard)
-description
-start_point
-end_point
-reference_point
-```
-
-#### Preloaded Data
-
-| hike_id | hut_id | writer_id | track_path |region |city |title |length(km)|expected_time |ascent(m) |difficulty|description|start_point |end_point |reference_point |
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |:---------- |
-| 1         | 1    | path1    |piemonte    |turin         |hiketitle1|1000.7|1:20|237.7|easy| This is the description of hikepath1 |1|1|2|
-
-### `3.Hut`
-
-It contains info about hut.
-
-```
-hut_id
-hut_name
-writer_id
-position_id
-num_of_beds
-cost(euro/night)
-```
-
-#### Preloaded Data
-
-| hut_id | hut_name | writer_id | position_id |num_of_beds|cost(euro/night)|
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |
-| 1         | hutName1     | 1  |1  |10|20.0|
-
-### `4. Hut-Hike`
-
-It contains info between hut and hike.
-
-```
-hh_id
-hike_id
-hut_id
-```
-
-#### Preloaded Data
-
-| hut_id | hike_id | hut_id| 
-| :-------- | :---------- | :---------- |
-| 1         | 1 | 1  |
-
-
-### `5. Opening_hours`
-
-It contains info between hut and hike.
-
-```
-openhour_id
-business_id
-type(parking/hut)
-day
-open_time
-close_time
-```
-
-#### Preloaded Data
-
-| openhour_id | business_id | type|day|open_time|close_time|
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |
-| 1         | 1 | parking  |1|8:10|20:15|
-
-### `6. Parking`
-
-It contains info about parking a lot.
-
-```
-parking_id
-parking_name
-writer_id
-posistion_id
-num_of_cars
-cost(euro/hour)
-```
-
-#### Preloaded Data
-
-| parking_id | parking_name | writer_id |posistion_id|num_of_cars|cost(euro/hour)|
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |
-| 1         | parking1  |1|1|100|2.0|
-
-
-### `7. Point`
-
-It contains info about point.
-
-```
-point_id
-position_id
-type(parking/hut)
-parking_id
-hut_id
-name_of_location
-```
-
-#### Preloaded Data
-
-| point_id | position_id | type |parking_id|hut_id|name_of_location|
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |
-| 1         |1| parking  |1||parking1|
-| 2         |2| hut  ||1|hut1|
-| 3         |3|  |||fountain|
-
-### `8. Position`
-
-It contains info about position.
-
-```
-position_id
-altitude
-latitude
-longitude
+writerId
+trackPath
 city
 province
-address
+region
+length
+expected_time
+ascent
+maxElevation
+difficulty
+description
+startPoint
+endPoint
 ```
 
-#### Preloaded Data
+### `Point`
 
-| position_id | altitude | latitude |longitude|city|province|address|
-| :-------- | :---------- | :---------- |:---------- |:---------- |:---------- |:---------- |
-| 1         |145.3| -100.3 |12.5|Turin|Piemonte|Turin, Piemonte|
-| 2         |122.2| -78.8 |15.5|Turin|Piemonte|Turin, Piemonte|
-| 3         |100.3| -45.0 |16.7|Turin|Piemonte|Turin, Piemonte|
+It contains info about points.
+
+```
+pointId
+type
+parkingLot
+hut
+nameOfLocation
+latitude
+longitude
+altitude
+```
+
+### `Hut`
+
+It contains info about huts.
+
+```
+hutId
+hutName
+pointId
+writerId
+city
+province
+region
+numOfBeds
+cost
+```
+
+### `HutDailySchedule`
+
+It contains info about huts' daily schedule.
+
+```
+hutId
+day
+openTime
+closeTime
+```
+
+### `HikeHut`
+
+It connects the hikes with their huts.
+
+```
+hikeId
+hutId
+```
+
+### `ParkingLot`
+
+It contains info about parking a lots.
+
+```
+parkingLotId
+parkingLotName
+pointId
+writerId
+```
+
+### `HikeParkingLot`
+
+It connects the hikes with their parking lots.
+
+```
+hikeId
+parkingLotId
+```
+
+### `HikeRefPoint`
+
+It connects the hikes with their reference points.
+
+```
+hikeId
+pointId
+```
 
 
 ## React Components APIs

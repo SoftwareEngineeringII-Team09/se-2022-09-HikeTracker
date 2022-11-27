@@ -68,12 +68,12 @@ describe("Page for adding new hike", () => {
         )
 
         /* Mock api calls */
-        api.hikes.createHike.mockResolvedValueOnce({ data: { hikeId: 1 } });
-        api.users.getUserInfo.mockResolvedValueOnce({ id: 2 });
+        api.hikes.createHike.mockResolvedValueOnce({  hikeId: 1 });
 
         await userEvent.type(screen.getByLabelText("Title:"), 'My title!')
-        await userEvent.selectOptions(screen.getByLabelText("Province:"), "TORINO")
-        await userEvent.selectOptions(screen.getByLabelText("City:"), 'ALMESE')
+        await userEvent.selectOptions(screen.getByLabelText("Region:"), "Piemonte")
+        await userEvent.selectOptions(screen.getByLabelText("Province:"), "Torino")
+        await userEvent.selectOptions(screen.getByLabelText("City:"), 'Alpette')
         await userEvent.selectOptions(screen.getByLabelText("Difficulty:"), 'Tourist')
         await userEvent.type(screen.getByLabelText("Expected time:"), '0230')
         await userEvent.type(screen.getByLabelText("Description:"), 'Test description')
@@ -82,8 +82,9 @@ describe("Page for adding new hike", () => {
 
         const expectedFormData = new FormData();
         expectedFormData.append('title', "My title!");
-        expectedFormData.append('province', "TORINO");
-        expectedFormData.append('city', "ALMESE");
+        expectedFormData.append('region', "Piemonte");
+        expectedFormData.append('province', "Torino");
+        expectedFormData.append('city', "Alpette");
         expectedFormData.append('difficulty', "Tourist");
         expectedFormData.append('expectedTime', "02,30");
         expectedFormData.append('description', "Test description");
@@ -112,7 +113,6 @@ describe("Page for adding new hike", () => {
         /* Mock api calls */
         const errorMessage = "There has been and error while creating the hike"
         api.hikes.createHike.mockRejectedValueOnce(new Error(errorMessage));
-        api.users.getUserInfo.mockResolvedValueOnce({ id: 2 });
 
         await userEvent.click(screen.getByRole("button"))
 

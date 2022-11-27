@@ -48,15 +48,20 @@
     "classnames": "^2.3.2",
     "cypress": "^11.1.0",
     "cypress-dark": "^1.8.3",
+    "cypress-file-upload": "^5.0.8",
+    "geolib": "^3.3.3",
     "history": "^5.3.0",
     "leaflet": "^1.9.2",
+    "leaflet-topography": "^0.2.1",
     "postcss-preset-env": "^7.8.2",
     "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.5.0",
     "react-icons": "^4.6.0",
     "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
-    "sass": "^1.55.0"
+    "regenerator-runtime": "^0.13.11",
+    "sass": "^1.55.0",
+    "yup-password": "^0.2.2"
   },
   "jest": {
     "moduleNameMapper": {
