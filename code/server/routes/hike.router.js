@@ -31,7 +31,7 @@ router.post(
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
 
-      await HikeManager.defineHike(
+      const hikeId = await HikeManager.defineHike(
         writerId,
         req.body.title,
         req.body.expectedTime,
@@ -42,7 +42,7 @@ router.post(
         req.body.region,
         fileName
       );
-      return res.status(201).end();
+      return res.status(201).send({ hikeId });
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =
@@ -52,6 +52,7 @@ router.post(
   }
 );
 
+// POST the list of reference points for a given hike
 router.post(
   "/:hikeId/refPoints",
   auth.withAuth,

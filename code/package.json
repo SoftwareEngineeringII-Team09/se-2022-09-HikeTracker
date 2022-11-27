@@ -16,6 +16,8 @@
     "dev:client": "cd ./client && npm start",
     "dev:server": "cd ./server && npm run dev",
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev:server\" \"npm run dev:client\"",
+    "start:test:server": "cd ./server && npm run start:test",
+    "start:test": "concurrently -n \"SERVER,CLIENT\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run start:test:server\" \"npm run dev:client\"",
     "format:check": "npx prettier --check --debug-check ./**/*.{js,jsx}",
     "format:write": "npx prettier --write ./**/*.{js,jsx}",
     "test:client": "cd client && npm test -- --watchAll=\"false\"",

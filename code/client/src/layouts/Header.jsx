@@ -1,10 +1,14 @@
-import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useState, useContext } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Button, Navbar } from "react-bootstrap"
 import { RiMenu3Fill } from 'react-icons/ri'
+import { toast } from 'react-toastify'
 
 import logoWhite from '@assets/logo/logo-white.png'
 import logo from '@assets/logo/logo-no-background.png'
+import api from '@services/api'
+
+import { AuthContext } from '@contexts/authContext'
 
 import navigation from "@data/navigation"
 import { NavLink } from "@components/ui-core"
@@ -12,8 +16,9 @@ import { NavLink } from "@components/ui-core"
 import MobileSidebar from "./MobileSidebar"
 
 const Header = () => {
-    const location = useLocation();
+    const [user] = useContext(AuthContext)
     const [open, setOpen] = useState(false)
+    const location = useLocation();
 
     const closeSidebar = () => setOpen(false)
     const openSidebar = () => setOpen(true)
@@ -29,18 +34,18 @@ const Header = () => {
             <div className="fw-semibold">
 
                 {/* Sidebar button for mobile devices */}
-                <Button data-testid="mobile-sidebar-toggle" className="d-lg-none" variant={location.pathname !== "/" ? "base-light" : "base"} onClick={openSidebar}>
+                <Button data-testid="mobile-sidebar-toggle" className={!user.loggedIn ? "d-lg-none" : "d-block"} variant={location.pathname !== "/" ? "base-light" : "base"} onClick={openSidebar}>
                     <RiMenu3Fill />
                 </Button>
 
                 {/* Navigation for desktop devices */}
-                <div className="d-none d-lg-flex align-items-center">
-                    {navigation.desktop.map((link, idx) => (
+                {!user.loggedIn && <div className="d-none d-lg-flex align-items-center">
+                    {navigation.default.desktop.map((link, idx) => (
                         <NavLink key={idx} url={link.url} variant={link.variant} className={`${location.pathname !== "/" ? "text-primary-dark" : "text-primary-light"} ps-5`}>
                             {link.label}
                         </NavLink>
                     ))}
-                </div>
+                </div>}
             </div>
         </Navbar>
     )

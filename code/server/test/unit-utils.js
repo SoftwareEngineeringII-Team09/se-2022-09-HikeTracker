@@ -13,6 +13,7 @@ const ParkingLotManager = require("../controllers/ParkingLotManager");
 const PointManager = require("../controllers/PointManager");
 const HikeRefPointManager = require("../controllers/HikeRefPointManager");
 const HutManager = require("../controllers/HutManager");
+const UserManager = require("../controllers/UserManager");
 
 /* Reset DB content */
 exports.clearAll = async function () {
@@ -258,7 +259,7 @@ exports.testDefineHike = function (
         fileName
       );
       const definedHike = await PersistentManager.loadAll(Hike.tableName).then(
-        (Hikes) => Hikes[0]
+        (hikes) => hikes[0]
       );
       const definedHikePoint = await PersistentManager.loadAll(
         Point.tableName
@@ -290,6 +291,17 @@ exports.testDefineHike = function (
     }
   });
 };
+
+exports.testGetPotentialStartEndPoints = function (itShould, hikeId, expectedGetPotentialStartEndPointsProperties) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeManager.getPotentialStartEndPoints(hikeId);
+
+    for (const p of expectedGetPotentialStartEndPointsProperties) {
+      expect(res).toHaveProperty(p);
+    }
+  });
+}
+
 
 /*****************************************************************************************************
  *              Hut
@@ -632,6 +644,122 @@ exports.testLoadAllByAttributeHikeRefPoint = function (
     }
   });
 };
+
+
+/*****************************************************************************************************
+ *              User
+ *****************************************************************************************************/
+exports.testStoreUser = function (itShould, newUser, expectedRejectionCode = undefined) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await UserManager.storeUser(newUser);
+      const storedUser = await PersistentManager.loadOneByAttribute(User.tableName, "userId", res);
+
+      expect(res).toEqual(newUser.userId);
+      expect(storedUser).toEqual(newUser);
+    } else {
+      await expect(UserManager.storeUser(newUser)).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testUpdateUser = function (itShould, newUser, attributeName, value, expectedRejectionCode = undefined) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      let attributesName = [];
+      for (const attribute in newUser) {
+        if (Object.prototype.hasOwnProperty.call(newUser, attribute)) {
+          attributesName.push(attribute);
+        }
+      }
+      await UserManager.updateUser(newUser, attributeName, value);
+      let updatedUsers = await PersistentManager.loadAllByAttribute(
+        User.tableName,
+        attributeName,
+        value
+      );
+
+      for (const updatedUser of updatedUsers) {
+        for (const attribute in attributesName) {
+          expect(updatedUser[attribute]).toEqual(newUser[attribute]);
+        }
+      }
+    } else {
+      await expect(UserManager.updateUser(newUser, attributeName, value)).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testLoadAllUser = function (itShould, expectedLength) {
+  test(`Should ${itShould}`, async () => {
+    const actualLength = await UserManager.loadAllUser().then(
+      (users) => users.length
+    );
+
+    expect(actualLength).toEqual(expectedLength);
+  });
+};
+
+exports.testExistsUser = function (itShould, attributeName, value, expectedResult) {
+  test(`Should ${itShould}`, async () => {
+    const res = await UserManager.existsUser(attributeName, value);
+
+    expect(res).toEqual(expectedResult);
+  });
+};
+
+exports.testLoadOneByAttributeUser = function (itShould, attributeName, value, expectedRejectionCode = undefined) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await UserManager.loadOneByAttributeUser(attributeName, value);
+
+      expect(res[attributeName]).toEqual(value);
+    } else {
+      await expect(UserManager.loadOneByAttributeUser(attributeName, value)).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testDefineUser = function (itShould, role, firstname, lastname, mobile, email, password, verificationCode) {
+  test(`Should ${itShould}`, async () => {
+    await UserManager.defineUser(role, firstname, lastname, mobile, email, password, verificationCode);
+    const definedUser = await PersistentManager.loadAll(User.tableName).then((users) => users[0]);
+
+    expect(definedUser.role).toEqual(role);
+    expect(definedUser.firstname).toEqual(firstname);
+    expect(definedUser.lastname).toEqual(lastname);
+    expect(definedUser.mobile).toEqual(mobile);
+    expect(definedUser.email).toEqual(email);
+    expect(definedUser.verificationCode).toEqual(verificationCode);
+  });
+}
+
+exports.testUpdateVerificationCode = function (itShould, userId, verificationCode) {
+  test(`Should ${itShould}`, async () => {
+    await UserManager.updateVerificationCode(userId, verificationCode);
+    let updatedUser = await PersistentManager.loadOneByAttribute(User.tableName, "userId", userId);
+
+    expect(updatedUser.verificationCode).toEqual(verificationCode);
+  });
+}
+
+exports.testVerifyEmail = function (itShould, userId, verificationCode, expectedRejectionCode = undefined) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      await UserManager.verifyEmail(userId, verificationCode);
+      const verifiedUser = await UserManager.loadOneByAttributeUser("userId", userId);
+
+      expect(verifiedUser.active).toEqual(1);
+      expect(verifiedUser.verificationCode).toEqual(null);
+    } else {
+      await expect(UserManager.verifyEmail(userId, verificationCode)).rejects.toHaveProperty("code", expectedRejectionCode);
+
+      const notVerifiedUser = await UserManager.loadOneByAttributeUser("userId", userId);
+      expect(notVerifiedUser.active).toEqual(0);
+    }
+  });
+};
+
 
 /*****************************************************************************************************
  *              Others

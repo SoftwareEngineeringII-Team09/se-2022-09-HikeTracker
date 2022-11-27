@@ -21,7 +21,6 @@ class UserManager {
         result: `A user with email = ${newUser.email} already exists`
       });
     }
-
     return PersistentManager.store(User.tableName, newUser);
   }
 
@@ -50,17 +49,17 @@ class UserManager {
    * @param {any} value 
    * @returns a Promise without any value
    */
-  async deleteUser(attributeName, value) {
+  /* async deleteUser(attributeName, value) {
     return PersistentManager.delete(User.tableName, attributeName, value);
-  }
+  } */
 
   /**
    * Delete all users
    * @returns a Promise without any value
    */
-  async deleteAllUser() {
+  /* async deleteAllUser() {
     return PersistentManager.deleteAll(User.tableName);
-  }
+  } */
 
   /**
    * Load all users 
@@ -104,9 +103,9 @@ class UserManager {
    * @param {any} value 
    * @returns a Promise with the list of users that satisfy the condition  
    */
-  async loadAllByAttributeUser(attributeName, value) {
+  /* async loadAllByAttributeUser(attributeName, value) {
     return PersistentManager.loadAllByAttribute(User.tableName, attributeName, value);
-  }
+  } */
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 
@@ -134,14 +133,14 @@ class UserManager {
           .catch((err) => reject(err));
       });
     });
-  }
+  };
 
   // Send the email verification code associated with a user account that is not activated yet
   async sendVerificationCode(email, userId, verificationCode) {
     return new Promise((resolve, reject) => {
       // Mail template for sending the verification code
       const mail = {
-        from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
+        from: `HikeTracker <${process.env.NODEMAILER_EMAIL}>`,
         to: email,
         subject: "Welcome to HikePiemonte! Here your verification code.",
         html: `
@@ -151,7 +150,7 @@ class UserManager {
               <p>Hi, thanks for signing up to HikeTracker!</p>
           
               <p>To complete your enrollment and verify your email account,
-              I invite you to <a href="http://localhost:3000/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
+              I invite you to <a href="http://localhost:${process.env.CLIENT_PORT || 3000}/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
               
               <p style="line-height: 0px">The HikeTracker Team</p>
               <p style="line-height: 10px">Best regards!</p>

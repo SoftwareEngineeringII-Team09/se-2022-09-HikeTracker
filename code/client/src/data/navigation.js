@@ -1,25 +1,24 @@
 const navigation = {
-    desktop: [
+    default: {
+        desktop: [
+            { label: "Browse", url: "/browse", variant: "link" },
+            { label: "Login", url: "/login", variant: "link" },
+            { label: "Create an account", url: "/signup", variant: "button" },
+        ],
+        mobile: [
+            { label: "Browse", url: "/browse" },
+            { label: "Login", url: "/login" },
+        ]
+    },
+    Hiker: [
         { label: "Browse", url: "/browse", variant: "link" },
-        { label: "Login", url: "/login", variant: "link" },
-        { label: "Create an account", url: "/signup", variant: "button" },
     ],
-    desktopGuide: [
+    LocalGuide: [
         { label: "Browse", url: "/browse", variant: "link" },
-        { label: "MyHikes", url: "/hikes", variant: "link" },
-        { label: "MyHuts", url: "/huts", variant: "link" },
-        { label: "Account", url: "/account", variant: "link" },
+        { label: "Create a new hike", url: "/add-hike" },
+        { label: "Create a new hut", url: "/add-hut" },
+        { label: "Create a new parking lot", url: "/add-parking-lot" },
     ],
-    mobile: [
-        { label: "Browse", url: "/browse" },
-        { label: "Login", url: "/login" },
-    ],
-    mobileGuide: [
-        { label: "Browse", url: "/browse" },
-        { label: "Account", url: "/account" },
-        { label: "MyHikes", url: "/hikes" },
-        { label: "MyHuts", url: "/huts" },
-    ]
 }
 
 export default navigation

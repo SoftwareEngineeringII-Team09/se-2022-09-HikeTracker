@@ -5,7 +5,7 @@ const User = require("../../dao/model/User");
 const Utils = require("../unit-utils");
 
 /* Some useful data to use for tests */
-const testUser = { userId: 1, email: "test@email.it", salt: "testSalt", password: "testPassword", firstname: "testFirstname", lastname: "testLastname", mobile: "390123456789", role: "testRole", active: 0 };
+const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
 const testParkingLotPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0, 10.0);
 const testParkingLotPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0, 20.0);
 const testParkingLotPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0, 30.0);
@@ -33,7 +33,7 @@ describe("Test storeParkingLot", () => {
 		await Utils.clearAll();
 	});
 
-	Utils.testStoreParkingLot("store the parking lot", testParkingLot1);
+	Utils.testStoreParkingLot("store the parking lot successfully", testParkingLot1);
 	Utils.testStoreParkingLot("reject because of not existing pointId foreign key", { ...testParkingLot1, pointId: notExistingPoint }, 404);
 	Utils.testStoreParkingLot("reject because of not existing writerId foreign key", { ...testParkingLot1, writerId: notExistingUser }, 404)
 })
@@ -95,7 +95,7 @@ describe("Test loadOneByAttributeParkingLot", () => {
 	});
 
 	Utils.testLoadOneByAttributeParkingLot("load a parking lot by attribute", "parkingLotId", testParkingLot1.parkingLotId);
-	Utils.testLoadOneByAttributeParkingLot("return 404 for non existing parking lot", "parkingLotId", notExistingParkingLot, 404);
+	Utils.testLoadOneByAttributeParkingLot("reject because of non existing parking lot", "parkingLotId", notExistingParkingLot, 404);
 })
 
 
@@ -115,5 +115,5 @@ describe("Test defineParkingLot", () => {
 	});
 
 	Utils.testDefineParkingLot("define a parking lot", testUser.userId, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.testDefineParkingLot("return 404 because of not existing writerId foreign key", notExistingUser, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude, 404);
+	Utils.testDefineParkingLot("reject because of not existing writerId foreign key", notExistingUser, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude, 404);
 })

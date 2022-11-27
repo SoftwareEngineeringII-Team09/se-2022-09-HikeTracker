@@ -6,12 +6,11 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-
-
 //import modules
 const express = require("express");
 const logger = require("morgan");
 const session = require("express-session");
+const MemoryStore = require('memorystore')(session);
 const cors = require("cors");
 const passport = require("passport");
 
@@ -20,18 +19,17 @@ const auth = require("./middlewares/auth");
 
 // import routers
 let testRouter;
-if(process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === "test") {
   testRouter = require("./routes/test.router");
 }
 
 const authRouter = require("./routes/auth.router");
+
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
 const userRouter = require("./routes/user.router");
 
-const SERVER_PORT = 3001;
-const CLIENT_PORT = 3000;
 const API_PREFIX = "/api";
 const PORT = 3001;
 
@@ -43,28 +41,33 @@ auth.deserializeUser();
 // server modules
 const app = express();
 app.use(logger("dev"));
-app.use(cors());
+
+/** Set up and enable Cross-Origin Resource Sharing (CORS) **/
+const corsOptions = {
+  origin: `http://localhost:3000`,
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
+
 app.use(session({
-  secret: "secret",
+  cookie: { maxAge: 86400000 },
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   resave: false,
-  saveUninitialized: false
-}));
+  saveUninitialized: false,
+  secret: 'secret'
+}))
 
 // Creating the session
 app.use(passport.initialize());
 app.use(passport.session());
 // app.use(passport.authenticate("session"));
 
-/** Set up and enable Cross-Origin Resource Sharing (CORS) **/
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
 // Setting up server routers
-if(process.env.NODE_ENV === "test")
+if (process.env.NODE_ENV === "test")
   app.use(`${API_PREFIX}/tests`, testRouter)
 
 // app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);

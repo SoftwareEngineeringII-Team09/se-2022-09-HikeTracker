@@ -19,10 +19,10 @@ const BrowseHikes = () => {
 
     useEffect(() => {
         api.hikes.getHikes()
-            .then(res => setHikes(res.hikes))
+            .then(hikes => setHikes(hikes))
             .catch(err => {
+                toast.error(err, { theme: 'colored' })
                 setHikes([])
-                toast.error(err.message, { theme: 'colored' })
             })
             .finally(() => setLoading(false))
     }, [])

@@ -32,7 +32,7 @@ const HikeCard = ({ hike }) => {
                         <dd className='m-0'>{hike.totalAscent} m</dd>
                     </div>
                 </dl>
-                <Link to={`/browse/${hike.id}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
+                <Link to={`/browse/${hike.hikeId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
                     <Button variant="primary-dark" className="fw-bold mt-4 w-100">
                         See more details
                     </Button>
