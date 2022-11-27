@@ -22,7 +22,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 ## Table of Contents
 
 1. [Docker Documentation](#docker-documentation)
-   - [Development](#frontend)
+   - [Development](#development)
    - [Tests](#tests)
    - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
    - [Pull from Docker Hub](#Pull-from-Docker-Hub)
@@ -32,7 +32,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
    - [Database](#database)
 3. [React Client Application Routes](#react-client-application-routes)
    - [Route `/`](#)
-   - [Route `/*`](#1)
+   - [Route `/*`](#)
 4. [API Server](#api-server)
    - [Ticket Routes](#ticket-routes)
      - [`GET /api/tickets/:counterId`](#get-apiticketscounterid)
@@ -138,16 +138,21 @@ Here the list of dependencies installed:
     "classnames": "^2.3.2",
     "cypress": "^11.1.0",
     "cypress-dark": "^1.8.3",
+    "cypress-file-upload": "^5.0.8",
+    "geolib": "^3.3.3",
     "history": "^5.3.0",
     "leaflet": "^1.9.2",
+    "leaflet-topography": "^0.2.1",
     "postcss-preset-env": "^7.8.2",
     "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.5.0",
     "react-icons": "^4.6.0",
     "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
-    "sass": "^1.55.0"
-},
+    "regenerator-runtime": "^0.13.11",
+    "sass": "^1.55.0",
+    "yup-password": "^0.2.2"
+}
 ```
 
 ### Backend
@@ -197,6 +202,35 @@ _This route is unprotected from the user authentication. Moreover, it is unreach
 ### `/*`
 
 Any other route is matched by this one where the application shows an error.
+
+### `/login`
+
+_Login form route_
+
+Visitors can insert their credentials to login and access the full functionalities of their account.
+
+_This route is reachable only by users that are not already logged in._
+
+### `/signup`
+
+_Signup form route_
+
+Visitors can provide their personal data to create a new user account.
+The account will have to be verified by clicking a verification link sent to the email used in the registration process.
+
+_This route is reachable only by users that are not logged in._
+
+### `/activate`
+
+_Account activation route_
+
+Visitors are redirected to this page by clicking on the activation link provided in the email they receive upon registration. An automatic requests is made to activate the user account as soon as the page loads.
+
+Route parameters:
+- id: The identifier of the account to activate
+- token: the randomly generated string needed to confirm the possession of the email address used during the registration process.
+
+_This route is reachable only by users that are not logged in._
 
 ## API Server
 
