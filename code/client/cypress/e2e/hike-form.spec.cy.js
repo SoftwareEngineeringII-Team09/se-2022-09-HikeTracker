@@ -2,22 +2,26 @@ import { SERVER_URL } from "../../src/services/config";
 
 describe('Create new hike', () => {
 
-  beforeEach(() => {
+  before(() => {
     // Reset the database prior to every test
-    // cy.request('DELETE', `${SERVER_URL}/tests/clearAll`)
+    cy.clearAll()
+    // Create Local Guide user
+    cy.addLocalGuide()
+  })
 
+  beforeEach(() => {
     // Intercept the request to the server
     cy.server()
   });
 
   it('Creates a new hike', () => {
 
-    // cy.loginLocalGuide();
+    cy.loginLocalGuide();
 
     cy.route({
       method: 'POST',
       url: `**/hikes`,
-    }).as('auth-request')
+    }).as('hike-creation-request')
 
     cy.visit('/hikes/add');
 
@@ -29,7 +33,7 @@ describe('Create new hike', () => {
     const hikeExpectedTime = "02:30";
     const hikeDifficulty = "Tourist";
     const hikeDescription = "Test description";
-    const gpxTestTrack = "../../src/data/test/gpxTestTrack.gpx";
+    const gpxTestTrack = "../fixtures/gpxTestTrack.gpx";
 
     cy.get('input[id="title"]').type(hikeTitle);
     cy.get('select[id="region"]').select(hikeRegion);
@@ -41,9 +45,9 @@ describe('Create new hike', () => {
     cy.get('input[id="gpxFile"]').attachFile(gpxTestTrack);
     cy.get('button[type="submit"]').click();
 
-    cy.wait('@auth-request').then((request) => {
+    cy.wait('@hike-creation-request').then((request) => {
       console.log(request)
-      // expect(xhr.status).to.equal(201)
+      expect(xhr.status).to.equal(201)
     });
 
     cy.url().should('include', '/browse/');

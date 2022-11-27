@@ -49,6 +49,7 @@ class PersistentManager {
     });
   }
 
+
   async update(tableName, object, attributeName, value) {
     return new Promise((resolve, reject) => {
       //names of the attributes of the objects
