@@ -10,11 +10,9 @@ import cities from '@data/locations/comuni'
 
 const HikeForm = () => {
     const [title, setTitle] = useState('');
-    const [region, setRegion] = useState('');
     const [province, setProvince] = useState(0);
     const [city, setCity] = useState(0);
     const [region, setRegion] = useState(0);
-    const [expectedTime, setExpectedTime] = useState(0);
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
     const [gpxFile, setGpxFile] = useState(null);
@@ -30,7 +28,6 @@ const HikeForm = () => {
         data.append('province', province);
         data.append('region', region);
         data.append('city', city);
-        data.append('expectedTime', expectedTime);
         data.append('difficulty', difficulty);
         data.append('description', description);
 
