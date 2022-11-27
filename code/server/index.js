@@ -44,7 +44,7 @@ app.use(logger("dev"));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
 const corsOptions = {
-  origin: `http://localhost:${process.env.CLIENT_PORT}`,
+  origin: `http://localhost:3000`,
   credentials: true,
 };
 app.use(cors(corsOptions));

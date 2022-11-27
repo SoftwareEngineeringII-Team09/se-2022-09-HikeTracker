@@ -150,7 +150,7 @@ class UserManager {
               <p>Hi, thanks for signing up to HikeTracker!</p>
           
               <p>To complete your enrollment and verify your email account,
-              I invite you to <a href="http://localhost:${process.env.CLIENT_PORT}/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
+              I invite you to <a href="http://localhost:${process.env.CLIENT_PORT || 3000}/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
               
               <p style="line-height: 0px">The HikeTracker Team</p>
               <p style="line-height: 10px">Best regards!</p>
