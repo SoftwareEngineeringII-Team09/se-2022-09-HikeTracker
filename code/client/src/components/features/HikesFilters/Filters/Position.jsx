@@ -24,8 +24,8 @@ const Position = ({ isOpen, close }) => {
             navigator.geolocation.getCurrentPosition(
                 (pos) => setPosition(pos.coords),
                 (err) => {
+                    setPosition({ latitude: 45.073811155764005, longitude: 7.687027960554972 })
                     setError(err.message)
-                    toast.error(err.message, { theme: 'colored' })
                 })
     }, [point.lat, point.lng])
 

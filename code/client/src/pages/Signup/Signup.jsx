@@ -72,13 +72,12 @@ const Signup = () => {
             /* Clear form inputs */
             resetForm();
         } catch (error) {
-            toast.error(error.message, {
+            toast.error(error, {
                 theme: "colored"
+
             });
-        } finally {
-            setSubmitting(false);
         }
-    };
+    }
 
     const initialValues = {
         role: 'Hiker',

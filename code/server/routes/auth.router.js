@@ -116,6 +116,7 @@ router.post('/login/password', authValidation.login, (req, res, next) => {
 	}
 })
 
+
 // DELETE /auth/logout
 // Route to perform the logout of the user
 router.delete('/logout', (req, res, next) => {

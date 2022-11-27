@@ -40,7 +40,7 @@ export const filterHikes = (hikes, filters, active) => {
                 // Length filter
                 && (hike.length >= length.min && hike.length <= length.max)
                 // Ascent filter
-                && (hike.totalAscent >= totalAscent.min && hike.length <= totalAscent.max)
+                && (hike.ascent >= totalAscent.min && hike.ascent <= totalAscent.max)
                 // Roundtrip time filter
                 && ((parseInt(hike.expectedTime.hours) + parseInt(hike.expectedTime.minutes) / 60) >= expectedTime.min
                     && (parseInt(hike.expectedTime.hours) + parseInt(hike.expectedTime.minutes) / 60) <= expectedTime.max)

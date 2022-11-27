@@ -15,6 +15,7 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (dirty) {
+            setLoading(true)
             api.users.getUserInfo()
                 .then((data) => {
                     setUser(data);

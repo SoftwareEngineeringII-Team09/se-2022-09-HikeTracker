@@ -23,7 +23,6 @@ jest.mock('react-toastify', () => {
     };
 });
 
-
 describe("<Signup />", () => {
 
     let emailInput, passwordInput, submitButton, signupForm, roleInput, nameInput, surnameInput, mobileInput;
@@ -466,10 +465,8 @@ describe("<Signup />", () => {
 
         /* Mock signup api call */
         axios.post.mockResolvedValueOnce({});
-        api.users.signup.mockRejectedValue({
-            message: mockUnsuccessfulRegistrationMessage
-        });
 
+        api.users.signup.mockRejectedValue(mockUnsuccessfulRegistrationMessage);
         /* Enter valid input */
         await userEvent.type(emailInput, validEmail);
         await userEvent.type(nameInput, firstname);
@@ -566,3 +563,4 @@ describe("<Signup />", () => {
     });
 
 });
+
