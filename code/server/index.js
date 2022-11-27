@@ -18,7 +18,7 @@ const auth = require("./middlewares/auth");
 
 // import routers
 let testRouter;
-if(process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === "test") {
   testRouter = require("./routes/test.router");
 }
 
@@ -51,13 +51,18 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
-app.use(
+
+app.use(session(
   session({
-    secret: "secret",
-    resave: false,
+    cookie: {
+      secure: true,
+      maxAge: 60000
+    },
+    secret: 'secret',
     saveUninitialized: false,
+    resave: false
   })
-);
+))
 
 // Creating the session
 app.use(passport.initialize());
@@ -65,7 +70,7 @@ app.use(passport.session());
 // app.use(passport.authenticate("session"));
 
 // Setting up server routers
-if(process.env.NODE_ENV === "test")
+if (process.env.NODE_ENV === "test")
   app.use(`${API_PREFIX}/tests`, testRouter)
 
 // app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);
