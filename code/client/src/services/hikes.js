@@ -26,9 +26,11 @@ const hikes = {
     })
   },
 
-  createHike: (data, writer) => {
+  createHike: (data) => {
     return new Promise((resolve, reject) => {
-      axios.post(`${SERVER_URL}/hikes/${writer}`, data)
+      axios.post(`${SERVER_URL}/hikes`, data)
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
     })
   }
 }
