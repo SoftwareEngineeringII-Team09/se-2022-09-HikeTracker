@@ -6,7 +6,7 @@ import parkingLots from './parkingLots'
 const api = {
     hikes,
     users,
-    huts
+    huts,
     parkingLots
 };
 
