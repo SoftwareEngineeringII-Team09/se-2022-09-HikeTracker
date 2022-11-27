@@ -15,25 +15,17 @@ class HutManager {
    * @param {Hut} newHut
    * @returns a Promise with the hutId value of the stored hut
    */
-  async storeHut(newHut) {
-    // Check that foreign key pointId exists
-    const pointExists = await PersistentManager.exists(
-      Point.tableName,
-      "pointId",
-      newHut.pointId
-    );
+   async storeHut(newHut) {
+    // Check if foreign key pointId exists
+    const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
       return Promise.reject({
         code: 404,
         result: `No available point with pointId = ${newHut.pointId}`,
       });
     }
-    // Check that foreign key writerId exists
-    const writerExists = await PersistentManager.exists(
-      User.tableName,
-      "userId",
-      newHut.writerId
-    );
+    // Check if foreign key writerId exists
+    const writerExists = await PersistentManager.exists(User.tableName, "userId", newHut.writerId);
     if (!writerExists) {
       return Promise.reject({
         code: 404,
@@ -59,7 +51,7 @@ class HutManager {
         result: `No available hut with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key pointId exists
+    // Check if foreign key pointId exists
     const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
       return Promise.reject({
@@ -67,7 +59,7 @@ class HutManager {
         result: `No available point with pointId = ${newHut.pointId}`
       });
     }
-    // Check that foreign key writerId exists
+    // Check if foreign key writerId exists
     const writerExists = await PersistentManager.exists(User.tableName, "userId", newHut.writerId);
     if (!writerExists) {
       return Promise.reject({

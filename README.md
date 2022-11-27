@@ -1,6 +1,21 @@
 ![tests workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/tests.yml/badge.svg)
+![sonarcloud analysis workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/sonarcloud.yml/badge.svg)
 ![docker build workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-build.yml/badge.svg)
 ![docker release workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-release.yml/badge.svg)
+
+---
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=bugs)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=SoftwareEngineeringII-Team09_se-2022-09-HikeTracker)
+
+---
 
 This project has been developed by Team-09 for the course of "Software Engineering II", attended during the academic year 2022/23 at Politecnico di Torino, Master's Degree in Computer Engineering.
 

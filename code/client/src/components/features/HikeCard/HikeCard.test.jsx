@@ -7,13 +7,15 @@ import HikeCard from './HikeCard'
 
 jest.mock("react-bootstrap", () => {
     const Col = ({ children }) => <div>{children}</div>
-    return ({ Col })
+    const Button = ({ children, ...props }) => <button {...props}>{children}</button>
+    return ({ Col, Button })
 })
 
 const testHike = {
-    id: 0,
+    hikeId: 0,
     title: "title",
     writer: "writer",
+    difficulty: "professional hiker",
     description: "description",
     maxElevation: 1200,
     length: 1,
@@ -21,10 +23,11 @@ const testHike = {
 }
 
 const expected = {
-    url: `/browse/${testHike.id}`,
+    url: `/browse/${testHike.hikeId}`,
     info: [
         { label: "title", value: testHike.title },
         { label: "writer", value: /created by writer/i },
+        { label: "difficulty", value: testHike.difficulty },
         { label: "description", value: testHike.description },
         { label: "elevation", value: /1200 m/i },
         { label: "length", value: /1 km/i },

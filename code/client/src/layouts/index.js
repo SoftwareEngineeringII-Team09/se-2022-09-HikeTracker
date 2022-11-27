@@ -1,1 +1,1 @@
-export { Visitors } from './Visitors'
+export { default as Layout } from './Layout'

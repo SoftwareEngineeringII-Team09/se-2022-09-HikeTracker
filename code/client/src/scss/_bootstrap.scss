@@ -73,6 +73,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     background-color: $primary-light !important;
 }
 
+.bg-danger-light {
+    background-color: $danger-light !important;
+}
+
 .text-primary-light {
     color: $primary-light !important;
 }
@@ -132,7 +136,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 @import "~bootstrap/scss/close";
 // @import "~bootstrap/scss/dropdown";
 // @import "~bootstrap/scss/list-group";
-// @import "~bootstrap/scss/modal"; // Requires transitions
+@import "~bootstrap/scss/modal"; // Requires transitions
 @import "~bootstrap/scss/nav";
 @import "~bootstrap/scss/navbar"; // Requires nav
 @import "~bootstrap/scss/offcanvas";
