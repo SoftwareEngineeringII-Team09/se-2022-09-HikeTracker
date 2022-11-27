@@ -57,10 +57,6 @@ const HikeForm = () => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='expTime'>Expected time:</Form.Label>
-                        <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
                         <Form.Label htmlFor='difficulty'>Difficulty:</Form.Label>
                         <Form.Select id='difficulty' required onChange={event => setDifficulty(event.target.value)} >
                             <option>Tourist</option>
