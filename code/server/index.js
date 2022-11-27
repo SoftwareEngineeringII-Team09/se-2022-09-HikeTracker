@@ -30,8 +30,6 @@ const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
 const userRouter = require("./routes/user.router");
 
-const SERVER_PORT = 3001;
-const CLIENT_PORT = 3000;
 const API_PREFIX = "/api";
 const PORT = 3001;
 
@@ -46,7 +44,7 @@ app.use(logger("dev"));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: `http://localhost:${process.env.CLIENT_PORT}`,
   credentials: true,
 };
 app.use(cors(corsOptions));
