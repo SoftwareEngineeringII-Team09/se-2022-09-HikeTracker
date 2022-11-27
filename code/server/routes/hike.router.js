@@ -69,7 +69,6 @@ router.post(
       await HikeRefPointManager.defineRefPoints(
         hikeId,
         req.body.referencePoints,
-        req.body.track
       );
 
       return res.status(201).end();

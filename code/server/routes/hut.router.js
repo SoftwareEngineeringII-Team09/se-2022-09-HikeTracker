@@ -66,6 +66,7 @@ router.get(
     }
   });
 
+<<<<<<< Updated upstream
 // GET hut by
 router.get(
   "/:hutId",
@@ -85,5 +86,9 @@ router.get(
     }
   }
 );
+=======
+
+
+>>>>>>> Stashed changes
 
 module.exports = router;

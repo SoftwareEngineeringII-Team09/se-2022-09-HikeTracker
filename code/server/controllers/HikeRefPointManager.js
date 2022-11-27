@@ -145,7 +145,7 @@ class HikeRefPointManager {
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
 
   //insert reference for a hike
-  async defineRefPoints(hikeId, referencePoints, track) {
+  async defineRefPoints(hikeId, referencePoints) {
     let refPointId = 0;
     for (let i = 0; i < referencePoints.length; i++) {
       refPointId = await PointManager.storePoint(
@@ -155,9 +155,9 @@ class HikeRefPointManager {
           0,
           0,
           referencePoints[i].name,
-          track[i][0],
-          track[i][1],
-          track[i][2]
+          referencePoints[i].coords[0],
+          referencePoints[i].coords[1],
+          1111
         )
       );
       console.log("defineRefPoints");
