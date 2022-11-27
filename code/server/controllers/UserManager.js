@@ -135,35 +135,6 @@ class UserManager {
     });
   };
 
-
-  // Send the email verification code associated with a user account that is not activated yet
-  async sendVerificationCode(email, verificationCode) {
-    return new Promise((resolve, reject) => {
-      // Mail template for sending the verification code
-      const mail = {
-        from: `HikeTracker <${process.env.NODEMAILER_EMAIL}>`,
-        to: email,
-        subject: "Welcome to HikeTracker! Here your verification code.",
-        html: `
-              <div style="color: #001829; padding: 30px">
-              <h1 style="color: #003052;">HikeTracker</h1>
-          
-              <p>Hi, thanks for signing up to HikeTracker!</p>
-          
-              <p>To complete your enrollment and verify your email account,
-              I invite you to insert the verification code you can find here.</p>
-          
-              <div style="background-color: #f8f8f8; padding: 20px; margin-top: 50px; margin-bottom: 50px;">
-                  <h3>${verificationCode}</h3>
-              </div>
-              
-              <p style="line-height: 0px">The HikeTracker Team</p>
-              <p style="line-height: 10px">Best regards!</p>
-              </div>`,
-      };
-    })
-  }
-
   // Send the email verification code associated with a user account that is not activated yet
   async sendVerificationCode(email, userId, verificationCode) {
     return new Promise((resolve, reject) => {
@@ -179,7 +150,7 @@ class UserManager {
               <p>Hi, thanks for signing up to HikeTracker!</p>
           
               <p>To complete your enrollment and verify your email account,
-              I invite you to <a href="http://localhost:3000/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
+              I invite you to <a href="http://localhost:${process.env.CLIENT_PORT}/activate?id=${userId}&token=${verificationCode}">click here</a>.</p>
               
               <p style="line-height: 0px">The HikeTracker Team</p>
               <p style="line-height: 10px">Best regards!</p>
