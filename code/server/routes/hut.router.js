@@ -52,8 +52,8 @@ router.post(
 // GET the list of all huts
 router.get(
   "/", 
-  auth.withAuth,
-  auth.withRole(["Hiker"]), 
+  // auth.withAuth,
+  // auth.withRole(["Hiker"]), 
   async (req, res) => {
     try {
       const hikes = await HutManager.getAllHuts();
@@ -69,13 +69,13 @@ router.get(
 // GET hut by Id
 router.get(
   "/:hutId",
-  auth.withAuth,
-  auth.withRole(["Hiker"]), 
+  // auth.withAuth,
+  // auth.withRole(["Hiker"]), 
   async (req, res) => {
     try {
       const hutId = req.params.hutId;
       const hut = await HutManager.getHutById(hutId);
-      console.log(hut);
+      //console.log(hut);
       return res.status(200).json(hut);
     } catch (exception) {
       console.log(exception);

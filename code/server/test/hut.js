@@ -12,55 +12,6 @@ const app = require("../index");
 let agent = chai.request.agent(app);
 
 /* Some useful data to use for tests */
-<<<<<<< HEAD
-const testUser = {
-  userId: 1,
-  email: "test@email.it",
-  salt: "testSalt",
-  password: "testPassword",
-  firstname: "testFirstname",
-  lastname: "testLastname",
-  mobile: "390123456789",
-  role: "testRole",
-  active: 0,
-};
-const testHutPoint1 = new Point(1, "hut", 0, 1, null, 10.0, 10.0, 10.0);
-const testHutPoint2 = new Point(2, "hut", 0, 1, null, 20.0, 20.0, 20.0);
-const testHutPoint3 = new Point(3, "hut", 0, 1, null, 30.0, 30.0, 30.0);
-const testHut1 = new Hut(
-  1,
-  "testName1",
-  testHutPoint1.pointId,
-  testUser.userId,
-  1,
-  1,
-  1,
-  1,
-  10.0
-);
-const testHut2 = new Hut(
-  2,
-  "testName2",
-  testHutPoint2.pointId,
-  testUser.userId,
-  2,
-  2,
-  2,
-  2,
-  20.0
-);
-const testHut3 = new Hut(
-  3,
-  "testName3",
-  testHutPoint3.pointId,
-  testUser.userId,
-  3,
-  3,
-  3,
-  3,
-  30.0
-);
-=======
 const testUserLocalGuide = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
 const testUserHiker = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
 const credentialsLocalGuide = { username: testUserLocalGuide.email, password: "Password1234." };
@@ -72,7 +23,6 @@ const testHutPoint3 = new Point(3, "hut", 0, 1, null, 30.0, 30.0, 30.0);
 const testHut1 = new Hut(1, "testName1", testHutPoint1.pointId, testUserLocalGuide.userId, 1, 1, 1, 1, 10.0);
 const testHut2 = new Hut(2, "testName2", testHutPoint2.pointId, testUserLocalGuide.userId, 2, 2, 2, 2, 20.0);
 const testHut3 = new Hut(3, "testName3", testHutPoint3.pointId, testUserLocalGuide.userId, 3, 3, 3, 3, 30.0);
->>>>>>> main
 const testHuts = [testHut1, testHut2, testHut3];
 const notExistingUser = testUserLocalGuide.userId + 1;
 
@@ -83,7 +33,7 @@ describe("POST /api/huts/writers/:writerId", function () {
   /* Test Setup */
   this.beforeAll(async () => {
     await Utils.clearAll();
-    await PersistentManager.store(User.tableName, testUser);
+    await PersistentManager.store(User.tableName, testUserLocalGuide);
   });
 
   /* Test Teardown */
@@ -95,7 +45,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "post a hut",
     201,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -140,7 +90,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong hutName format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     1,
     testHut1.city,
     testHut1.province,
@@ -155,7 +105,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong city format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     "wrongCityFormat",
     testHut1.province,
@@ -170,7 +120,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong province format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     "wrongProvinceFormat",
@@ -185,7 +135,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong region format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -200,7 +150,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong numOfBeds format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -215,7 +165,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong cost format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -230,7 +180,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong latitude format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -245,7 +195,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong longitude format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -260,7 +210,7 @@ describe("POST /api/huts/writers/:writerId", function () {
     agent,
     "return 422 because of wrong altitude format",
     422,
-    testUser.userId,
+    testUserLocalGuide.userId,
     testHut1.hutName,
     testHut1.city,
     testHut1.province,
@@ -361,15 +311,9 @@ describe("GET /api/huts/:hutId", function () {
 
 
 /*****************************************************************************************************
-<<<<<<< HEAD
-*              GET /api/huts/:hutId
-*****************************************************************************************************/
-describe("GET /api/huts/:hutId", function () {
-=======
 *              POST /api/huts
 *****************************************************************************************************/
 describe("POST /api/huts", function () {
->>>>>>> main
 	/* Test Setup */
 	this.beforeAll(async () => {
 		await Utils.clearAll();
@@ -377,19 +321,6 @@ describe("POST /api/huts", function () {
 			PersistentManager.store(User.tableName, testUserLocalGuide),
 			PersistentManager.store(User.tableName, testUserHiker)
 		]);
-<<<<<<< HEAD
-		await Promise.all([
-			PersistentManager.store(Point.tableName, testHutPoint1),
-			PersistentManager.store(Point.tableName, testHutPoint2),
-			PersistentManager.store(Point.tableName, testHutPoint3)
-		]);
-		await Promise.all([
-			PersistentManager.store(Hut.tableName, testHut1),
-			PersistentManager.store(Hut.tableName, testHut2),
-			PersistentManager.store(Hut.tableName, testHut3)
-		]);
-=======
->>>>>>> main
 	});
 
 	/* Test Teardown */
@@ -397,11 +328,6 @@ describe("POST /api/huts", function () {
 		await Utils.clearAll();
 	});
 
-<<<<<<< HEAD
-	Utils.getOneHut(agent, "return the hut", 200, credentialsHiker);
-	Utils.getOneHut(agent, "return 401 because of not authenticated user", 401, wrongCredentials);
-	Utils.getOneHut(agent, "return 401 because of not authorized user", 401, credentialsLocalGuide);
-=======
 	Utils.postHut(agent, "post a hut", 201, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
 	Utils.postHut(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
 	Utils.postHut(agent, "return 401 because of not authorized user", 401, credentialsHiker, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
@@ -448,7 +374,6 @@ describe("GET /api/huts", function () {
 	Utils.getAllHuts(agent, "return the list of huts", 200, credentialsHiker, testHuts.length);
 	Utils.getAllHuts(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHuts.length);
 	Utils.getAllHuts(agent, "return 401 because of not authorized user", 401, credentialsLocalGuide, testHuts.length);
->>>>>>> main
 });
 
 
