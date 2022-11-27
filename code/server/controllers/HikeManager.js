@@ -355,7 +355,7 @@ class HikeManager {
           );
           return {
             name: point.nameOfLocation,
-            coords: [point.longitude, point.latitude],
+            coords: [point.latitude, point.longitude],
           };
         })
       );

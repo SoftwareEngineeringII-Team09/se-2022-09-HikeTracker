@@ -30,7 +30,7 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 		);
 		await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
 
-		return res.status(200).json(userId);
+		return res.status(201).json(userId);
 	} catch (exception) {
 		const errorCode = exception.code ?? 500;
 		const errorMessage =
@@ -54,7 +54,7 @@ router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (
 		const user = await UserManager.loadOneByAttributeUser("userId", req.body.userId);
 		await UserManager.sendVerificationCode(user.email, req.body.userId, verificationCode);
 
-		return res.status(200).end();
+		return res.status(201).end();
 	} catch (exception) {
 		const errorCode = exception.code ?? 500;
 		const errorMessage =
@@ -74,7 +74,7 @@ router.put('/verifyEmail', authValidation.verifyEmail, async (req, res) => {
 		
 		await UserManager.verifyEmail(req.body.userId, req.body.token);
 
-		return res.status(200).end();
+		return res.status(201).end();
 	} catch (exception) {
 		const errorCode = exception.code ?? 500;
 		const errorMessage =
