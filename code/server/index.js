@@ -2,9 +2,9 @@
 
 // If the server is not in production, configures usage of
 // .env file for environment variables
-// if (process.env.NODE_ENV !== 'production') {
-//   require('dotenv').config();
-// }
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 //import modules
 const express = require("express");
@@ -43,8 +43,12 @@ app.use(cors());
 app.use(
   session({
     secret: "secret",
-    resave: false,
     saveUninitialized: false,
+    resave: false,
+    cookie: {
+      secure: true,
+      maxAge: 60000,
+    },
   })
 );
 
