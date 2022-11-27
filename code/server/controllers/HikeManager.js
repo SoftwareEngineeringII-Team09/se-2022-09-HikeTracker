@@ -582,7 +582,7 @@ class HikeManager {
   }
 
   // Update the start point of a hike by hikeId
-  async updateStartPoint(hikeId, newStartPoint) {
+  /* async updateStartPoint(hikeId, newStartPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldStartPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
     
@@ -609,10 +609,10 @@ class HikeManager {
     }
 
     return Promise.resolve();
-  }
+  } */
 
   // Update the end point of a hike by hikeId
-  async updateEndPoint(hikeId, newEndPoint) {
+  /* async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
 
@@ -639,7 +639,7 @@ class HikeManager {
     }
 
     return Promise.resolve();
-  }
+  } */
 }
 
 module.exports = new HikeManager();

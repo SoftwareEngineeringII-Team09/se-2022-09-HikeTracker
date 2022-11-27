@@ -83,17 +83,17 @@ class HikeRefPointManager {
    * Delete all hikeRefPoints
    * @returns a Promise without any value
    */
-  async deleteAllHikeRefPoint() {
+  /* async deleteAllHikeRefPoint() {
     return PersistentManager.deleteAll(HikeRefPoint.tableName);
-  }
+  } */
 
   /**
    * Load all hikeRefPoints
    * @returns a Promise with the list of all hikeRefPoints
    */
-  async loadAllHikeRefPoint() {
+  /* async loadAllHikeRefPoint() {
     return PersistentManager.loadAll(HikeRefPoint.tableName);
-  }
+  } */
 
   /**
    * Check if the hikeRefPoints exists

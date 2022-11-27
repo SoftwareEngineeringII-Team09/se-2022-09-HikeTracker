@@ -11,7 +11,7 @@ const Utils = require("../unit-utils");
 
 /* Some useful data to use for tests */
 const testGpx = "rocciamelone.gpx";
-const testUser = { userId: 1, email: "test@email.it", salt: "testSalt", password: "testPassword", firstname: "testFirstname", lastname: "testLastname", mobile: "390123456789", role: "testRole", active: 0 };
+const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
 const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.000, 10.000, 10.0);
 const testEndPoint1 = new Point( 2,"end point",0,0,"End point of testHike1", 10.010, 10.010, 20.0);
 const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHike2", 30.0, 30.0, 30.0);
@@ -59,7 +59,6 @@ const expectedGetPotentialStartEndPointsProperties = ["potentialStartPoints", "p
  *****************************************************************************************************/
 describe("Test storeHike", () => {
   /* Test Setup */
-  jest.setTimeout(20000);
   beforeAll(async () => {
     await Utils.clearAll();
     await PersistentManager.store(User.tableName, testUser);
@@ -74,7 +73,7 @@ describe("Test storeHike", () => {
     await Utils.clearAll();
   });
 
-  Utils.testStoreHike("store the hike", testHike1);
+  Utils.testStoreHike("store the hike successfully", testHike1);
   Utils.testStoreHike(
     "reject because of not existing startPoint foreign key",
     { ...testHike1, startPoint: notExistingPoint },
@@ -319,7 +318,7 @@ describe("Test loadOneByAttributeHike", () => {
     testHike1.hikeId
   );
   Utils.testLoadOneByAttributeHike(
-    "return 404 for non existing hike",
+    "reject because of non existing hike",
     "hikeId",
     notExistingHike,
     404
@@ -396,7 +395,7 @@ describe("Test defineHike", () => {
   );
 
   Utils.testDefineHike(
-    "return 404 because of not existing writerId foreign key",
+    "reject because of not existing writerId foreign key",
     notExistingUser,
     testHike1.title,
     testHike1.expectedTime,
@@ -480,7 +479,7 @@ describe("Test getHikeById", () => {
     undefined
   );
   Utils.testGetHikeByHikeId(
-    "return 404 because of not existing hike with hikeId = hikeId",
+    "reject because of not existing hike with hikeId = hikeId",
     notExistingHike,
     undefined,
     404
@@ -522,7 +521,7 @@ describe("Test getGpxPath", () => {
     undefined
   );
   Utils.testGetGpxPath(
-    "return 404 because of not existing hike with hikeId = hikeId",
+    "reject because of not existing hike with hikeId = hikeId",
     notExistingHike,
     undefined,
     404
