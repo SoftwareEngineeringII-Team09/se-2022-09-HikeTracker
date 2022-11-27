@@ -14,12 +14,13 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (dirty) {
-            api.getUserInfo()
+            setLoading(true)
+            api.users.getUserInfo()
                 .then((data) => {
                     setUser(data);
                     setLoggedIn(true);
                 })
-                .catch((error) => {
+                .catch(() => {
                     setUser(null);
                     setLoggedIn(false);
                 })

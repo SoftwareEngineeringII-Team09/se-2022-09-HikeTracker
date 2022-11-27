@@ -12,7 +12,7 @@ jest.mock("react-bootstrap", () => {
 })
 
 const testHike = {
-    id: 0,
+    hikeId: 0,
     title: "title",
     writer: "writer",
     difficulty: "professional hiker",
@@ -23,7 +23,7 @@ const testHike = {
 }
 
 const expected = {
-    url: `/browse/${testHike.id}`,
+    url: `/browse/${testHike.hikeId}`,
     info: [
         { label: "title", value: testHike.title },
         { label: "writer", value: /created by writer/i },

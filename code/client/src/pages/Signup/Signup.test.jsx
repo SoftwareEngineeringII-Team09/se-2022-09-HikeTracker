@@ -2,9 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 const { createMemoryHistory } = require("history");
 import userEvent from '@testing-library/user-event'
 import { Router } from 'react-router-dom'
-import { act } from 'react-dom/test-utils';
 import Signup from './Signup'
-import { signup } from '../../services/users';
 
 describe("<Signup />", () => {
 
@@ -191,7 +189,7 @@ describe("<Signup />", () => {
         });
         // });
     });
-    
+
     it("Doesn't show error messages when input is valid", async () => {
 
         expect(emailInput.value).toBe('');
@@ -218,4 +216,200 @@ describe("<Signup />", () => {
         // });
     });
 
-})
+
+    /* INTEGRATION TESTS */
+
+    it("Submits the form with correct data", async () => {
+
+        const validEmail = "valid@email.com";
+        const password = "Secure!p4ssw0rd";
+        const mobile = "+39 3921234567";
+        const role = "Hut Worker";
+        const firstname = "John";
+        const lastname = "Doe";
+
+        /* Get additional fields */
+        await userEvent.selectOptions(roleInput, role);
+        nameInput = await screen.findByLabelText("Name");
+        surnameInput = await screen.findByLabelText("Surname");
+        mobileInput = await screen.findByLabelText("Mobile number");
+
+        /* Mock signup api call */
+        axios.post.mockResolvedValueOnce({});
+        api.users.signup.mockResolvedValueOnce({});
+
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(nameInput, firstname);
+        await userEvent.type(surnameInput, lastname);
+        await userEvent.type(passwordInput, password);
+        await userEvent.type(mobileInput, mobile);
+
+        /* Check data is inserted correctly */
+        expect(signupForm).toHaveFormValues({
+            "email": validEmail,
+            "firstname": firstname,
+            "lastname": lastname,
+            "mobile": mobile,
+            "password": password,
+            "role": role,
+        });
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Check no error is shown */
+        await waitFor(() => {
+            expect(roleInput).not.toHaveClass('is-invalid');
+            expect(emailInput).not.toHaveClass('is-invalid');
+            expect(passwordInput).not.toHaveClass('is-invalid');
+            expect(nameInput).not.toHaveClass('is-invalid');
+            expect(surnameInput).not.toHaveClass('is-invalid');
+            expect(mobileInput).not.toHaveClass('is-invalid');
+        });
+
+        /* Check api call is made */
+        await waitFor(async () => {
+            expect(api.users.signup).toHaveBeenCalledTimes(1);
+            expect(api.users.signup).toHaveBeenCalledWith({
+                email: validEmail,
+                password: password,
+                firstname: firstname,
+                lastname: lastname,
+                mobile: mobile,
+                role: role
+            });
+        });
+
+        /* Check success message is shown */
+        const successMessage1 = await screen.findByText("Welcome!");
+        const successMessage2 = await screen.findByText("Your account has been created, we have sent you an email to activate your account. If you didn't receive it, please check your spam folder, or click the button below to resend it.");
+        expect(successMessage1).toBeInTheDocument();
+        expect(successMessage2).toBeInTheDocument();
+
+        /* Check fields have been reset */
+        expect(signupForm).toHaveFormValues({
+            "email": "",
+            "password": "",
+            "role": "Hiker"
+        });
+
+    });
+
+    it("Shows error toast on unsuccessful registration", async () => {
+
+        const mockUnsuccessfulRegistrationMessage = "Sorry, there has been a problem with your registration, please try again later";
+        const validEmail = "valid@email.com";
+        const password = "Secure!p4ssw0rd";
+        const mobile = "+39 3921234567";
+        const role = "Hut Worker";
+        const firstname = "John";
+        const lastname = "Doe";
+
+        /* Get additional fields */
+        await userEvent.selectOptions(roleInput, role);
+        nameInput = await screen.findByLabelText("Name");
+        surnameInput = await screen.findByLabelText("Surname");
+        mobileInput = await screen.findByLabelText("Mobile number");
+
+        /* Mock signup api call */
+        axios.post.mockResolvedValueOnce({});
+        api.users.signup.mockRejectedValue(mockUnsuccessfulRegistrationMessage);
+
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(nameInput, firstname);
+        await userEvent.type(surnameInput, lastname);
+        await userEvent.type(passwordInput, password);
+        await userEvent.type(mobileInput, mobile);
+
+        /* Check data is inserted correctly */
+        expect(signupForm).toHaveFormValues({
+            "email": validEmail,
+            "firstname": firstname,
+            "lastname": lastname,
+            "mobile": mobile,
+            "password": password,
+            "role": role,
+        });
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Check no error is shown */
+        await waitFor(() => {
+            expect(roleInput).not.toHaveClass('is-invalid');
+            expect(emailInput).not.toHaveClass('is-invalid');
+            expect(passwordInput).not.toHaveClass('is-invalid');
+            expect(nameInput).not.toHaveClass('is-invalid');
+            expect(surnameInput).not.toHaveClass('is-invalid');
+            expect(mobileInput).not.toHaveClass('is-invalid');
+        });
+
+        /* Check api call is made */
+        await waitFor(async () => {
+            expect(api.users.signup).toHaveBeenCalledTimes(1);
+            expect(api.users.signup).toHaveBeenCalledWith({
+                email: validEmail,
+                password: password,
+                firstname: firstname,
+                lastname: lastname,
+                mobile: mobile,
+                role: role
+            });
+        });
+
+        /* Check error message is shown */
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledTimes(1);
+            expect(toast.error).toHaveBeenCalledWith(mockUnsuccessfulRegistrationMessage, { "theme": "colored" });
+        });
+    });
+
+    it("Re-sends activation email", async () => {
+
+        const validEmail = "valid@email.com";
+        const password = "Secure!p4ssw0rd";
+
+        /* Mock signup/resend mail api call */
+        axios.post.mockResolvedValueOnce({});
+        axios.put.mockResolvedValueOnce({});
+        api.users.signup.mockResolvedValueOnce({});
+        api.users.sendVerificationCode.mockResolvedValueOnce({});
+
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(passwordInput, password);
+
+        /* Check data is inserted correctly */
+        expect(signupForm).toHaveFormValues({
+            "email": validEmail,
+            "password": password,
+            "role": "Hiker"
+        });
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        /* Check error message is shown */
+        const resendActivationButton = await screen.findByText("Receive a new activation link");
+        expect(resendActivationButton).toBeInTheDocument();
+
+        /* Request new activation email */
+
+        await userEvent.click(resendActivationButton);
+
+        await waitFor(() => {
+            /* Check api call is made */
+            expect(api.users.sendVerificationCode).toHaveBeenCalledTimes(1);
+            expect(api.users.sendVerificationCode).toHaveBeenCalledWith(validEmail);
+        });
+
+        await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledTimes(1);
+            expect(toast.success).toHaveBeenCalledWith("We have sent you a new activation email", { "theme": "colored" });
+        });
+    });
+
+});
+

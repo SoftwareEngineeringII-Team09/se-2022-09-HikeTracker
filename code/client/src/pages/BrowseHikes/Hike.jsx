@@ -1,25 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Col, Button, Alert, Spinner } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 
+import { AuthContext } from '@contexts/authContext'
 import api from '@services/api'
 
 import { HikeDetails } from '@components/features'
 
 const Hike = () => {
+    const [user] = useContext(AuthContext)
     const [hike, setHike] = useState(undefined)
     const [loading, setLoading] = useState(true)
-    const [user] = useState(true)
     const { hikeId } = useParams()
 
     useEffect(() => {
         api.hikes.getHikeDetails(hikeId)
-            .then(res => setHike(res.hike))
+            .then(hike => setHike(hike))
             .catch(err => {
                 setHike(null)
-                toast.error(err.message, { theme: 'colored' })
+                toast.error(err, { theme: 'colored' })
             })
             .finally(() => setLoading(false))
     }, []) // eslint-disable-line
@@ -27,6 +28,7 @@ const Hike = () => {
     const handleDownload = () => {
         api.hikes.getHikeGPXFile(hikeId)
             .then((res) => {
+                console.log(res)
                 const url = window.URL.createObjectURL(new Blob([res]))
                 const link = document.createElement('a')
                 link.href = url
@@ -34,19 +36,20 @@ const Hike = () => {
                 document.body.appendChild(link)
                 link.click()
             })
+            .catch(err => toast.error(err, { theme: 'colored' }))
     }
 
     if (!loading && hike)
         return (
-            <Col xs={12} xl={user ? 6 : 10} className={`${user ? "ms-auto" : "mx-auto"} my-5`}>
-                {user &&
-                    <HikeDetails.TrackMap start={hike.startPoint} end={hike.endPoint} track={hike.track} />}
-                {!user &&
+            <Col xs={12} xl={user.loggedIn ? 6 : 10} className={`${user.loggedIn ? "ms-auto" : "mx-auto"} my-5`}>
+                {user.loggedIn &&
+                    <HikeDetails.TrackMap start={hike.startPoint} end={hike.endPoint} track={hike.track} references={hike.referencePoints} />}
+                {!user.loggedIn &&
                     <Alert variant='warning' className='mb-5'>
                         You should be an autenticated hiker to see the map and to be able to download the track as a <code style={{ color: "currentcolor" }}>.gpx</code> file
                     </Alert>}
                 <HikeDetails.Details hike={hike} />
-                {user &&
+                {user.loggedIn &&
                     <Button variant='primary-light fw-bold mt-5 w-100' size='lg' onClick={handleDownload}>
                         Download track
                     </Button>}

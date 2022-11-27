@@ -46,23 +46,19 @@ const Signup = () => {
     });
 
     /* Signup submission */
-    const submitSignup = async (values, { setSubmitting }) => {
-        api.signup(values)
-            .then(() => {
-                toast.success(
-                    "Your account has been created, we have sent you an email to confirm your account", {
-                    theme: "colored",
-                    autoClose: false
-                });
-            })
-            .catch((error) => {
-                toast.error(error.message, {
-                    theme: "colored"
-                });
-            })
-            .finally(() => {
-                setSubmitting(false);
+    const submitSignup = async (values, { setSubmitting, resetForm }) => {
+        try {
+            await api.users.signup(values);
+            setRegistrationEmail(values.email);
+            setSuccessfulSignup(true);
+            /* Clear form inputs */
+            resetForm();
+        } catch (error) {
+            toast.error(error, {
+                theme: "colored"
+
             });
+        }
     }
 
     const initialValues = {

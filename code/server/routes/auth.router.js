@@ -134,7 +134,7 @@ router.post('/signup', (req, res) => {
 
 // POST /auth/login
 // Route to perform user login with passport local strategy
-router.post('/login',  (req, res, next) => {
+router.post('/login', (req, res, next) => {
     // Check for validation errors associated with request body
     // const validationErrors = validationResult(req);
     // if (!validationErrors.isEmpty()) {
@@ -176,7 +176,9 @@ router.get('/current', (req, res) => {
     if (req.isAuthenticated()) return res.status(200).json(req.user);
 
     // User is not authenticated and logged in
-    res.status(401).json({error: "Unauthenticated user"})
+    const errorCode = 401;
+    const errorMessage = "The user is not authenticated";
+    return res.status(errorCode).json({ error: errorMessage });
 })
 
 module.exports = router;

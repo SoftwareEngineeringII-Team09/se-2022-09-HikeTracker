@@ -6,8 +6,6 @@
 //   require('dotenv').config();
 // }
 
-
-
 //import modules
 const express = require("express");
 const logger = require("morgan");
@@ -20,6 +18,13 @@ const passport = require("passport");
 const auth = require("./middlewares/auth");
 
 // import routers
+let testRouter;
+if (process.env.NODE_ENV === "test") {
+  testRouter = require("./routes/test.router");
+}
+
+const authRouter = require("./routes/auth.router");
+
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingRouter = require("./routes/parkinglot.router");
@@ -40,8 +45,16 @@ auth.deserializeUser();
 // server modules
 const app = express();
 app.use(logger("dev"));
+
+
+/** Set up and enable Cross-Origin Resource Sharing (CORS) **/
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
-app.use(cors());
 app.use(
   session({
     secret: "secret",
@@ -55,14 +68,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
 
-/** Set up and enable Cross-Origin Resource Sharing (CORS) **/
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
 // Setting up server routers
+
+if (process.env.NODE_ENV === "test")
+  app.use(`${API_PREFIX}/tests`, testRouter)
+
 // app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
 app.use(`${API_PREFIX}/users`, userRouter);

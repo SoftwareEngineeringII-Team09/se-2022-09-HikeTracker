@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import LoginForm from './Login';
 
 describe("<LoginForm />", () => {
@@ -27,12 +26,12 @@ describe("<LoginForm />", () => {
         /* Email field */
         expect(emailLabel).toBeInTheDocument();
         expect(emailInput).toHaveAttribute("type", "email");
-        expect(emailInput).toHaveAttribute("placeholder", "Your email");
+        expect(emailInput).toHaveAttribute("placeholder", "example@mail.com");
 
         /* Password field */
         expect(passwordLabel).toBeInTheDocument();
         expect(passwordInput).toHaveAttribute("type", "password");
-        expect(passwordInput).toHaveAttribute("placeholder", "Your password");
+        expect(passwordInput).toHaveAttribute("placeholder", "••••••••••••");
 
         /* Submit button */
         expect(submitButton).toBeInTheDocument();
@@ -40,7 +39,7 @@ describe("<LoginForm />", () => {
 
         /* Field values */
         expect(loginForm).toHaveFormValues({
-            email: "",
+            username: "",
             password: ""
         });
     });
@@ -52,7 +51,7 @@ describe("<LoginForm />", () => {
         await waitFor(async () => {
             const emailError = await screen.findByText("Insert your email address");
             expect(emailError).toBeInTheDocument();
-            expect(emailError).toHaveClass("invalid-feedback");
+            expect(emailError).toHaveClass("text-danger");
         });
     });
 
@@ -63,7 +62,7 @@ describe("<LoginForm />", () => {
         await waitFor(async () => {
             const passwordError = await screen.findByText("Insert your password");
             expect(passwordError).toBeInTheDocument();
-            expect(passwordError).toHaveClass("invalid-feedback");
+            expect(passwordError).toHaveClass("text-danger");
         });
     });
 
@@ -72,23 +71,21 @@ describe("<LoginForm />", () => {
         expect(emailInput.value).toBe('');
         const invalidEmail = "invalid#email.com";
 
-        // act(() => {
-            /* Enter invalid email */
-            await userEvent.type(emailInput, invalidEmail);
+        /* Enter invalid email */
+        await userEvent.type(emailInput, invalidEmail);
 
-            /* Submit the form to trigger form validation */
-            await userEvent.click(submitButton);
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
 
-            /* Wait for the error message to appear */
-            await waitFor(async () => {
-                /* Check email value */
-                expect(emailInput.value).toBe(invalidEmail);
-                /* Check for error message */
-                const emailError = await screen.findByText("This is not a valid email address");
-                expect(emailError).toBeInTheDocument();
-                expect(emailInput).toHaveClass('is-invalid');
-            });
-        // });
+        /* Wait for the error message to appear */
+        await waitFor(async () => {
+            /* Check email value */
+            expect(emailInput.value).toBe(invalidEmail);
+            /* Check for error message */
+            const emailError = await screen.findByText("This is not a valid email address");
+            expect(emailError).toBeInTheDocument();
+            expect(emailInput).toHaveClass('is-invalid');
+        });
     });
 
     it("Doesn't show error messages when input is valid", async () => {
@@ -99,22 +96,120 @@ describe("<LoginForm />", () => {
         const validEmail = "valid@email.com";
         const password = "p4ssw0rd";
 
-        // await act(async () => {
-            /* Enter valid input */
-            await userEvent.type(emailInput, validEmail);
-            await userEvent.type(passwordInput, password);
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(passwordInput, password);
 
-            /* Submit the form to trigger form validation */
-            await userEvent.click(submitButton);
+        /* Mock login api call */
+        api.users.login.mockResolvedValue({});
 
-            await waitFor(() => {
-                /* Check data is inserted correctly and no error is shown */
-                expect(emailInput.value).toBe(validEmail);
-                expect(passwordInput.value).toBe(password);
-                expect(emailInput).not.toHaveClass('is-invalid');
-                expect(passwordInput).not.toHaveClass('is-invalid');
-            });
-        // });
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            /* Check data is inserted correctly and no error is shown */
+            expect(emailInput.value).toBe(validEmail);
+            expect(passwordInput.value).toBe(password);
+            expect(emailInput).not.toHaveClass('is-invalid');
+            expect(passwordInput).not.toHaveClass('is-invalid');
+        });
     });
 
+    /* INTEGRATION TESTS */
+
+    it("Submits the form with valid input for a real user", async () => {
+
+        expect(emailInput.value).toBe('');
+        expect(passwordInput.value).toBe('');
+
+        const validEmail = "valid@email.com";
+        const password = "p4ssw0rd";
+
+        /* Mock login api call => Resolve */
+        axios.post.mockResolvedValueOnce({});
+        api.users.login.mockResolvedValue({});
+
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(passwordInput, password);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            /* Check data is inserted correctly and no error is shown */
+            expect(emailInput.value).toBe(validEmail);
+            expect(passwordInput.value).toBe(password);
+            expect(emailInput).not.toHaveClass('is-invalid');
+            expect(passwordInput).not.toHaveClass('text-danger');
+        });
+
+        /* Check the form is submitted */
+        await waitFor(() => {
+            expect(loginForm).toHaveFormValues({
+                username: validEmail,
+                password: password
+            });
+        });
+
+        /* Check the login function is called */
+        await waitFor(() => {
+            expect(api.users.login).toHaveBeenCalledTimes(1);
+            expect(api.users.login).toHaveBeenCalledWith({
+                username: validEmail,
+                password: password
+            });
+        });
+
+        /* Check the user is redirected to the homepage */
+        await waitFor(() => {
+            expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+            expect(mockedUsedNavigate).toHaveBeenCalledWith('/', { replace: true });
+        });
+    });
+
+    it("Doesn't show error messages when input is valid", async () => {
+
+        expect(emailInput.value).toBe('');
+        expect(passwordInput.value).toBe('');
+
+        const validEmail = "valid@email.com";
+        const password = "p4ssw0rd";
+
+        /* Mock login api call => Reject */
+        axios.post.mockResolvedValueOnce({});
+        api.users.login.mockRejectedValue(mockWrongCredentialsError);
+
+        /* Enter valid input */
+        await userEvent.type(emailInput, validEmail);
+        await userEvent.type(passwordInput, password);
+
+        /* Submit the form to trigger form validation */
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            /* Check data is inserted correctly and no error is shown */
+            expect(emailInput.value).toBe(validEmail);
+            expect(passwordInput.value).toBe(password);
+            expect(emailInput).not.toHaveClass('is-invalid');
+            expect(passwordInput).not.toHaveClass('is-invalid');
+        });
+
+        /* Check the form is submitted */
+        await waitFor(() => {
+            expect(loginForm).toHaveFormValues({
+                username: validEmail,
+                password: password
+            });
+        });
+
+        /* Check the login function is called */
+        await waitFor(() => {
+            expect(api.users.login).toHaveBeenCalledTimes(1);
+            expect(api.users.login).toHaveBeenCalledWith({
+                username: validEmail,
+                password: password
+            });
+        });
+    });
 });
