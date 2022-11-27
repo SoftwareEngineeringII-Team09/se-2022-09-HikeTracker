@@ -16,7 +16,7 @@ const Hut = () => {
 
     useEffect(() => {
         api.huts.getHutDetails(hutId)
-            .then(res => setHut(res.hut))
+            .then(res => setHut(res))
             .catch(err => {
                 setHut(null)
                 toast.error(err.message, { theme: 'colored' })
@@ -28,7 +28,7 @@ const Hut = () => {
         return (
             <Col xs={12} xl={user ? 6 : 10} className={`${user ? "ms-auto" : "mx-auto"} my-5`}>
                 {user &&
-                    <HutDetails.TrackMap p={hut.coords} />}
+                    <HutDetails.TrackMap coords={[hut.latitude, hut.longitude]} />}
                 {!user &&
                     <Alert variant='warning' className='mb-5'>
                         You should be an autenticated hiker to see the map.

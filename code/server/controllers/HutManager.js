@@ -228,10 +228,27 @@ class HutManager {
     return Promise.resolve(huts);
   }
 
-  async getOneHut(atrName, val) {
+  // Load a hut by hutId
+  async getHutById(hutId) {
+    let hut = await this.loadOneByAttributeHut("hutId", hutId);
+    let point = await PointManager.loadOneByAttributePoint(
+      "pointId",
+      hut.pointId
+    );
+
+    hut = {
+      ...hut,
+      ...point
+    }
+
+    return Promise.resolve(hut);
+  }
+
+  /*async getOneHut(atrName, val) {
     let hut = await this.loadOneByAttributeHut(atrName, val);
     //position coord needed
     //shcedule time needed
+    console.log(hut)
     hut = await Promise.all(
       hut.map(async (h) => {
         const shceduleTime =
@@ -271,7 +288,7 @@ class HutManager {
     );
 
     return Promise.resolve(huts);
-  }
+  }*/
 }
 
 module.exports = new HutManager();
