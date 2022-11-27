@@ -16,7 +16,8 @@ jest.mock('react-leaflet', () => {
 const testProps = {
     start: [],
     end: [],
-    track: []
+    track: [],
+    references: []
 }
 
 describe("TrackMap component", () => {

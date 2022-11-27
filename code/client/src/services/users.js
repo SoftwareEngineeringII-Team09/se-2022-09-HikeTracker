@@ -5,50 +5,50 @@ import axios from 'axios';
 const users = {
 
     signup: (user) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             axios.post(`${SERVER_URL}/auth/signup`, user)
-                .then(() => resolve())
-                .catch(err => reject(err));
+                .then((res) => resolve(res.data))
+                .catch(err => reject(err.response.data.error));
         });
     },
 
     login: (credentials) => {
-        return new Promise(async (resolve, reject) => {
-            axios.post(`${SERVER_URL}/auth/login`, credentials)
+        return new Promise((resolve, reject) => {
+            axios.post(`${SERVER_URL}/auth/login/password`, credentials, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err));
+                .catch(err => reject(err.response.data.error));
         });
     },
 
-    sendVerificationCode: (email) => {
-        return new Promise(async (resolve, reject) => {
-            axios.put(`${SERVER_URL}/auth/send-verification-code`, email)
+    sendVerificationCode: (userId) => {
+        return new Promise((resolve, reject) => {
+            axios.put(`${SERVER_URL}/auth/sendVerificationCode`, {userId})
                 .then(() => resolve())
-                .catch(err => reject(err));
+                .catch(err => reject(err.response.data.error));
         });
     },
 
     verifyEmail: (data) => {
-        return new Promise(async (resolve, reject) => {
-            axios.put(`${SERVER_URL}/auth/verify-email`, data)
+        return new Promise((resolve, reject) => {
+            axios.put(`${SERVER_URL}/auth/verifyEmail`, data)
                 .then(() => resolve())
-                .catch(err => reject(err));
+                .catch(err => reject(err.response.data.error));
         });
     },
 
     logout: () => {
-        return new Promise(async (resolve, reject) => {
-            axios.delete(`${SERVER_URL}/auth/logout`)
+        return new Promise((resolve, reject) => {
+            axios.delete(`${SERVER_URL}/auth/logout`, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err));
+                .catch(err => reject(err.response.data.error));
         });
     },
 
     getUserInfo: () => {
-        return new Promise(async (resolve, reject) => {
-            axios.get(`${SERVER_URL}/auth/current`)
+        return new Promise((resolve, reject) => {
+            axios.get(`${SERVER_URL}/auth/current`, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err));
+                .catch(err => reject(err.response.data.error));
         });
     }
 };

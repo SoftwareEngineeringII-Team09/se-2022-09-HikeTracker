@@ -3,9 +3,9 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
+import { AuthContext } from '@contexts/authContext'
 
 import Header from './Header'
-
 import navigation from '@data/navigation'
 
 jest.mock("react-bootstrap", () => {
@@ -22,6 +22,17 @@ jest.mock("react-bootstrap", () => {
     return ({ Navbar: Navbar, Button: Button })
 })
 
+/* Mocking the logout api and error toast */
+jest.mock("axios");
+jest.mock('@services/api');
+jest.mock('react-toastify', () => {
+    return {
+        toast: {
+            error: jest.fn()
+        }
+    };
+});
+
 const mockMobileSidebar = jest.fn()
 jest.mock('./MobileSidebar', () => (props) => {
     mockMobileSidebar(props);
@@ -29,17 +40,20 @@ jest.mock('./MobileSidebar', () => (props) => {
 })
 
 describe("Header component", () => {
-    it.each(navigation.desktop)("Link to $url is correctly rendered", async (link) => {
+    it.each(navigation.default.desktop)("Link to $url is correctly rendered", async (link) => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <Header />
+                <AuthContext.Provider value={[{ loggedIn: false }]}>
+                    <Header />
+                </AuthContext.Provider>
             </Router>
         )
         expect(screen.getByRole("link", { name: link.label })).toHaveAttribute("href", link.url)
         await userEvent.click(screen.getByRole("link", { name: link.label }))
         expect(history.location.pathname).toBe(link.url)
     })
+
 
     it("Logo is correctly rendered as a link to home", async () => {
         const history = createMemoryHistory();
@@ -65,19 +79,5 @@ describe("Header component", () => {
                 isOpen: false,
             })
         );
-    })
-
-    it("State changes when mobile sidebar toggler is clicked", async () => {
-        const setOpen = jest.fn()
-        const history = createMemoryHistory();
-        render(
-            <Router location={history.location} navigator={history}>
-                <Header />
-            </Router>
-        )
-        const state = jest.spyOn(React, "useState")
-        state.mockImplementation(open => [open, setOpen]);
-        await userEvent.click(screen.getByTestId("mobile-sidebar-toggle"))
-        expect(state).toHaveBeenCalledTimes(1)
     })
 })

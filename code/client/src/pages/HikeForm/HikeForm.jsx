@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
 
-import provinces from '@data/locations/province'
+
 import regions from '@data/locations/regioni'
+import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
 const HikeForm = () => {

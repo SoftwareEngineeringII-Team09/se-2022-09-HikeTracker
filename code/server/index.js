@@ -6,8 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-
-
 //import modules
 const express = require("express");
 const logger = require("morgan");
@@ -25,6 +23,7 @@ if(process.env.NODE_ENV === "test") {
 }
 
 const authRouter = require("./routes/auth.router");
+
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
@@ -43,18 +42,6 @@ auth.deserializeUser();
 // server modules
 const app = express();
 app.use(logger("dev"));
-app.use(cors());
-app.use(express.json());
-app.use(session({
-  secret: "secret",
-  resave: false,
-  saveUninitialized: false
-}));
-
-// Creating the session
-app.use(passport.initialize());
-app.use(passport.session());
-// app.use(passport.authenticate("session"));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
 const corsOptions = {
@@ -62,6 +49,20 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Creating the session
+app.use(passport.initialize());
+app.use(passport.session());
+// app.use(passport.authenticate("session"));
 
 // Setting up server routers
 if(process.env.NODE_ENV === "test")
