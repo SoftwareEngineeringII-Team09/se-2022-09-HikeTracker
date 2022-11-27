@@ -10,6 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require("express");
 const logger = require("morgan");
 const session = require("express-session");
+const MemoryStore = require('memorystore')(session);
 const cors = require("cors");
 const passport = require("passport");
 
@@ -52,17 +53,15 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-app.use(session(
-  session({
-    cookie: {
-      secure: true,
-      maxAge: 60000
-    },
-    secret: 'secret',
-    saveUninitialized: false,
-    resave: false
-  })
-))
+app.use(session({
+  cookie: { maxAge: 86400000 },
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
+  resave: false,
+  saveUninitialized: false,
+  secret: 'secret'
+}))
 
 // Creating the session
 app.use(passport.initialize());
