@@ -2,13 +2,8 @@
 
 // If the server is not in production, configures usage of
 // .env file for environment variables
-<<<<<<< HEAD
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-=======
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
->>>>>>> main
 }
 
 //import modules
@@ -28,7 +23,6 @@ if (process.env.NODE_ENV === "test") {
 }
 
 const authRouter = require("./routes/auth.router");
-
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
@@ -59,15 +53,6 @@ app.use(express.json());
 
 app.use(session(
   session({
-<<<<<<< HEAD
-    secret: "secret",
-    saveUninitialized: false,
-    resave: false,
-    cookie: {
-      secure: true,
-      maxAge: 60000,
-    },
-=======
     cookie: {
       secure: true,
       maxAge: 60000
@@ -75,7 +60,6 @@ app.use(session(
     secret: 'secret',
     saveUninitialized: false,
     resave: false
->>>>>>> main
   })
 ))
 
@@ -83,11 +67,7 @@ app.use(session(
 //app.use(express.cookieParser('your secret option here'));
 app.use(passport.initialize());
 app.use(passport.session());
-<<<<<<< HEAD
 app.use(passport.authenticate("session"));
-=======
-// app.use(passport.authenticate("session"));
->>>>>>> main
 
 // Setting up server routers
 if (process.env.NODE_ENV === "test")
