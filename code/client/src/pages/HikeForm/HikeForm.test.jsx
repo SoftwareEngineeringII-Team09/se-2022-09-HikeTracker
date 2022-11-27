@@ -5,7 +5,7 @@ const { createMemoryHistory } = require("history");
 import { toast } from "react-toastify"
 import api from '../../services/api';
 
-const gpxTestTrack = require("@data/test/gpxTestTrack.gpx");
+const gpxTestTrack = require("./gpxTestTrack.gpx");
 
 /* Mocking the login api and libraries */
 jest.mock('../../services/api');

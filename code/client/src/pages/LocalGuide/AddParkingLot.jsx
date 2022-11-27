@@ -14,8 +14,8 @@ const AddParkingLot = () => {
     const initialValues = {
         parkingLotName: "",
         point: {
-            longitude: null,
             latitude: null,
+            longitude: null,
             // altitude: 0,
         }
     }
