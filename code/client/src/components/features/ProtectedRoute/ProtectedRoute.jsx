@@ -1,4 +1,4 @@
-import { AuthContext } from '../../../contexts/authContext';
+import { AuthContext } from '@contexts/authContext';
 import { Navigate, Outlet } from "react-router-dom";
 import { useContext } from 'react';
 
@@ -10,17 +10,17 @@ const ProtectedRoute = ({
 }) => {
 
     /* Get user info from context */
-    const [userStatus,] = useContext(AuthContext);
-
-    console.log(userStatus);
+    const [userStatus] = useContext(AuthContext);
 
     /* Redirect unauthorized users to redirectPath */
     const userRole = userStatus.role || "";
     const unauthenticated = requiresLogin && !userStatus.loggedIn;
     const notUnauthenticated = requiresNoLogin && userStatus.loggedIn;
     const unauthorized = requiredRole && userRole !== requiredRole;
-    if (unauthenticated || unauthorized || notUnauthenticated)
+
+    if (unauthenticated || notUnauthenticated || unauthorized) {
         return <Navigate to={redirectPath} replace />;
+    }
 
     return <Outlet />;
 };

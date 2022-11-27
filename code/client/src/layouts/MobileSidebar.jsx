@@ -54,9 +54,11 @@ const MobileSidebar = ({ isOpen, close }) => {
                             </NavLink>
                         ))}
                 </div>
+                {user.loggedIn &&
                 <Button variant="primary-dark" size="lg" className="d-block py-3 fw-bold w-100" onClick={handleLogout}>
                     Logout
                 </Button>
+                }
             </Offcanvas.Body>
         </Offcanvas>
     );

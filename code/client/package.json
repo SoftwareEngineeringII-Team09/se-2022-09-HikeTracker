@@ -59,7 +59,8 @@
     "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
     "regenerator-runtime": "^0.13.11",
-    "sass": "^1.55.0"
+    "sass": "^1.55.0",
+    "yup-password": "^0.2.2"
   },
   "jest": {
     "moduleNameMapper": {

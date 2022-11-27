@@ -1,6 +1,5 @@
 import { useState, useEffect, createContext } from 'react';
 import { Spinner } from 'react-bootstrap';
-import { toast } from 'react-toastify'
 import api from '../services/api';
 import React from 'react';
 
@@ -21,10 +20,9 @@ const AuthProvider = ({ children }) => {
                     setUser(data);
                     setLoggedIn(true);
                 })
-                .catch((err) => {
+                .catch(() => {
                     setUser(null);
-                    setLoggedIn(false);
-                    toast.error(err.message, { theme: 'colored' })
+                    setLoggedIn(false)
                 })
                 .finally(() => {
                     setDirty(false);

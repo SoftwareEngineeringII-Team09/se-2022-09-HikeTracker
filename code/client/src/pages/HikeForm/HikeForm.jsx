@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-import provinces from '@data/provinces'
-import cities from '@data/cities'
+import regions from '@data/locations/regioni' 
+import provinces from '@data/locations/province' 
+import cities from '@data/locations/comuni'
 
 const HikeForm = () => {
     const [title, setTitle] = useState('');

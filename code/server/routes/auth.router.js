@@ -51,8 +51,8 @@ router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (
 		const verificationCode = randomWords({ exactly: 3, join: "-" });
 
 		await UserManager.updateVerificationCode(req.body.userId, verificationCode);
-		const email = await UserManager.loadOneByAttributeUser("userId", req.body.userId);
-		await UserManager.sendVerificationCode(email, req.body.userId, verificationCode);
+		const user = await UserManager.loadOneByAttributeUser("userId", req.body.userId);
+		await UserManager.sendVerificationCode(user.email, req.body.userId, verificationCode);
 
 		return res.status(200).end();
 	} catch (exception) {
@@ -71,7 +71,7 @@ router.put('/verifyEmail', authValidation.verifyEmail, async (req, res) => {
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ error: errors.array()[0] });
 		}
-
+		
 		await UserManager.verifyEmail(req.body.userId, req.body.token);
 
 		return res.status(200).end();

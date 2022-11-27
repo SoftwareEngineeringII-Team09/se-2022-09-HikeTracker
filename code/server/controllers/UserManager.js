@@ -169,7 +169,7 @@ class UserManager {
     return new Promise((resolve, reject) => {
       // Mail template for sending the verification code
       const mail = {
-        from: `YourBrand <${process.env.NODEMAILER_EMAIL}>`,
+        from: `HikeTracker <${process.env.NODEMAILER_EMAIL}>`,
         to: email,
         subject: "Welcome to HikePiemonte! Here your verification code.",
         html: `

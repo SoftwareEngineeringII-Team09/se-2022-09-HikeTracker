@@ -12,6 +12,7 @@ jest.mock('../../services/api');
 
 jest.mock("axios");
 
+const mockWrongCredentialsError = "The credentials you provided are not correct";
 const mockedUsedNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -174,7 +175,7 @@ describe("<LoginForm />", () => {
         /* Check the form is submitted */
         await waitFor(() => {
             expect(loginForm).toHaveFormValues({
-                email: validEmail,
+                username: validEmail,
                 password: password
             });
         });
@@ -183,7 +184,7 @@ describe("<LoginForm />", () => {
         await waitFor(() => {
             expect(api.users.login).toHaveBeenCalledTimes(1);
             expect(api.users.login).toHaveBeenCalledWith({
-                email: validEmail,
+                username: validEmail,
                 password: password
             });
         });
@@ -201,7 +202,6 @@ describe("<LoginForm />", () => {
         expect(emailInput.value).toBe('');
         expect(passwordInput.value).toBe('');
 
-        const mockWrongCredentialsError = "The credentials you provided are not correct";
         const validEmail = "valid@email.com";
         const password = "p4ssw0rd";
 
@@ -241,13 +241,6 @@ describe("<LoginForm />", () => {
                 username: validEmail,
                 password: password
             });
-        });
-
-
-        /* Check the user is redirected to the homepage */
-        await waitFor(() => {
-            expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
-            expect(mockedUsedNavigate).toHaveBeenCalledWith('/', { replace: true });
         });
     });
 
