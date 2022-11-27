@@ -10,6 +10,7 @@ import cities from '@data/locations/comuni'
 
 const HutForm = () => {
     const [name, setName] = useState('');
+    const [region, setRegion] = useState('');
     const [province, setProvince] = useState('');
     const [city, setCity] = useState('');
     const [address, setAddress] = useState('');
@@ -39,20 +40,29 @@ const HutForm = () => {
                         <Form.Control id="name" type='text' required placeholder='Hut name' onChange={event => setName(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor="province">Province:</Form.Label>
-                        <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
-                            <option value={0}>Select a provice</option>
-                            {provinces.map(province => (
-                                <option key={province.istat_provincia} value={province.istat_provincia}>{province.provincia}</option>
+                        <Form.Label htmlFor="region">Region:</Form.Label>
+                        <Form.Select id='region' required onChange={(e) => setRegion(parseInt(e.target.value))}>
+                            <option value={0}>Select a region</option>
+                            {regions.map(region => (
+                                <option key={region.regione} value={region.regione}>{region.nome}</option>
                             ))}
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor="city">City:</Form.Label>
+                        <Form.Label htmlFor='province'>Province:</Form.Label>
+                        <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
+                            <option value={0}>Select a provice</option>
+                            {provinces.filter(province => province.regione === region).map(province => (
+                                <option key={province.provincia} value={province.provincia}>{province.nome}</option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
+                        <Form.Label htmlFor='city'>City:</Form.Label>
                         <Form.Select id='city' required onChange={(e) => setCity(parseInt(e.target.value))}>
                             <option value={0}>I want to leave this field empty</option>
-                            {cities.filter(city => city.istat_provincia === province).map(city => (
-                                <option key={city.codiceistatcomune} value={city.codiceistatcomune}>{city.comune}</option>
+                            {cities.filter(city => city.provincia === province).map(city => (
+                                <option key={city.comune} value={city.comune}>{city.nome}</option>
                             ))}
                         </Form.Select>
                     </Form.Group>

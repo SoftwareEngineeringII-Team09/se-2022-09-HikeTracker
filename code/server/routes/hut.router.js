@@ -52,8 +52,8 @@ router.post(
 // GET the list of all huts
 router.get(
   "/", 
-  auth.withAuth,
-  auth.withRole(["Hiker"]), 
+  //auth.withAuth,
+  //auth.withRole(["Hiker"]), 
   async (req, res) => {
     try {
       const hikes = await HutManager.getAllHuts();
@@ -65,5 +65,25 @@ router.get(
       return res.status(errorCode).json({ error: errorMessage });
     }
   });
+
+// GET hut by
+router.get(
+  "/:hutId",
+ 
+  async (req, res) => {
+    try {
+      const hutId = req.params.hutId;
+      const hut = await HutManager.getHutById(hutId);
+      console.log(hut);
+      return res.status(200).json(hut);
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
 
 module.exports = router;

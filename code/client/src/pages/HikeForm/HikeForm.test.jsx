@@ -52,9 +52,6 @@ describe("Page for adding new hike", () => {
         await userEvent.type(screen.getByLabelText("Title:"), 'My title!')
         expect(screen.getByDisplayValue("My title!")).toBeInTheDocument()
 
-        await userEvent.type(screen.getByLabelText("Expected time:"), '0230')
-        expect(screen.getByDisplayValue("02:30")).toBeInTheDocument()
-
         await userEvent.type(screen.getByLabelText("Description:"), 'Prova!')
         expect(screen.getByDisplayValue("Prova!")).toBeInTheDocument()
     })
@@ -75,7 +72,6 @@ describe("Page for adding new hike", () => {
         await userEvent.selectOptions(screen.getByLabelText("Province:"), "Torino")
         await userEvent.selectOptions(screen.getByLabelText("City:"), 'Alpette')
         await userEvent.selectOptions(screen.getByLabelText("Difficulty:"), 'Tourist')
-        await userEvent.type(screen.getByLabelText("Expected time:"), '0230')
         await userEvent.type(screen.getByLabelText("Description:"), 'Test description')
         await userEvent.upload(screen.getByLabelText("Insert your gpx file:"), gpxTestTrack)
         await userEvent.click(screen.getByRole("button"))
@@ -86,7 +82,6 @@ describe("Page for adding new hike", () => {
         expectedFormData.append('province', "Torino");
         expectedFormData.append('city', "Alpette");
         expectedFormData.append('difficulty', "Tourist");
-        expectedFormData.append('expectedTime', "02,30");
         expectedFormData.append('description', "Test description");
         expectedFormData.append('file', gpxTestTrack);
 

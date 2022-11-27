@@ -6,8 +6,8 @@ import parkingLots from './parkingLots'
 const api = {
     hikes,
     users,
-    parkingLots,
-    ...huts
+    huts,
+    parkingLots
 };
 
 export default api;

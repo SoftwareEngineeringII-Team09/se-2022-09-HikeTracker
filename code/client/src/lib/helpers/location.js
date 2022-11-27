@@ -10,6 +10,8 @@ export const getLocationFullName = (provinceId, cityId) => {
     return `${cityName}, ${provinceName}`
 }
 
+export const getLocationRegion = (regionId) => __REGIONS.find(region => region.regione === regionId).nome
+
 export const getProvincesForRegion = (region) => __PROVINCES.filter(province => province.regione === region)
 
 export const getCitiesForProvince = (province) => __CITIES.filter(city => city.provincia === province)
