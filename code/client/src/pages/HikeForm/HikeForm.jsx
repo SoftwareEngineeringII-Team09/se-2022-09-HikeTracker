@@ -4,13 +4,13 @@ import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
 
-
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
 const HikeForm = () => {
     const [title, setTitle] = useState('');
+    const [region, setRegion] = useState('');
     const [province, setProvince] = useState(0);
     const [city, setCity] = useState(0);
     const [region, setRegion] = useState(0);
@@ -67,7 +67,7 @@ const HikeForm = () => {
                         <Form.Control id='title' type='text' required placeholder='Hike title' onChange={event => setTitle(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='region'>Region:</Form.Label>
+                        <Form.Label htmlFor="region">Region:</Form.Label>
                         <Form.Select id='region' required onChange={(e) => setRegion(parseInt(e.target.value))}>
                             <option value={0}>Select a region</option>
                             {regions.map(region => (
@@ -94,10 +94,6 @@ const HikeForm = () => {
                                 <option key={city.comune} value={city.comune}>{city.nome}</option>
                             ))}
                         </Form.Select>
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='expTime'>Expected time:</Form.Label>
-                        <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
                         <Form.Label htmlFor='difficulty'>Difficulty:</Form.Label>
