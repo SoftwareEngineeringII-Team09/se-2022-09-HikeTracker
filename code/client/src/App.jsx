@@ -19,6 +19,7 @@ const App = () => {
         </Route>
         <Route element={<ProtectedRoute requiredRole="Local Guide" redirectPath='/login' />}>
           <Route path='/add-parking-lot' element={<Pages.LocalGuide.AddParkingLot />} />
+          <Route path='/reference-points/:hikeId' element={<Pages.LocalGuide.ReferencePoints />} />
           <Route path='/hikes/add' element={<Pages.HikeForm />} />
           <Route path='/huts/add' element={<Pages.HutForm />} />
           {/* <Route path='/hikes' element={<Pages.HikeList />} />

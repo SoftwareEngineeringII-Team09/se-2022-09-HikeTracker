@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
+import { MarkerOnPoint } from '@components/features/Map'
+import { MapContainer, TileLayer } from 'react-leaflet'
 
-import regions from '@data/locations/regioni' 
+import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
@@ -18,6 +20,11 @@ const HutForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+    }
+
+    const handleClickOnMap = (point) => {
+        setLatitude(point.latitude)
+        setLongitude(point.longitude)
     }
 
     return (
@@ -53,14 +60,15 @@ const HutForm = () => {
                         <Form.Label htmlFor="address">Address:</Form.Label>
                         <Form.Control id="address" type='text' required onChange={event => setAddress(event.target.value)} />
                     </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor="latitude">Latitude:</Form.Label>
-                        <Form.Control id="latitude" type='number' min={-90} max={90} step={0.0000001} required onChange={event => setLatitude(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor="longitude">Longitude:</Form.Label>
-                        <Form.Control id="longitude" type='number' min={-180} max={180} step={0.0000001} required onChange={event => setLongitude(event.target.value)} />
-                    </Form.Group>
+
+                    <div className='my-3'>
+                        <p className='mb-2'>Click a point on the map to set hut position</p>
+                        <MapContainer center={[45.073811155764005, 7.687027960554972]} zoom={13} scrollWheelZoom style={{ height: 480 }}>
+                            <MarkerOnPoint point={{ latitude, longitude }} setPoint={handleClickOnMap} />
+                            <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png" />
+                        </MapContainer>
+                    </div>
+
                     <Form.Group className='mb-2'>
                         <Form.Label htmlFor="altitude">Altitude: (m)</Form.Label>
                         <Form.Control id="altitude" type='number' min={0} max={8000} step={1} required onChange={event => setAltitude(event.target.value)} />
