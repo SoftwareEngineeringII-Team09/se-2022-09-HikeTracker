@@ -21,6 +21,26 @@ export const __DEFAULT_FILTERS = {
     }
 }
 
+export const __DEFAULT_FILTERS_HUTS = {
+    altitude: { min: 0, max: 8000 },
+    cost: { min: 0, max: 10000 },
+    beds: { min: 0, max: 5000 },
+    geoArea: {
+        location: {
+            region: 0,
+            province: 0,
+            city: 0
+        },
+        position: {
+            radius: 0,
+            point: {
+                lat: 0,
+                lng: 0
+            }
+        }
+    }
+}
+
 const getRegion = (filters) => parseInt(filters.geoArea.location.region)
 const getLat = (filters) => filters.geoArea.position.point.lat
 const getLng = (filters) => filters.geoArea.position.point.lng
@@ -60,3 +80,34 @@ export const filterHikes = (hikes, filters, active) => {
 }
 
 export const isFilteredHikesArrayEmpty = (hikes, filters, active) => !filterHikes(hikes, filters, active).length
+
+export const filterHuts = (huts, filters, active) => {
+    const { altitude, cost, beds } = filters
+    const { region, province, city } = filters.geoArea.location
+    const { radius, point } = filters.geoArea.position
+    
+    if (active)
+        return huts.filter(hut => {
+            return (
+                // Altitude filter
+                (hut.altitude >= altitude.min && hut.altitude <= altitude.max)
+                // Cost filter
+                && (hut.cost >= cost.min && hut.cost <= cost.max)
+                // Beds filter
+                && (hut.beds >= beds.min && hut.beds <= beds.max)
+                // Location filter
+                && (!parseInt(city) || (parseInt(city) && parseInt(city) === hut.city))
+                && (!parseInt(province) || (parseInt(province) && parseInt(province) === hut.province))
+                && (!parseInt(region) || (parseInt(region) && parseInt(region) === hut.region))
+                // Position filter
+                && ((!point.lat && !point.lng) || (isPointWithinRadius(
+                    { latitude: hut.coords[0], longitude: hut.coords[1] },
+                    { latitude: point.lat, longitude: point.lng },
+                    radius * 1000
+                )))
+            )
+        })
+    else return huts
+}
+
+export const isFilteredHutsArrayEmpty = (huts, filters, active) => !filterHuts(huts, filters, active).length

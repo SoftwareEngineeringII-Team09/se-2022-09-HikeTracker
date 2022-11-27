@@ -5,7 +5,7 @@ import huts from './huts'
 const api = {
     hikes,
     users,
-    ...huts
+    huts
 };
 
 export default api;
