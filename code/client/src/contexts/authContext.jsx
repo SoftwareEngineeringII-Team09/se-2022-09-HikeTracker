@@ -7,21 +7,22 @@ const AuthContext = createContext([{}, () => { }]);
 
 const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({ role: "Visitor" });
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [dirty, setDirty] = useState(true);
 
     useEffect(() => {
         if (dirty) {
+            setLoading(true)
             api.users.getUserInfo()
                 .then((data) => {
                     setUser(data);
                     setLoggedIn(true);
                 })
-                .catch((error) => {
+                .catch(() => {
                     setUser(null);
-                    setLoggedIn(false);
+                    setLoggedIn(false)
                 })
                 .finally(() => {
                     setDirty(false);
@@ -30,15 +31,17 @@ const AuthProvider = ({ children }) => {
         }
     }, [dirty]);
 
-    if (loading) {
-        return <Spinner />;
-    } else {
-        return (
-            <AuthContext.Provider value={[{ ...user, loggedIn }, setDirty]}>
-                {children}
-            </AuthContext.Provider>
-        )
-    }
+    if (loading) return (
+        <div role="status" className='h-100vh position-absolute top-50 start-50' >
+            <Spinner animation="border" variant="primary-dark" />
+        </div>
+    )
+    else return (
+        <AuthContext.Provider value={[{ ...user, loggedIn }, setDirty]}>
+            {children}
+        </AuthContext.Provider>
+    )
+
 }
 
 export { AuthContext, AuthProvider };

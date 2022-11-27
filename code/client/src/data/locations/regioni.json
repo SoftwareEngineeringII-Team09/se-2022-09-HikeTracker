@@ -1,0 +1,82 @@
+[
+  {
+    "regione": 1,
+    "nome": "Piemonte"
+  },
+  {
+    "regione": 2,
+    "nome": "Valle d'Aosta/Vallée d'Aoste"
+  },
+  {
+    "regione": 3,
+    "nome": "Lombardia"
+  },
+  {
+    "regione": 4,
+    "nome": "Trentino-Alto Adige/Südtirol"
+  },
+  {
+    "regione": 5,
+    "nome": "Veneto"
+  },
+  {
+    "regione": 6,
+    "nome": "Friuli-Venezia Giulia"
+  },
+  {
+    "regione": 7,
+    "nome": "Liguria"
+  },
+  {
+    "regione": 8,
+    "nome": "Emilia-Romagna"
+  },
+  {
+    "regione": 9,
+    "nome": "Toscana"
+  },
+  {
+    "regione": 10,
+    "nome": "Umbria"
+  },
+  {
+    "regione": 11,
+    "nome": "Marche"
+  },
+  {
+    "regione": 12,
+    "nome": "Lazio"
+  },
+  {
+    "regione": 13,
+    "nome": "Abruzzo"
+  },
+  {
+    "regione": 14,
+    "nome": "Molise"
+  },
+  {
+    "regione": 15,
+    "nome": "Campania"
+  },
+  {
+    "regione": 16,
+    "nome": "Puglia"
+  },
+  {
+    "regione": 17,
+    "nome": "Basilicata"
+  },
+  {
+    "regione": 18,
+    "nome": "Calabria"
+  },
+  {
+    "regione": 19,
+    "nome": "Sicilia"
+  },
+  {
+    "regione": 20,
+    "nome": "Sardegna"
+  }
+]

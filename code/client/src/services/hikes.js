@@ -6,7 +6,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes`)
         .then(res => resolve(res.data))
-        .catch(err => reject(err));
+        .catch(err => reject(err.response.data.error));
     })
   },
 
@@ -14,23 +14,25 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/${hikeId}`)
         .then(res => resolve(res.data))
-        .catch(err => reject(err));
+        .catch(err => reject(err.response.data.error));
     })
   },
 
   getHikeGPXFile: (hikeId) => {
     return new Promise((resolve, reject) => {
-      axios.get(`${SERVER_URL}/hikes/${hikeId}/download`)
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/download`, { withCredentials: true })
         .then(res => resolve(res.data))
-        .catch(err => reject(err));
+        .catch(err => reject(err.response.data.error));
     })
   },
 
-  //   createHike: (data) => {
-  //     return new Promise((resolve, reject) => {
-  //         axios.post(`${SERVER_URL}/hikes`, {})
-  //     })
-  //   }
+  createHike: (data) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${SERVER_URL}/hikes`, data)
+      .then(res => resolve(res.data))
+      .catch(err => reject(err));
+    })
+  }
 }
 
 export default hikes
