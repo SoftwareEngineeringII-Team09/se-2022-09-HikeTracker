@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Offcanvas, Alert, Button } from "react-bootstrap";
 import { RiCloseLine } from 'react-icons/ri'
 
-import { navigation } from "@data/index";
+import navigation from "@data/navigation";
 import { NavLink } from "@components/ui-core";
 
 const MobileSidebar = ({ isOpen, close, isLoggedIn, handleLogout }) => {

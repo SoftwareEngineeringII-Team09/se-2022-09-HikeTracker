@@ -1,9 +1,9 @@
 "use strict";
 
 const HikeHut = require("../dao/model/HikeHut");
+const Hike = require("../dao/model/Hike");
+const Hut = require("../dao/model/Hut");
 const PersistentManager = require("../dao/PersistentManager");
-const HikeManager = require("./HikeManager");
-const HutManager = require("./HutManager");
 
 class HikeHutManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -13,16 +13,16 @@ class HikeHutManager {
    * @returns a Promise with the rowId value of the stored hikeHut 
    */
   /* async storeHikeHut(newHikeHut) {
-    // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeHut.hikeId);
+    // Check if foreign key hikeId exists
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
         result: `No available hike with hikeId = ${newHikeHut.hikeId}`
       });
     }
-    // Check that foreign key hutId exists
-    const hutExists = await HutManager.existsHut("hutId", newHikeHut.hutId);
+    // Check if foreign key hutId exists
+    const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHikeHut.hutId);
     if (!hutExists) {
       return Promise.reject({
         code: 404,
@@ -48,16 +48,16 @@ class HikeHutManager {
         result: `No available hikeHut with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key hikeId exists
-    const hikeExists = await HikeManager.existsHike("hikeId", newHikeHut.hikeId);
+    // Check if foreign key hikeId exists
+    const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
       return Promise.reject({
         code: 404,
         result: `No available hike with hikeId = ${newHikeHut.hikeId}`
       });
     }
-    // Check that foreign key hutId exists
-    const hutExists = await HutManager.existsHut("hutId", newHikeHut.hutId);
+    // Check if foreign key hutId exists
+    const hutExists = await PersistentManager.exists(Hut.tableName, "hutId", newHikeHut.hutId);
     if (!hutExists) {
       return Promise.reject({
         code: 404,
@@ -88,18 +88,10 @@ class HikeHutManager {
 
   /**
    * Load all hikeHuts 
-   * @returns a resolved Promise with the list of hikeHuts in case HikeHut table is not empty, a rejected Promise with an object containing code and result otherwise
+   * @returns a Promise with the list of all hikeHuts
    */
-  /* async loadAllRowsHikeHut() {
-    const hikeHuts = await PersistentManager.loadAllRows(HikeHut.tableName);
-    if (hikeHuts.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: "HikeHut table is empty"
-      });
-    }
-
-    return Promise.resolve(hikeHuts);
+  /* async loadAllHikeHut() {
+    return PersistentManager.loadAll(HikeHut.tableName);    
   } */
 
   /**
@@ -134,19 +126,11 @@ class HikeHutManager {
    * Load all hikeHuts by attribute
    * @param {String} attributeName 
    * @param {any} value 
-   * @returns a resolved Promise with the list of hikeHuts in case there is at least one, a rejected Promise with an object containing code and result otherwise  
+   * @returns a Promise with the list of hikeHuts that satisfy the condition   
    */
-  /* async loadAllByAttributeHikeHut(attributeName, value) {
-    const hikeHuts = await PersistentManager.loadAllByAttribute(HikeHut.tableName, attributeName, value);
-    if (hikeHuts.length === 0) {
-      return Promise.reject({
-        code: 404,
-        result: `No available hikeHuts with ${attributeName} = ${value}`
-      });
-    }
-
-    return Promise.resolve(hikeHuts);
-  } */
+  async loadAllByAttributeHikeHut(attributeName, value) {
+    return PersistentManager.loadAllByAttribute(HikeHut.tableName, attributeName, value);
+  }
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 

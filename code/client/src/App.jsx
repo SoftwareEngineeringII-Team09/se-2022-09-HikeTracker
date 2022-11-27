@@ -17,6 +17,10 @@ const App = (props) => {
         <Route index path='/' element={<Pages.Home />} />
         <Route path='/browse' element={<Pages.BrowseHikes />} />
         <Route path='/browse/:hikeId' element={<Pages.Hike />} />
+        <Route path='/hikes' element={<Pages.HikeList />} />
+        <Route path='/hikes/add' element={<Pages.HikeForm />} />
+        <Route path='/huts' element={<Pages.HutList />} />
+        <Route path='/huts/add' element={<Pages.HutForm />} />
       </Route>
       <Route path='*' element={<Pages.Error />} />
     </Routes>
