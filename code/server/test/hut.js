@@ -53,6 +53,42 @@ describe("POST /api/huts/writers/:writerId", function () {
 });
 
 
+
+/*****************************************************************************************************
+*              GET /api/huts/:hutId
+*****************************************************************************************************/
+describe("GET /api/huts/:hutId", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUserLocalGuide),
+			PersistentManager.store(User.tableName, testUserHiker)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testHutPoint1),
+			PersistentManager.store(Point.tableName, testHutPoint2),
+			PersistentManager.store(Point.tableName, testHutPoint3)
+		]);
+		await Promise.all([
+			PersistentManager.store(Hut.tableName, testHut1),
+			PersistentManager.store(Hut.tableName, testHut2),
+			PersistentManager.store(Hut.tableName, testHut3)
+		]);
+	});
+
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.getOneHut(agent, "return the hut", 200, credentialsHiker);
+	Utils.getOneHut(agent, "return 401 because of not authenticated user", 401, wrongCredentials);
+	Utils.getOneHut(agent, "return 401 because of not authorized user", 401, credentialsLocalGuide);
+});
+
+
+
 /*****************************************************************************************************
 *              Other tests
 *****************************************************************************************************/

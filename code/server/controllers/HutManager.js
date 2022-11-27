@@ -235,6 +235,51 @@ class HutManager {
 
     return Promise.resolve(huts);
   }
+
+  async getOneHut(atrName, val) {
+    let hut = await this.loadOneByAttributeHut(atrName, val);
+    //position coord needed
+    //shcedule time needed
+    hut = await Promise.all(
+      hut.map(async (h) => {
+        const shceduleTime =
+          await HutDailyScheduleManager.loadAllByAttributeHutDailySchedule(
+            "hutId",
+            h.hutId
+          );
+        const hutPosition = await PointManager.loadOneByAttributePoint(
+          "pointId",
+          h.pointId
+        );
+
+        const hut = {
+          hutId: h.hutId,
+          hutName: h.hutName,
+          pointId: h.pointId,
+          city: h.city,
+          province: h.province,
+          region: h.region,
+          numOfBeds: h.numOfBeds,
+          cost: h.cost,
+          latitude: hutPosition.latitude,
+          longitude: hutPosition.longitude,
+          altitude: hutPosition.altitude,
+          schedule: shceduleTime.map((s) => {
+            let time = {
+              day: s.day,
+              openTime: s.openTime,
+              closeTime: s.closeTime,
+            };
+            return time;
+          }),
+        };
+
+        return hut;
+      })
+    );
+
+    return Promise.resolve(huts);
+  }
 }
 
 module.exports = new HutManager();

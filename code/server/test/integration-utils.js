@@ -108,6 +108,18 @@ exports.postHut = function (agent, itShould, expectedHTTPStatus, writerId, hutNa
 	});
 }
 
+exports.getOneHut = function (agent, itShould, expectedHTTPStatus, hutId,credentials) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/huts/${hutId}`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					res.body.hutId.should.be.eql(hutId);
+					done();
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	});
+}
 
 /*****************************************************************************************************
 *              ParkingLot

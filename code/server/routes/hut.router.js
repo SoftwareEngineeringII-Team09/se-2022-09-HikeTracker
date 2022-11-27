@@ -4,6 +4,7 @@ const HutManager = require("../controllers/HutManager");
 const { body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
+const auth = require("../middlewares/auth");
 
 // POST a hut
 router.post(
@@ -48,10 +49,10 @@ router.post(
 );
 
 // GET the list of all huts
-router.get("/", async (req, res) => {
+router.get("/", auth.withAuth, auth.withRole(["Hiker"]), async (req, res) => {
   try {
-    const hikes = await HutManager.getAllHuts();
-    return res.status(200).json(hikes);
+    const huts = await HutManager.getAllHuts();
+    return res.status(200).json(huts);
   } catch (exception) {
     console.log(exception);
     const errorCode = exception.code ?? 500;
@@ -59,5 +60,24 @@ router.get("/", async (req, res) => {
     return res.status(errorCode).json({ error: errorMessage });
   }
 });
+
+// GET hut by
+router.get(
+  "/:hutId",
+
+  async (req, res) => {
+    try {
+      const hutId = req.params.hutId;
+      const hut = await HutManager.getOneHut("hutId", hutId);
+      return res.status(200).json(hut);
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
 
 module.exports = router;

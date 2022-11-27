@@ -49,6 +49,7 @@ app.use(
 );
 
 // Creating the session
+//app.use(express.cookieParser('your secret option here'));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
