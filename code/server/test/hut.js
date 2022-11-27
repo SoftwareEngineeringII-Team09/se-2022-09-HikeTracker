@@ -27,9 +27,9 @@ const testHuts = [testHut1, testHut2, testHut3];
 const notExistingUser = testUserLocalGuide.userId + 1;
 
 /*****************************************************************************************************
- *              POST /api/huts/writers/:writerId
+ *              POST /api/huts/
  *****************************************************************************************************/
-describe("POST /api/huts/writers/:writerId", function () {
+describe("POST /api/huts/", function () {
   /* Test Setup */
   this.beforeAll(async () => {
     await Utils.clearAll();
