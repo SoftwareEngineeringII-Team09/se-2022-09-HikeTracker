@@ -38,6 +38,14 @@ auth.deserializeUser();
 // server modules
 const app = express();
 app.use(logger("dev"));
+
+/** Set up and enable Cross-Origin Resource Sharing (CORS) **/
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(cors());
 app.use(
@@ -57,13 +65,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
-
-/** Set up and enable Cross-Origin Resource Sharing (CORS) **/
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-};
-app.use(cors(corsOptions));
 
 // Setting up server routers
 // app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);

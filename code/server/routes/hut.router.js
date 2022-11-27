@@ -98,4 +98,23 @@ router.get(
   }
 );
 
+// GET hut by
+router.get(
+  "/:hutId",
+
+  async (req, res) => {
+    try {
+      const hutId = req.params.hutId;
+      const hut = await HutManager.getOneHut("hutId", hutId);
+      return res.status(200).json(hut);
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
+
 module.exports = router;
