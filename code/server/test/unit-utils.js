@@ -291,6 +291,17 @@ exports.testDefineHike = function (
   });
 };
 
+exports.testGetPotentialStartEndPoints = function (itShould, hikeId, expectedGetPotentialStartEndPointsProperties) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeManager.getPotentialStartEndPoints(hikeId);
+
+    for (const p of expectedGetPotentialStartEndPointsProperties) {
+      expect(res).toHaveProperty(p);
+    }
+  });
+}
+
+
 /*****************************************************************************************************
  *              Hut
  *****************************************************************************************************/

@@ -3,9 +3,9 @@
 class HikeParkingLot {
   static tableName = "HikeParkingLot";
   
-  constructor(hikeId, parkingId) {
+  constructor(hikeId, parkingLotId) {
     this.hikeId = hikeId;
-    this.parkingId = parkingId;
+    this.parkingLotId = parkingLotId;
   }
 }
 

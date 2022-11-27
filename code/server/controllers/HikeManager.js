@@ -518,12 +518,13 @@ class HikeManager {
     // Filtering start point huts by distance from start point and selecting between huts that are close to both the start point and the end point 
     potentialStartPointHuts = potentialStartPointHuts.filter(psph => {
       const distanceFromStartPoint = geodist({lat: psph.coords[0], lon: psph.coords[1]}, {lat: startPoint.latitude, lon: startPoint.longitude}, {exact: true, unit: 'km'});
-      const distanceFromEndPoint = potentialEndPointHuts.some(peph => peph.type === psph.type && peph.id === psph.id) && geodist({lat: psph.coords[0], lon: psph.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});  
+      const distanceFromEndPoint = potentialEndPointHuts.some(peph => peph.id === psph.id) && geodist({lat: psph.coords[0], lon: psph.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});  
       if (distanceFromStartPoint > maxDistance) {
         return false;
       }
       else if (distanceFromEndPoint) {
         if (distanceFromStartPoint <= distanceFromEndPoint) {
+          potentialEndPointHuts = potentialEndPointHuts.filter(peph => peph.id !== psph.id);
           return true;
         } else {
           return false;
@@ -533,19 +534,11 @@ class HikeManager {
       }
     });
 
-    // Filtering end point huts by distance from start point and selecting between huts that are close to both the end point and the start point
+    // Filtering end point huts by distance from end point
     potentialEndPointHuts = potentialEndPointHuts.filter(peph => {
       const distanceFromEndPoint = geodist({lat: peph.coords[0], lon: peph.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});
-      const distanceFromStartPoint = potentialStartPointHuts.some(psph => psph.type === peph.type && psph.id === peph.id) && geodist({lat: peph.coords[0], lon: peph.coords[1]}, {lat: startPoint.latitude, lon: startPoint.longitude}, {exact: true, unit: 'km'});  
       if (distanceFromEndPoint > maxDistance) {
         return false;
-      }
-      else if (distanceFromStartPoint) {
-        if (distanceFromEndPoint < distanceFromStartPoint) {
-          return true;
-        } else {
-          return false;
-        }
       } else {
         return true;
       }
@@ -554,12 +547,13 @@ class HikeManager {
     // Filtering start point parking lots by distance from start point and selecting between parking lots that are close to both the start point and the end point
     potentialStartPointParkingLots = potentialStartPointParkingLots.filter(psppl => {
       const distanceFromStartPoint = geodist({lat: psppl.coords[0], lon: psppl.coords[1]}, {lat: startPoint.latitude, lon: startPoint.longitude}, {exact: true, unit: 'km'});
-      const distanceFromEndPoint = potentialEndPointParkingLots.some(peppl => peppl.type === psppl.type && peppl.id === psppl.id) && geodist({lat: psppl.coords[0], lon: psppl.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});  
+      const distanceFromEndPoint = potentialEndPointParkingLots.some(peppl => peppl.id === psppl.id) && geodist({lat: psppl.coords[0], lon: psppl.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});  
       if (distanceFromStartPoint > maxDistance) {
         return false;
       }
       else if (distanceFromEndPoint) {
         if (distanceFromStartPoint <= distanceFromEndPoint) {
+          potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => peppl.id !== psppl.id);
           return true;
         } else {
           return false;
@@ -569,19 +563,11 @@ class HikeManager {
       }
     });
 
-    // Filtering end point parking lots by distance from start point and selecting between parking lots that are close to both the end point and the start point
+    // Filtering end point parking lots by distance from end point
     potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => {
       const distanceFromEndPoint = geodist({lat: peppl.coords[0], lon: peppl.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});
-      const distanceFromStartPoint = potentialStartPointParkingLots.some(psppl => psppl.type === peppl.type && psppl.id === peppl.id) && geodist({lat: peppl.coords[0], lon: peppl.coords[1]}, {lat: startPoint.latitude, lon: startPoint.longitude}, {exact: true, unit: 'km'});  
       if (distanceFromEndPoint > maxDistance) {
         return false;
-      }
-      else if (distanceFromStartPoint) {
-        if (distanceFromEndPoint < distanceFromStartPoint) {
-          return true;
-        } else {
-          return false;
-        }
       } else {
         return true;
       }
@@ -637,7 +623,7 @@ class HikeManager {
       await PointManager.updatePoint({ ...hutPoint, type: "end point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, endPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newEndPoint.type === "parking lot") {
-      const parkingLot = await ParkingLotManager.loadOneByAttributeParkinglot("parkingLotId", newEndPoint.id);
+      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newEndPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
       await PointManager.updatePoint({ ...parkingLotPoint, type: "end point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, endPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
