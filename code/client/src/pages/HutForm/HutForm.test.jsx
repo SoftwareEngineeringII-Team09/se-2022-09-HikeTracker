@@ -36,8 +36,8 @@ describe("Hut form page", () => {
         await userEvent.type(screen.getByLabelText("Name:"), 'Rifugio1')
         expect(screen.getByDisplayValue("Rifugio1")).toBeInTheDocument()
 
-        await userEvent.type(screen.getByLabelText("Address:"), 'Via Roma 1')
-        expect(screen.getByDisplayValue("Via Roma 1")).toBeInTheDocument()
+        // await userEvent.type(screen.getByLabelText("Address:"), 'Via Roma 1')
+        // expect(screen.getByDisplayValue("Via Roma 1")).toBeInTheDocument()
 
         // await userEvent.type(screen.getByLabelText("Latitude:"), '12.3456789')
         // expect(screen.getByDisplayValue("12.3456789")).toBeInTheDocument()

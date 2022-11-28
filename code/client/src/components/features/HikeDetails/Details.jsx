@@ -38,7 +38,7 @@ const Details = ({ hike }) => {
                         {[
                             { label: "Elevation", value: `${hike.maxElevation} m` },
                             { label: "Length", value: `${hike.length} km` },
-                            { label: "Ascent", value: `${hike.totalAscent} m` },
+                            { label: "Ascent", value: `${hike.ascent} m` },
                             { label: "Expected RT time", value: `${hike.expectedTime.hours}h : ${hike.expectedTime.minutes}m` },
                         ].map((info, idx) => (
                             <div key={idx} className='d-flex mb-2'>
