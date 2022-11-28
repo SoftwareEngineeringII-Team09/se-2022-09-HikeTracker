@@ -51,7 +51,7 @@ router.post(
 
 // GET the list of all huts
 router.get(
-  "/", 
+  "/",
   //auth.withAuth,
   //auth.withRole(["Hiker"]), 
   async (req, res) => {
@@ -69,7 +69,7 @@ router.get(
 // GET hut by
 router.get(
   "/:hutId",
- 
+
   async (req, res) => {
     try {
       const hutId = req.params.hutId;

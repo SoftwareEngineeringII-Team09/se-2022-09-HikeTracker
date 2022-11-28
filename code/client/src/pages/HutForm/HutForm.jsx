@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify'
 
 import { MarkerOnPoint } from '@components/features/Map'
 import { MapContainer, TileLayer } from 'react-leaflet'
@@ -8,19 +10,38 @@ import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
+import api from '@services/api'
+
 const HutForm = () => {
     const [name, setName] = useState('');
     const [region, setRegion] = useState('');
     const [province, setProvince] = useState('');
     const [city, setCity] = useState('');
-    const [address, setAddress] = useState('');
     const [beds, setBeds] = useState(0);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
     const [altitude, setAltitude] = useState(0);
 
+    const navigate = useNavigate()
+
     const handleSubmit = (event) => {
         event.preventDefault();
+        api.huts.createHut({
+            hutName: name,
+            city,
+            province,
+            region,
+            numOfBeds: parseInt(beds),
+            cost: 10.5,
+            latitude,
+            longitude,
+            altitude: parseInt(altitude)
+        }).then(() => {
+            toast.success("The new hut has been correctly added", { theme: 'colored' })
+            navigate('/', { replace: true })
+        })
+            .catch(err => toast.error(err, { theme: 'colored' }))
+
     }
 
     const handleClickOnMap = (point) => {
@@ -65,10 +86,6 @@ const HutForm = () => {
                                 <option key={city.comune} value={city.comune}>{city.nome}</option>
                             ))}
                         </Form.Select>
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor="address">Address:</Form.Label>
-                        <Form.Control id="address" type='text' required onChange={event => setAddress(event.target.value)} />
                     </Form.Group>
 
                     <div className='my-3'>
