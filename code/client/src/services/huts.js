@@ -18,11 +18,13 @@ const huts = {
     })
   },
 
-  //   createHut: (data) => {
-  //     return new Promise((resolve, reject) => {
-  //         axios.post(`${SERVER_URL}/huts`, {})
-  //     })
-  //   }
+  createHut: (data) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${SERVER_URL}/huts`, data, { withCredentials: true })
+        .then(() => resolve())
+        .catch(err => reject(err.response.data.error));
+    })
+  }
 }
 
 export default huts

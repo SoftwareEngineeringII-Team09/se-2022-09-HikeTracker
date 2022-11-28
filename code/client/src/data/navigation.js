@@ -15,8 +15,8 @@ const navigation = {
     ],
     LocalGuide: [
         { label: "Browse", url: "/browse", variant: "link" },
-        { label: "Create a new hike", url: "/add-hike" },
-        { label: "Create a new hut", url: "/add-hut" },
+        { label: "Create a new hike", url: "/hikes/add" },
+        { label: "Create a new hut", url: "/huts/add" },
         { label: "Create a new parking lot", url: "/add-parking-lot" },
     ],
 }

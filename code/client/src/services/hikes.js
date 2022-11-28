@@ -28,9 +28,17 @@ const hikes = {
 
   createHike: (data) => {
     return new Promise((resolve, reject) => {
-      axios.post(`${SERVER_URL}/hikes`, data)
-      .then(res => resolve(res.data))
-      .catch(err => reject(err));
+      axios.post(`${SERVER_URL}/hikes`, data, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+    })
+  },
+
+  updateReferencePoints: (hikeId, data) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${SERVER_URL}/hikes/${hikeId}/refPoints`, data, { withCredentials: true })
+        .then(() => resolve())
+        .catch(err => reject(err.response.data.error));
     })
   }
 }

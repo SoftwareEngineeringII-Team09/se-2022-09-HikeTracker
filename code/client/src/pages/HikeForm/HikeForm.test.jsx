@@ -5,7 +5,7 @@ const { createMemoryHistory } = require("history");
 import { toast } from "react-toastify"
 import api from '../../services/api';
 
-const gpxTestTrack = require("@data/test/gpxTestTrack.gpx");
+const gpxTestTrack = require("./gpxTestTrack.gpx");
 
 /* Mocking the login api and libraries */
 jest.mock('../../services/api');
@@ -56,7 +56,7 @@ describe("Page for adding new hike", () => {
         expect(screen.getByDisplayValue("Prova!")).toBeInTheDocument()
     })
 
-    it("Redirects to /hikes/:id after successfully creating an hike", async () => {
+    it("Redirects to /reference-points/:id after successfully creating an hike", async () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -93,7 +93,7 @@ describe("Page for adding new hike", () => {
             expect(toast.success).toHaveBeenCalledWith("Hike created successfully", { theme: "colored" })
         })
         await waitFor(() => {
-            expect(mockedUsedNavigate).toHaveBeenCalledWith("/browse/1")
+            expect(mockedUsedNavigate).toHaveBeenCalledWith("/reference-points/1")
         })
     })
 

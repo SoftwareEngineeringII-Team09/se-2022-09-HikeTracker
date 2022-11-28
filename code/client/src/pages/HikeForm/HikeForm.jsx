@@ -13,6 +13,7 @@ const HikeForm = () => {
     const [province, setProvince] = useState(0);
     const [city, setCity] = useState(0);
     const [region, setRegion] = useState(0);
+    const [expectedTime, setExpectedTime] = useState(0);
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
     const [gpxFile, setGpxFile] = useState(null);
@@ -27,6 +28,7 @@ const HikeForm = () => {
         data.append('title', title);
         data.append('province', province);
         data.append('region', region);
+        data.append('expectedTime', expectedTime);
         data.append('city', city);
         data.append('difficulty', difficulty);
         data.append('description', description);
@@ -38,7 +40,7 @@ const HikeForm = () => {
                     theme: "colored"
                 });
                 // Redirect to the newly created hike
-                navigate('/browse/' + res.hikeId);
+                navigate(`/reference-points/${res.hikeId}`);
             })
             .catch((error) => {
                 toast.error(error.message, {
@@ -91,6 +93,10 @@ const HikeForm = () => {
                                 <option key={city.comune} value={city.comune}>{city.nome}</option>
                             ))}
                         </Form.Select>
+                    </Form.Group>
+                    <Form.Group className='mb-2'>
+                        <Form.Label>Expected time:</Form.Label>
+                        <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
                         <Form.Label htmlFor='difficulty'>Difficulty:</Form.Label>
