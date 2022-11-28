@@ -36,7 +36,7 @@ const hikes = {
 
   updateReferencePoints: (hikeId, data) => {
     return new Promise((resolve, reject) => {
-      axios.post(`${SERVER_URL}/hikes/${hikeId}/refPoints`, data, { withCredentials: true })
+      axios.post(`${SERVER_URL}/hikes/${hikeId}/refPoints`, { referencePoints: data }, { withCredentials: true })
         .then(() => resolve())
         .catch(err => reject(err.response.data.error));
     })
