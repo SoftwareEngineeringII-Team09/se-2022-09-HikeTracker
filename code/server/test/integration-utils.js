@@ -60,24 +60,33 @@ exports.getAllHikes = function (agent, itShould, expectedHTTPStatus, expectedLen
 	});
 }
 
-exports.getAllHikes = function (
-  agent,
-  itShould,
-  expectedHTTPStatus,
-  expectedLength
-) {
-  it(`Should ${itShould}`, function (done) {
-    agent
-      .get("/api/hikes")
-      .then(function (res) {
-        res.should.have.status(expectedHTTPStatus);
-        res.body.should.be.a("array");
-        res.body.length.should.be.eql(expectedLength);
-        done();
-      })
-      .catch((e) => console.log(e));
-  });
-};
+exports.getHikeById = function (agent, itShould, expectedHTTPStatus, hikeId, expectedHike = undefined) {
+	it(`Should ${itShould}`, function (done) {
+		if (expectedHTTPStatus === 200) {
+			agent.get(`/api/hikes/${hikeId}`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					res.body.hikeId.should.be.eql(hikeId);
+					res.body.title.should.be.eql(expectedHike.title);
+					res.body.city.should.be.eql(expectedHike.city);
+					res.body.province.should.be.eql(expectedHike.province);
+					res.body.region.should.be.eql(expectedHike.region);
+					res.body.length.should.be.eql(expectedHike.length);
+					res.body.ascent.should.be.eql(expectedHike.ascent);
+					res.body.maxElevation.should.be.eql(expectedHike.maxElevation);
+					res.body.difficulty.should.be.eql(expectedHike.difficulty);
+					res.body.description.should.be.eql(expectedHike.description);
+					done();
+				}).catch(e => console.log(e));
+		} else {
+			agent.get(`/api/hikes/${hikeId}`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					done();
+				}).catch(e => console.log(e));
+		}
+	});
+}
 
 exports.getHikeGpxById = function (agent, itShould, expectedHTTPStatus, credentials, hikeId) {
 	it(`Should ${itShould}`, function (done) {

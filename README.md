@@ -671,15 +671,16 @@ JSON object containing reference point information of specific hike.
 ```json
 {
    "referencePoints":[
-      {"name": "refPoint1"},
-      {"name": "refPoint2"},
-      {"name": "refPoint3"}
-   ],
-      "track":[
-         [44.56666,6.5444,1978.786291],
-         [44.56634,6.5334,1891.73755],
-         [44.56634,6.5334,1525.3]
-   ]
+   {
+      "name": "refName1",
+      "coords": [12334.555,123.5675]
+   },
+   {
+      "name": "refName2",
+      "coords": [563.3452,8564.345234]
+   }
+  
+]
   
 }
 ```
