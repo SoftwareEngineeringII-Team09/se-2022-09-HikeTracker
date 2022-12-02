@@ -1,11 +1,12 @@
 "use strict";
 
+const { body, param, validationResult } = require("express-validator");
 const HikeManager = require("../controllers/HikeManager");
 const HikeRefPointManager = require("../controllers/HikeRefPointManager");
-const { check, body, param, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const auth = require("../middlewares/auth");
 
 const storage = multer.diskStorage({
   destination: "./gpx",
@@ -17,12 +18,12 @@ const upload = multer({ storage: storage });
 
 // POST a hike
 router.post(
-  "/writers/:writerId",
-  param("writerId").isInt({ min: 0 }),
+  "/",
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   upload.single("gpx"),
   async (req, res) => {
-    const writerId = req.params.writerId;
-
+    const writerId = req.user.userId;
     const fileName = req.file.originalname;
     try {
       // Validation of body and/or parameters
@@ -30,7 +31,7 @@ router.post(
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
 
-      await HikeManager.defineHike(
+      const hikeId = await HikeManager.defineHike(
         writerId,
         req.body.title,
         req.body.expectedTime,
@@ -41,7 +42,7 @@ router.post(
         req.body.region,
         fileName
       );
-      return res.status(201).end();
+      return res.status(201).send({ hikeId });
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =
@@ -51,8 +52,11 @@ router.post(
   }
 );
 
+// POST the list of reference points for a given hike
 router.post(
-  "/refPoints/:hikeId",
+  "/:hikeId/refPoints",
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   param("hikeId").isInt({ min: 0 }),
   async (req, res) => {
     const hikeId = req.params.hikeId;
@@ -65,7 +69,6 @@ router.post(
       await HikeRefPointManager.defineRefPoints(
         hikeId,
         req.body.referencePoints,
-        req.body.track
       );
 
       return res.status(201).end();
@@ -119,6 +122,7 @@ router.get(
 // GET a hike gpx
 router.get(
   "/:hikeId/download",
+  auth.withAuth,
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
@@ -140,5 +144,79 @@ router.get(
     }
   }
 );
+
+// GET potential start and end points
+router.get(
+  "/:hikeId/potentialStartEndPoints",
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
+  param("hikeId")
+    .isInt({ min: 1 })
+    .toInt()
+    .withMessage("Provide a valid hikeId"),
+  async (req, res) => {
+    try {
+      // Validation of body and/or parameters
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ error: errors.array()[0] });
+
+      const hikeId = req.params.hikeId;
+      const potentialStartEndPoints = await HikeManager.getPotentialStartEndPoints(hikeId);
+
+      return res.status(200).json(potentialStartEndPoints);
+    } catch (exception) {
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
+
+// PUT new start and/or end point for the hike
+router.put(
+  "/:hikeId/startEndPoints",
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
+  param("hikeId")
+    .isInt({ min: 1 })
+    .toInt()
+    .withMessage("Provide a valid hikeId"),
+    body("newStartPoint").optional().isObject(), 
+    body("newStartPoint.type").optional().isString(), 
+    body("newStartPoint.id").optional().isInt({ min: 1 }),
+    body("newEndPoint").optional().isObject(),  
+    body("newEndPoint.type").optional().isString(), 
+    body("newEndPoint.id").optional().isInt({ min: 1 }), 
+  async (req, res) => {
+    try {
+      // Validation of body and/or parameters
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ error: errors.array()[0] });
+      
+      const hikeId = req.params.hikeId;
+      const newStartPoint = req.body.newStartPoint;
+      const newEndPoint = req.body.newEndPoint;
+
+      if (newStartPoint) {
+        await HikeManager.updateStartPoint(hikeId, newStartPoint);
+      }
+      if (newEndPoint) {
+        await HikeManager.updateEndPoint(hikeId, newEndPoint);
+      }
+
+      return res.status(201).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
+
+
 
 module.exports = router;

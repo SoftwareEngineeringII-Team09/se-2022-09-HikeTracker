@@ -15,25 +15,17 @@ class HutManager {
    * @param {Hut} newHut
    * @returns a Promise with the hutId value of the stored hut
    */
-  async storeHut(newHut) {
-    // Check that foreign key pointId exists
-    const pointExists = await PersistentManager.exists(
-      Point.tableName,
-      "pointId",
-      newHut.pointId
-    );
+   async storeHut(newHut) {
+    // Check if foreign key pointId exists
+    const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
       return Promise.reject({
         code: 404,
         result: `No available point with pointId = ${newHut.pointId}`,
       });
     }
-    // Check that foreign key writerId exists
-    const writerExists = await PersistentManager.exists(
-      User.tableName,
-      "userId",
-      newHut.writerId
-    );
+    // Check if foreign key writerId exists
+    const writerExists = await PersistentManager.exists(User.tableName, "userId", newHut.writerId);
     if (!writerExists) {
       return Promise.reject({
         code: 404,
@@ -59,7 +51,7 @@ class HutManager {
         result: `No available hut with ${attributeName} = ${value}`
       });
     }
-    // Check that foreign key pointId exists
+    // Check if foreign key pointId exists
     const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
       return Promise.reject({
@@ -67,7 +59,7 @@ class HutManager {
         result: `No available point with pointId = ${newHut.pointId}`
       });
     }
-    // Check that foreign key writerId exists
+    // Check if foreign key writerId exists
     const writerExists = await PersistentManager.exists(User.tableName, "userId", newHut.writerId);
     if (!writerExists) {
       return Promise.reject({
@@ -235,6 +227,68 @@ class HutManager {
 
     return Promise.resolve(huts);
   }
+
+  // Load a hut by hutId
+  async getHutById(hutId) {
+    let hut = await this.loadOneByAttributeHut("hutId", hutId);
+    let point = await PointManager.loadOneByAttributePoint(
+      "pointId",
+      hut.pointId
+    );
+
+    hut = {
+      ...hut,
+      ...point
+    }
+
+    return Promise.resolve(hut);
+  }
+
+  /*async getOneHut(atrName, val) {
+    let hut = await this.loadOneByAttributeHut(atrName, val);
+    //position coord needed
+    //shcedule time needed
+    console.log(hut)
+    hut = await Promise.all(
+      hut.map(async (h) => {
+        const shceduleTime =
+          await HutDailyScheduleManager.loadAllByAttributeHutDailySchedule(
+            "hutId",
+            h.hutId
+          );
+        const hutPosition = await PointManager.loadOneByAttributePoint(
+          "pointId",
+          h.pointId
+        );
+
+        const hut = {
+          hutId: h.hutId,
+          hutName: h.hutName,
+          pointId: h.pointId,
+          city: h.city,
+          province: h.province,
+          region: h.region,
+          numOfBeds: h.numOfBeds,
+          cost: h.cost,
+          latitude: hutPosition.latitude,
+          longitude: hutPosition.longitude,
+          altitude: hutPosition.altitude,
+          schedule: shceduleTime.map((s) => {
+            let time = {
+              day: s.day,
+              openTime: s.openTime,
+              closeTime: s.closeTime,
+            };
+            return time;
+          }),
+        };
+
+        return hut;
+      })
+    );
+
+    return Promise.resolve(huts);
+  }*/
 }
 
 module.exports = new HutManager();

@@ -5,7 +5,7 @@ const sqlite = require("sqlite3");
 const fs = require("fs");
 
 async function main() {
-  const SQL = fs.readFileSync("dbschema.sql", "ascii");
+  let SQL = fs.readFileSync("dbschema.sql", "ascii");
 
   db = new sqlite.Database("DB.db", (err) => {
     if (err) {
@@ -18,7 +18,24 @@ async function main() {
     if (err) console.log(err);
     else
       console.log(
-        "Database correctly cleaned and filled with default data"
+        "Main database correctly cleaned and filled with default data"
+      );
+  });
+
+  SQL = fs.readFileSync("dbschemaTest.sql", "ascii");
+
+  dbTest = new sqlite.Database("DB.test.db", (err) => {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+  });
+
+  await dbTest.exec(SQL, function (err) {
+    if (err) console.log(err);
+    else
+      console.log(
+        "Test database correctly cleaned"
       );
   });
 }

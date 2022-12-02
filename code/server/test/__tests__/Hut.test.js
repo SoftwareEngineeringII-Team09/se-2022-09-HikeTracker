@@ -6,17 +6,7 @@ const Utils = require("../unit-utils");
 const Hut = require("../../dao/model/Hut");
 
 /* Some useful data to use for tests */
-const testUser = {
-  userId: 1,
-  email: "test@email.it",
-  salt: "testSalt",
-  password: "testPassword",
-  firstname: "testFirstname",
-  lastname: "testLastname",
-  mobile: "390123456789",
-  role: "testRole",
-  active: 0,
-};
+const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
 const pointHut1 = new Point(1, "start point", 0, 1, null, 10.0, 10.0, 10.0);
 const pointHut2 = new Point(
   2,
@@ -184,7 +174,7 @@ describe("Test defineHut", () => {
   /* Test Setup */
   beforeAll(async () => {
     await Utils.clearAll();
-    PersistentManager.store(User.tableName, testUser);
+    await PersistentManager.store(User.tableName, testUser);
   });
 
   /* Test Teardown */
@@ -207,7 +197,7 @@ describe("Test defineHut", () => {
     pointHut1.altitude
   );
   Utils.testDefineHut(
-    "return 404 because of not existing writerId foreign key",
+    "reject because of not existing writerId foreign key",
     testHut1.hutName,
     notExistingUser,
     testHut1.city,

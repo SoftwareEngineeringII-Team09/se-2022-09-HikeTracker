@@ -1,14 +1,17 @@
-import provinces from '@data/provinces'
-import cities from '@data/cities'
+import * as locations from '@data/locations'
 
-const getLocationFullName = (provinceId, cityId) => {
-    const provinceName = provinces.find(province => province.istat_provincia === provinceId).provincia
-    const cityName = cities.find(city => city.codiceistatcomune === cityId).comune
+export const __REGIONS = locations.regions.map(r => ({...r, nome: r.nome.toUpperCase()}))
+export const __PROVINCES = locations.provinces.map(p => ({...p, nome: p.nome.toUpperCase()}))
+export const __CITIES = locations.cities.map(c => ({...c, nome: c.nome.toUpperCase()}))
+
+export const getLocationFullName = (provinceId, cityId) => {
+    const provinceName = __PROVINCES.find(province => province.provincia === provinceId).nome
+    const cityName = __CITIES.find(city => city.comune === cityId).nome
     return `${cityName}, ${provinceName}`
 }
 
-const getCitiesForProvince = (province) => cities.filter(city => city.istat_provincia === province)
+export const getLocationRegion = (regionId) => __REGIONS.find(region => region.regione === regionId).nome
 
-const helperLocation = { provinces, cities, getLocationFullName, getCitiesForProvince }
+export const getProvincesForRegion = (region) => __PROVINCES.filter(province => province.regione === region)
 
-export default helperLocation
+export const getCitiesForProvince = (province) => __CITIES.filter(city => city.provincia === province)

@@ -12,10 +12,14 @@ const app = require("../index");
 let agent = chai.request.agent(app);
 
 /* Some useful data to use for tests */
-const testUser = { userId: 1, email: "test@email.it", salt: "testSalt", password: "testPassword", firstname: "testFirstname", lastname: "testLastname", mobile: "390123456789", role: "testRole", active: 0 };
-const testParkingLotPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0, 10.0);
-const testParkingLotPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0, 20.0);
-const testParkingLotPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0, 30.0);
+const testUser = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
+const notAuthorizedUser = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
+const credentials = { username: testUser.email, password: "Password1234." };
+const wrongCredentials = { username: testUser.email, password: "wrongPassword" };
+const notAuthorizedCredentials = { username: notAuthorizedUser.email, password: "Password1234." };
+const testParkingLotPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0, 2000.0);
+const testParkingLotPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0, 2000.0);
+const testParkingLotPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0, 2000.0);
 const testParkingLot1 = new ParkingLot(1, "testName1", testParkingLotPoint1.pointId, testUser.userId);
 const testParkingLot2 = new ParkingLot(2, "testName2", testParkingLotPoint2.pointId, testUser.userId);
 const testParkingLot3 = new ParkingLot(3, "testName3", testParkingLotPoint3.pointId, testUser.userId);
@@ -24,27 +28,30 @@ const notExistingUser = testUser.userId + 1;
 
 
 /*****************************************************************************************************
-*              POST /api/parkingLots/writers/:writerId
+*              POST /api/parkingLots
 *****************************************************************************************************/
-describe("POST /api/parkingLots/writers/:writerId", function () {
+describe("POST /api/parkingLots", function () {
 	/* Test Setup */
 	this.beforeAll(async () => {
 		await Utils.clearAll();
-		await PersistentManager.store(User.tableName, testUser);
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
 	});
 
 	/* Test Teardown */
 	this.afterAll(async () => {
 		await Utils.clearAll();
 	});
-
-	Utils.postParkingLot(agent, "post a parking lot", 201, testUser.userId, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 404 because of not existing writer with writerId = :writerId", 404, notExistingUser, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong :writerId format", 422, "wrongWriterIdFormat", testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong parkingLotName format", 422, testUser.userId, 1, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong latitude format", 422, testUser.userId, testParkingLot1.parkingLotName, "wrongLatitudeFormat", testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong longitude format", 422, testUser.userId, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, "wrongLongitudeFormat", testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong altitude format", 422, testUser.userId, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, "wrongAltitudeFormat");
+	
+	Utils.postParkingLot(agent, "post a parking lot", 201, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
+	Utils.postParkingLot(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
+	Utils.postParkingLot(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
+	Utils.postParkingLot(agent, "return 422 because of wrong parkingLotName format", 422, credentials, 1, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
+	Utils.postParkingLot(agent, "return 422 because of wrong latitude format", 422, credentials, testParkingLot1.parkingLotName, "wrongLatitudeFormat", testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
+	Utils.postParkingLot(agent, "return 422 because of wrong longitude format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, "wrongLongitudeFormat", testParkingLotPoint1.altitude);
+	// Utils.postParkingLot(agent, "return 422 because of wrong altitude format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, "wrongAltitudeFormat");
 });
 
 

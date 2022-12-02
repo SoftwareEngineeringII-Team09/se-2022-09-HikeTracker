@@ -3,10 +3,8 @@ import { MemoryRouter } from 'react-router-dom'
 
 import Details from './Details'
 
-jest.mock("@lib/helpers", () => ({
-    helperLocation: {
-        getLocationFullName: (province, city) => `c${city}, p${province}`
-    }
+jest.mock("@lib/helpers/location", () => ({
+    getLocationFullName: (province, city) => `c${city}, p${province}`
 }))
 
 const testHike = {
@@ -28,7 +26,7 @@ const testHike = {
     ],
     maxElevation: 1200,
     length: 1,
-    totalAscent: 300,
+    ascent: 300,
     expectedTime: {
         hours: 5,
         minutes: 30

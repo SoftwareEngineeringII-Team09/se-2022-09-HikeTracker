@@ -1,4 +1,4 @@
-import { helperLocation } from '@lib/helpers'
+import { getLocationFullName } from '@lib/helpers/location'
 
 const Details = ({ hike }) => {
     return (
@@ -9,7 +9,7 @@ const Details = ({ hike }) => {
                     Created by <span className='fw-bold'>{hike.writer}</span>{" "}
                     for <span className='fw-bold bg-primary-light px-3 fs-6 py-1 rounded-pill'>{hike.difficulty}</span>
                 </h5>
-                <span>{helperLocation.getLocationFullName(hike.province, hike.city)}</span>
+                <span>{getLocationFullName(hike.province, hike.city)}</span>
             </div>
             <p>{hike.description}</p>
             <div className='mt-5 d-flex flex-column flex-lg-row justify-content-between'>
@@ -38,7 +38,7 @@ const Details = ({ hike }) => {
                         {[
                             { label: "Elevation", value: `${hike.maxElevation} m` },
                             { label: "Length", value: `${hike.length} km` },
-                            { label: "Ascent", value: `${hike.totalAscent} m` },
+                            { label: "Ascent", value: `${hike.ascent} m` },
                             { label: "Expected RT time", value: `${hike.expectedTime.hours}h : ${hike.expectedTime.minutes}m` },
                         ].map((info, idx) => (
                             <div key={idx} className='d-flex mb-2'>
