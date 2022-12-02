@@ -1,3 +1,9 @@
+@mixin coloredMarker($alt, $hueVariation) {
+    .leaflet-marker-icon[alt="#{$alt}"] {
+        filter: hue-rotate($hueVariation);
+    }
+}
+
 .track-map {
     z-index: 90;
 
@@ -12,5 +18,14 @@
         left: 4rem;
         width: 40vw;
         height: 80vh;
+    }
+
+    .leaflet-marker-pane {
+    
+            // Green: 280deg
+            // TODO: Make orange and red
+            @include coloredMarker('Start marker', 280deg);
+            @include coloredMarker('End marker', 220deg);
+            
     }
 }

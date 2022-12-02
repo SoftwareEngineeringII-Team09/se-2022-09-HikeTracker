@@ -8,7 +8,7 @@ const HikeEndpoint = ({ type, point }) => {
 
     return (
         <>
-            <h3>{type} point <img alt={`${type} point pin`} src={pinImage} /></h3>
+            <h3>{type} point <img alt={`${type} point pin`} src={pinImage} className={`${type}-marker`}/></h3>
             {point && point.name && <p>{point.name}</p>}
             <Container fluid>
                 <Row className='mb-5'>
