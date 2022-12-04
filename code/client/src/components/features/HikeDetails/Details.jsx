@@ -1,10 +1,29 @@
-import { getLocationFullName } from '@lib/helpers/location'
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { FaMapMarkerAlt } from 'react-icons/fa'
 
+import { getLocationFullName } from '@lib/helpers/location'
+import { AuthContext } from '@contexts/authContext'
+import { Tooltip } from '@components/ui-core'
+
+// TODO: Update API to get also writer ID and check if local guide can update the hike
 const Details = ({ hike }) => {
+    const [user] = useContext(AuthContext)
+
     return (
         <div className=''>
             <div className='mb-5'>
-                <h1 className='fw-black'>{hike.title}</h1>
+                <h1 className='fw-black'>
+                    {hike.title}
+                    {/* TODO: Add a check on the writer ID */}
+                    {(user.role === "Local Guide") && <Tooltip tip="Update reference points">
+                        <Link to={`/account/reference-points/${hike.hikeId}`}>
+                            <span className='text-primary fw-bold ms-4'>
+                                <FaMapMarkerAlt size={25} />
+                            </span>
+                        </Link>
+                    </Tooltip>}
+                </h1>
                 <h5 className='mb-2'>
                     Created by <span className='fw-bold'>{hike.writer}</span>{" "}
                     for <span className='fw-bold bg-primary-light px-3 fs-6 py-1 rounded-pill'>{hike.difficulty}</span>

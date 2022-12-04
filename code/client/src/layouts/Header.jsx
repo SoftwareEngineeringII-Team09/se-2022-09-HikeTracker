@@ -1,12 +1,10 @@
 import { useState, useContext } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { Button, Navbar } from "react-bootstrap"
 import { RiMenu3Fill } from 'react-icons/ri'
-import { toast } from 'react-toastify'
 
 import logoWhite from '@assets/logo/logo-white.png'
 import logo from '@assets/logo/logo-no-background.png'
-import api from '@services/api'
 
 import { AuthContext } from '@contexts/authContext'
 
@@ -40,7 +38,7 @@ const Header = () => {
 
                 {/* Navigation for desktop devices */}
                 {!user.loggedIn && <div className="d-none d-lg-flex align-items-center">
-                    {navigation.default.desktop.map((link, idx) => (
+                    {navigation("Visitor").map((link, idx) => (
                         <NavLink key={idx} url={link.url} variant={link.variant} className={`${location.pathname !== "/" ? "text-primary-dark" : "text-primary-light"} ps-5`}>
                             {link.label}
                         </NavLink>

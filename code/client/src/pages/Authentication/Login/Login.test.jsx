@@ -2,13 +2,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { toast } from "react-toastify";
-import api from '../../services/api';
+import api from '@services/api';
 import LoginForm from './Login';
 import axios from 'axios';
 
 
 /* Mocking the login api and libraries */
-jest.mock('../../services/api');
+jest.mock('@services/api');
 
 jest.mock("axios");
 

@@ -23,7 +23,7 @@ const testHike = {
 }
 
 const expected = {
-    url: `/browse/${testHike.hikeId}`,
+    url: `/hikes/${testHike.hikeId}`,
     info: [
         { label: "title", value: testHike.title },
         { label: "writer", value: /created by writer/i },

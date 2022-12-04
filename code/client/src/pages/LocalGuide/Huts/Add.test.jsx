@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 const { createMemoryHistory } = require("history");
 
-import HutForm from './HutForm'
+import AddHut from './Add'
 
 jest.mock('react-leaflet', () => {
     const MapContainer = ({ children }) => <div>{children}</div>
@@ -21,7 +21,7 @@ jest.mock('@components/features/Map', () => ({
 
 describe("Hut form page", () => {
     it("Hut form page correctly rendered", () => {
-        render(<HutForm />, { wrapper: MemoryRouter })
+        render(<AddHut />, { wrapper: MemoryRouter })
         expect(screen.getByText("Insert hut data")).toBeInTheDocument();
     })
 
@@ -29,7 +29,7 @@ describe("Hut form page", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <HutForm />
+                <AddHut />
             </Router>
         )
 

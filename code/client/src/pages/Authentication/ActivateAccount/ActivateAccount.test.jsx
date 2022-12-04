@@ -1,15 +1,14 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import ActivateAccount from './ActivateAccount';
 import { createMemoryHistory } from "history";
 import { Router } from 'react-router-dom';
-import api from '../../services/api';
+import api from '@services/api';
 import React from 'react';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 
 /* Mocking api and libraries */
-jest.mock('../../services/api');
+jest.mock('@services/api');
 jest.mock("axios");
 
 const mockUserId = 5;

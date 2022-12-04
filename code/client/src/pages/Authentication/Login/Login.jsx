@@ -1,7 +1,7 @@
 import { Button, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from '../../services/api';
+import api from '@services/api';
 import { useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';

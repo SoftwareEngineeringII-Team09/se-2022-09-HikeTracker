@@ -12,7 +12,7 @@ import cities from '@data/locations/comuni'
 
 import api from '@services/api'
 
-const HutForm = () => {
+const AddHut = () => {
     const [name, setName] = useState('');
     const [region, setRegion] = useState('');
     const [province, setProvince] = useState('');
@@ -113,4 +113,4 @@ const HutForm = () => {
     );
 }
 
-export default HutForm;
+export default AddHut;

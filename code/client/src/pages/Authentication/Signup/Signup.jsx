@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Row, Col, Alert } from 'react-bootstrap';
 import { toast } from "react-toastify";
-import api from '../../services/api';
+import api from '../../../services/api';
 import { Formik, Form } from 'formik';
 
 import { SignupSchema } from '@lib/validations';
@@ -58,7 +58,7 @@ const Signup = () => {
 
     return (
         <div className='my-5'>
-            <h1 className="fw-bold text-center">Register</h1>
+            <h1 className="fw-bold text-center mb-5">Register</h1>
             {
                 successfulSignup &&
                 <Alert variant="success" className='my-5'>
