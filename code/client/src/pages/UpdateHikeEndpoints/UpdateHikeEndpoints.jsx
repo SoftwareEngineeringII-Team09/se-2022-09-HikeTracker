@@ -33,14 +33,14 @@ const UpdateHikeEndpoints = () => {
 
     useEffect(() => {
 
-        Promise.all([
-            /* Retrieve hike information */
-            api.hikes.getHikeDetails(hikeId),
-            /* Retrieve huts and parking lots close to start/end point */
-            api.hikes.getPotentialPoints(hikeId)
-        ])
-            .then((results) => {
-                if (trackUpdated) {
+        if (trackUpdated) {
+            Promise.all([
+                /* Retrieve hike information */
+                api.hikes.getHikeDetails(hikeId),
+                /* Retrieve huts and parking lots close to start/end point */
+                api.hikes.getPotentialPoints(hikeId)
+            ])
+                .then((results) => {
                     setHike(results[0]);
                     const potentialStartPoints = results[1].potentialStartPoints.map((point) => ({ ...point, pointType: 'start', updatePoint }))
                     const potentialEndPoints = results[1].potentialEndPoints.map((point) => ({ ...point, pointType: 'end', updatePoint }))
@@ -53,15 +53,15 @@ const UpdateHikeEndpoints = () => {
                     results[0].endPoint.original = true;
                     setStartPoint(results[0].startPoint);
                     setEndPoint(results[0].endPoint);
-                }
-            })
-            .catch((error) => {
-                setError(error);
-            })
-            .finally(() => {
-                setTrackUpdated(false);
-                setLoading(false);
-            });
+                })
+                .catch((error) => {
+                    setError(error);
+                })
+                .finally(() => {
+                    setTrackUpdated(false);
+                    setLoading(false);
+                });
+        }
     }, [hikeId, trackUpdated]);
 
     const savePoints = () => {
@@ -75,9 +75,15 @@ const UpdateHikeEndpoints = () => {
         setLoadingUpdate(true);
 
         if (!startPoint.hasOwnProperty('original'))
-            points.newStartPoint = startPoint;
+            points.newStartPoint = {
+                coords: startPoint.coords,
+                type: startPoint.type,
+            };
         if (!endPoint.hasOwnProperty('original'))
-            points.newEndPoint = endPoint;
+            points.newEndPoint = {
+                coords: endPoint.coords,
+                type: endPoint.type,
+            };
 
         api.hikes.updateHikeEndpoints(hikeId, points)
             .then(() => {
@@ -120,7 +126,7 @@ const UpdateHikeEndpoints = () => {
                     <Button variant="primary-dark" size='lg' className="py-3 fw-bold w-100 my-3" onClick={savePoints} disabled={loadingUpdate}>
                         {loadingUpdate ? <Spinner /> : "Save points"}
                     </Button>
-                    <NavLink className='d-block mt-3 text-center' onClick={() => navigate(-1)}>Return to hike details</NavLink>
+                    <NavLink className='d-block mt-3 text-center' onClick={() => navigate(`/browse/${hikeId}`)}>Return to hike details</NavLink>
                 </Col>
             </Row>
         </Container>

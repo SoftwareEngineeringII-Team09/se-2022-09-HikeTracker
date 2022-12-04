@@ -1,5 +1,4 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import ActivateAccount from './ActivateAccount';
 import { createMemoryHistory } from "history";
 import { Router } from 'react-router-dom';
@@ -43,7 +42,7 @@ describe("<ActivateAccount />", () => {
         })
     };
 
-    /* Retrieve page elements */
+    /* Render component */
     beforeEach(setup);
 
     it("Correctly renders loading text and Makes API Call to verify mail on page load", async () => {

@@ -7,7 +7,7 @@ import { useRef } from 'react';
 const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] }) => {
 
     const popupElRef = useRef(null);
-    const closePopup = () => popupElRef.current._closeButton.click();
+    const closePopup = () => popupElRef && popupElRef.current && popupElRef.current._closeButton.click();
 
     return (
         <div className="track-map mb-5 mb-xl-0">
