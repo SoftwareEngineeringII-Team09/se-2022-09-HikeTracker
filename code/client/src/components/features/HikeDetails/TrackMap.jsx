@@ -2,8 +2,13 @@ import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
 import { AuthContext } from '@contexts/authContext';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { useRef } from 'react';
 
-const TrackMap = ({ hikeId, start, end, references=[], track, potentials = [] }) => {
+const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] }) => {
+
+    const popupElRef = useRef(null);
+    const closePopup = () => popupElRef.current._closeButton.click();
+
     return (
         <div className="track-map mb-5 mb-xl-0">
             <MapContainer center={start.coords} zoom={13} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
@@ -16,10 +21,10 @@ const TrackMap = ({ hikeId, start, end, references=[], track, potentials = [] })
                 ))}
                 {potentials.map((ref, idx) => (
                     <Marker key={idx} position={ref.coords}>
-                        <Popup className='text-center'>
+                        <Popup className='text-center' ref={popupElRef}>
                             <span className='fw-bold'>{ref.name}</span>
-                            <Button className='d-block mt-2' onClick={() => ref.updatePoint(ref)}>
-                                Set as {ref.type} point
+                            <Button className='d-block mt-2' onClick={() => { closePopup(); ref.updatePoint(ref) }}>
+                                Set as {ref.pointType} point
                             </Button>
                         </Popup>
                     </Marker>

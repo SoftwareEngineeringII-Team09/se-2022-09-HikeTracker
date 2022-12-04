@@ -372,7 +372,7 @@ class HikeManager {
     gpx.parse(gpxString);
     let track = gpx.tracks[0].points.map((p) => [p.lat, p.lon]);
     track[0] = [startPoint.latitude, startPoint.longitude];
-    track[track.length-1] = [endPoint.latitude, endPoint.longitude];
+    track[track.length - 1] = [endPoint.latitude, endPoint.longitude];
 
     hike = {
       hikeId: hike.hikeId,
@@ -458,8 +458,8 @@ class HikeManager {
     // Retrieving the list of potential start point huts with coordinates 
     potentialStartPointHuts = await Promise.all(
       potentialStartPointHuts.map(async (psph) => {
-        const hut = await HutManager.loadOneByAttributeHut("hutId", psph.hutId); 
-        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId); 
+        const hut = await HutManager.loadOneByAttributeHut("hutId", psph.hutId);
+        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
 
         return {
           type: "hut",
@@ -480,7 +480,7 @@ class HikeManager {
           type: "parking lot",
           id: parkingLot.parkingLotId,
           name: parkingLot.parkingLotName,
-          coords: [parkingLotPoint.latitude, parkingLotPoint.longitude] 
+          coords: [parkingLotPoint.latitude, parkingLotPoint.longitude]
         };
       })
     );
@@ -488,8 +488,8 @@ class HikeManager {
     // Retrieving the list of potential end point huts with coordinates 
     potentialEndPointHuts = await Promise.all(
       potentialEndPointHuts.map(async (peph) => {
-        const hut = await HutManager.loadOneByAttributeHut("hutId", peph.hutId); 
-        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId); 
+        const hut = await HutManager.loadOneByAttributeHut("hutId", peph.hutId);
+        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
 
         return {
           type: "hut",
@@ -510,15 +510,15 @@ class HikeManager {
           type: "parking lot",
           id: parkingLot.parkingLotId,
           name: parkingLot.parkingLotName,
-          coords: [parkingLotPoint.latitude, parkingLotPoint.longitude] 
+          coords: [parkingLotPoint.latitude, parkingLotPoint.longitude]
         };
       })
     );
-    
+
     // Filtering start point huts by distance from start point and selecting between huts that are close to both the start point and the end point 
     potentialStartPointHuts = potentialStartPointHuts.filter(psph => {
-      const distanceFromStartPoint = geodist({lat: psph.coords[0], lon: psph.coords[1]}, {lat: startPoint.latitude, lon: startPoint.longitude}, {exact: true, unit: 'km'});
-      const distanceFromEndPoint = potentialEndPointHuts.some(peph => peph.id === psph.id) && geodist({lat: psph.coords[0], lon: psph.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});  
+      const distanceFromStartPoint = geodist({ lat: psph.coords[0], lon: psph.coords[1] }, { lat: startPoint.latitude, lon: startPoint.longitude }, { exact: true, unit: 'km' });
+      const distanceFromEndPoint = potentialEndPointHuts.some(peph => peph.id === psph.id) && geodist({ lat: psph.coords[0], lon: psph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
       if (distanceFromStartPoint > maxDistance) {
         return false;
       }
@@ -536,7 +536,7 @@ class HikeManager {
 
     // Filtering end point huts by distance from end point
     potentialEndPointHuts = potentialEndPointHuts.filter(peph => {
-      const distanceFromEndPoint = geodist({lat: peph.coords[0], lon: peph.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});
+      const distanceFromEndPoint = geodist({ lat: peph.coords[0], lon: peph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
       if (distanceFromEndPoint > maxDistance) {
         return false;
       } else {
@@ -546,8 +546,8 @@ class HikeManager {
 
     // Filtering start point parking lots by distance from start point and selecting between parking lots that are close to both the start point and the end point
     potentialStartPointParkingLots = potentialStartPointParkingLots.filter(psppl => {
-      const distanceFromStartPoint = geodist({lat: psppl.coords[0], lon: psppl.coords[1]}, {lat: startPoint.latitude, lon: startPoint.longitude}, {exact: true, unit: 'km'});
-      const distanceFromEndPoint = potentialEndPointParkingLots.some(peppl => peppl.id === psppl.id) && geodist({lat: psppl.coords[0], lon: psppl.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});  
+      const distanceFromStartPoint = geodist({ lat: psppl.coords[0], lon: psppl.coords[1] }, { lat: startPoint.latitude, lon: startPoint.longitude }, { exact: true, unit: 'km' });
+      const distanceFromEndPoint = potentialEndPointParkingLots.some(peppl => peppl.id === psppl.id) && geodist({ lat: psppl.coords[0], lon: psppl.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
       if (distanceFromStartPoint > maxDistance) {
         return false;
       }
@@ -565,7 +565,7 @@ class HikeManager {
 
     // Filtering end point parking lots by distance from end point
     potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => {
-      const distanceFromEndPoint = geodist({lat: peppl.coords[0], lon: peppl.coords[1]}, {lat: endPoint.latitude, lon: endPoint.longitude}, {exact: true, unit: 'km'});
+      const distanceFromEndPoint = geodist({ lat: peppl.coords[0], lon: peppl.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
       if (distanceFromEndPoint > maxDistance) {
         return false;
       } else {
@@ -576,16 +576,16 @@ class HikeManager {
     let potentialStartEndPoints = {
       potentialStartPoints: [...potentialStartPointHuts, ...potentialStartPointParkingLots],
       potentialEndPoints: [...potentialEndPointHuts, ...potentialEndPointParkingLots],
-    };    
+    };
 
     return Promise.resolve(potentialStartEndPoints);
   }
 
   // Update the start point of a hike by hikeId
-  /* async updateStartPoint(hikeId, newStartPoint) {
+  async updateStartPoint(hikeId, newStartPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldStartPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
-    
+
     // Check if the start point is a hut or a parking lot and update the hike
     if (newStartPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newStartPoint.id);
@@ -593,7 +593,7 @@ class HikeManager {
       await PointManager.updatePoint({ ...hutPoint, type: "start point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, startPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newStartPoint.type === "parking lot") {
-      const parkingLot = await ParkingLotManager.loadOneByAttributeParkinglot("parkingLotId", newStartPoint.id);
+      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newStartPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
       await PointManager.updatePoint({ ...parkingLotPoint, type: "start point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
@@ -609,10 +609,10 @@ class HikeManager {
     }
 
     return Promise.resolve();
-  } */
+  }
 
   // Update the end point of a hike by hikeId
-  /* async updateEndPoint(hikeId, newEndPoint) {
+  async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
 
@@ -639,7 +639,7 @@ class HikeManager {
     }
 
     return Promise.resolve();
-  } */
+  }
 }
 
 module.exports = new HikeManager();

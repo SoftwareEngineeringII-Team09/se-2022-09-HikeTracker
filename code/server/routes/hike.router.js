@@ -73,7 +73,6 @@ router.post(
 
       return res.status(201).end();
     } catch (exception) {
-      console.log(exception);
       const errorCode = exception.code ?? 503;
       const errorMessage =
         exception.result ?? "Something went wrong, please try again";

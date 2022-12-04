@@ -1,14 +1,11 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import startPin from '@assets/pins/start-pin.png';
-import endPin from '@assets/pins/end-pin.png';
+import marker from '@assets/marker.png';
 
 const HikeEndpoint = ({ type, point }) => {
 
-    const pinImage = type === 'start' ? startPin : endPin;
-
     return (
         <>
-            <h3>{type} point <img alt={`${type} point pin`} src={pinImage} className={`${type}-marker`}/></h3>
+            <h3>{type} point <img alt={`${type} marker`} className="custom-marker-icon" src={marker}/></h3>
             {point && point.name && <p>{point.name}</p>}
             <Container fluid>
                 <Row className='mb-5'>

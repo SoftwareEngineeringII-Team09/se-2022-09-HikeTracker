@@ -57,24 +57,21 @@ Cypress.Commands.add('addEmergencyOperator', () => {
     cy.request('POST', `${SERVER_URL}/tests/addUser`, { ...user, role: "Emergency Operator" })
 });
 
-// /* Logins */
+/* Logins */
 
 Cypress.Commands.add('loginLocalGuide', () => {
     const username = "testLocalGuide@email.com";
     const password = "Password1234.";
-    cy.session([username, password], () => {
-        cy.request('POST', `${SERVER_URL}/auth/login/password`, { username, password })
-            .then(({ body, headers }) => {
-                console.log(headers)
-                // window.localStorage.setItem('connect.sid', )
-            })
-
-        // cy.visit('/login');
-        // cy.get('input[name="username"]').type(username);
-        // cy.get('input[name="password"]').type(password);
-        // cy.get('button[type="submit"]').click();
-        // cy.url().should('eq', '/');
-    });
+    cy.session(
+        [username, password], () => {
+            cy.request('POST', `${SERVER_URL}/auth/login/password`, { username, password });
+        },
+        {
+            validate() {
+                cy.request(`${SERVER_URL}/auth/current`).its('status').should('eq', 200);
+            },
+        }
+    );
 });
 
 // Cypress.Commands.add('loginHutWorker', () => {
@@ -113,4 +110,48 @@ Cypress.Commands.add('loginLocalGuide', () => {
 //     });
 // });
 
-// import 'cypress-file-upload';
+/* Create Hikes */
+Cypress.Commands.add('addHike', (hikeData) => {
+    cy.loginLocalGuide();
+
+    const data = new FormData();
+    data.append('gpx', hikeData.gpx);
+    data.append('title', hikeData.title);
+    data.append('province', hikeData.province);
+    data.append('region', hikeData.region);
+    data.append('expectedTime', hikeData.expectedTime);
+    data.append('city', hikeData.city);
+    data.append('difficulty', hikeData.difficulty);
+    data.append('description', hikeData.description);
+
+    cy.request({
+        method: 'POST',
+        url: `${SERVER_URL}/hikes`,
+        body: data,
+        headers: {
+            'content-type': 'multipart/form-data',
+        },
+    });
+});
+
+/* Create Parking Lot */
+Cypress.Commands.add('addParkingLot', (parkingLotData) => {
+    cy.loginLocalGuide();
+
+    cy.request({
+        method: 'POST',
+        url: `${SERVER_URL}/parkingLots`,
+        body: parkingLotData
+    });
+});
+
+/* Create Hut */
+Cypress.Commands.add('addHut', (hutData) => {
+    cy.loginLocalGuide();
+
+    cy.request({
+        method: 'POST',
+        url: `${SERVER_URL}/huts`,
+        body: hutData
+    });
+});
