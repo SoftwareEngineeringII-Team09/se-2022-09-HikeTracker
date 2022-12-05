@@ -4,7 +4,7 @@ import axios from 'axios';
 const huts = {
   getHuts: () => {
     return new Promise((resolve, reject) => {
-      axios.get(`${SERVER_URL}/huts`)
+      axios.get(`${SERVER_URL}/huts`, { withCredentials: true })
         .then(res => resolve(res.data))
         .catch(err => reject(err));
     })

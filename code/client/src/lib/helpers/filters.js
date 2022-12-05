@@ -85,7 +85,7 @@ export const filterHuts = (huts, filters, active) => {
     const { altitude, cost, beds } = filters
     const { region, province, city } = filters.geoArea.location
     const { radius, point } = filters.geoArea.position
-    
+
     if (active)
         return huts.filter(hut => {
             return (
@@ -94,7 +94,7 @@ export const filterHuts = (huts, filters, active) => {
                 // Cost filter
                 && (hut.cost >= cost.min && hut.cost <= cost.max)
                 // Beds filter
-                && (hut.beds >= beds.min && hut.beds <= beds.max)
+                && (hut.numOfBeds >= beds.min && hut.numOfBeds <= beds.max)
                 // Location filter
                 && (!parseInt(city) || (parseInt(city) && parseInt(city) === hut.city))
                 && (!parseInt(province) || (parseInt(province) && parseInt(province) === hut.province))
