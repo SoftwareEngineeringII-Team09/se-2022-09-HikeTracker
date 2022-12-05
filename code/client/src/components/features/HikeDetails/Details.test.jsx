@@ -26,7 +26,7 @@ const testHike = {
     ],
     maxElevation: 1200,
     length: 1,
-    totalAscent: 300,
+    ascent: 300,
     expectedTime: {
         hours: 5,
         minutes: 30

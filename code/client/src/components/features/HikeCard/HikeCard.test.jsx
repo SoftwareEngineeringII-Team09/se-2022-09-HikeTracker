@@ -19,7 +19,7 @@ const testHike = {
     description: "description",
     maxElevation: 1200,
     length: 1,
-    totalAscent: 300
+    ascent: 300
 }
 
 const expected = {

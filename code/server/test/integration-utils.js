@@ -12,19 +12,18 @@ const User = require("../dao/model/User");
 
 /* Reset DB content */
 exports.clearAll = async function () {
-	await PersistentManager.deleteAll(HikeHut.tableName);
-	await PersistentManager.deleteAll(HikeParkingLot.tableName);
-	await PersistentManager.deleteAll(HikeRefPoint.tableName);
-	await PersistentManager.deleteAll(HutDailySchedule.tableName);
-	await PersistentManager.deleteAll(Hut.tableName);
-	await PersistentManager.deleteAll(ParkingLot.tableName);
-	await PersistentManager.deleteAll(Hike.tableName);
-	await PersistentManager.deleteAll(Point.tableName);
-	await PersistentManager.deleteAll(User.tableName);
+  await PersistentManager.deleteAll(HikeHut.tableName);
+  await PersistentManager.deleteAll(HikeParkingLot.tableName);
+  await PersistentManager.deleteAll(HikeRefPoint.tableName);
+  await PersistentManager.deleteAll(HutDailySchedule.tableName);
+  await PersistentManager.deleteAll(Hut.tableName);
+  await PersistentManager.deleteAll(ParkingLot.tableName);
+  await PersistentManager.deleteAll(Hike.tableName);
+  await PersistentManager.deleteAll(Point.tableName);
+  await PersistentManager.deleteAll(User.tableName);
 
-	return Promise.resolve();
+  return Promise.resolve();
 };
-
 
 /*****************************************************************************************************
 *              Hike
@@ -135,6 +134,22 @@ exports.putHikeStartEndPoints = function (agent, itShould, expectedHTTPStatus, c
 	})
 }
 
+exports.getHikeGpxById = function (
+  agent,
+  itShould,
+  expectedHTTPStatus,
+  hikeId
+) {
+  it(`Should ${itShould}`, function (done) {
+    agent
+      .get(`/api/hikes/${hikeId}`)
+      .then(function (res) {
+        res.should.have.status(expectedHTTPStatus);
+        done();
+      })
+      .catch((e) => console.log(e));
+  });
+};
 
 /*****************************************************************************************************
 *              Hut
@@ -173,6 +188,30 @@ exports.getAllHuts = function (agent, itShould, expectedHTTPStatus, credentials,
 	});
 }
 
+exports.getOneHut = function (
+  agent,
+  itShould,
+  expectedHTTPStatus,
+  hutId,
+  credentials
+) {
+  it(`Should ${itShould}`, function (done) {
+    agent
+      .post("/api/auth/login/password")
+      .send(credentials)
+      .then(function () {
+        agent
+          .get(`/api/huts/${hutId}`)
+          .then(function (res) {
+            res.should.have.status(expectedHTTPStatus);
+            res.body.hutId.should.be.eql(hutId);
+            done();
+          })
+          .catch((e) => console.log(e));
+      })
+      .catch((loginError) => console.log(loginError));
+  });
+};
 
 /*****************************************************************************************************
 *              ParkingLot
@@ -195,5 +234,5 @@ exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credenti
 
 
 /*****************************************************************************************************
-*              Others
-*****************************************************************************************************/
+ *              Others
+ *****************************************************************************************************/

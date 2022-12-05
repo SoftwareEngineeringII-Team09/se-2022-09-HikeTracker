@@ -1,3 +1,6 @@
 export { default as HikeCard } from './HikeCard'
 export { default as HikesFilters } from './HikesFilters'
 export * as HikeDetails from './HikeDetails'
+export { default as HutCard } from './HutCard'
+export { default as HutsFilters } from './HutsFilters'
+export * as HutDetails from './HutDetails'

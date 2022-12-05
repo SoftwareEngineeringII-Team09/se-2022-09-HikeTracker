@@ -5,6 +5,7 @@ const gpxParser = require("gpxparser");
 const geodist = require('geodist')
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
+const {lastIndexOfRegex} = require('index-of-regex');
 const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
@@ -572,11 +573,11 @@ class HikeManager {
     
     // Update GPX start point
     const oldGpx = fs.readFileSync(hike.trackPath).toString();
-    const newGpx = oldGpx
-      .replace(oldStartPoint.latitude, newStartPointData.latitude)
-      .replace(oldStartPoint.longitude, newStartPointData.longitude);
+    const regex = new RegExp(/<trkpt.*>/);
+    const newTrkpt = `<trkpt let="${newStartPointData.latitude}" lon="${newStartPointData.longitude}">`;
+    const newGpx = oldGpx.replace(regex, newTrkpt);
     fs.writeFileSync(hike.trackPath, newGpx);
-    
+
     return Promise.resolve();
   }
 
@@ -612,13 +613,12 @@ class HikeManager {
 
     // Update GPX end point
     const oldGpx = fs.readFileSync(hike.trackPath).toString();
-    const updateGpxCoordinate = (gpxToUpdate, oldCoordinate, newCoordinate) => {
-      const lastIndex = gpxToUpdate.lastIndexOf(oldCoordinate);
-      const updatedGpx = gpxToUpdate.substring(0, lastIndex) + newCoordinate + gpxToUpdate.substring(lastIndex + oldCoordinate.toString().length);
-      return updatedGpx;
-    } 
-    let newGpx = updateGpxCoordinate(oldGpx, oldEndPoint.latitude, newEndPointData.latitude);
-    newGpx = updateGpxCoordinate(newGpx, oldEndPoint.longitude, newEndPointData.longitude)
+    const regex = new RegExp(/<trkpt.*>/g);
+    const trkptMatches = oldGpx.match(regex);
+    const oldTrkptLength = trkptMatches[trkptMatches.length - 1].length;
+    const lastIndex = lastIndexOfRegex(oldGpx, regex);
+    const newTrkpt = `<trkpt let="${newEndPointData.latitude}" lon="${newEndPointData.longitude}">`;
+    const newGpx = oldGpx.substring(0, lastIndex) + newTrkpt + oldGpx.substring(lastIndex + oldTrkptLength);
     fs.writeFileSync(hike.trackPath, newGpx);
 
     return Promise.resolve();

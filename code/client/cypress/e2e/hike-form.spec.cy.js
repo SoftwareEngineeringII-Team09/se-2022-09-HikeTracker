@@ -1,3 +1,4 @@
+
 import { SERVER_URL } from "../../src/services/config";
 
 describe('Create new hike', () => {
@@ -16,6 +17,7 @@ describe('Create new hike', () => {
 
   it('Creates a new hike', () => {
 
+
     cy.loginLocalGuide();
 
     cy.route({
@@ -27,6 +29,7 @@ describe('Create new hike', () => {
 
     /* Fill out the login form and submit it  */
     const hikeTitle = "Hike title";
+
     const hikeRegion = "Piemonte";
     const hikeProvince = "Torino";
     const hikeCity = "Maglione";

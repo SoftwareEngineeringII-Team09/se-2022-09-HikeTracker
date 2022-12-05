@@ -4,8 +4,8 @@ const TrackMap = ({ start, end, references, track }) => {
     return (
         <div className="track-map mb-5 mb-xl-0">
             <MapContainer center={start.coords} zoom={13} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
-                {references.map(ref => (
-                    <Marker position={ref.coords}>
+                {references.map((ref, idx) => (
+                    <Marker key={idx} position={ref.coords}>
                         <Popup>
                             <span className='fw-bold'>{ref.name}</span>
                         </Popup>

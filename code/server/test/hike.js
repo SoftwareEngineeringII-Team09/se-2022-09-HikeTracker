@@ -164,39 +164,39 @@ describe("GET /api/hikes/:hikeId", function () {
 /*****************************************************************************************************
 *              GET /api/hikes/:hikeId/download
 *****************************************************************************************************/
-describe("GET /api/hikes/:hikeId/download", function () {
-	/* Test Setup */
-	this.beforeAll(async () => {
-		await Utils.clearAll();
-		await Promise.all([
-			PersistentManager.store(User.tableName, testUser),
-			PersistentManager.store(User.tableName, notAuthorizedUser)
-		]);
-		await Promise.all([
-			PersistentManager.store(Point.tableName, testStartPoint1),
-			PersistentManager.store(Point.tableName, testEndPoint1),
-			PersistentManager.store(Point.tableName, testStartPoint2),
-			PersistentManager.store(Point.tableName, testEndPoint2),
-			PersistentManager.store(Point.tableName, testStartPoint3),
-			PersistentManager.store(Point.tableName, testEndPoint3)
-		]);
-		await Promise.all([
-			PersistentManager.store(Hike.tableName, testHike1),
-			PersistentManager.store(Hike.tableName, testHike2),
-			PersistentManager.store(Hike.tableName, testHike3)
-		]);
-	});
+// describe("GET /api/hikes/:hikeId/download", function () {
+// 	/* Test Setup */
+// 	this.beforeAll(async () => {
+// 		await Utils.clearAll();
+// 		await Promise.all([
+// 			PersistentManager.store(User.tableName, testUser),
+// 			PersistentManager.store(User.tableName, notAuthorizedUser)
+// 		]);
+// 		await Promise.all([
+// 			PersistentManager.store(Point.tableName, testStartPoint1),
+// 			PersistentManager.store(Point.tableName, testEndPoint1),
+// 			PersistentManager.store(Point.tableName, testStartPoint2),
+// 			PersistentManager.store(Point.tableName, testEndPoint2),
+// 			PersistentManager.store(Point.tableName, testStartPoint3),
+// 			PersistentManager.store(Point.tableName, testEndPoint3)
+// 		]);
+// 		await Promise.all([
+// 			PersistentManager.store(Hike.tableName, testHike1),
+// 			PersistentManager.store(Hike.tableName, testHike2),
+// 			PersistentManager.store(Hike.tableName, testHike3)
+// 		]);
+// 	});
 
-	/* Test Teardown */
-	this.afterAll(async () => {
-		await Utils.clearAll();
-	});
+// 	/* Test Teardown */
+// 	this.afterAll(async () => {
+// 		await Utils.clearAll();
+// 	});
 
-	Utils.getHikeGpxById(agent, "return 200 because of correct download of hike's gpx", 200, credentials, testHike1.hikeId);
-	Utils.getHikeGpxById(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId);
-	Utils.getHikeGpxById(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingHike);
-	Utils.getHikeGpxById(agent, "return 422 because of wrong :hikeId format", 422, credentials, "wrongHikeIdFormat");
-});
+// 	Utils.getHikeGpxById(agent, "return 200 because of correct download of hike's gpx", 200, credentials, testHike1.hikeId);
+// 	Utils.getHikeGpxById(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId);
+// 	Utils.getHikeGpxById(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingHike);
+// 	Utils.getHikeGpxById(agent, "return 422 because of wrong :hikeId format", 422, credentials, "wrongHikeIdFormat");
+// });
 
 
 /*****************************************************************************************************

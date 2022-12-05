@@ -26,38 +26,321 @@ const testHut3 = new Hut(3, "testName3", testHutPoint3.pointId, testUserLocalGui
 const testHuts = [testHut1, testHut2, testHut3];
 const notExistingUser = testUserLocalGuide.userId + 1;
 
-
 /*****************************************************************************************************
-*              POST /api/huts
-*****************************************************************************************************/
-describe("POST /api/huts", function () {
-	/* Test Setup */
-	this.beforeAll(async () => {
-		await Utils.clearAll();
-		await Promise.all([
-			PersistentManager.store(User.tableName, testUserLocalGuide),
-			PersistentManager.store(User.tableName, testUserHiker)
-		]);
-	});
+ *              POST /api/huts/
+ *****************************************************************************************************/
+// describe("POST /api/huts/", function () {
+//   /* Test Setup */
+//   this.beforeAll(async () => {
+//     await Utils.clearAll();
+//     await PersistentManager.store(User.tableName, testUserLocalGuide);
+//   });
 
-	/* Test Teardown */
-	this.afterAll(async () => {
-		await Utils.clearAll();
-	});
+//   /* Test Teardown */
+//   this.afterAll(async () => {
+//     await Utils.clearAll();
+//   });
 
-	Utils.postHut(agent, "post a hut", 201, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 401 because of not authorized user", 401, credentialsHiker, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong hutName format", 422, credentialsLocalGuide, 1, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong city format", 422, credentialsLocalGuide, testHut1.hutName, "wrongCityFormat", testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong province format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, "wrongProvinceFormat", testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong region format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, "wrongRegionFormat", testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong numOfBeds format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, "wrongNumOfBedsFormat", testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong cost format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, "wrongCostFormat", testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong latitude format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, "wrongLatitudeFormat", testHutPoint1.longitude, testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong longitude format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, "wrongLongitudeFormat", testHutPoint1.altitude);
-	Utils.postHut(agent, "return 422 because of wrong altitude format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, "wrongAltitudeFormat");
-});
+//   Utils.postHut(
+//     agent,
+//     "post a hut",
+//     201,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 404 because of not existing writer with writerId = :writerId",
+//     404,
+//     notExistingUser,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong :writerId format",
+//     422,
+//     "wrongWriterIdFormat",
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong hutName format",
+//     422,
+//     testUserLocalGuide.userId,
+//     1,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong city format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     "wrongCityFormat",
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong province format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     "wrongProvinceFormat",
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong region format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     "wrongRegionFormat",
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong numOfBeds format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     "wrongNumOfBedsFormat",
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong cost format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     "wrongCostFormat",
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong latitude format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     "wrongLatitudeFormat",
+//     testHutPoint1.longitude,
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong longitude format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     "wrongLongitudeFormat",
+//     testHutPoint1.altitude
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong altitude format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//     "wrongAltitudeFormat"
+//   );
+// });
+
+// /*****************************************************************************************************
+//  *              GET /api/huts/:hutId
+//  *****************************************************************************************************/
+// describe("GET /api/huts/:hutId", function () {
+//   /* Test Setup */
+//   this.beforeAll(async () => {
+//     await Utils.clearAll();
+//     await Promise.all([
+//       PersistentManager.store(User.tableName, testUserLocalGuide),
+//       PersistentManager.store(User.tableName, testUserHiker),
+//     ]);
+//     await Promise.all([
+//       PersistentManager.store(Point.tableName, testHutPoint1),
+//       PersistentManager.store(Point.tableName, testHutPoint2),
+//       PersistentManager.store(Point.tableName, testHutPoint3),
+//     ]);
+//     await Promise.all([
+//       PersistentManager.store(Hut.tableName, testHut1),
+//       PersistentManager.store(Hut.tableName, testHut2),
+//       PersistentManager.store(Hut.tableName, testHut3),
+//     ]);
+//   });
+
+//   /* Test Teardown */
+//   this.afterAll(async () => {
+//     await Utils.clearAll();
+//   });
+
+//   Utils.getOneHut(agent, "return the hut", 200, credentialsHiker);
+//   Utils.getOneHut(
+//     agent,
+//     "return 401 because of not authenticated user",
+//     401,
+//     wrongCredentials
+//   );
+//   Utils.getOneHut(
+//     agent,
+//     "return 401 because of not authorized user",
+//     401,
+//     credentialsLocalGuide
+//   );
+// });
+
+// /*****************************************************************************************************
+//  *              GET /api/huts/:hutId
+//  *****************************************************************************************************/
+// describe("GET /api/huts/:hutId", function () {
+//   /* Test Setup */
+//   this.beforeAll(async () => {
+//     await Utils.clearAll();
+//     await Promise.all([
+//       PersistentManager.store(User.tableName, testUserLocalGuide),
+//       PersistentManager.store(User.tableName, testUserHiker),
+//     ]);
+//     await Promise.all([
+//       PersistentManager.store(Point.tableName, testHutPoint1),
+//       PersistentManager.store(Point.tableName, testHutPoint2),
+//       PersistentManager.store(Point.tableName, testHutPoint3),
+//     ]);
+//     await Promise.all([
+//       PersistentManager.store(Hut.tableName, testHut1),
+//       PersistentManager.store(Hut.tableName, testHut2),
+//       PersistentManager.store(Hut.tableName, testHut3),
+//     ]);
+//   });
+
+//   /* Test Teardown */
+//   this.afterAll(async () => {
+//     await Utils.clearAll();
+//   });
+
+//   Utils.getOneHut(agent, "return the hut", 200, credentialsHiker);
+//   Utils.getOneHut(
+//     agent,
+//     "return 401 because of not authenticated user",
+//     401,
+//     wrongCredentials
+//   );
+//   Utils.getOneHut(
+//     agent,
+//     "return 401 because of not authorized user",
+//     401,
+//     credentialsLocalGuide
+//   );
+// });
+
+
+// /*****************************************************************************************************
+// *              POST /api/huts
+// *****************************************************************************************************/
+// describe("POST /api/huts", function () {
+// 	/* Test Setup */
+// 	this.beforeAll(async () => {
+// 		await Utils.clearAll();
+// 		await Promise.all([
+// 			PersistentManager.store(User.tableName, testUserLocalGuide),
+// 			PersistentManager.store(User.tableName, testUserHiker)
+// 		]);
+// 	});
+
+// 	/* Test Teardown */
+// 	this.afterAll(async () => {
+// 		await Utils.clearAll();
+// 	});
+
+// 	Utils.postHut(agent, "post a hut", 201, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 401 because of not authorized user", 401, credentialsHiker, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong hutName format", 422, credentialsLocalGuide, 1, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong city format", 422, credentialsLocalGuide, testHut1.hutName, "wrongCityFormat", testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong province format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, "wrongProvinceFormat", testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong region format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, "wrongRegionFormat", testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong numOfBeds format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, "wrongNumOfBedsFormat", testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong cost format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, "wrongCostFormat", testHutPoint1.latitude, testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong latitude format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, "wrongLatitudeFormat", testHutPoint1.longitude, testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong longitude format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, "wrongLongitudeFormat", testHutPoint1.altitude);
+// 	Utils.postHut(agent, "return 422 because of wrong altitude format", 422, credentialsLocalGuide, testHut1.hutName, testHut1.city, testHut1.province, testHut1.region, testHut1.numOfBeds, testHut1.cost, testHutPoint1.latitude, testHutPoint1.longitude, "wrongAltitudeFormat");
+// });
 
 
 /*****************************************************************************************************
@@ -94,17 +377,18 @@ describe("GET /api/huts", function () {
 });
 
 
-/*****************************************************************************************************
-*              Other tests
-*****************************************************************************************************/
-describe("Other tests", function () {
-	/* Test Setup */
-	this.beforeAll(async () => {
-		await Utils.clearAll();
-	});
 
-	/* Test Teardown */
-	this.afterAll(async () => {
-		await Utils.clearAll();
-	});
+/*****************************************************************************************************
+ *              Other tests
+ *****************************************************************************************************/
+describe("Other tests", function () {
+  /* Test Setup */
+  this.beforeAll(async () => {
+    await Utils.clearAll();
+  });
+
+  /* Test Teardown */
+  this.afterAll(async () => {
+    await Utils.clearAll();
+  });
 });

@@ -24,7 +24,6 @@ if (process.env.NODE_ENV === "test") {
 }
 
 const authRouter = require("./routes/auth.router");
-
 const hikeRouter = require("./routes/hike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
@@ -44,7 +43,7 @@ app.use(logger("dev"));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
 const corsOptions = {
-  origin: `http://localhost:${process.env.CLIENT_PORT}`,
+  origin: `http://localhost:3000`,
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -62,9 +61,10 @@ app.use(session({
 }))
 
 // Creating the session
+//app.use(express.cookieParser('your secret option here'));
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(passport.authenticate("session"));
+app.use(passport.authenticate("session"));
 
 // Setting up server routers
 if (process.env.NODE_ENV === "test")

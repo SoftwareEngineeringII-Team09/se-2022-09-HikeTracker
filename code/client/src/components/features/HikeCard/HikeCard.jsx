@@ -29,7 +29,7 @@ const HikeCard = ({ hike }) => {
                     </div>
                     <div className='d-flex flex-column'>
                         <dt>Ascent</dt>
-                        <dd className='m-0'>{hike.totalAscent} m</dd>
+                        <dd className='m-0'>{hike.ascent} m</dd>
                     </div>
                 </dl>
                 <Link to={`/browse/${hike.hikeId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>

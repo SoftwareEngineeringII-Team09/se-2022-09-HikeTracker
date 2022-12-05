@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
 
-
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
@@ -29,8 +28,8 @@ const HikeForm = () => {
         data.append('title', title);
         data.append('province', province);
         data.append('region', region);
-        data.append('city', city);
         data.append('expectedTime', expectedTime);
+        data.append('city', city);
         data.append('difficulty', difficulty);
         data.append('description', description);
 
@@ -41,10 +40,9 @@ const HikeForm = () => {
                     theme: "colored"
                 });
                 // Redirect to the newly created hike
-                navigate('/browse/' + res.hikeId);
+                navigate(`/reference-points/${res.hikeId}`);
             })
             .catch((error) => {
-                console.log(error)
                 toast.error(error.message, {
                     theme: "colored",
                 });
@@ -68,7 +66,7 @@ const HikeForm = () => {
                         <Form.Control id='title' type='text' required placeholder='Hike title' onChange={event => setTitle(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='region'>Region:</Form.Label>
+                        <Form.Label htmlFor="region">Region:</Form.Label>
                         <Form.Select id='region' required onChange={(e) => setRegion(parseInt(e.target.value))}>
                             <option value={0}>Select a region</option>
                             {regions.map(region => (
@@ -97,7 +95,7 @@ const HikeForm = () => {
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='expTime'>Expected time:</Form.Label>
+                        <Form.Label>Expected time:</Form.Label>
                         <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
                     </Form.Group>
                     <Form.Group className='mb-2'>
