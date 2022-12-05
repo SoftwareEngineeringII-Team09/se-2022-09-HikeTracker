@@ -91,9 +91,9 @@ class ParkingLotManager {
    * Load all parking lots 
    * @returns a Promise with the list of all parking lots
    */
-  /* async loadAllParkingLot() {
+  async loadAllParkingLot() {
     return PersistentManager.loadAll(ParkingLot.tableName);
-  } */
+  }
 
   /**
    * Check if the parking lot exists

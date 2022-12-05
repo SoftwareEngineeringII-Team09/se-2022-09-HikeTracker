@@ -128,13 +128,13 @@ VALUES (4, "testEmergencyOperator@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f"
 
 /* Point table data */
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (1, "start point", 0, 1, NULL, 44.5742508675903, 6.98268919251859, 1757.43);
+VALUES (1, "start point", 0, 1, NULL, 44.574250867590308, 6.982689192518592, 1757.43);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (2, "end point", 0,	0, "End point of Trial to Monte Ferra",	44.5742639433593, 6.98264703154564, 1809.34);
+VALUES (2, "end point", 0,	0, "End point of Trial to Monte Ferra",	44.574263943359256, 6.982647031545639, 1809.34);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (3, "start point", 0 , 0, "Start point of Trial to Rocca Patanua", 45.1490879058838, 7.23706126213074, 1429.33806852415);
+VALUES (3, "start point", 0 , 0, "Start point of Trial to Rocca Patanua", 45.14908790588379, 7.237061262130737, 1429.33806852415);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (4, "end point", 0, 0, "End point of Trial to Rocca Patanua", 45.1782586891204, 7.21963947638869, 2345.60486124045);
+VALUES (4, "end point", 0, 0, "End point of Trial to Rocca Patanua", 45.17825868912041, 7.219639476388693, 2345.60486124045);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
 VALUES (5, "start point", 0, 1, NULL, 46.147128, 8.534505, 1265.850139);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
@@ -148,9 +148,9 @@ VALUES (9, "start point", 0, 0, "Start point of Trial to Monte Cristetto", 44.94
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
 VALUES (10, "end point", 0, 0, "End point of Trial to Monte Cristetto", 44.989283, 7.281253, 1525.3);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (11, "start point", 0, 1, NULL, 44.6154945250601, 7.05316658131778, 1500.76);
+VALUES (11, "start point", 0, 1, NULL, 44.615494525060058, 7.053166581317782, 1500.76);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (12, "end point", 0, 0, "End point of Trial to Bivacco Berardo", 44.6483429521322, 7.07200482487679, 2702.88);
+VALUES (12, "end point", 0, 0, "End point of Trial to Bivacco Berardo", 44.648342952132225, 7.072004824876785, 2702.88);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
 VALUES (13, "reference point", 0, 0, "Max elevation point of Trial to Monte Rocca Patanua", 44.6020830608904, 6.9847284257412, 3094.14);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
