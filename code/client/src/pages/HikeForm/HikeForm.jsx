@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
+import { LoadingButton } from '@components/form';
 
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
@@ -17,11 +18,13 @@ const HikeForm = () => {
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
     const [gpxFile, setGpxFile] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         const data = new FormData();
         data.append('gpx', gpxFile);
@@ -46,6 +49,9 @@ const HikeForm = () => {
                 toast.error(error.message, {
                     theme: "colored",
                 });
+            })
+            .finally(() => {
+                setLoading(true);
             });
     };
 
@@ -114,9 +120,7 @@ const HikeForm = () => {
                         <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>
                         <Form.Control id="gpxFile" type='file' required onChange={handleFileChange} />
                     </Form.Group>
-                    <Button variant='primary-light fw-bold my-3 mx-auto d-block' size='lg' type='submit' className='mb-3'>
-                        Create new hike
-                    </Button>
+                    <LoadingButton type="submit" text="Create new hike" loading={loading}/>
                 </Form>
             </div>
         </>

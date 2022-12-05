@@ -1,19 +1,20 @@
-import { Button, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from '../../services/api';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { AuthContext } from '@contexts/authContext';
 
-import { Input } from '@components/form'
+import { Input, LoadingButton } from '@components/form'
 
 const LoginForm = () => {
 
     const navigate = useNavigate();
     const [, requestLoginUpdate] = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
 
     /* Login data Validation schema */
     const validationSchema = Yup.object({
@@ -27,6 +28,7 @@ const LoginForm = () => {
     /* Login submission */
     const submitLogin = async (values, { setSubmitting }) => {
         try {
+            setLoading(true);
             await api.users.login(values);
             requestLoginUpdate(true);
             navigate('/');
@@ -36,6 +38,7 @@ const LoginForm = () => {
             });
         } finally {
             setSubmitting(false);
+            setLoading(false);
         }
     };
 
@@ -57,7 +60,7 @@ const LoginForm = () => {
                             <Input id="password" name="password" type="password" label="Password" placeholder="••••••••••••" />
                         </Col>
                         <Col xs={12} lg={7}>
-                            <Button variant="primary-dark" type="submit" size='lg' className="py-3 fw-bold w-100">Login</Button>
+                            <LoadingButton text="Login" type="submit" loading={loading} />
                         </Col>
                     </Form>
                 )}

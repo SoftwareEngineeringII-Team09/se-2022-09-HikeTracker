@@ -21,11 +21,13 @@ const HutForm = () => {
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
     const [altitude, setAltitude] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setLoading(true);
         api.huts.createHut({
             hutName: name,
             city,
@@ -36,12 +38,15 @@ const HutForm = () => {
             latitude,
             longitude,
             altitude: parseInt(altitude)
-        }).then(() => {
-            toast.success("The new hut has been correctly added", { theme: 'colored' })
-            navigate('/', { replace: true })
         })
+            .then(() => {
+                toast.success("The new hut has been correctly added", { theme: 'colored' })
+                navigate('/', { replace: true })
+            })
             .catch(err => toast.error(err, { theme: 'colored' }))
-
+            .finally(() => {
+                setLoading(true);
+            });
     }
 
     const handleClickOnMap = (point) => {
@@ -104,9 +109,7 @@ const HutForm = () => {
                         <Form.Label htmlFor="numberOfBeds">Number of beds:</Form.Label>
                         <Form.Control id="numberOfBeds" type='number' min={1} step={1} required onChange={event => setBeds(event.target.value)} />
                     </Form.Group>
-                    <Button variant='primary-light fw-bold' size='lg' type='submit' className='mb-3'>
-                        Create new hut
-                    </Button>
+                    <LoadingButton type="submit" text="Create new hut" loading={loading} />
                 </Form>
             </div>
         </>
