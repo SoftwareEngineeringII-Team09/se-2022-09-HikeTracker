@@ -209,8 +209,7 @@ class HikeManager {
         0,
         `Start point of ${title}`,
         startPoint.lat,
-        startPoint.lon,
-        startPoint.ele
+        startPoint.lon
       )
     );
 
@@ -223,8 +222,7 @@ class HikeManager {
         0,
         `End point of ${title}`,
         endPoint.lat,
-        endPoint.lon,
-        endPoint.ele
+        endPoint.lon
       )
     );
 

@@ -12,12 +12,12 @@ const Utils = require("../unit-utils");
 /* Some useful data to use for tests */
 const testGpx = "rocciamelone.gpx";
 const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
-const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.000, 10.000, 10.0);
-const testEndPoint1 = new Point( 2,"end point",0,0,"End point of testHike1", 10.010, 10.010, 20.0);
-const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHike2", 30.0, 30.0, 30.0);
-const testEndPoint2 = new Point(4, "end point", 0, 0, "End point of testHike2", 40.0, 40.0, 40.0);
-const testStartPoint3 = new Point(5, "start point", 0, 0, "Start point of testHike3", 50.0, 50.0, 50.0);
-const testEndPoint3 = new Point(6, "end point", 0, 0, "End point of testHike3", 60.0, 60.0, 60.0);
+const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.000, 10.000);
+const testEndPoint1 = new Point( 2,"end point",0,0,"End point of testHike1", 10.010, 10.010);
+const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHike2", 30.0, 30.0);
+const testEndPoint2 = new Point(4, "end point", 0, 0, "End point of testHike2", 40.0, 40.0);
+const testStartPoint3 = new Point(5, "start point", 0, 0, "Start point of testHike3", 50.0, 50.0);
+const testEndPoint3 = new Point(6, "end point", 0, 0, "End point of testHike3", 60.0, 60.0);
 const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId);
 const testHike2 = new Hike( 2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 2, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId);
 const testHike3 = new Hike( 3, "testTitle3", testUser.userId, `gpx/${testGpx}`, 3, 3, 3, 30.0, "03:03", 30.0, 30.0, "testDifficulty3", "testDescription3", testStartPoint3.pointId, testEndPoint3.pointId);
@@ -27,22 +27,22 @@ const notExistingPoint = testStartPoint1.pointId + testStartPoint2.pointId + tes
 const notExistingUser = testUser.userId + 1;
 const expectedGetAllHikesProperties = [ "hikeId", "title", "writer", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint"];
 const expectedGetHikeByIdProperties = [ "hikeId", "title", "writer", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint", "referencePoints", "track"];
-const testHutPoint1 = new Point(7, "hut", 0, 1, null, 10.001, 10.001, 10.0);
-const testHutPoint2 = new Point(8, "hut", 0, 1, null, 10.005, 10.005, 10.0);
-const testHutPoint3 = new Point(9, "hut", 0, 1, null, 10.006, 10.006, 10.0);
-const testHutPoint4 = new Point(10, "hut", 0, 1, null, 10.009, 10.009, 10.0);
-const testParkingLotPoint1 = new Point(11, "parking lot", 1, 0, null, 10.001, 10.001, 10.0);
-const testParkingLotPoint2 = new Point(12, "parking lot", 1, 0, null, 10.005, 10.005, 10.0);
-const testParkingLotPoint3 = new Point(13, "parking lot", 1, 0, null, 10.006, 10.006, 10.0);
-const testParkingLotPoint4 = new Point(14, "parking lot", 1, 0, null, 10.009, 10.009, 10.0);
-const testHut1 = new Hut(1, "testHutName1", testHutPoint1.pointId, testUser.userId, 1, 1, 1, 10, 10.0);
-const testHut2 = new Hut(2, "testHutName2", testHutPoint2.pointId, testUser.userId, 2, 2, 2, 20, 20.0);
-const testHut3 = new Hut(3, "testHutName3", testHutPoint3.pointId, testUser.userId, 3, 3, 3, 30, 30.0);
-const testHut4 = new Hut(4, "testHutName4", testHutPoint4.pointId, testUser.userId, 4, 4, 4, 40, 40.0);
-const testParkingLot1 = new ParkingLot(1, "testParkingLotName1", testParkingLotPoint1.pointId, testUser.userId);
-const testParkingLot2 = new ParkingLot(2, "testParkingLotName2", testParkingLotPoint2.pointId, testUser.userId);
-const testParkingLot3 = new ParkingLot(3, "testParkingLotName3", testParkingLotPoint3.pointId, testUser.userId);
-const testParkingLot4 = new ParkingLot(4, "testParkingLotName4", testParkingLotPoint4.pointId, testUser.userId);
+const testHutPoint1 = new Point(7, "hut", 0, 1, null, 10.001, 10.001);
+const testHutPoint2 = new Point(8, "hut", 0, 1, null, 10.005, 10.005);
+const testHutPoint3 = new Point(9, "hut", 0, 1, null, 10.006, 10.006);
+const testHutPoint4 = new Point(10, "hut", 0, 1, null, 10.009, 10.009);
+const testParkingLotPoint1 = new Point(11, "parking lot", 1, 0, null, 10.001, 10.001);
+const testParkingLotPoint2 = new Point(12, "parking lot", 1, 0, null, 10.005, 10.005);
+const testParkingLotPoint3 = new Point(13, "parking lot", 1, 0, null, 10.006, 10.006);
+const testParkingLotPoint4 = new Point(14, "parking lot", 1, 0, null, 10.009, 10.009);
+const testHut1 = new Hut(1, "testHutName1", testHutPoint1.pointId, testUser.userId, 1, 1, 1, 10, 10.0, 1000.0, "391012345678", "testHutEmail1@email.com", "www.testHutWebSite1.com");
+const testHut2 = new Hut(2, "testHutName2", testHutPoint2.pointId, testUser.userId, 2, 2, 2, 20, 20.0, 2000.0, "392012345678", "testHutEmail2@email.com", "www.testHutWebSite2.com");
+const testHut3 = new Hut(3, "testHutName3", testHutPoint3.pointId, testUser.userId, 3, 3, 3, 30, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com");
+const testHut4 = new Hut(4, "testHutName4", testHutPoint4.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail4@email.com", "www.testHutWebSite4.com");
+const testParkingLot1 = new ParkingLot(1, "testParkingLotName1", testParkingLotPoint1.pointId, testUser.userId, 1000.0, 100);
+const testParkingLot2 = new ParkingLot(2, "testParkingLotName2", testParkingLotPoint2.pointId, testUser.userId, 2000.0, 200);
+const testParkingLot3 = new ParkingLot(3, "testParkingLotName3", testParkingLotPoint3.pointId, testUser.userId, 3000.0, 300);
+const testParkingLot4 = new ParkingLot(4, "testParkingLotName4", testParkingLotPoint4.pointId, testUser.userId, 4000.0, 400);
 const testHikeHut1 = new HikeHut(testHike1.hikeId, testHut1.hutId);
 const testHikeHut2 = new HikeHut(testHike1.hikeId, testHut2.hutId);
 const testHikeHut3 = new HikeHut(testHike1.hikeId, testHut3.hutId);
@@ -476,12 +476,12 @@ describe("Test getHikeById", () => {
     "get a hike by hikeId",
     testHike1.hikeId,
     expectedGetHikeByIdProperties,
-    undefined
+    null
   );
   Utils.testGetHikeByHikeId(
     "reject because of not existing hike with hikeId = hikeId",
     notExistingHike,
-    undefined,
+    null,
     404
   );
 });
@@ -518,12 +518,12 @@ describe("Test getGpxPath", () => {
     "get a gpx path by hikeId",
     testHike1.hikeId,
     testHike1.trackPath,
-    undefined
+    null
   );
   Utils.testGetGpxPath(
     "reject because of not existing hike with hikeId = hikeId",
     notExistingHike,
-    undefined,
+    null,
     404
   );
 });
