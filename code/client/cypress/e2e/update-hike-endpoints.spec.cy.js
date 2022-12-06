@@ -1,5 +1,5 @@
 
-import { SERVER_URL } from "../../src/services/config";
+import { CLIENT_URL } from "../../src/services/config";
 
 describe('Create new hike', () => {
 
@@ -38,10 +38,8 @@ describe('Create new hike', () => {
       numOfBeds: 10,
       cost: 60.00,
       altitude: 1000,
-      // latitude: 45.19,
-      // longitude: 7.75
-      latitude: 45.17779,
-      longitude: 7.08338
+      latitude: 45.19,
+      longitude: 7.75
     });
   })
 
@@ -50,27 +48,94 @@ describe('Create new hike', () => {
     cy.server()
   });
 
-  it('Creates a new hike', () => {
+  it('Updates hike start/end points', () => {
 
+    const hikeId = 1;
     cy.loginLocalGuide();
+
+    // Intercept the requests to the server
 
     cy.route({
       method: 'GET',
       url: `**/potentialStartEndPoints`,
-    }).as('hike-potential-endpoints')
+    }).as('get-potential-endpoints');
 
     cy.route({
       method: 'PUT',
       url: `**/startEndPoints`,
-    }).as('hike-update-endpoints')
+    }).as('hike-update-endpoints');
 
-    cy.visit('/hikes/1/update-endpoints');
+    /* Navigate to start/end point update page */
+    cy.visit(`/browse/${hikeId}`);
 
-    cy.wait('@hike-update-endpoints').then((request) => {
-      expect(request.status).to.equal(201)
+    // Click on start point marker
+    cy.get('img[alt="Start marker"]').click({ force: true });
+
+    // Check popup is shown
+    cy.get('.leaflet-popup').should('have.css', 'opacity', '1');
+
+    // Click on "Update start point" link
+    cy.get('a').contains("Update Start Point").click({ force: true });
+
+    cy.url().should('eq', `${CLIENT_URL}hikes/${hikeId}/update-endpoints`);
+
+    // Wait for potential endpoints retrieval
+    cy.wait('@get-potential-endpoints').then((request) => {
+      expect(request.status).to.equal(200);
+
+      const oldStartPoint = cy.get('img[alt="Start marker"]');
+      const oldEndPoint = cy.get('img[alt="End marker"]');
+
+      /*  SET START POINT */
+
+      // Click on a potential start point
+      cy.get('img[alt="Marker"]').first().click({ force: true });
+
+      // Check update popup is shown
+      cy.get('.leaflet-popup').should('have.css', 'opacity', '1');
+
+      // Click on "Set as start point" button
+      cy.get('button').contains("Set as start point").focus().click({ force: true });
+
+
+      /*  SET END POINT */
+
+      // Click on a potential end point
+      cy.get('img[alt="Marker"]:nth-of-type(3)').first().click({ force: true });
+
+      // Check update popup is shown
+      cy.get('.leaflet-popup').should('have.css', 'opacity', '1');
+
+      // Click on "Set as end point" button
+      cy.get('button').contains("Set as end point").focus().click({ force: true });
+
+
+      // Submit endpoints update
+      cy.get('button').contains("Save points").click();
+
+      expect(cy.get('img[alt="Start marker"]')).to.not.equal(oldStartPoint);
+
+      // Wait for start point update
+      cy.wait('@hike-update-endpoints').then((xhr) => {
+
+        expect(xhr.request.body).equal({
+          newStartPoint: {
+            type: "hut",
+            id: 1
+          },
+          newEndPoint: {
+            type: "parkingLot",
+            id: 1
+          }
+        });
+        expect(xhr.status).to.equal(200);
+
+        // Check success message is shown
+        cy.get('.Toastify__toast--success').contains('Points have been successfully updated').should('be.visible');
+
+      });
+
     });
-
-    cy.url().should('include', '/browse/');
 
   });
 

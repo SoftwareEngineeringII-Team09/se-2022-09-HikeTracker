@@ -76,13 +76,13 @@ const UpdateHikeEndpoints = () => {
 
         if (!startPoint.hasOwnProperty('original'))
             points.newStartPoint = {
-                coords: startPoint.coords,
                 type: startPoint.type,
+                id: startPoint.id,
             };
         if (!endPoint.hasOwnProperty('original'))
             points.newEndPoint = {
-                coords: endPoint.coords,
                 type: endPoint.type,
+                id: endPoint.id,
             };
 
         api.hikes.updateHikeEndpoints(hikeId, points)
