@@ -35,7 +35,7 @@ describe('Create new hike', () => {
     const hikeExpectedTime = "02:30";
     const hikeDifficulty = "Tourist";
     const hikeDescription = "Test description";
-    const gpxTestTrack = "../fixtures/gpxTestTrack.gpx";
+    const gpxTestTrack = "../fixtures/tracks/gpxTestTrack.gpx";
 
     cy.get('input[id="title"]').type(hikeTitle);
     cy.get('select[id="region"]').select(hikeRegion);

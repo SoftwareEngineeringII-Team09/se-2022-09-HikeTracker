@@ -1,7 +1,7 @@
 import { Spinner, Alert, Container, Row, Col, Button } from 'react-bootstrap';
 import HikeEndpoint from '@components/features/HikeDetails/HikeEndpoint';
 import TrackMap from '@components/features/HikeDetails/TrackMap';
-import { useNavigate, useParams, NavLink } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import api from '@services/api';
@@ -25,10 +25,20 @@ const UpdateHikeEndpoints = () => {
         navigate('/browse');
 
     const updatePoint = (point) => {
-        if (point.pointType === 'start')
-            setStartPoint(point);
-        else
-            setEndPoint(point);
+        const updateFunction = point.pointType === 'start' ? setStartPoint : setEndPoint;
+        updateFunction((oldPoint) => {
+            // Add point to potentialPoints if it was the original one (to put back things as they were)
+            if (oldPoint && oldPoint.hasOwnProperty('original')) {
+                oldPoint.name = `Old ${oldPoint.pointType} point`;
+                setPotentialPoints(potentialPoints => [...potentialPoints, {...oldPoint, potential: true}]);
+            }
+            // Remove point from potentialPoints if it is the original one (avoid having it twice on the map)
+            if (point.hasOwnProperty('original')) {
+                point.name = `${oldPoint.pointType.charAt(0).toUpperCase() + oldPoint.pointType.slice(1)} point`;
+                setPotentialPoints(potentialPoints => potentialPoints.filter(p => !p.potential || point.pointType !== p.pointType));
+            }
+            return point;
+        });
     };
 
     useEffect(() => {
@@ -51,6 +61,14 @@ const UpdateHikeEndpoints = () => {
                     /* Set initial start/end points */
                     results[0].startPoint.original = true;
                     results[0].endPoint.original = true;
+                    results[0].startPoint.pointType = 'start';
+                    results[0].endPoint.pointType = 'end';
+                    results[0].startPoint.updatePoint = updatePoint;
+                    results[0].endPoint.updatePoint = updatePoint;
+                    if (!results[0].startPoint.name)
+                        results[0].startPoint.name = "Start point";
+                    if (!results[0].endPoint.name)
+                        results[0].endPoint.name = "End point";
                     setStartPoint(results[0].startPoint);
                     setEndPoint(results[0].endPoint);
                 })
@@ -126,7 +144,7 @@ const UpdateHikeEndpoints = () => {
                     <Button variant="primary-dark" size='lg' className="py-3 fw-bold w-100 my-3" onClick={savePoints} disabled={loadingUpdate}>
                         {loadingUpdate ? <Spinner /> : "Save points"}
                     </Button>
-                    <NavLink className='d-block mt-3 text-center' onClick={() => navigate(`/browse/${hikeId}`)}>Return to hike details</NavLink>
+                    <Link className='d-block mt-3 text-center' to={`/browse/${hikeId}`}>Return to hike details</Link>
                 </Col>
             </Row>
         </Container>

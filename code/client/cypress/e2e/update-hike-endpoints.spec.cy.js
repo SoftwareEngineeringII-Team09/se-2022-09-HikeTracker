@@ -3,49 +3,41 @@ import { CLIENT_URL } from "../../src/services/config";
 
 describe('Create new hike', () => {
 
+  let firstLatitude, firstLongitude, firstName, lastLatitude, lastLongitude, lastName;
+
   before(() => {
     // Reset the database prior to every test
-    cy.clearAll()
+    cy.clearAll();
     // Create Local Guide user
-    cy.addLocalGuide()
+    cy.addLocalGuide();
     // Login as Local Guide
     cy.loginLocalGuide();
     // Create a hike
-    cy.fixture('../fixtures/gpxTestTrack.gpx').then((gpx) => {
-      cy.addHike({
-        title: "Test Hike",
-        region: 1,
-        province: 2,
-        city: 3,
-        expTime: "2:30",
-        difficulty: "Hiker",
-        description: "Test description",
-        gpx: new File([gpx], "gpxTestTrack.gpx")
+    cy.fixture('../fixtures/tracks/gpxTestTrack.gpx').then((gpx) => {
+      cy.fixture('../fixtures/hikes/hike1.json').then((hike) => {
+        hike.gpx = new File([gpx], "gpxTestTrack.gpx");
+        cy.addHike(hike);
       });
     });
     // Create parking lot clost to start point
-    cy.addParkingLot({
-      parkingLotName: "Test Parking Lot",
-      latitude: 45.17,
-      longitude: 7.085
+    cy.fixture('../fixtures/parkingLots/parkingLot1.json').then((parkingLot) => {
+      cy.addParkingLot(parkingLot);
+      firstLatitude = parkingLot.latitude;
+      firstLongitude = parkingLot.longitude;
+      firstName = parkingLot.parkingLotName;
     });
     // Create Hut close to end point
-    cy.addHut({
-      hutName: "Test Hut",
-      city: 1,
-      province: 1,
-      region: 1,
-      numOfBeds: 10,
-      cost: 60.00,
-      altitude: 1000,
-      latitude: 45.19,
-      longitude: 7.75
+    cy.fixture('../fixtures/huts/hut1.json').then((hut) => {
+      cy.addHut(hut);
+      lastLatitude = hut.latitude;
+      lastLongitude = hut.longitude;
+      lastName = hut.hutName;
     });
-  })
+  });
 
   beforeEach(() => {
     // Intercept the request to the server
-    cy.server()
+    cy.server();
   });
 
   it('Updates hike start/end points', () => {
@@ -54,6 +46,10 @@ describe('Create new hike', () => {
     cy.loginLocalGuide();
 
     // Intercept the requests to the server
+    cy.route({
+      method: 'GET',
+      url: `**/hikes/**`,
+    }).as('get-hike-details');
 
     cy.route({
       method: 'GET',
@@ -79,6 +75,8 @@ describe('Create new hike', () => {
 
     cy.url().should('eq', `${CLIENT_URL}hikes/${hikeId}/update-endpoints`);
 
+    cy.wait('@get-hike-details').then(() => {});
+
     // Wait for potential endpoints retrieval
     cy.wait('@get-potential-endpoints').then((request) => {
       expect(request.status).to.equal(200);
@@ -97,11 +95,14 @@ describe('Create new hike', () => {
       // Click on "Set as start point" button
       cy.get('button').contains("Set as start point").focus().click({ force: true });
 
+      // Check UI shows new start point
+      cy.contains(`Latitude: ${firstLatitude}`);
+      cy.contains(`Longitude: ${firstLongitude}`);
 
       /*  SET END POINT */
 
       // Click on a potential end point
-      cy.get('img[alt="Marker"]:nth-of-type(3)').first().click({ force: true });
+      cy.get('img[alt="Marker"]:nth-of-type(2)').first().click({ force: true });
 
       // Check update popup is shown
       cy.get('.leaflet-popup').should('have.css', 'opacity', '1');
@@ -109,29 +110,42 @@ describe('Create new hike', () => {
       // Click on "Set as end point" button
       cy.get('button').contains("Set as end point").focus().click({ force: true });
 
+      // Check UI shows new start point
+      cy.contains(`Latitude: ${lastLatitude}`);
+      cy.contains(`Longitude: ${lastLongitude}`);
+
+      cy.wait('@get-hike-details').then(() => {});
 
       // Submit endpoints update
       cy.get('button').contains("Save points").click();
 
+      // verify markes are updated
       expect(cy.get('img[alt="Start marker"]')).to.not.equal(oldStartPoint);
+      expect(cy.get('img[alt="End marker"]')).to.not.equal(oldEndPoint);
 
       // Wait for start point update
       cy.wait('@hike-update-endpoints').then((xhr) => {
 
-        expect(xhr.request.body).equal({
-          newStartPoint: {
-            type: "hut",
-            id: 1
-          },
-          newEndPoint: {
-            type: "parking lot",
-            id: 1
-          }
+        const expectedBody = {
+          newStartPoint: { type: 'parking lot', id: 1 },
+          newEndPoint: { type: 'hut', id: 1 }
+        };
+
+        Object.keys(expectedBody).forEach(key => {
+          expect(expectedBody[key]).to.deep.eq(xhr.request.body[key]);
         });
-        expect(xhr.status).to.equal(200);
+        
+        expect(Object.keys(expectedBody).length).to.eq(Object.keys(xhr.request.body).length);
+
+        expect(xhr.status).to.equal(201);
 
         // Check success message is shown
         cy.get('.Toastify__toast--success').contains('Points have been successfully updated').should('be.visible');
+
+        // Check the new updated is retrieved from the server
+        cy.wait('@get-hike-details').then((request) => {
+          expect(request.status).to.equal(200);
+        });
 
       });
 

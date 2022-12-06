@@ -11,12 +11,10 @@ jest.mock('../../services/api');
 jest.mock("axios");
 
 var mockHikeId = 1;
-const mockedUseNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useParams: () => ({ hikeId: mockHikeId }),
-    useNavigate: () => mockedUseNavigate
 }));
 
 jest.mock('react-toastify', () => {
@@ -152,7 +150,7 @@ describe("<UpdateHikeEndpoints />", () => {
 
     });
 
-    it("Returns to hike details", async () => {
+    it("Links to the hike details", async () => {
         const route = `/hikes/${mockHikeId}/update-endpoints`;
         const history = createMemoryHistory({ initialEntries: [route] });
 
@@ -171,14 +169,7 @@ describe("<UpdateHikeEndpoints />", () => {
         );
 
         const returnToHikeDetails = await screen.findByRole("link", { name: "Return to hike details" });
-        console.log(returnToHikeDetails);
-        await userEvent.click(returnToHikeDetails);
-
-        /* Check the user is redirected to hike details */
-        await waitFor(() => {
-            expect(mockedUseNavigate).toHaveBeenCalledTimes(1);
-            expect(mockedUseNavigate).toHaveBeenCalledWith('/browse/1');
-        });
+        expect(returnToHikeDetails).toHaveAttribute("href", `/browse/${mockHikeId}`);
     });
 
     it("Shows error message if something goes wrong during update", async () => {
@@ -241,14 +232,16 @@ describe("<UpdateHikeEndpoints />", () => {
                 {
                     name: "Start point name",
                     coords: [1, 2],
-                    type: "Parking Lot"
+                    type: "Parking Lot",
+                    id: 3
                 }
             ],
             potentialEndPoints: [
                 {
                     name: "End point name",
                     coords: [3, 4],
-                    type: "Hut"
+                    type: "Hut",
+                    id: 1
                 }
             ]
         });
@@ -274,17 +267,11 @@ describe("<UpdateHikeEndpoints />", () => {
             expect(api.hikes.updateHikeEndpoints).toHaveBeenCalledTimes(1);
             expect(api.hikes.updateHikeEndpoints).toHaveBeenCalledWith(mockHikeId, {
                 "newStartPoint": {
-                    "coords": [
-                        1,
-                        2,
-                    ],
+                    id: 3,
                     type: "Parking Lot"
                 },
                 "newEndPoint": {
-                    "coords": [
-                        3,
-                        4,
-                    ],
+                    id: 1,
                     type: "Hut"
                 },
             });
