@@ -3,7 +3,7 @@ import { CLIENT_URL } from "../../src/services/config";
 
 describe('Create new hike', () => {
 
-  let firstLatitude, firstLongitude, firstName, lastLatitude, lastLongitude, lastName;
+  let firstLatitude, firstLongitude, lastLatitude, lastLongitude;
 
   before(() => {
     // Reset the database prior to every test
@@ -24,14 +24,12 @@ describe('Create new hike', () => {
       cy.addParkingLot(parkingLot);
       firstLatitude = parkingLot.latitude;
       firstLongitude = parkingLot.longitude;
-      firstName = parkingLot.parkingLotName;
     });
     // Create Hut close to end point
     cy.fixture('../fixtures/huts/hut1.json').then((hut) => {
       cy.addHut(hut);
       lastLatitude = hut.latitude;
       lastLongitude = hut.longitude;
-      lastName = hut.hutName;
     });
   });
 

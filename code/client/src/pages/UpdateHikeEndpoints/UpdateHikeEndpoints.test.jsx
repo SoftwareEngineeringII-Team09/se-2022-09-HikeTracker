@@ -10,7 +10,7 @@ import api from '@services/api';
 jest.mock('../../services/api');
 jest.mock("axios");
 
-var mockHikeId = 1;
+let mockHikeId = 1;
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
