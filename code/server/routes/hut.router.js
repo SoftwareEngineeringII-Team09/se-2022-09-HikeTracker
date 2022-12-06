@@ -20,6 +20,9 @@ router.post(
   body("latitude").isFloat({ min: 0 }),
   body("longitude").isFloat({ min: 0 }),
   body("altitude").isFloat({ min: 0 }),
+  body("phone").isString(),
+  body("email").isEmail(),
+  body("website").optional().isString(),
   async (req, res) => {
     const writerId = req.user.userId;
     try {
@@ -37,7 +40,10 @@ router.post(
         req.body.cost,
         req.body.latitude,
         req.body.longitude,
-        req.body.altitude
+        req.body.altitude,
+        req.body.phone,
+        req.body.email,
+        req.body.website ?? null
       );
       return res.status(201).end();
     } catch (exception) {
@@ -59,7 +65,6 @@ router.get(
       const hikes = await HutManager.getAllHuts();
       return res.status(200).json(hikes);
     } catch (exception) {
-      console.log(exception);
       const errorCode = exception.code ?? 500;
       const errorMessage = exception.result ?? "Something went wrong, try again";
       return res.status(errorCode).json({ error: errorMessage });
@@ -75,10 +80,8 @@ router.get(
     try {
       const hutId = req.params.hutId;
       const hut = await HutManager.getHutById(hutId);
-      //console.log(hut);
       return res.status(200).json(hut);
     } catch (exception) {
-      console.log(exception);
       const errorCode = exception.code ?? 500;
       const errorMessage =
         exception.result ?? "Something went wrong, try again";

@@ -13,7 +13,8 @@ router.post("/",
   body("parkingLotName").isString(),
   body("latitude").isFloat({ min: 0 }),
   body("longitude").isFloat({ min: 0 }),
-  // body("altitude").isFloat({ min: 0 }),
+  body("altitude").optional().isFloat({ min: 0 }),
+  body("capacity").isInt({ min: 0 }),
   async (req, res) => {
     const writerId = req.user.userId;
     try {
@@ -27,7 +28,8 @@ router.post("/",
         req.body.parkingLotName,
         req.body.latitude,
         req.body.longitude,
-        2000.0
+        req.body.altitude ?? null,
+        req.body.capacity
       );
       return res.status(201).end();
     } catch (exception) {

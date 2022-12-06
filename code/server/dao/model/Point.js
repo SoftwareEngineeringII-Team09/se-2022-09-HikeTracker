@@ -10,8 +10,7 @@ class Point {
     hut,
     nameOfLocation,
     latitude,
-    longitude,
-    altitude
+    longitude
   ) {
     this.pointId = pointId;
     this.type = type;
@@ -20,7 +19,6 @@ class Point {
     this.nameOfLocation = nameOfLocation;
     this.latitude = latitude;
     this.longitude = longitude;
-    this.altitude = altitude;
   }
 }
 

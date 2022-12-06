@@ -142,7 +142,8 @@ class ParkingLotManager {
     parkingLotName,
     latitude,
     longitude,
-    altitude
+    altitude,
+    capacity
   ) {
     // Defining parking lot point
     const newPoint = new Point(
@@ -152,8 +153,7 @@ class ParkingLotManager {
       0,
       null,
       latitude,
-      longitude,
-      2000.0
+      longitude
     );
     const newPointId = await PointManager.storePoint(newPoint);
 
@@ -162,7 +162,9 @@ class ParkingLotManager {
       null,
       parkingLotName,
       newPointId,
-      writerId
+      writerId,
+      altitude,
+      capacity
     ); 
 
     return this.storeParkingLot(newParkingLot);
