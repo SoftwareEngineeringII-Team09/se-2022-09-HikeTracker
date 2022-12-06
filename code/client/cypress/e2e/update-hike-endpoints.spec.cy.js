@@ -124,7 +124,7 @@ describe('Create new hike', () => {
             id: 1
           },
           newEndPoint: {
-            type: "parkingLot",
+            type: "parking lot",
             id: 1
           }
         });

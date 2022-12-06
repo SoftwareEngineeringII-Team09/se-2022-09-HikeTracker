@@ -5,6 +5,7 @@ const gpxParser = require("gpxparser");
 const geodist = require('geodist')
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
+const {lastIndexOfRegex} = require('index-of-regex');
 const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
@@ -14,8 +15,6 @@ const PointManager = require("./PointManager");
 const ParkingLotManager = require("./ParkingLotManager");
 const HutManager = require("./HutManager");
 const HikeRefPointManager = require("./HikeRefPointManager");
-const HikeHutManager = require("./HikeHutManager");
-const HikeParkingLotManager = require("./HikeParkingLotManager");
 
 dayjs.extend(duration);
 const gpx = new gpxParser();
@@ -416,50 +415,36 @@ class HikeManager {
 
   // Return the list of potential start and end points for a given hike
   async getPotentialStartEndPoints(hikeId) {
-    const maxDistance = 1.0;
+    const maxDistance = 5.0;
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const startPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
     const endPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
-    let potentialStartPointHuts = await HikeHutManager.loadAllByAttributeHikeHut("hikeId", hikeId).then(hikeHuts => hikeHuts.map(hh => { return { hutId: hh.hutId } }));
-    let potentialEndPointHuts = potentialStartPointHuts;
-    let potentialStartPointParkingLots = await HikeParkingLotManager.loadAllByAttributeHikeParkingLot("hikeId", hikeId).then(hikeParkingLots => hikeParkingLots.map(hpl => { return { parkingLotId: hpl.parkingLotId } }));
-    let potentialEndPointParkingLots = potentialStartPointParkingLots;
+    let potentialStartEndPointHuts = await HutManager.loadAllHut(); 
+    let potentialStartEndPointParkingLots = await ParkingLotManager.loadAllParkingLot();
 
-    // Creating an asynchronous filter  
+    // Asynchronous filter use to filter huts and parking lots  
     const asyncFilter = async (array, predicate) => {
       const results = await Promise.all(array.map(predicate));
       return array.filter((_v, index) => results[index]);
     }
 
-    // Filtering huts that have pointId = startPoint.pointId
-    potentialStartPointHuts = await asyncFilter(potentialStartPointHuts, async (psph) => {
+    // Filtering huts that have pointId = startPoint.pointId or pointId = endPoint.pointId
+    potentialStartEndPointHuts = await asyncFilter(potentialStartEndPointHuts, async (psph) => {
       const hutPointId = await HutManager.loadOneByAttributeHut("hutId", psph.hutId).then(h => h.pointId);
-      return hutPointId !== startPoint.pointId;
+      return hutPointId !== startPoint.pointId && hutPointId !== endPoint.pointId;
     });
 
-    // Filtering parkingLots that have pointId = startPoint.pointId
-    potentialStartPointParkingLots = await asyncFilter(potentialStartPointParkingLots, async (psppl) => {
+    // Filtering parkingLots that have pointId = startPoint.pointId or pointId = startPoint.pointId
+    potentialStartEndPointParkingLots = await asyncFilter(potentialStartEndPointParkingLots, async (psppl) => {
       const parkingLotPointId = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", psppl.parkingLotId).then(pl => pl.pointId);
-      return parkingLotPointId !== startPoint.pointId;
+      return parkingLotPointId !== startPoint.pointId && parkingLotPointId !== endPoint.pointId;
     });
 
-    // Filtering huts that have pointId = endPoint.pointId
-    potentialEndPointHuts = await asyncFilter(potentialEndPointHuts, async (peph) => {
-      const hutPointId = await HutManager.loadOneByAttributeHut("hutId", peph.hutId).then(h => h.pointId);
-      return hutPointId !== endPoint.pointId;
-    });
-
-    // Filtering parkingLots that have pointId = endPoint.pointId
-    potentialEndPointParkingLots = await asyncFilter(potentialEndPointParkingLots, async (peppl) => {
-      const parkingLotPointId = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", peppl.parkingLotId).then(pl => pl.pointId);
-      return parkingLotPointId !== endPoint.pointId;
-    });
-
-    // Retrieving the list of potential start point huts with coordinates 
-    potentialStartPointHuts = await Promise.all(
-      potentialStartPointHuts.map(async (psph) => {
-        const hut = await HutManager.loadOneByAttributeHut("hutId", psph.hutId);
-        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
+    // Retrieving the list of potential start-end point huts with coordinates 
+    potentialStartEndPointHuts = await Promise.all(
+      potentialStartEndPointHuts.map(async (psph) => {
+        const hut = await HutManager.loadOneByAttributeHut("hutId", psph.hutId); 
+        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId); 
 
         return {
           type: "hut",
@@ -470,9 +455,9 @@ class HikeManager {
       })
     );
 
-    // Retrieving the list of potential start point parking lots with coordinates
-    potentialStartPointParkingLots = await Promise.all(
-      potentialStartPointParkingLots.map(async (psppl) => {
+    // Retrieving the list of potential start-end point parking lots with coordinates
+    potentialStartEndPointParkingLots = await Promise.all(
+      potentialStartEndPointParkingLots.map(async (psppl) => {
         const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", psppl.parkingLotId);
         const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
 
@@ -484,36 +469,11 @@ class HikeManager {
         };
       })
     );
-
-    // Retrieving the list of potential end point huts with coordinates 
-    potentialEndPointHuts = await Promise.all(
-      potentialEndPointHuts.map(async (peph) => {
-        const hut = await HutManager.loadOneByAttributeHut("hutId", peph.hutId);
-        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-
-        return {
-          type: "hut",
-          id: hut.hutId,
-          name: hut.hutName,
-          coords: [hutPoint.latitude, hutPoint.longitude]
-        };
-      })
-    );
-
-    // Retrieving the list of potential start point parking lots with coordinates
-    potentialEndPointParkingLots = await Promise.all(
-      potentialEndPointParkingLots.map(async (peppl) => {
-        const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", peppl.parkingLotId);
-        const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-
-        return {
-          type: "parking lot",
-          id: parkingLot.parkingLotId,
-          name: parkingLot.parkingLotName,
-          coords: [parkingLotPoint.latitude, parkingLotPoint.longitude]
-        };
-      })
-    );
+    
+    let potentialStartPointHuts = potentialStartEndPointHuts;
+    let potentialEndPointHuts = potentialStartEndPointHuts;
+    let potentialStartPointParkingLots = potentialStartEndPointParkingLots;
+    let potentialEndPointParkingLots = potentialStartEndPointParkingLots;
 
     // Filtering start point huts by distance from start point and selecting between huts that are close to both the start point and the end point 
     potentialStartPointHuts = potentialStartPointHuts.filter(psph => {
@@ -585,16 +545,19 @@ class HikeManager {
   async updateStartPoint(hikeId, newStartPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldStartPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
-
+    let newStartPointData;
+    
     // Check if the start point is a hut or a parking lot and update the hike
     if (newStartPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newStartPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
+      newStartPointData = hutPoint;
       await PointManager.updatePoint({ ...hutPoint, type: "start point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, startPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newStartPoint.type === "parking lot") {
       const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newStartPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
+      newStartPointData = parkingLotPoint;
       await PointManager.updatePoint({ ...parkingLotPoint, type: "start point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
     }
@@ -607,6 +570,13 @@ class HikeManager {
     } else if (oldStartPoint.hut) {
       await PointManager.updatePoint({ ...oldStartPoint, type: "hut" }, "pointId", oldStartPoint.pointId);
     }
+    
+    // Update GPX start point
+    const oldGpx = fs.readFileSync(hike.trackPath).toString();
+    const regex = new RegExp(/<trkpt.*>/);
+    const newTrkpt = `<trkpt let="${newStartPointData.latitude}" lon="${newStartPointData.longitude}">`;
+    const newGpx = oldGpx.replace(regex, newTrkpt);
+    fs.writeFileSync(hike.trackPath, newGpx);
 
     return Promise.resolve();
   }
@@ -615,16 +585,19 @@ class HikeManager {
   async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
+    let newEndPointData;
 
     // Check if the end point is a hut or a parking lot and update the hike
     if (newEndPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newEndPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
+      newEndPointData = hutPoint;
       await PointManager.updatePoint({ ...hutPoint, type: "end point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, endPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newEndPoint.type === "parking lot") {
       const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newEndPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
+      newEndPointData = parkingLotPoint;
       await PointManager.updatePoint({ ...parkingLotPoint, type: "end point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, endPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
     }
@@ -637,6 +610,16 @@ class HikeManager {
     } else if (oldEndPoint.hut) {
       await PointManager.updatePoint({ ...oldEndPoint, type: "hut" }, "pointId", oldEndPoint.pointId);
     }
+
+    // Update GPX end point
+    const oldGpx = fs.readFileSync(hike.trackPath).toString();
+    const regex = new RegExp(/<trkpt.*>/g);
+    const trkptMatches = oldGpx.match(regex);
+    const oldTrkptLength = trkptMatches[trkptMatches.length - 1].length;
+    const lastIndex = lastIndexOfRegex(oldGpx, regex);
+    const newTrkpt = `<trkpt let="${newEndPointData.latitude}" lon="${newEndPointData.longitude}">`;
+    const newGpx = oldGpx.substring(0, lastIndex) + newTrkpt + oldGpx.substring(lastIndex + oldTrkptLength);
+    fs.writeFileSync(hike.trackPath, newGpx);
 
     return Promise.resolve();
   }
