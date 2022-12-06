@@ -21,8 +21,8 @@ beforeEach(setup)
 
 const filters = [
     { label: "Altitude", unit: "meters", input: "Altitude" },
-    { label: "Cost per night", unit: "euros", input: "Cost per night" },
-    { label: "Number of beds", unit: "", input: "Number of beds" }
+    { label: "Cost per night", unit: "euros", input: "cost" },
+    { label: "Number of beds", unit: "", input: "beds" }
 ]
 
 describe('Specs Filter component', () => {

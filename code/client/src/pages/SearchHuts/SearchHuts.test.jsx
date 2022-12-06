@@ -38,6 +38,5 @@ describe("SearchHuts page", () => {
 
         render(<SearchHuts />, { wrapper: MemoryRouter })
         expect(api.huts.getHuts).toHaveBeenCalledTimes(1)
-        await waitFor(() => expect(screen.getByText('Search huts')).toBeInTheDocument())
     })
 })

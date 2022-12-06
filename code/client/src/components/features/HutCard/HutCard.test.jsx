@@ -12,20 +12,28 @@ jest.mock("react-bootstrap", () => {
 })
 
 const testHut = {
-    id: 0,
-    name: "name",
+    hutId: 0,
+    hutName: "name",
+    pointId: 5,
+    writerId: 0,
+    city: 103024,
+    province: 103,
+    region: 1,
     altitude: 1200,
     cost: 10,
     numOfBeds: 300
 }
 
 const expected = {
-    url: `/browse/${testHut.id}`,
+    url: `/search/${testHut.hutId}`,
     info: [
-        { label: "name", value: testHut.name },
-        { label: "altitude", value: /1200 m/i },
+        { label: "hutName", value: /name/i },
+        { label: "altitude", value: /1200.00 m/i },
         { label: "cost", value: /10 €/i },
-        { label: "numOfBeds", value: /300/i }
+        { label: "numOfBeds", value: /300/i },
+        { label: "city", value: /CRAVEGGIA/i },
+        { label: "province", value: /VERBANO-CUSIO-OSSOLA/i },
+        { label: "region", value: /PIEMONTE/i }
     ]
 }
 
