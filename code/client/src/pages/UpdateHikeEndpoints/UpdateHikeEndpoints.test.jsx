@@ -5,6 +5,7 @@ import { createMemoryHistory } from "history";
 import { Router } from 'react-router-dom';
 import { toast } from "react-toastify";
 import api from '@services/api';
+import { findRenderedComponentWithType } from 'react-dom/test-utils';
 
 /* Mocking api and libraries */
 jest.mock('../../services/api');
@@ -50,25 +51,36 @@ const mockHike = {
     }
 }
 
+function buildHistory() {
+    const route = `/hikes/${mockHikeId}/update-endpoints`;
+    const history = createMemoryHistory({ initialEntries: [route] });
+    return history;
+}
+
+function renderComponent(history) {
+    render(
+        <Router location={history.location} navigator={history}>
+            <UpdateHikeEndpoints />
+        </Router>
+    );
+}
+
+function mockApiCalls() {
+    api.hikes.updateHikeEndpoints.mockResolvedValueOnce({});
+    api.hikes.getHikeDetails.mockResolvedValue(mockHike);
+    api.hikes.getPotentialPoints.mockResolvedValue({
+        potentialStartPoints: [],
+        potentialEndPoints: []
+    });
+}
+
 describe("<UpdateHikeEndpoints />", () => {
 
     it("Correctly renders component", async () => {
 
-        const route = `/hikes/${mockHikeId}/update-endpoints`;
-        const history = createMemoryHistory({ initialEntries: [route] });
-
-        /* Mock api call */
-        api.hikes.getHikeDetails.mockResolvedValue(mockHike);
-        api.hikes.getPotentialPoints.mockResolvedValue({
-            potentialStartPoints: [],
-            potentialEndPoints: []
-        });
-
-        render(
-            <Router location={history.location} navigator={history}>
-                <UpdateHikeEndpoints />
-            </Router>
-        );
+        const history = buildHistory();
+        mockApiCalls();
+        renderComponent(history);
 
         await waitFor(() => {
             expect(screen.getByText("Test hike name")).toBeInTheDocument();
@@ -84,17 +96,11 @@ describe("<UpdateHikeEndpoints />", () => {
 
     it("Shows error message for non-existing hikes", async () => {
 
-        const route = `/hikes/${mockHikeId}/update-endpoints`;
-        const history = createMemoryHistory({ initialEntries: [route] });
+        const history = buildHistory();
         const errorMessage = "Hike not found";
 
         api.hikes.getHikeDetails.mockRejectedValue(errorMessage);
-
-        render(
-            <Router location={history.location} navigator={history}>
-                <UpdateHikeEndpoints />
-            </Router>
-        );
+        renderComponent(history);
 
         /* Check the getHikeDetails function is called */
         await waitFor(() => {
@@ -110,23 +116,9 @@ describe("<UpdateHikeEndpoints />", () => {
 
     it("Doesn't call the API if endpoints haven't been updated", async () => {
 
-        const route = `/hikes/${mockHikeId}/update-endpoints`;
-        const history = createMemoryHistory({ initialEntries: [route] });
-
-        /* Mock api call */
-        api.hikes.updateHikeEndpoints.mockResolvedValueOnce({});
-        api.hikes.getHikeDetails.mockResolvedValue(mockHike);
-        api.hikes.getPotentialPoints.mockResolvedValue({
-            potentialStartPoints: [],
-            potentialEndPoints: []
-        });
-
-        render(
-            <Router location={history.location} navigator={history}>
-                <UpdateHikeEndpoints />
-            </Router>
-        );
-
+        const history = buildHistory();
+        mockApiCalls();
+        renderComponent(history);
         const submitButton = await screen.findByRole("button", { name: "Save points" });
 
         /* Check the getHikeDetails function is called */
@@ -151,22 +143,10 @@ describe("<UpdateHikeEndpoints />", () => {
     });
 
     it("Links to the hike details", async () => {
-        const route = `/hikes/${mockHikeId}/update-endpoints`;
-        const history = createMemoryHistory({ initialEntries: [route] });
+        const history = buildHistory();
 
-        /* Mock api call */
-        api.hikes.updateHikeEndpoints.mockResolvedValueOnce({});
-        api.hikes.getHikeDetails.mockResolvedValue(mockHike);
-        api.hikes.getPotentialPoints.mockResolvedValue({
-            potentialStartPoints: [],
-            potentialEndPoints: []
-        });
-
-        render(
-            <Router location={history.location} navigator={history}>
-                <UpdateHikeEndpoints />
-            </Router>
-        );
+        mockApiCalls();
+        renderComponent(history);
 
         const returnToHikeDetails = await screen.findByRole("link", { name: "Return to hike details" });
         expect(returnToHikeDetails).toHaveAttribute("href", `/browse/${mockHikeId}`);
@@ -174,8 +154,7 @@ describe("<UpdateHikeEndpoints />", () => {
 
     it("Shows error message if something goes wrong during update", async () => {
 
-        const route = `/hikes/${mockHikeId}/update-endpoints`;
-        const history = createMemoryHistory({ initialEntries: [route] });
+        const history = buildHistory();
         const updateErrorMessage = "Error updating endpoints";
 
         /* Mock api call */
@@ -191,11 +170,7 @@ describe("<UpdateHikeEndpoints />", () => {
             potentialEndPoints: []
         });
 
-        render(
-            <Router location={history.location} navigator={history}>
-                <UpdateHikeEndpoints />
-            </Router>
-        );
+        renderComponent(history);
 
         /* Click on "Set start point" button */
         const setStartPointButton = await screen.findByRole("button", { name: "Set as start point" });
@@ -221,8 +196,7 @@ describe("<UpdateHikeEndpoints />", () => {
 
     it("Correctly updates start/end point", async () => {
 
-        const route = `/hikes/${mockHikeId}/update-endpoints`;
-        const history = createMemoryHistory({ initialEntries: [route] });
+        const history = buildHistory();
 
         /* Mock api call */
         api.hikes.updateHikeEndpoints.mockResolvedValueOnce({});
@@ -246,11 +220,7 @@ describe("<UpdateHikeEndpoints />", () => {
             ]
         });
 
-        render(
-            <Router location={history.location} navigator={history}>
-                <UpdateHikeEndpoints />
-            </Router>
-        );
+        renderComponent(history);
 
         /* Click on "Set start point" and "Set end point" buttons */
         const setStartPointButton = await screen.findByRole("button", { name: "Set as start point" });
