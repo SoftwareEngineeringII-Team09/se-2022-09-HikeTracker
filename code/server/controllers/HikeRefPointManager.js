@@ -30,7 +30,7 @@ class HikeRefPointManager {
         result: `No available refPoint with pointId = ${newHikeRefPoint.pointId}`,
       });
     }
-
+    
     return PersistentManager.store(HikeRefPoint.tableName, newHikeRefPoint);
   }
 
