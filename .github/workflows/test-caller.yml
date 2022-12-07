@@ -1,0 +1,13 @@
+name: Test Workflow Caller
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  
+jobs:
+  sonarcloud:
+    name: Sonarcloud
+    uses: ./.github/workflows/sonarcloud.yml
+    secrets: inherit
