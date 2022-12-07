@@ -34,7 +34,6 @@ jobs:
     - run: npm ci
     - run: npm test
 
-    # Cypress tests
     - name: Cypress run
       uses: cypress-io/github-action@v4.2.0
 
@@ -64,5 +63,6 @@ jobs:
     - run: npm run integration
 
   sonarcloud:
+    name: Sonarcloud
     uses: ./.github/workflows/sonarcloud.yml
     secrets: inherit
