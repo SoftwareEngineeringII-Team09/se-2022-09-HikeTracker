@@ -17,12 +17,12 @@ const notAuthorizedUser = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda
 const credentials = { username: testUser.email, password: "Password1234." };
 const wrongCredentials = { username: testUser.email, password: "wrongPassword" };
 const notAuthorizedCredentials = { username: notAuthorizedUser.email, password: "Password1234." };
-const testParkingLotPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0, 2000.0);
-const testParkingLotPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0, 2000.0);
-const testParkingLotPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0, 2000.0);
-const testParkingLot1 = new ParkingLot(1, "testName1", testParkingLotPoint1.pointId, testUser.userId);
-const testParkingLot2 = new ParkingLot(2, "testName2", testParkingLotPoint2.pointId, testUser.userId);
-const testParkingLot3 = new ParkingLot(3, "testName3", testParkingLotPoint3.pointId, testUser.userId);
+const testParkingLotPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0);
+const testParkingLotPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0);
+const testParkingLotPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0);
+const testParkingLot1 = new ParkingLot(1, "testName1", testParkingLotPoint1.pointId, testUser.userId, 1000.0, 100);
+const testParkingLot2 = new ParkingLot(2, "testName2", testParkingLotPoint2.pointId, testUser.userId, 2000.0, 200);
+const testParkingLot3 = new ParkingLot(3, "testName3", testParkingLotPoint3.pointId, testUser.userId, 3000.0, 300);
 const testParkingLots = [testParkingLot1, testParkingLot2, testParkingLot3];
 const notExistingUser = testUser.userId + 1;
 
@@ -45,13 +45,14 @@ describe("POST /api/parkingLots", function () {
 		await Utils.clearAll();
 	});
 	
-	Utils.postParkingLot(agent, "post a parking lot", 201, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong parkingLotName format", 422, credentials, 1, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong latitude format", 422, credentials, testParkingLot1.parkingLotName, "wrongLatitudeFormat", testParkingLotPoint1.longitude, testParkingLotPoint1.altitude);
-	Utils.postParkingLot(agent, "return 422 because of wrong longitude format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, "wrongLongitudeFormat", testParkingLotPoint1.altitude);
-	// Utils.postParkingLot(agent, "return 422 because of wrong altitude format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, "wrongAltitudeFormat");
+	Utils.postParkingLot(agent, "post a parking lot", 201, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLot1.altitude, testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLot1.altitude, testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLot1.altitude, testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 422 because of wrong parkingLotName format", 422, credentials, 1, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLot1.altitude, testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 422 because of wrong latitude format", 422, credentials, testParkingLot1.parkingLotName, "wrongLatitudeFormat", testParkingLotPoint1.longitude, testParkingLot1.altitude, testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 422 because of wrong longitude format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, "wrongLongitudeFormat", testParkingLot1.altitude, testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 422 because of wrong altitude format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, "wrongAltitudeFormat", testParkingLot1.capacity);
+	Utils.postParkingLot(agent, "return 422 because of wrong capacity format", 422, credentials, testParkingLot1.parkingLotName, testParkingLotPoint1.latitude, testParkingLotPoint1.longitude, testParkingLot1.altitude, "wrongCapacityFormat");
 });
 
 

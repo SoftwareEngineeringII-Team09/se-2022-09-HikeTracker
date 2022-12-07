@@ -5,9 +5,9 @@ const Utils = require("../unit-utils");
 
 /* Some useful data to use for tests */
 const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
-const testPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0, 10.0);
-const testPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0, 20.0);
-const testPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0, 30.0);
+const testPoint1 = new Point(1, "parking lot", 1, 0, null, 10.0, 10.0);
+const testPoint2 = new Point(2, "parking lot", 1, 0, null, 20.0, 20.0);
+const testPoint3 = new Point(3, "parking lot", 1, 0, null, 30.0, 30.0);
 const testPoints = [testPoint1, testPoint2, testPoint3];
 const notExistingPoint = testPoint1.pointId + testPoint2.pointId + testPoint3.pointId;
 

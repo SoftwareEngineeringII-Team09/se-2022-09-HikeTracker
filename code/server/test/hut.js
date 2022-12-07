@@ -17,12 +17,12 @@ const testUserHiker = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25
 const credentialsLocalGuide = { username: testUserLocalGuide.email, password: "Password1234." };
 const credentialsHiker = { username: testUserHiker.email, password: "Password1234." };
 const wrongCredentials = { username: testUserLocalGuide.email, password: "wrongPassword" };
-const testHutPoint1 = new Point(1, "hut", 0, 1, null, 10.0, 10.0, 10.0);
-const testHutPoint2 = new Point(2, "hut", 0, 1, null, 20.0, 20.0, 20.0);
-const testHutPoint3 = new Point(3, "hut", 0, 1, null, 30.0, 30.0, 30.0);
-const testHut1 = new Hut(1, "testName1", testHutPoint1.pointId, testUserLocalGuide.userId, 1, 1, 1, 1, 10.0);
-const testHut2 = new Hut(2, "testName2", testHutPoint2.pointId, testUserLocalGuide.userId, 2, 2, 2, 2, 20.0);
-const testHut3 = new Hut(3, "testName3", testHutPoint3.pointId, testUserLocalGuide.userId, 3, 3, 3, 3, 30.0);
+const testHutPoint1 = new Point(1, "hut", 0, 1, null, 10.0, 10.0);
+const testHutPoint2 = new Point(2, "hut", 0, 1, null, 20.0, 20.0);
+const testHutPoint3 = new Point(3, "hut", 0, 1, null, 30.0, 30.0);
+const testHut1 = new Hut(1, "testName1", testHutPoint1.pointId, testUserLocalGuide.userId, 1, 1, 1, 1, 10.0, 1000.0, "391012345678", "testHutEmail1@email.com", "www.testHutWebSite1.com");
+const testHut2 = new Hut(2, "testName2", testHutPoint2.pointId, testUserLocalGuide.userId, 2, 2, 2, 2, 20.0, 2000.0, "392012345678", "testHutEmail2@email.com", "www.testHutWebSite2.com");
+const testHut3 = new Hut(3, "testName3", testHutPoint3.pointId, testUserLocalGuide.userId, 3, 3, 3, 3, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com");
 const testHuts = [testHut1, testHut2, testHut3];
 const notExistingUser = testUserLocalGuide.userId + 1;
 
@@ -69,7 +69,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -84,7 +87,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -99,7 +105,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -114,7 +123,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -129,7 +141,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -144,7 +159,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -159,7 +177,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -174,7 +195,10 @@ describe("POST /api/huts/", function () {
 //     "wrongCostFormat",
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -189,7 +213,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     "wrongLatitudeFormat",
 //     testHutPoint1.longitude,
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -204,7 +231,10 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     "wrongLongitudeFormat",
-//     testHutPoint1.altitude
+//		 testHut1.altitude,
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
 //   );
 //   Utils.postHut(
 //     agent,
@@ -219,7 +249,64 @@ describe("POST /api/huts/", function () {
 //     testHut1.cost,
 //     testHutPoint1.latitude,
 //     testHutPoint1.longitude,
-//     "wrongAltitudeFormat"
+//		 "wrongAltitudeFormat",
+//		 testHut1.phone,
+//		 testHut1.email,
+//     testHut1.website
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong phoe format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//		 "wrongAltitudeFormat",
+//		 1,
+//		 testHut1.email,
+//     testHut1.website
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong email format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//		 "wrongAltitudeFormat",
+//		 testHut1.phone,
+//		 1,
+//     testHut1.website
+//   );
+//   Utils.postHut(
+//     agent,
+//     "return 422 because of wrong website format",
+//     422,
+//     testUserLocalGuide.userId,
+//     testHut1.hutName,
+//     testHut1.city,
+//     testHut1.province,
+//     testHut1.region,
+//     testHut1.numOfBeds,
+//     testHut1.cost,
+//     testHutPoint1.latitude,
+//     testHutPoint1.longitude,
+//		 "wrongAltitudeFormat",
+//		 testHut1.phone,
+//		 testHut1.email,
+//     1
 //   );
 });
 

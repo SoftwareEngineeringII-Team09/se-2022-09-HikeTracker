@@ -15,6 +15,7 @@ const PointManager = require("./PointManager");
 const ParkingLotManager = require("./ParkingLotManager");
 const HutManager = require("./HutManager");
 const HikeRefPointManager = require("./HikeRefPointManager");
+const HikeHutManager = require("./HikeHutManager");
 
 dayjs.extend(duration);
 const gpx = new gpxParser();
@@ -209,8 +210,7 @@ class HikeManager {
         0,
         `Start point of ${title}`,
         startPoint.lat,
-        startPoint.lon,
-        startPoint.ele
+        startPoint.lon
       )
     );
 
@@ -223,8 +223,7 @@ class HikeManager {
         0,
         `End point of ${title}`,
         endPoint.lat,
-        endPoint.lon,
-        endPoint.ele
+        endPoint.lon
       )
     );
 
@@ -270,7 +269,10 @@ class HikeManager {
         const hike = {
           hikeId: h.hikeId,
           title: h.title,
-          writer: `${writer.firstname} ${writer.lastname}`,
+          writer: {
+            writerId: writer.userId,
+            writerName: `${writer.firstname} ${writer.lastname}`, 
+          },
           city: h.city,
           province: h.province,
           region: h.region,
@@ -284,8 +286,8 @@ class HikeManager {
           difficulty: h.difficulty,
           description: h.description,
           startPoint: {
-            coords: [startPoint.latitude, startPoint.longitude],
-          },
+            coords: [startPoint.latitude, startPoint.longitude]
+          }
         };
 
         return hike;
@@ -354,11 +356,25 @@ class HikeManager {
           );
           return {
             name: point.nameOfLocation,
-            coords: [point.latitude, point.longitude],
+            coords: [point.latitude, point.longitude]
           };
         })
       );
     }
+
+    // Retrieving huts linked to the hike
+    let huts = await HikeHutManager.loadAllByAttributeHikeHut("hikeId", hikeId);
+    huts = await Promise.all(
+      huts.map(async (h) => {
+        const hut = await HutManager.loadOneByAttributeHut("hutId", h.hutId);
+        const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
+        return {
+          hutId: hut.hutId,
+          hutName: hut.hutName,
+          coords: [hutPoint.latitude, hutPoint.longitude] 
+        };
+      })
+    ); 
 
     // Retrieving expected time
     const expectedTime = hike.expectedTime.split(":");
@@ -376,14 +392,17 @@ class HikeManager {
     hike = {
       hikeId: hike.hikeId,
       title: hike.title,
-      writer: `${writer.firstname} ${writer.lastname}`,
+      writer: {
+        writerId: writer.userId,
+        writerName: `${writer.firstname} ${writer.lastname}`, 
+      },
       city: hike.city,
       province: hike.province,
       region: hike.region,
       length: hike.length,
       expectedTime: {
         hours: hours,
-        minutes: minutes,
+        minutes: minutes
       },
       ascent: hike.ascent,
       maxElevation: hike.maxElevation,
@@ -391,14 +410,15 @@ class HikeManager {
       description: hike.description,
       startPoint: {
         name: startPoint.nameOfLocation,
-        coords: [startPoint.latitude, startPoint.longitude],
+        coords: [startPoint.latitude, startPoint.longitude]
       },
       endPoint: {
         name: endPoint.nameOfLocation,
-        coords: [endPoint.latitude, endPoint.longitude],
+        coords: [endPoint.latitude, endPoint.longitude]
       },
+      huts: huts,
       referencePoints: referencePoints,
-      track: track,
+      track: track
     };
 
     return Promise.resolve(hike);
