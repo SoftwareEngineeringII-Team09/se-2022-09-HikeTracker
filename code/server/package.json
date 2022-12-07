@@ -49,6 +49,7 @@
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
     "check-code-coverage": "^1.10.0",
+    "cross-env": "^7.0.3",
     "jest": "^27.5.1",
     "mocha": "^9.2.2",
     "mochawesome": "^7.1.3",
@@ -56,9 +57,9 @@
   },
   "scripts": {
     "integration": "mocha test --timeout 10000 --require test/mocha.env.js --exit",
-    "test": "set NODE_ENV=test && jest --runInBand --coverage",
-    "dev": "set NODE_ENV=development && nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand --coverage",
+    "dev": "cross-env NODE_ENV=development && nodemon index.js",
     "start": "node index.js",
-    "start:test": "set NODE_ENV=test && nodemon index.js"
+    "start:test": "cross-env NODE_ENV=test node index.js"
   }
 }

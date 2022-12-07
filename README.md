@@ -189,6 +189,7 @@ Here the list of dependencies installed:
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
     "check-code-coverage": "^1.10.0",
+    "cross-env": "^7.0.3",
     "jest": "^27.5.1",
     "mocha": "^9.2.2",
     "mochawesome": "^7.1.3",

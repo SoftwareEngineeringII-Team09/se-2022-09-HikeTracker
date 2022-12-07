@@ -103,6 +103,7 @@ const UpdateHikeEndpoints = () => {
                 id: endPoint.id,
             };
 
+        console.log("UPDATE", points)
         api.hikes.updateHikeEndpoints(hikeId, points)
             .then(() => {
                 toast.success("Points have been successfully updated", { theme: "colored" });
