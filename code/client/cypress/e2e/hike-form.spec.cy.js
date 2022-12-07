@@ -17,7 +17,6 @@ describe('Create new hike', () => {
 
   it('Creates a new hike', () => {
 
-
     cy.loginLocalGuide();
 
     cy.route({
@@ -36,7 +35,7 @@ describe('Create new hike', () => {
     const hikeExpectedTime = "02:30";
     const hikeDifficulty = "Tourist";
     const hikeDescription = "Test description";
-    const gpxTestTrack = "../fixtures/gpxTestTrack.gpx";
+    const gpxTestTrack = "../fixtures/tracks/gpxTestTrack.gpx";
 
     cy.get('input[id="title"]').type(hikeTitle);
     cy.get('select[id="region"]').select(hikeRegion);
@@ -49,11 +48,10 @@ describe('Create new hike', () => {
     cy.get('button[type="submit"]').click();
 
     cy.wait('@hike-creation-request').then((request) => {
-      console.log(request)
-      expect(xhr.status).to.equal(201)
+      expect(request.status).to.equal(201)
     });
 
-    cy.url().should('include', '/browse/');
+    cy.url().should('include', '/reference-points/');
 
   });
 

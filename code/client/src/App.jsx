@@ -28,6 +28,7 @@ const App = () => {
           <Route path='/hikes' element={<Pages.HikeList />} />
           <Route path='/huts/add' element={<Pages.HutForm />} />
           <Route path='/huts' element={<Pages.HutList />} />
+          <Route path='/hikes/:hikeId/update-endpoints' element={<Pages.UpdateHikeEndpoints />} />
         </Route>
       </Route>
       <Route path='*' element={<Pages.Error />} />

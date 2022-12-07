@@ -1,8 +1,8 @@
-import { toast } from "react-toastify";
 import { Button, Col, Alert, Spinner } from 'react-bootstrap';
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from '@services/api';
 import React from 'react';
-import api from '../../services/api';
 
 const ActivateAccount = () => {
     const [searchParams] = useSearchParams();
