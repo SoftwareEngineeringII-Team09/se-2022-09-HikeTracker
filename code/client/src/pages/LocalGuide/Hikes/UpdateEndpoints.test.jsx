@@ -148,7 +148,7 @@ describe("<UpdateHikeEndpoints />", () => {
         renderComponent(history);
 
         const returnToHikeDetails = await screen.findByRole("link", { name: "Return to hike details" });
-        expect(returnToHikeDetails).toHaveAttribute("href", `/browse/${mockHikeId}`);
+        expect(returnToHikeDetails).toHaveAttribute("href", `/hikes/${mockHikeId}`);
     });
 
     it("Shows error message if something goes wrong during update", async () => {
