@@ -413,6 +413,39 @@ class HikeManager {
     return Promise.resolve(gpxPath);
   }
 
+  //Return the list of potential huts info for a given hike
+  async getPotentialHuts(hikeId){
+    const maxDiameter = 5.0;
+    // get all coor in file
+    let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
+    const gpx = new gpxParser();
+    const gpxString = fs.readFileSync(hike.trackPath).toString();
+    gpx.parse(gpxString);
+    let tracks = gpx.tracks[0].points.map((p) => [p.lat, p.lon]);
+   
+    //get all huts coordinate
+    let hutsInfo = await PointManager.loadAllByAttributePoint("hut",1);
+  
+
+    //calculate and add all possible huts in list
+    let res = new Set();
+    tracks.map(async(c) => {
+      let cx = c[0];
+      let cy = c[1];
+      hutsInfo.map((h) =>{
+        if(!res.has(h) && Math.pow((cx - h.latitude),2) + Math.pow((cy - h.longitude),2) < Math.pow(maxDiameter,2) ){          
+          res.add(h);
+        }
+      }                  
+      )     
+    }) 
+    return Array.from(res);
+    
+  }
+
+
+
+
   // Return the list of potential start and end points for a given hike
   async getPotentialStartEndPoints(hikeId) {
     const maxDistance = 5.0;

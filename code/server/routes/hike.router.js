@@ -52,8 +52,12 @@ router.post(
   }
 );
 
-// POST the list of reference points for a given hike
-router.post(
+
+
+
+
+// PUT the list of reference points for a given hike
+router.put(
   "/:hikeId/refPoints",
   auth.withAuth,
   auth.withRole(["Local Guide"]),
@@ -65,8 +69,8 @@ router.post(
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-
-      await HikeRefPointManager.defineRefPoints(
+      
+      await HikeRefPointManager.updateRefPoint(
         hikeId,
         req.body.referencePoints,
       );
@@ -164,6 +168,36 @@ router.get(
       const potentialStartEndPoints = await HikeManager.getPotentialStartEndPoints(hikeId);
 
       return res.status(200).json(potentialStartEndPoints);
+    } catch (exception) {
+      const errorCode = exception.code ?? 500;
+      const errorMessage =
+        exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
+
+// GET potential huts
+router.get(
+  "/:hikeId/linkable-huts",
+  // auth.withAuth,
+  // auth.withRole(["Local Guide"]),
+  param("hikeId")
+    .isInt({ min: 1 })
+    .toInt()
+    .withMessage("Provide a valid hikeId"),
+  async (req, res) => {
+    try {
+      // Validation of body and/or parameters
+      
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ error: errors.array()[0] });
+
+      const hikeId = req.params.hikeId;
+      const potentiaHuts = await HikeManager.getPotentialHuts(hikeId);
+    
+      return res.status(200).json(potentiaHuts);
     } catch (exception) {
       const errorCode = exception.code ?? 500;
       const errorMessage =

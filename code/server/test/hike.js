@@ -73,26 +73,26 @@ describe("POST /api/hikes", function () {
 
 
 /*****************************************************************************************************
-*              POST /api/hikes/:hikeId/refPoints
+*               /api/hikes/:hikeId/refPoints
 *****************************************************************************************************/
-// describe("POST /api/hikes/:hikeId/refPoints", function () {
-// 	/* Test Setup */
-// 	this.beforeAll(async () => {
-// 		await Utils.clearAll();
-// 		await Promise.all([
-// 			PersistentManager.store(User.tableName, testUser),
-// 			PersistentManager.store(User.tableName, notAuthorizedUser)
-// 		]);
-// 		// Add here other useful functions
-// 	});
+describe("PUT /api/hikes/:hikeId/refPoints", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
+		// Add here other useful functions
+	});
 
-// 	/* Test Teardown */
-// 	this.afterAll(async () => {
-// 		await Utils.clearAll();
-// 	});
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
 
-// 	// Add here the functions
-// });
+	// Add here the functions
+});
 
 
 /*****************************************************************************************************
