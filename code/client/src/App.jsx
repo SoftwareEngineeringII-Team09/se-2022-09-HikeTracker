@@ -24,6 +24,7 @@ const App = () => {
         <Route element={<ProtectedRoute requiredRole="Local Guide" redirectPath='/login' />}>
           <Route path='/account/hikes' element={<Pages.LocalGuide.Hikes.List />} />
           <Route path='/account/hikes/add' element={<Pages.LocalGuide.Hikes.Add />} />
+          <Route path='/account/hikes/:hikeId/update-endpoints' element={<Pages.LocalGuide.Hikes.UpdateEndpoints />} />
           <Route path='/account/reference-points/:hikeId' element={<Pages.LocalGuide.ReferencePoints.Update />} />
           <Route path='/account/huts' element={<Pages.LocalGuide.Huts.List />} />
           <Route path='/account/huts/add' element={<Pages.LocalGuide.Huts.Add />} />

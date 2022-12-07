@@ -43,7 +43,7 @@ const Hike = () => {
         return (
             <Col xs={12} xl={user.loggedIn ? 6 : 10} className={`${user.loggedIn ? "ms-auto" : "mx-auto"} my-5`}>
                 {user.loggedIn &&
-                    <HikeDetails.TrackMap start={hike.startPoint} end={hike.endPoint} track={hike.track} references={hike.referencePoints} />}
+                    <HikeDetails.TrackMap hikeId={hikeId} start={hike.startPoint} end={hike.endPoint} track={hike.track} references={hike.referencePoints} />}
                 {!user.loggedIn &&
                     <Alert variant='warning' className='mb-5'>
                         You should be an autenticated hiker to see the map and to be able to download the track as a <code style={{ color: "currentcolor" }}>.gpx</code> file

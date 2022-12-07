@@ -152,7 +152,10 @@ class HutManager {
     cost,
     latitude,
     longitude,
-    altitude
+    altitude,
+    phone,
+    email,
+    website
   ) {
     // Defining hut point
     const newPoint = new Point(
@@ -162,8 +165,7 @@ class HutManager {
       1,
       null,
       latitude,
-      longitude,
-      altitude
+      longitude
     );
     const newPointId = await PointManager.storePoint(newPoint);
 
@@ -177,7 +179,11 @@ class HutManager {
       province,
       region,
       numOfBeds,
-      cost
+      cost,
+      altitude,
+      phone,
+      email,
+      website
     );
 
     return this.storeHut(newHut);
@@ -210,7 +216,10 @@ class HutManager {
           cost: h.cost,
           latitude: hutPosition.latitude,
           longitude: hutPosition.longitude,
-          altitude: hutPosition.altitude,
+          altitude: h.altitude,
+          phone: h.phone,
+          email: h.email,
+          website: h.website,
           schedule: shceduleTime.map((s) => {
             let time = {
               day: s.day,
@@ -272,7 +281,10 @@ class HutManager {
           cost: h.cost,
           latitude: hutPosition.latitude,
           longitude: hutPosition.longitude,
-          altitude: hutPosition.altitude,
+          altitude: h.altitude,
+          phone: h.phone,
+          email: h.email,
+          website: h.website,
           schedule: shceduleTime.map((s) => {
             let time = {
               day: s.day,

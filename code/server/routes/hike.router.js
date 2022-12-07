@@ -73,7 +73,6 @@ router.post(
 
       return res.status(201).end();
     } catch (exception) {
-      console.log(exception);
       const errorCode = exception.code ?? 503;
       const errorMessage =
         exception.result ?? "Something went wrong, please try again";
@@ -86,6 +85,36 @@ router.post(
 router.get("/", async (req, res) => {
   try {
     const hikes = await HikeManager.getAllHikes();
+    return res.status(200).json(hikes);
+  } catch (exception) {
+    const errorCode = exception.code ?? 500;
+    const errorMessage = exception.result ?? "Something went wrong, try again";
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+});
+
+// GET the list of all hikes by writerId
+router.get(
+  "/writers/:writerId", 
+    auth.withAuth,
+    auth.withRole(["Local Guide"]),
+  param("writerId")
+    .isInt({ min: 1 })
+    .toInt()
+    .withMessage("Provide a valid writerId"),
+  async (req, res) => {
+  try {
+    // Validation of body and/or parameters
+    const error = validationResult(req);
+    if (!error.isEmpty())
+      return res.status(422).json({ error: error.array()[0] });
+
+    if (req.params.writerId !== req.user.userId) {
+      return res.status(401).json({ error: `The user is not authorized, :writerId ${req.params.writerId} not corresponding to actual userId ${req.user.userId}` });
+    }
+
+    const hikes = await HikeManager.getAllHikes().then(hikes => hikes.filter(h => h.writer.writerId === req.params.writerId));
+    
     return res.status(200).json(hikes);
   } catch (exception) {
     const errorCode = exception.code ?? 500;
@@ -109,6 +138,7 @@ router.get(
         return res.status(422).json({ error: errors.array()[0] });
 
       const hike = await HikeManager.getHikeById(req.params.hikeId);
+
       return res.status(200).json(hike);
     } catch (exception) {
       const errorCode = exception.code ?? 500;

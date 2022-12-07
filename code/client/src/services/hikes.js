@@ -34,6 +34,22 @@ const hikes = {
     })
   },
 
+  getPotentialPoints: (hikeId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialStartEndPoints`, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
+  updateHikeEndpoints: (hikeId, points) => {
+    return new Promise((resolve, reject) => {
+      axios.put(`${SERVER_URL}/hikes/${hikeId}/startEndPoints`, points, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
   updateReferencePoints: (hikeId, data) => {
     return new Promise((resolve, reject) => {
       axios.post(`${SERVER_URL}/hikes/${hikeId}/refPoints`, { referencePoints: data }, { withCredentials: true })

@@ -156,8 +156,7 @@ class HikeRefPointManager {
           0,
           referencePoints[i].name,
           referencePoints[i].coords[0],
-          referencePoints[i].coords[1],
-          1111
+          referencePoints[i].coords[1]
         )
       );
       console.log("defineRefPoints");
