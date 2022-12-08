@@ -1,12 +1,14 @@
-import { Button, Col, Alert, Spinner } from 'react-bootstrap';
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { Button, Col, Alert, Spinner } from 'react-bootstrap';
+
 import api from '@services/api';
-import React from 'react';
 
 const ActivateAccount = () => {
     const [searchParams] = useSearchParams();
-    const [status, setStatus] = React.useState("loading");
+    const [status, setStatus] = useState("loading");
     const userId = searchParams.get("id");
     const token = searchParams.get("token");
     const navigate = useNavigate();
@@ -35,15 +37,12 @@ const ActivateAccount = () => {
         }
     };
 
-    React.useEffect(() => {
-
+    useEffect(() => {
         /* Redirect to Home if activation token or userId are missing */
         if (!token || !userId) {
             navigate('/');
-            toast.error("There has been an error with your activtion link, please try again", {theme: 'colored'})
-        }
-
-        activateAccount();
+            toast.error("There has been an error with your activtion link, please try again", { theme: 'colored' })
+        } else activateAccount();
     }, []); // eslint-disable-line
 
     return (

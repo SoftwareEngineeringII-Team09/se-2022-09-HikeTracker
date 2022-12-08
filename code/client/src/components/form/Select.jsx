@@ -1,4 +1,4 @@
-import { Form, InputGroup } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import classNames from "classnames";
 
 import { Field, ErrorMessage, useField } from "formik";

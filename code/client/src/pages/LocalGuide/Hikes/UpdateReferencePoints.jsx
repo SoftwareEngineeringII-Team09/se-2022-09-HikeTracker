@@ -15,7 +15,7 @@ import { Input } from '@components/form'
 
 import api from '@services/api'
 
-const ReferencePoints = () => {
+const UpdateReferencePoints = () => {
     const [points, setPoints] = useState([])
     const [hike, setHike] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -51,7 +51,7 @@ const ReferencePoints = () => {
         api.hikes.updateReferencePoints(hikeId, points)
             .then(() => {
                 toast.success("Reference points have been correctly updated!", {theme: 'colored'})
-                navigate('/browse', { replace: true })
+                navigate(`/hikes/${hikeId}`, { replace: true })
             })
             .catch(err => toast.error(err, {theme: 'colored'}))
     }
@@ -132,4 +132,4 @@ const ReferencePoints = () => {
         )
 }
 
-export default ReferencePoints
+export default UpdateReferencePoints

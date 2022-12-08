@@ -1,14 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import UpdateHikeEndpoints from './UpdateHikeEndpoints';
+import UpdateEndpoints from './UpdateEndpoints';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from "history";
 import { Router } from 'react-router-dom';
 import { toast } from "react-toastify";
 import api from '@services/api';
-import { findRenderedComponentWithType } from 'react-dom/test-utils';
 
 /* Mocking api and libraries */
-jest.mock('../../services/api');
+jest.mock('@services/api');
 jest.mock("axios");
 
 let mockHikeId = 1;
@@ -60,7 +59,7 @@ function buildHistory() {
 function renderComponent(history) {
     render(
         <Router location={history.location} navigator={history}>
-            <UpdateHikeEndpoints />
+            <UpdateEndpoints />
         </Router>
     );
 }
@@ -149,7 +148,7 @@ describe("<UpdateHikeEndpoints />", () => {
         renderComponent(history);
 
         const returnToHikeDetails = await screen.findByRole("link", { name: "Return to hike details" });
-        expect(returnToHikeDetails).toHaveAttribute("href", `/browse/${mockHikeId}`);
+        expect(returnToHikeDetails).toHaveAttribute("href", `/hikes/${mockHikeId}`);
     });
 
     it("Shows error message if something goes wrong during update", async () => {

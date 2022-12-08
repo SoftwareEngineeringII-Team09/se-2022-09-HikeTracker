@@ -3,13 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { toast } from "react-toastify";
-import api from '../../services/api';
+import api from '@services/api';
 import Signup from './Signup';
 import axios from 'axios';
 import React from 'react';
 
 /* Mocking the signup api and libraries */
-jest.mock('../../services/api');
+jest.mock('@services/api');
 
 jest.mock("axios");
 

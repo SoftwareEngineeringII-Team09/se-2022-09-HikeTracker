@@ -10,25 +10,25 @@ const App = () => {
     <Routes location={location} key={location.pathname}>
       <Route element={<Layout />}>
         <Route index path='/' element={<Pages.Home />} />
-        <Route path='/browse' element={<Pages.BrowseHikes />} />
-        <Route path='/browse/:hikeId' element={<Pages.Hike />} />
+        <Route path='/hikes' element={<Pages.BrowseHikes />} />
+        <Route path='/hikes/:hikeId' element={<Pages.Hike />} />
         <Route element={<ProtectedRoute requiredRole="Hiker" redirectPath='/login' />}>
-          <Route path='/search' element={<Pages.SearchHuts />} />
-          <Route path='/search/:hutId' element={<Pages.Hut />} />
+          <Route path='/huts' element={<Pages.SearchHuts />} />
+          <Route path='/huts/:hutId' element={<Pages.Hut />} />
         </Route>
         <Route element={<ProtectedRoute requiresNoLogin={true} />}>
-          <Route path='/signup' element={<Pages.Registration />} />
-          <Route path='/login' element={<Pages.Login />} />
-          <Route path='/activate' element={<Pages.ActivateAccount />} />
+          <Route path='/signup' element={<Pages.Authentication.Signup />} />
+          <Route path='/login' element={<Pages.Authentication.Login />} />
+          <Route path='/activate' element={<Pages.Authentication.ActivateAccount />} />
         </Route>
         <Route element={<ProtectedRoute requiredRole="Local Guide" redirectPath='/login' />}>
-          <Route path='/add-parking-lot' element={<Pages.LocalGuide.AddParkingLot />} />
-          <Route path='/reference-points/:hikeId' element={<Pages.LocalGuide.ReferencePoints />} />
-          <Route path='/hikes/add' element={<Pages.HikeForm />} />
-          <Route path='/hikes' element={<Pages.HikeList />} />
-          <Route path='/huts/add' element={<Pages.HutForm />} />
-          <Route path='/huts' element={<Pages.HutList />} />
-          <Route path='/hikes/:hikeId/update-endpoints' element={<Pages.UpdateHikeEndpoints />} />
+          <Route path='/account/hikes' element={<Pages.LocalGuide.Hikes.List />} />
+          <Route path='/account/hikes/add' element={<Pages.LocalGuide.Hikes.Add />} />
+          <Route path='/account/hikes/:hikeId/update/endpoints' element={<Pages.LocalGuide.Hikes.UpdateEndpoints />} />
+          <Route path='/account/hikes/:hikeId/update/reference-points' element={<Pages.LocalGuide.Hikes.UpdateReferencePoints />} />
+          <Route path='/account/huts' element={<Pages.LocalGuide.Huts.List />} />
+          <Route path='/account/huts/add' element={<Pages.LocalGuide.Huts.Add />} />
+          <Route path='/account/parking-lots/add' element={<Pages.LocalGuide.ParkingLots.Add />} />
         </Route>
       </Route>
       <Route path='*' element={<Pages.Error />} />

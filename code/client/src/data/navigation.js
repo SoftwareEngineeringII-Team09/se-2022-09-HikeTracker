@@ -1,24 +1,24 @@
+const __DEFAULT_NAVIGATION = [
+    { label: "Browse hikes", url: "/hikes", variant: "link" }
+]
+
 const navigation = {
-    default: {
-        desktop: [
-            { label: "Browse", url: "/browse", variant: "link" },
-            { label: "Login", url: "/login", variant: "link" },
-            { label: "Create an account", url: "/signup", variant: "button" },
-        ],
-        mobile: [
-            { label: "Browse", url: "/browse" },
-            { label: "Login", url: "/login" },
-        ]
-    },
+    Visitor: [
+        { label: "Login", url: "/login", variant: "link" },
+        { label: "Create an account", url: "/signup", variant: "button" },
+    ],
     Hiker: [
-        { label: "Browse", url: "/browse", variant: "link" },
+        { label: "Search huts", url: "/huts", variant: "link" },
     ],
     LocalGuide: [
-        { label: "Browse", url: "/browse", variant: "link" },
-        { label: "Create a new hike", url: "/hikes/add" },
-        { label: "Create a new hut", url: "/huts/add" },
-        { label: "Create a new parking lot", url: "/add-parking-lot" },
+        { label: "My hikes", url: "/account/hikes" },
+        { label: "My Huts", url: "/account/huts" },
+        { label: "Create a new hike", url: "/account/hikes/add" },
+        { label: "Create a new hut", url: "/account/huts/add" },
+        { label: "Create a new parking lot", url: "/account/parking-lots/add" },
     ],
 }
 
-export default navigation
+const getNavigation = (role) => __DEFAULT_NAVIGATION.concat(navigation[role])
+
+export default getNavigation

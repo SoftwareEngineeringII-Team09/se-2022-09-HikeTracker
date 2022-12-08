@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import api from '@services/api';
 
-const UpdateHikeEndpoints = () => {
+const UpdateEndpoints = () => {
 
     // Get the hike id from the url
     const { hikeId } = useParams();
@@ -103,7 +103,6 @@ const UpdateHikeEndpoints = () => {
                 id: endPoint.id,
             };
 
-        console.log("UPDATE", points)
         api.hikes.updateHikeEndpoints(hikeId, points)
             .then(() => {
                 toast.success("Points have been successfully updated", { theme: "colored" });
@@ -145,7 +144,7 @@ const UpdateHikeEndpoints = () => {
                     <Button variant="primary-dark" size='lg' className="py-3 fw-bold w-100 my-3" onClick={savePoints} disabled={loadingUpdate}>
                         {loadingUpdate ? <Spinner /> : "Save points"}
                     </Button>
-                    <Link className='d-block mt-3 text-center' to={`/browse/${hikeId}`}>Return to hike details</Link>
+                    <Link className='d-block mt-3 text-center' to={`/hikes/${hikeId}`}>Return to hike details</Link>
                 </Col>
             </Row>
         </Container>
@@ -153,4 +152,4 @@ const UpdateHikeEndpoints = () => {
 
 };
 
-export default UpdateHikeEndpoints;
+export default UpdateEndpoints;

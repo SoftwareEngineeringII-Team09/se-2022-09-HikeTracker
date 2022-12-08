@@ -3,12 +3,12 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 const { createMemoryHistory } = require("history");
 import { toast } from "react-toastify"
-import api from '../../services/api';
+import api from '@services/api';
 
-const gpxTestTrack = require("./gpxTestTrack.gpx");
+const gpxTestTrack = require("@data/test/gpxTestTrack.gpx");
 
 /* Mocking the login api and libraries */
-jest.mock('../../services/api');
+jest.mock('@services/api');
 
 jest.mock("axios");
 
@@ -32,12 +32,12 @@ jest.mock('react-toastify', () => {
     };
 });
 
-import HikeForm from './HikeForm'
+import AddHike from './Add'
 
 describe("Page for adding new hike", () => {
 
     it("Hike form page correctly rendered", () => {
-        render(<HikeForm />, { wrapper: MemoryRouter })
+        render(<AddHike />, { wrapper: MemoryRouter })
         expect(screen.getByText("Insert hike data")).toBeInTheDocument();
     })
 
@@ -45,7 +45,7 @@ describe("Page for adding new hike", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <HikeForm />
+                <AddHike />
             </Router>
         )
 
@@ -60,7 +60,7 @@ describe("Page for adding new hike", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <HikeForm />
+                <AddHike />
             </Router>
         )
 
@@ -101,7 +101,7 @@ describe("Page for adding new hike", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <HikeForm />
+                <AddHike />
             </Router>
         )
 

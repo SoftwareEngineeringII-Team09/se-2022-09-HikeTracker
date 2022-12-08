@@ -8,7 +8,7 @@ import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
-const HikeForm = () => {
+const AddHike = () => {
     const [title, setTitle] = useState('');
     const [province, setProvince] = useState(0);
     const [city, setCity] = useState(0);
@@ -123,4 +123,4 @@ const HikeForm = () => {
     );
 }
 
-export default HikeForm;
+export default AddHike;

@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 
 import bg from '@assets/home_bg.jpg';
 
-const HikeList = () => {
+const ListHuts = () => {
     return (
         <>
             <div>
@@ -12,15 +12,15 @@ const HikeList = () => {
             </div>
             <div style={{ zIndex: 99 }} className="px-4">
                 <div className='mb-5'>
-                    <h1 className='text-white fw-black m-0 display-1'>Your hikes:</h1>
+                    <h1 className='text-white fw-black m-0 display-1'>Your huts:</h1>
                 </div>
                 <div className='mb-2 p-2 bg-light d-flex justify-content-between rounded'>
-                    <h2>My hike #1</h2>
-                    <Button>Update description</Button>
+                    <h2>My hut #1</h2>
+                    <Button>Update</Button>
                 </div>
-                <Link to="/hikes/add">
+                <Link to="/account/huts/add">
                     <Button variant='primary-light fw-bold' size='lg'>
-                        Create new hike
+                        New hut
                     </Button>
                 </Link>
             </div>
@@ -28,4 +28,4 @@ const HikeList = () => {
     );
 }
 
-export default HikeList;
+export default ListHuts;

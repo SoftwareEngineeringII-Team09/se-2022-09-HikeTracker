@@ -3,11 +3,11 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 const { createMemoryHistory } = require("history");
 
-import HutList from './HutList'
+import ListHuts from './List'
 
 describe("Hut list page", () => {
     it("Hut list page correctly rendered", () => {
-        render(<HutList />, { wrapper: MemoryRouter })
+        render(<ListHuts />, { wrapper: MemoryRouter })
         expect(screen.getByText("Your huts:")).toBeInTheDocument();
     })
 
@@ -15,11 +15,11 @@ describe("Hut list page", () => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
-                <HutList />
+                <ListHuts />
             </Router>
         )
-        expect(screen.getByRole("link")).toHaveAttribute("href", "/huts/add")
+        expect(screen.getByRole("link")).toHaveAttribute("href", "/account/huts/add")
         await userEvent.click(screen.getByRole("link"))
-        expect(history.location.pathname).toBe("/huts/add")
+        expect(history.location.pathname).toBe("/account/huts/add")
     })
 })
