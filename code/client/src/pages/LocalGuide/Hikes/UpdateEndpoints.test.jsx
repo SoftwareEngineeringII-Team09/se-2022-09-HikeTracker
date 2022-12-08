@@ -5,6 +5,7 @@ import { createMemoryHistory } from "history";
 import { Router } from 'react-router-dom';
 import { toast } from "react-toastify";
 import api from '@services/api';
+import { AuthContext } from '@contexts/authContext'
 
 /* Mocking api and libraries */
 jest.mock('@services/api');
@@ -40,6 +41,7 @@ jest.mock('react-leaflet', () => {
 const mockHike = {
     track: [],
     name: "Test hike name",
+    writer: { writerId: 1 },
     startPoint: {
         name: "Start point name",
         coords: [1, 2]
@@ -59,7 +61,9 @@ function buildHistory() {
 function renderComponent(history) {
     render(
         <Router location={history.location} navigator={history}>
-            <UpdateEndpoints />
+            <AuthContext.Provider value={[{ loggedIn: true, userId: 1 }]}>
+                <UpdateEndpoints />
+            </AuthContext.Provider>
         </Router>
     );
 }

@@ -3,7 +3,7 @@ import { AuthContext } from '@contexts/authContext';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] }) => {
+const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [], linkedHuts = [] }) => {
 
     const closePopup = () => {
         document.querySelector(".leaflet-popup-close-button")?.click();
@@ -12,6 +12,13 @@ const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] 
     return (
         <div className="track-map mb-5 mb-xl-0">
             <MapContainer center={start.coords} zoom={13} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
+                {linkedHuts.map((hut, idx) => (
+                    <Marker key={idx} position={hut.coords}>
+                        <Popup>
+                            <span className='fw-bold'>{hut.hutName}</span>
+                        </Popup>
+                    </Marker>
+                ))}
                 {references.map((ref, idx) => (
                     <Marker key={idx} position={ref.coords}>
                         <Popup>
@@ -35,14 +42,14 @@ const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] 
                             <Popup>
                                 <span className='fw-bold'>Start point</span>
                                 <p className='m-0'>{start.name}</p>
-                                {user.role === 'Local Guide' && hikeId && <NavLink to={`/hikes/${hikeId}/update-endpoints`}>Update Start Point</NavLink>}
+                                {user.role === 'Local Guide' && hikeId && <NavLink to={`/account/hikes/${hikeId}/update/endpoints`}>Update Start Point</NavLink>}
                             </Popup>
                         </Marker>
                         <Marker position={end.coords} alt="End marker">
                             <Popup>
                                 <span className='fw-bold'>End point</span>
                                 <p className='m-0'>{end.name}</p>
-                                {user.role === 'Local Guide' && hikeId && <NavLink to={`/hikes/${hikeId}/update-endpoints`}>Update End Point</NavLink>}
+                                {user.role === 'Local Guide' && hikeId && <NavLink to={`/account/hikes/${hikeId}/update/endpoints`}>Update End Point</NavLink>}
                             </Popup>
                         </Marker>
                     </>}
