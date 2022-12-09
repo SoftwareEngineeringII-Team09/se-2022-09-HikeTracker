@@ -435,7 +435,7 @@ class HikeManager {
 
   //Return the list of potential huts info for a given hike
   async getPotentialHuts(hikeId){
-    const maxDiameter = 5.0;
+    const maxDiameter = 5;
     // get all coor in file
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const gpx = new gpxParser();
@@ -451,16 +451,33 @@ class HikeManager {
     let HutPointInfo = new Set();
     let res =[] ;
   
-    tracks.map((c) => {
-      let cx = c[0];
-      let cy = c[1];
+    function rad(d){
+      return d * Math.PI / 180.0;
+    }
+
+    tracks.map((tr) => {
+      let lon1 = tr[1];
+      let lat1 = tr[0];
+     
       hutsInfo.map(async (h) =>{
-        if(!HutPointInfo.has(h) && Math.pow((cx - h.latitude),2) + Math.pow((cy - h.longitude),2) < Math.pow(maxDiameter,2) ){          
+        let R = 6371;
+        let dLat = rad(h.latitude - lat1);
+        let dLon = rad(h.longitude - lon1);
+
+        let radlat1 = rad(lat1);
+        let radlat2 = rad(h.latitude);  
+       
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radlat1 ) * Math.cos(radlat2 ) * Math.sin(dLon/2) * Math.sin(dLon/2);
+	      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	      var d = R * c;    
+        if(!HutPointInfo.has(h) && d < maxDiameter){          
           HutPointInfo.add(h);
         }
       }) 
             
     }) 
+
+  
   
    let candiArray = Array.from(HutPointInfo);
     await Promise.all(candiArray.map(async(h) =>{

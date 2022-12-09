@@ -310,9 +310,6 @@ exports.testGetPotentialHut = function (itShould, hikeId, expectNum) {
   test(`Should ${itShould}`, async () => {
     const res = await HikeManager.getPotentialHuts(hikeId);
     expect(res.potentialHuts).toHaveLength(expectNum);
-
-    
-    
     
   });
 }
