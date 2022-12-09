@@ -168,16 +168,16 @@ describe("Test existsHut", () => {
 // 	/* Test Setup */
 // 	beforeAll(async () => {
 // 		await Utils.clearAll();
-// 		// TODO: insert here if you need other test teardown function calls
+// 		// Insert here if you need other test teardown function calls
 // 	});
 
 // 	/* Test Teardown */
 // 	afterAll(async () => {
 // 		await Utils.clearAll();
-// 		// TODO: insert here if you need other test teardown function calls
+// 		// Insert here if you need other test teardown function calls
 // 	});
 
-// 	// TODO: insert here the functions calls to perform the tests. The function should be defined in unit-utils.js
+// 	// Insert here the functions calls to perform the tests. The function should be defined in unit-utils.js
 // })
 
 /*****************************************************************************************************
@@ -193,7 +193,7 @@ describe("Test defineHut", () => {
   /* Test Teardown */
   afterAll(async () => {
     await Utils.clearAll();
-    // TODO: insert here if you need other test teardown function calls
+    // Insert here if you need other test teardown function calls
   });
 
   Utils.testDefineHut(

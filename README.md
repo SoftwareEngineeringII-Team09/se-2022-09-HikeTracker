@@ -22,27 +22,66 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 ## Table of Contents
 
 1. [Docker Documentation](#docker-documentation)
-   - [Development](#development)
-   - [Tests](#tests)
-   - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
-   - [Pull from Docker Hub](#Pull-from-Docker-Hub)
-2. [Technologies](#technologies)
-   - [Frontend](#frontend)
-   - [Backend](#backend)
-   - [Database](#database)
-3. [React Client Application Routes](#react-client-application-routes)
-   - [Route `/`](#)
-   - [Route `/*`](#)
-4. [API Server](#api-server)
-   <!-- - [Ticket Routes](#ticket-routes)
-     - [`GET /api/tickets/:counterId`](#get-apiticketscounterid) -->
-5. [Database Tables](#database-tables)
-   - [Table `Service`](#service)
-6. [React Components APIs](#react-components-apis)
+    - [Development](#development)
+    - [Tests](#tests)
+    - [Production](#production)
+	  - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
+    - [Pull from Docker Hub](#Pull-from-Docker-Hub)
+2. [Technical Dept Strategy](#technical-dept-strategy)
+3. [Technologies](#technologies)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Database](#database)
+4. [React Client Application Routes](#react-client-application-routes)
+    - [Route `/`](#index-route)
+    - [Route `/hikes`](#index-route)
+    - [Route `/hikes/:hikeId`](#hikeshikeid)
+    - [Route `/signup`](#signup)
+    - [Route `/login`](#login)
+    - [Route `/activate`](#activate)
+    - [Route `/account/hikes`](#accounthikes)
+    - [Route `/account/hikes/add`](#accounthikesadd)
+    - [Route `/account/reference-points/update`](#accountreference-pointsupdate)
+    - [Route `/account/huts/add`](#accounthutsadd)
+    - [Route `/account/parking-lots/add`](#accountparking-lotsadd)
+    - [Route `/*`](#page-not-found-route)
+5. [API Server](#api-server)
+    - [Session Routes](#session-routes)
+	    - [`POST /api/auth/signup`](#post-apiauthsignup)
+	    - [`PUT /api/auth/sendVerificationCode`](#put-apiauthsendverificationcode)
+	    - [`PUT /api/auth/verifyEmail`](#put-apiauthverifyemail)
+	    - [`POST /api/auth/login/password`](#post-apiauthloginpassword)
+	    - [`DELETE /api/auth/logout`](#delete-apiauthlogout)
+	    - [`GET /api/auth/current`](#get-apiauthcurrent)
+    - [Hike Routes](#hike-routes)
+	    - [`POST /api/hikes`](#post-apihikes)
+	    - [`GET /api/hikes`](#get-apihikes)
+	    - [`GET /api/hikes/:hikeId`](#get-apihikeshikeid)
+	    - [`GET /api/hikes/:hikeId/download`](#get-apihikeshikeiddownload)
+	    - [`POST /api/hikes/refPoints/:hikeId`](#post-apihikesrefpointshikeid)
+    - [Hut Routes](#hut-routes)
+	    - [`POST /api/huts`](#post-apihuts)
+	    - [`GET /api/huts`](#get-apihuts)
+    - [Parking Lot Routes](#parking-lot-routes)
+	    - [`POST /api/parkingLots`](#post-apiparkinglots)
+6. [Database Tables](#database-tables)
+    - [Table `User`](#user)
+    - [Table `Hike`](#hike)
+    - [Table `Point`](#point)
+    - [Table `Hut`](#hut)
+    - [Table `HutDailySchedule`](#hutdailyschedule)
+    - [Table `HikeHut`](#hikehut)
+    - [Table `ParkingLot`](#parkinglot)
+    - [Table `HikeParkingLot`](#hikeparkinglot)
+    - [Table `HikeRefPoint`](#hikerefpoint)
 7. [Testing](#testing)
+	  - [Testing Frontend](#testing-frontend)
+	  - [Testing Backend](#testing-backend)
 8. [Mocks](#mocks)
 
 ## Docker Documentation
+
+You must be in `/code` to be able to run docker commands.
 
 ### Development
 
@@ -77,7 +116,7 @@ the ```-f``` flag is for custom docker file path
 
 ### Deploy on Docker Hub
 
-Be sure that the .env file is in /server directory
+Be sure that the .env file is in `/server` directory
 
 ```
 docker login
@@ -106,6 +145,10 @@ Note:
 
 - the images se09-client depends on the se09-server one, so this must be run first
 - in case of name conflicts, remove the containers with ```docker rm <name>``` and run again the commands above
+
+## Technical Dept Strategy
+
+We made repo analysis with Sonarcloud, that allows us to track security issues, code smells and some other useful info you may see above.
 
 ## Technologies
 
@@ -206,50 +249,91 @@ For more info about the database structure, see [Database Tables](#database-tabl
 
 ## React Client Application Routes
 
-### `/`
+### Index Route `/`
 
 _This is the index route_
 
 Homepage for visitor users (not logged in users).
 
-_This route is unprotected from the user authentication. Moreover, it is unreachable when the user is logged in._
+_This route is unprotected from the user authentication._
 
-### `/*`
+### `/hikes`
 
-Any other route is matched by this one where the application shows an error.
+The page shows to any type of user the list of available hikes and main info for each of them.
+
+_This route is unprotected from the user authentication._
+
+### `/hikes/:hikeId`
+
+The page shows more details for the selected hike. Moreover, a map, that allows user to see the track and some useful markers, and a button, that allows user to download `.gpx` file, are shown only if the user is logged in.
+
+_This route is unprotected from the user authentication, but for some features it is required._
 
 ### `/login`
 
-_Login form route_
-
-Visitors can insert their credentials to login and access the full functionalities of their account.
+The page allows user to perform login with his email address and password, used during registration.
 
 _This route is reachable only by users that are not already logged in._
 
 ### `/signup`
 
-_Signup form route_
+The page allows user to signup to the application providing a valid email address and a password. The form asks also for the type of user is going to signup, e.g. Hiker, Local Guide or Hut Manager.
 
-Visitors can provide their personal data to create a new user account.
-The account will have to be verified by clicking a verification link sent to the email used in the registration process.
+Personal info, i.e. firstname, lastname and mobile phone, are required only if user role is not Hiker.
+
+When valid data are submitted, an email with an activation link is sent to the user's email address.
 
 _This route is reachable only by users that are not logged in._
 
 ### `/activate`
 
-_Account activation route_
+#### Route parameters:
+- `id`: The identifier of the account to activate
+- `token`: the randomly generated string needed to confirm the possession of the email address used during the registration process.
 
-Visitors are redirected to this page by clicking on the activation link provided in the email they receive upon registration. An automatic requests is made to activate the user account as soon as the page loads.
-
-Route parameters:
-- id: The identifier of the account to activate
-- token: the randomly generated string needed to confirm the possession of the email address used during the registration process.
+When the user clicks on the activation link sent by email, he is redirected to this page, where a request to activate the account is sent. At the end, the page shows the response to the user. 
 
 _This route is reachable only by users that are not logged in._
 
+### `/account/hikes`
+
+The page shows the list of hikes created by the logged in local guide, a button allowing user to create a new hike and some buttons, for each hike, allowing user to update the hike.
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### `/account/hikes/add`
+
+The page allows a local guide to create a new hike adding useful deatils and uploading an associated `.gpx` file.
+
+When an hike is correctly added, the user is redirected to [the page that allows him to update the reference points for that hike](#accountreference-pointsupdate).
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### `/account/reference-points/update`
+
+The page allows a local guide to update the reference points for an hike.
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### `/account/huts/add`
+
+The page allows a local guide to create a new hut adding some useful details.
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### `/account/parking-lots/add`
+
+The page allows a local guide to create a new parking lot adding some useful details.
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### Page Not Found Route `/*`
+
+Any other route is matched by this one where the application shows an error.
+
 ## API Server
 
-### **Registration and Authentication Routes** 
+### **Session Routes** 
 
 #### `POST /api/auth/signup`
 
@@ -634,7 +718,7 @@ Get a hike by hikeId.
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 
 
-#### `GET /api/:hikeId/download` 
+#### `GET /api/hikes/:hikeId/download` 
 
 Get gpx file according to the hike Id.
 
@@ -804,7 +888,7 @@ Get all huts
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 
 
-### **ParkingLot Routes**
+### **Parking Lot Routes**
 
 #### `POST /api/parkingLots`
 
@@ -973,12 +1057,11 @@ hikeId
 pointId
 ```
 
-
-## React Components APIs
-
 ## Testing
 
-### Backend 
+### Testing Frontend
+
+### Testing Backend 
 
 The libraries used for testing are `Jest` for unit testing, `Mocha` and `Chai` for integration testing.
 
@@ -990,6 +1073,7 @@ To run the integration tests
 ```
 npm run integration 
 ```
+
 #### Note: to run these commands you must be in `/code/server/`
 
 
@@ -1004,3 +1088,7 @@ npm run integration
 
 ![Registration Hiker](./doc/mocks/Account/Register_default.png)
 ![Registration Local Guide](./doc/mocks/Account/Register_additional_info.png)
+
+### Select Start/Arrival points
+
+![Select Hike Endpoints](./doc/mocks/Update%20Hikes/SelectEndpoints.jpg)

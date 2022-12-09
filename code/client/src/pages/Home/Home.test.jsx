@@ -18,8 +18,8 @@ describe("Home page", () => {
                 <Home />
             </Router>
         )
-        expect(screen.getByRole("link")).toHaveAttribute("href", "/browse")
+        expect(screen.getByRole("link")).toHaveAttribute("href", "/hikes")
         await userEvent.click(screen.getByRole("link"))
-        expect(history.location.pathname).toBe("/browse")
+        expect(history.location.pathname).toBe("/hikes")
     })
 })

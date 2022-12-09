@@ -253,6 +253,22 @@ class HutManager {
     return Promise.resolve(hut);
   }
 
+
+    // Load a hutInfo by pointId
+    async getHutByPointId(pointId) {
+      let hut = await this.loadOneByAttributeHut("pointId", pointId);
+      let point = await PointManager.loadOneByAttributePoint(
+        "pointId",
+        hut.pointId
+      );
+  
+      hut = {
+        ...hut,
+        ...point
+      }
+  
+      return Promise.resolve(hut);
+    }
   /*async getOneHut(atrName, val) {
     let hut = await this.loadOneByAttributeHut(atrName, val);
     //position coord needed

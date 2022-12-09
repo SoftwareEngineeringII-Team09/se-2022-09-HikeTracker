@@ -28,8 +28,6 @@ exports.clearAll = async function () {
 /*****************************************************************************************************
 *              Hike
 *****************************************************************************************************/
-const authentication = function (agent, credentials) {
-}
 
 exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx) {
 	const testHikeData = { title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region };
@@ -151,6 +149,51 @@ exports.getHikeGpxById = function (
   });
 };
 
+
+exports.putRefPoint = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, newRefpointList) {
+	const newRefPoints =  {referencePoints: newRefpointList};
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.put(`/api/hikes/${hikeId}/refPoints`)
+				.send(newRefPoints)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
+exports.putHutList = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, testHutList) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.put(`/api/hikes/${hikeId}/huts`)
+				.send(testHutList)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
+exports.getPotentialHut = function (agent, itShould, expectedHTTPStatus, credentials, hikeId) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/hikes/${hikeId}/linkable-huts`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
 /*****************************************************************************************************
 *              Hut
 *****************************************************************************************************/
@@ -204,14 +247,19 @@ exports.getOneHut = function (
           .get(`/api/huts/${hutId}`)
           .then(function (res) {
             res.should.have.status(expectedHTTPStatus);
-            res.body.hutId.should.be.eql(hutId);
-            done();
-          })
-          .catch((e) => console.log(e));
+			if (expectedHTTPStatus !== 401){
+				res.body.hutId.should.be.eql(hutId);
+			}
+            agent.delete("/api/auth/logout").then(function () {
+				done();
+			}).catch(logoutError => console.log(logoutError))
+		}).catch((e) => console.log(e));
       })
       .catch((loginError) => console.log(loginError));
   });
 };
+
+
 
 /*****************************************************************************************************
 *              ParkingLot

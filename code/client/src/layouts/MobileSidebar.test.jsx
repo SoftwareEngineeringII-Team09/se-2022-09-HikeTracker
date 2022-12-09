@@ -41,7 +41,7 @@ jest.mock('react-toastify', () => {
 });
 
 describe("MobileSidebar component", () => {
-    it.each(navigation.default.mobile)("Link to $url is correctly rendered", async (link) => {
+    it.each(navigation('Visitor'))("Link to $url is correctly rendered", async (link) => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
@@ -105,7 +105,7 @@ describe("MobileSidebar component", () => {
         expect(api.users.logout).toHaveBeenCalledTimes(1)
     })
 
-    it.each(navigation.LocalGuide)("Links to $url is shown to logged-in local guides", async (link) => {
+    it.each(navigation("LocalGuide"))("Links to $url is shown to logged-in local guides", async (link) => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>
