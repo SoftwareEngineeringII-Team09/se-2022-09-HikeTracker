@@ -73,10 +73,10 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with: 
-          name: backend-coverage-report
+      # - name: Download artifacts
+      #   uses: actions/download-artifact@v3
+      #   with: 
+      #     name: backend-coverage-report
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
