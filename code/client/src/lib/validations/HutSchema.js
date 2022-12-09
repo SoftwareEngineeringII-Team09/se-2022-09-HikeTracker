@@ -25,7 +25,11 @@ const HutSchema = Yup.object({
     phone: Yup.string()
         .required('Provide a phone number')
         .matches(mobileRegExp, 'Provide a valid phone number'),
-    website: Yup.string().url("Provide a valid website").nullable(),
+    website: Yup.string()
+        .matches(
+            /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+            "Provide a valid website"
+        ).nullable(),
     email: Yup.string()
         .email('This is not a valid email address')
         .required('Insert your email address'),
