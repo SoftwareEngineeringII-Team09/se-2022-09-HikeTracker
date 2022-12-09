@@ -185,6 +185,8 @@ class PersistentManager {
       db.close();
     });
   }
+
+  
 }
 
 module.exports = new PersistentManager();

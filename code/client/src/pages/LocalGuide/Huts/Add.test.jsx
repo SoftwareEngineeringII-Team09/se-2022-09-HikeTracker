@@ -50,5 +50,14 @@ describe("Hut form page", () => {
 
         await userEvent.type(screen.getByLabelText("Number of beds:"), '25')
         expect(screen.getByDisplayValue("25")).toBeInTheDocument()
+
+        await userEvent.type(screen.getByLabelText("Phone number:"), '392 1234567')
+        expect(screen.getByDisplayValue("392 1234567")).toBeInTheDocument()
+
+        await userEvent.type(screen.getByLabelText("Email:"), 'email@example.com')
+        expect(screen.getByDisplayValue("email@example.com")).toBeInTheDocument()
+
+        await userEvent.type(screen.getByLabelText("Website: (optional)"), 'www.example.com')
+        expect(screen.getByDisplayValue("www.example.com")).toBeInTheDocument()
     })
 })
