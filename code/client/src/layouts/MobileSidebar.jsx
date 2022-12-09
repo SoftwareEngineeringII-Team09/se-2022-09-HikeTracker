@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Offcanvas, Alert, Button } from "react-bootstrap";
+import { Offcanvas, Alert, Button} from "react-bootstrap";
 import { RiCloseLine } from 'react-icons/ri'
 import { toast } from "react-toastify";
 

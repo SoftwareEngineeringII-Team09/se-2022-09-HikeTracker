@@ -16,19 +16,19 @@ const Hike = () => {
     const { hikeId } = useParams()
 
     useEffect(() => {
-        api.hikes.getHikeDetails(hikeId)
-            .then(hike => setHike(hike))
-            .catch(err => {
-                setHike(null)
-                toast.error(err, { theme: 'colored' })
-            })
-            .finally(() => setLoading(false))
-    }, []) // eslint-disable-line
+        if (loading)
+            api.hikes.getHikeDetails(hikeId)
+                .then(hike => setHike(hike))
+                .catch(err => {
+                    setHike(null)
+                    toast.error(err, { theme: 'colored' })
+                })
+                .finally(() => setLoading(false))
+    }, [loading]) // eslint-disable-line
 
     const handleDownload = () => {
         api.hikes.getHikeGPXFile(hikeId)
             .then((res) => {
-                console.log(res)
                 const url = window.URL.createObjectURL(new Blob([res]))
                 const link = document.createElement('a')
                 link.href = url
