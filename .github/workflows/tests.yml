@@ -112,7 +112,7 @@ jobs:
       working-directory: ./code/server
 
     - name: Unit tests
-      run: npm test
+      run: npm run test
       working-directory: ./code/server
 
     - name: Integration tests
