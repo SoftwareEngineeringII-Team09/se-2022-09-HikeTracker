@@ -74,7 +74,7 @@ const UpdateReferencePoints = () => {
                         Have you already done? Click on Save changes button on the bottom!
                     </p>
                     <Formik initialValues={initialValues} validationSchema={ReferencePointSchema} onSubmit={(values, { resetForm }) => handleAddPoint(values, { resetForm })}>
-                        {({ values, touched, isValid, setFieldValue, setFieldTouched, resetForm }) => {
+                        {({ values, touched, isValid, setFieldValue, setFieldTouched }) => {
                             const disabled = (!touched.referencePointName
                                 && (!touched.point || (touched.point && !touched.point.latitude && !touched.point.longitude)))
                                 || !isValid
@@ -109,7 +109,7 @@ const UpdateReferencePoints = () => {
                                             </Button>
                                         </Col>
                                     </Row>
-                                    <MapContainer center={hike.startPoint.coords} zoom={13} scrollWheelZoom style={{ height: 480 }} className="mt-5">
+                                    <MapContainer center={hike.startPoint.coords} zoom={12} scrollWheelZoom style={{ height: 480 }} className="mt-5">
                                         <MarkerOnPoint point={values.point} setPoint={handleClick} />
                                         {points.map((point, idx) => (
                                             <Marker key={idx} position={point.coords}>

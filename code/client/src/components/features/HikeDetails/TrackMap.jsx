@@ -11,7 +11,7 @@ const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [],
 
     return (
         <div className="track-map mb-5 mb-xl-0">
-            <MapContainer center={start.coords} zoom={13} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
+            <MapContainer center={start.coords} zoom={12} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
                 {linkedHuts.map((hut, idx) => (
                     <Marker key={idx} position={hut.coords}>
                         <Popup>

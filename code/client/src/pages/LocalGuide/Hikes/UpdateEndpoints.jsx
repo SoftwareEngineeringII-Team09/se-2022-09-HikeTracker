@@ -87,7 +87,7 @@ const UpdateEndpoints = () => {
                     setLoading(false);
                 });
         }
-    }, [hikeId, trackUpdated]);
+    }, [hikeId, trackUpdated]); // eslint-disable-line
 
     const savePoints = () => {
 
