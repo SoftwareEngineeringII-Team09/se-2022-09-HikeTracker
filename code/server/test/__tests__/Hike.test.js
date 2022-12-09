@@ -380,7 +380,6 @@ describe("Test defineHike", () => {
   /* Test Teardown */
   afterAll(async () => {
     await Utils.clearAll();
-    // TODO: insert here if you need other test teardown function calls
   });
 
   Utils.testDefineHike(

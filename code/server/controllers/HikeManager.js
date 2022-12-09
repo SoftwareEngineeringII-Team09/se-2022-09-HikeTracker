@@ -563,11 +563,7 @@ class HikeManager {
     // Filtering end point huts by distance from end point
     potentialEndPointHuts = potentialEndPointHuts.filter(peph => {
       const distanceFromEndPoint = geodist({ lat: peph.coords[0], lon: peph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
-      if (distanceFromEndPoint > maxDistance) {
-        return false;
-      } else {
-        return true;
-      }
+      return !(distanceFromEndPoint > maxDistance);
     });
 
     // Filtering start point parking lots by distance from start point and selecting between parking lots that are close to both the start point and the end point
@@ -592,11 +588,7 @@ class HikeManager {
     // Filtering end point parking lots by distance from end point
     potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => {
       const distanceFromEndPoint = geodist({ lat: peppl.coords[0], lon: peppl.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
-      if (distanceFromEndPoint > maxDistance) {
-        return false;
-      } else {
-        return true;
-      }
+      return !(distanceFromEndPoint > maxDistance);
     });
 
     let potentialStartEndPoints = {
