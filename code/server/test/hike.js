@@ -113,9 +113,9 @@ describe("PUT /api/hikes/:hikeId/refPoints", function () {
 		await Utils.clearAll();
 	});
 	//add refpoint first time (post)
-	Utils.putRefPoint(agent, "put a reference point list", 201, credentials, testHike1.hikeId, testRefPointList);
+	//Utils.putRefPoint(agent, "put a reference point list", 201, credentials, testHike1.hikeId, testRefPointList);
 	//update refpoint
-	Utils.putRefPoint(agent, "delete existing data and put a reference point list", 201, credentials, testHike2.hikeId, testRefPointList);
+	//Utils.putRefPoint(agent, "delete existing data and put a reference point list", 201, credentials, testHike2.hikeId, testRefPointList);
 });
 
 
