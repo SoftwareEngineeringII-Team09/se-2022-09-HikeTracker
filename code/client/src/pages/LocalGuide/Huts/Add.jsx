@@ -14,9 +14,9 @@ import api from '@services/api'
 
 const AddHut = () => {
     const [name, setName] = useState('');
-    const [region, setRegion] = useState('');
-    const [province, setProvince] = useState('');
-    const [city, setCity] = useState('');
+    const [region, setRegion] = useState(0);
+    const [province, setProvince] = useState(0);
+    const [city, setCity] = useState(0);
     const [beds, setBeds] = useState(0);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
@@ -32,7 +32,6 @@ const AddHut = () => {
             province,
             region,
             numOfBeds: parseInt(beds),
-            cost: 10.5,
             latitude,
             longitude,
             altitude: parseInt(altitude)
