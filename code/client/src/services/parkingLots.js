@@ -11,7 +11,7 @@ const parkingLots = {
                 altitude: point.altitude,
             }, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
         })
     },
 }

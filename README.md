@@ -25,7 +25,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [Development](#development)
     - [Tests](#tests)
     - [Production](#production)
-	  - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
+	 - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
     - [Pull from Docker Hub](#Pull-from-Docker-Hub)
 2. [Technical Dept Strategy](#technical-dept-strategy)
 3. [Technologies](#technologies)

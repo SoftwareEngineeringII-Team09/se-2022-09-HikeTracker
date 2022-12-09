@@ -27,9 +27,12 @@ const LoginForm = () => {
     /* Login submission */
     const submitLogin = async (values, { setSubmitting }) => {
         try {
-            await api.users.login(values);
+            const user = await api.users.login(values);
             requestLoginUpdate(true);
             navigate('/');
+            toast.success(`Welcome, ${user.firstname || "Hiker"}!`, {
+                theme: "colored"
+            });
         } catch (error) {
             toast.error(error, {
                 theme: "colored"

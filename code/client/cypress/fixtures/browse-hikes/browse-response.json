@@ -1,0 +1,42 @@
+{
+    "response": {
+        "InternalServerError": {
+            "statusCode": 500,
+            "body": {
+                "error": "Generic error"
+            }
+        },
+        "SuccessEmpty": {
+            "statusCode": 200,
+            "body": []
+        },
+        "Success": {
+            "statusCode": 200,
+            "body": [
+                {
+                    "hikeId": 1,
+                    "title": "Trail for Mont Ferra",
+                    "writer": " Mario Rossi",
+                    "city": 1001,
+                    "province": 1,
+                    "region": 1,
+                    "length": 13,
+                    "expectedTime": {
+                        "hours": "05",
+                        "minutes": "30"
+                    },
+                    "ascent": 1290,
+                    "maxElevation": 3094,
+                    "difficulty": "Hiker",
+                    "description": "This is the description",
+                    "startPoint": {
+                        "coords": [
+                            44.125215216512,
+                            7.5734655851987
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

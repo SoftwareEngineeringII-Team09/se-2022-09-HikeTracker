@@ -1,11 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { MapContainer, useMapEvents } from 'react-leaflet'
 
 import RadiusOnPoint from './RadiusOnPoint'
 
 jest.mock('react-leaflet', () => ({
-    MapContainer: (props) => <div>{props.children}</div>,
     Circle: () => <div data-testid="circle" />,
     useMapEvents: jest.fn()
 }))

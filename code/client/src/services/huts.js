@@ -22,7 +22,7 @@ const huts = {
     return new Promise((resolve, reject) => {
       axios.post(`${SERVER_URL}/huts`, data, { withCredentials: true })
         .then(() => resolve())
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   }
 }

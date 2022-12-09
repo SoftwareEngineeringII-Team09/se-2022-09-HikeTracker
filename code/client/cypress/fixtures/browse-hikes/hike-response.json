@@ -1,0 +1,75 @@
+{
+    "response": {
+        "InternalServerError": {
+            "statusCode": 500,
+            "body": {
+                "error": "Generic error"
+            }
+        },
+        "NotFound": {
+            "statusCode": 404,
+            "body": {
+                "error": "Hike not found"
+            }
+        },
+        "UnprocessableEntity": {
+            "statusCode": 422,
+            "body": {
+                "error": "Validation error"
+            }
+        },
+        "Success": {
+            "statusCode": 200,
+            "body": {
+                "hikeId": 1,
+                "title": "Trail for Mont Ferra",
+                "writer": " Mario Rossi",
+                "city": 1001,
+                "province": 2,
+                "region": 1,
+                "length": 12,
+                "expectedTime": {
+                    "hours": "05",
+                    "minutes": "30"
+                },
+                "ascent": 1290,
+                "maxElevation": 3094.13,
+                "difficulty": "Hiker",
+                "description": "This is description",
+                "startPoint": {
+                    "name": "Start point of Trial to Rocca Patanua",
+                    "coords": [
+                        44.125215216512,
+                        7.5734655851987
+                    ]
+                },
+                "endPoint": {
+                    "name": " End point of Trial to Rocca Patanua",
+                    "coords": [
+                        45.678595216512,
+                        7.5678955851987
+                    ]
+                },
+                "referencePoints": [
+                    {
+                        "name": "Max elevation point of Trial to Monte Ferra",
+                        "coords": [
+                            44.459115216512,
+                            7.3987655851987
+                        ]
+                    }
+                ],
+                "track": [
+                    [
+                        44.591215216512,
+                        7.53219555851987
+                    ],
+                    [
+                        45.37899215216512,
+                        7.210521655851987
+                    ]
+                ]
+            }
+        }
+    }
+}
