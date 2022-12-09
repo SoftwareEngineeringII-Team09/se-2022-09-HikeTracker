@@ -5,7 +5,6 @@ const UserManager = require("../controllers/UserManager");
 const router = express.Router();
 const TestUtils = require("../test/integration-utils");
 
-// POST a hut
 router.delete(
   "/clearAll",
   async (req, res) => {

@@ -40,7 +40,7 @@ jest.mock('./MobileSidebar', () => (props) => {
 })
 
 describe("Header component", () => {
-    it.each(navigation.default.desktop)("Link to $url is correctly rendered", async (link) => {
+    it.each(navigation('Visitor'))("Link to $url is correctly rendered", async (link) => {
         const history = createMemoryHistory();
         render(
             <Router location={history.location} navigator={history}>

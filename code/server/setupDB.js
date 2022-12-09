@@ -7,14 +7,14 @@ const fs = require("fs");
 async function main() {
   let SQL = fs.readFileSync("dbschema.sql", "ascii");
 
-  db = new sqlite.Database("DB.db", (err) => {
+  let db = new sqlite.Database("DB.db", (err) => {
     if (err) {
       console.log(err);
       throw err;
     }
   });
 
-  await db.exec(SQL, function (err) {
+  db.exec(SQL, function (err) {
     if (err) console.log(err);
     else
       console.log(
@@ -24,14 +24,14 @@ async function main() {
 
   SQL = fs.readFileSync("dbschemaTest.sql", "ascii");
 
-  dbTest = new sqlite.Database("DB.test.db", (err) => {
+  let dbTest = new sqlite.Database("DB.test.db", (err) => {
     if (err) {
       console.log(err);
       throw err;
     }
   });
 
-  await dbTest.exec(SQL, function (err) {
+  dbTest.exec(SQL, function (err) {
     if (err) console.log(err);
     else
       console.log(

@@ -1,0 +1,11 @@
+{
+    "hutName": "Test Hut",
+    "city": 5036,
+    "province": 5,
+    "region": 1,
+    "numOfBeds": 10,
+    "cost": 60.00,
+    "altitude": 1000,
+    "latitude": 45.205,
+    "longitude": 7.082
+}

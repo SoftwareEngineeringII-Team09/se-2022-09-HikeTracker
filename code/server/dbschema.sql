@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "User" (
 	"email" TEXT NOT NULL UNIQUE CHECK(typeof(email) == "text"),
     "salt" TEXT NOT NULL CHECK(typeof(salt) == "text"),
     "password" TEXT NOT NULL CHECK(typeof(password) == "text"),
-    "verificationCode" TEXT CHECK(typeof(verificationCode) == "text" OR (verificationCode) == NULL),
+    "verificationCode" TEXT CHECK(typeof(verificationCode) == "text" OR typeof(verificationCode) == NULL),
     "firstname" TEXT CHECK(typeof(firstname) == "text" OR typeof(firstname) == NULL),
     "lastname" TEXT CHECK(typeof(lastname) == "text" OR typeof(lastname) == NULL),
     "mobile" TEXT CHECK(typeof(mobile) == "text" OR typeof(mobile) == NULL),
@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS "Point" (
     "nameOfLocation" TEXT CHECK(typeof(nameOfLocation) == "text" OR typeof(nameOfLocation) == NULL),
     "latitude" REAL NOT NULL CHECK(typeof(latitude) == "real"),
     "longitude" REAL NOT NULL CHECK(typeof(longitude) == "real"),
-    "altitude" REAL NOT NULL CHECK(typeof(altitude) == "real"),
     PRIMARY KEY("pointId")
 );
 
@@ -33,6 +32,8 @@ CREATE TABLE IF NOT EXISTS "ParkingLot" (
     "parkingLotName" TEXT NOT NULL CHECK(typeof(parkingLotName) == "text"),
     "pointId" INTEGER NOT NULL CHECK(typeof(pointId) == "integer"),
     "writerId" INTEGER NOT NULL CHECK(typeof(writerId) == "integer"),
+    "capacity" INTEGER NOT NULL CHECK(typeof(capacity) == "integer"),
+    "altitude" REAL CHECK(typeof(altitude) == "real"  OR typeof(altitude) == NULL),
     PRIMARY KEY("parkingLotId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")
@@ -49,6 +50,10 @@ CREATE TABLE IF NOT EXISTS "Hut" (
     "region" INTEGER NOT NULL CHECK(typeof(region) == "integer"),
     "numOfBeds" INTEGER NOT NULL CHECK(typeof(numOfBeds) == "integer"),
     "cost" REAL NOT NULL CHECK(typeof(cost) == "real"),
+    "altitude" REAL NOT NULL CHECK(typeof(altitude) == "real"),
+    "phone" TEXT NOT NULL CHECK(typeof(phone) == "text"),
+    "email" TEXT NOT NULL CHECK(typeof(email) == "text"),
+    "website" TEXT CHECK(typeof(website) == "text" OR typeof(website) == NULL),
     PRIMARY KEY("hutId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")
@@ -114,7 +119,6 @@ CREATE TABLE IF NOT EXISTS "HikeRefPoint" (
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId")
 );
 
-
 /* Default data */
 /* User table data */
 INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
@@ -127,132 +131,128 @@ INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "f
 VALUES (4, "testEmergencyOperator@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", NULL, NULL, NULL, NULL, "Emergency Operator", 1);
 
 /* Point table data */
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (1, "start point", 0, 1, NULL, 44.5742508675903, 6.98268919251859, 1757.43);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (2, "end point", 0,	0, "End point of Trial to Monte Ferra",	44.5742639433593, 6.98264703154564, 1809.34);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (3, "start point", 0 , 0, "Start point of Trial to Rocca Patanua", 45.1490879058838, 7.23706126213074, 1429.33806852415);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (4, "end point", 0, 0, "End point of Trial to Rocca Patanua", 45.1782586891204, 7.21963947638869, 2345.60486124045);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (5, "start point", 0, 1, NULL, 46.147128, 8.534505, 1265.850139);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (6, "end point", 0,	0, "End point of Trial to Monte Ziccher", 46.163437, 8.534103, 1978.786291);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (7, "start point", 0, 0, "Start point of Trial to Bivacco Gias Nuovo", 45.363406, 7.222457, 1209.93591);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (8, "end point", 0, 0, "End point of Trial to Bivacco Gias Nuovo", 45.36339, 7.222483, 1227.83801);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (9, "start point", 0, 0, "Start point of Trial to Monte Cristetto", 44.948397, 7.290876, 781.2);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (10, "end point", 0, 0, "End point of Trial to Monte Cristetto", 44.989283, 7.281253, 1525.3);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (11, "start point", 0, 1, NULL, 44.6154945250601, 7.05316658131778, 1500.76);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (12, "end point", 0, 0, "End point of Trial to Bivacco Berardo", 44.6483429521322, 7.07200482487679, 2702.88);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (13, "reference point", 0, 0, "Max elevation point of Trial to Monte Rocca Patanua", 44.6020830608904, 6.9847284257412, 3094.14);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (14, "reference point", 0, 0, "Max elevation point of Trial to Rocca Patanua", 45.1783776283264, 7.21914410591126, 2352.9619286962);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (15, "reference point", 0, 0, "Max elevation point of Trial to Monte Ziccher", 46.163437, 8.534103, 1978.786291);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (16, "reference point", 0, 0, "Max elevation point of Trial to Bivacco Gias Nuovo", 45.339905, 7.18368, 1891.73755);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (17, "reference point", 0, 0, "Max elevation point of Trial to Monte Cristetto", 44.989283, 7.281253, 1525.3);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (18, "reference point", 0, 0, "Max elevation point of Trial to Bivacco Berardo", 44.6483261045069, 7.07202368415892, 2702.88);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (19, "parking lot", 1, 0, NULL, 44.5799508675903, 6.98408919299859, 1757.43);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (20, "parking lot", 1, 0, NULL, 44.5749908675903, 6.98998919251859, 1757.43);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (21, "parking lot", 1, 0, NULL, 44.5749939993593, 6.98269703999564, 1809.34); 
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")
-VALUES (22, "hut", 0, 1, NULL, 44.5799639433993, 6.98994703154964, 1809.34); 
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (23, "start point", 0, 0, "Start point of Poggio Tre Croci Ciaspole", 45.079073, 6.695705, 1318.7);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (24, "end point", 0,	0, "Start point of Poggio Tre Croci Ciaspole",	45.079097,6.695723, 1331.6);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (25, "start point", 0, 0,"Start point of San Michele", 45.099076, 7.354971, 390.667053);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (26, "end point", 0,	0, "End point of San Michele",	45.097073, 7.343123, 870.661011);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (27, "start point", 0,  0,"Start point of Punta Nera e Colle della Rho", 45.089292, 6.675187, 1683.9);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (28, "end point", 0,	0, "End point of Punta Nera e Colle della Rho",	45.089308, 6.675215, 1717.7);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (29, "start point", 0, 0, "Start point of Colombardo da Pratobotrile ", 45.1468026638,7.31685161591, 1018.02104731782);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (30, "end point", 0,	0, "End point of Colombardo da Pratobotrile",	45.14682345092, 7.31701573357, 1025.49197508288);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (31, "start point", 0, 0, "Start point of monte musine", 45.107742, 7.477332, 409.245361);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (32, "end point", 0,	0, "End point of monte musine",	45.113762,7.454839,1091.795166);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (33, "start point", 0, 0, "Start point of anello Rocca sella e monte sapei", 45.134888, 7.343993, 1071.106812);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (34, "end point", 0,	0, "End point of anello Rocca sella e monte sapei",	45.134431, 7.344251, 1058.459229);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (35, "start point", 0, 0, "Start point of Cima del Bosco", 44.937484078109264373779296875, 6.86268364079296588897705078125, 1554.5999755859375);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (36, "end point", 0,	0, "End point of Cima del Bosco",	44.9376612715423107147216796875, 6.8631246127188205718994140625, 1614.4000244140625);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (37, "start point", 0, 0," Start point ofAnello Val Servin", 45.302128, 7.221029, 1417.160889);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (38, "end point", 0,	0, "End point of  Anello Val Servin",	45.298574,7.219757, 1463.802734);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (39, "start point", 0, 0, "pian dell azaria", 45.539785, 7.534497, 1343.054443);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (40, "end point", 0,	0, "End point of pian dell azaria",	45.565481, 7.501388, 1658.425659);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (41, "start point", 0, 0, "Start point of  Monte Riba del Gias da Becetto", 44.597067581489682, 7.202494293451309,1545.460000000000036);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (42, "end point", 0,	0, "End point of  Monte Riba del Gias da Becetto",	44.621665952727199, 7.200692351907492, 2380.840000000000146);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (43, "start point", 0, 0, "Start point of  Borgata Rua-Cima di Crosa", 44.596613, 7.201825, 1506.479970);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (44, "end point", 0,	0, "End point of  Borgata Rua-Cima di Crosa",	44.615185, 7.177367, 2455.995572);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (45, "start point", 0, 0, "Start point of Lago Panelatte", 46.172037,8.459393, 1251.1);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (46, "end point", 0,	0, "End point of Lago Panelatte",	46.20274, 8.450575, 2149.2);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (47, "start point", 0, 0, "Start Point of Hike_Zicher", 46.147128, 8.534505,1265.850139);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (48, "end point", 0,	0, "End point of Hike_Zicher",	46.163437, 8.534103, 1978.786291);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (49, "start point", 0, 0, "Start point of Laghi Paione", 46.151141, 8.196038, 1621.6);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (50, "end point", 0,	0, "End point of Laghi Paione",	46.173033, 8.192136, 2159);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (51, "start point", 0, 0, "Start point rifugio paolo daviso", 45.364377, 7.223178, 1266.13171);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (52, "end point", 0,	0, "End point of rifugio paolo daviso",	45.364041,7.222142, 1273.87671);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (53, "start point", 0, 0, "Start point pietraborga da piossasco", 44.9941, 7.455977, 424.7);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (54, "end point", 0,	0, "End point of pietraborga da piossasco",	45.021651,7.421736, 885.9);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (55, "start point", 0, 0, "Start point alpe dattia da ala", 45.316959,7.304834, 1131.50122);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (56, "end point", 0,	0, "End point of alpe dattia da ala",	45.331211,7.298011, 1789.4397);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (57, "start point", 0, 0, "Start point rifugio Alagna Valsesia - Sorgenti del Sesia", 45.866059, 7.936636, 1258.5);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (58, "end point", 0,	0, "End point of rifugio Alagna Valsesia - Sorgenti del Sesia",	45.900313,7.907224, 2066.6);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (59, "start point", 0, 0, "Start point Lago di Afframont ",45.291582019999623, 7.237375248223543, 1410.3900000000001);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (60, "end point", 0,	0, "End point of Lago di Afframont ",	45.292359441518784,7.238771421834827, 2000.1600000000001);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (61, "start point", 0, 0, "Start point Laghetti Verdi e Lago Paschiet", 45.30031, 7.21939, 1446.4);
-INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (62, "end point", 0,	0, "End point of Laghetti Verdi e Lago Paschiet",	45.30031,7.21939, 1446.4);
-
-
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (1, "start point", 0, 1, NULL, 44.574250867590308, 6.982689192518592);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (2, "end point", 0,	0, "End point of Trial to Monte Ferra",	44.574263943359256, 6.982647031545639);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (3, "start point", 0 , 0, "Start point of Trial to Rocca Patanua", 45.14908790588379, 7.237061262130737);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (4, "end point", 0, 0, "End point of Trial to Rocca Patanua", 45.17825868912041, 7.219639476388693);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (5, "start point", 0, 1, NULL, 46.147128, 8.534505);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (6, "end point", 0,	0, "End point of Trial to Monte Ziccher", 46.163437, 8.534103);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (7, "start point", 0, 0, "Start point of Trial to Bivacco Gias Nuovo", 45.363406, 7.222457);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (8, "end point", 0, 0, "End point of Trial to Bivacco Gias Nuovo", 45.36339, 7.222483);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (9, "start point", 0, 0, "Start point of Trial to Monte Cristetto", 44.948397, 7.290876);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (10, "end point", 0, 0, "End point of Trial to Monte Cristetto", 44.989283, 7.281253);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (11, "start point", 0, 1, NULL, 44.615494525060058, 7.053166581317782);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (12, "end point", 0, 0, "End point of Trial to Bivacco Berardo", 44.648342952132225, 7.072004824876785);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (13, "reference point", 0, 0, "Max elevation point of Trial to Monte Rocca Patanua", 44.6020830608904, 6.9847284257412);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (14, "reference point", 0, 0, "Max elevation point of Trial to Rocca Patanua", 45.1783776283264, 7.21914410591126);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (15, "reference point", 0, 0, "Max elevation point of Trial to Monte Ziccher", 46.163437, 8.534103);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (16, "reference point", 0, 0, "Max elevation point of Trial to Bivacco Gias Nuovo", 45.339905, 7.18368);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (17, "reference point", 0, 0, "Max elevation point of Trial to Monte Cristetto", 44.989283, 7.281253);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (18, "reference point", 0, 0, "Max elevation point of Trial to Bivacco Berardo", 44.6483261045069, 7.07202368415892);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (19, "parking lot", 1, 0, NULL, 44.5799508675903, 6.98408919299859);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (20, "parking lot", 1, 0, NULL, 44.5749908675903, 6.98998919251859);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
+VALUES (21, "parking lot", 1, 0, NULL, 44.5749939993593, 6.98269703999564);  
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (23, "start point", 0, 0, "Start point of Poggio Tre Croci Ciaspole", 45.079073, 6.695705);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (24, "end point", 0,	0, "Start point of Poggio Tre Croci Ciaspole",	45.079097,6.695723);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (25, "start point", 0, 0,"Start point of San Michele", 45.099076, 7.354971);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (26, "end point", 0,	0, "End point of San Michele",	45.097073, 7.343123);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (27, "start point", 0,  0,"Start point of Punta Nera e Colle della Rho", 45.089292, 6.675187);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (28, "end point", 0,	0, "End point of Punta Nera e Colle della Rho",	45.089308, 6.675215);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (29, "start point", 0, 0, "Start point of Colombardo da Pratobotrile ", 45.1468026638,7.31685161591);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (30, "end point", 0,	0, "End point of Colombardo da Pratobotrile",	45.14682345092, 7.31701573357);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (31, "start point", 0, 0, "Start point of monte musine", 45.107742, 7.477332);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (32, "end point", 0,	0, "End point of monte musine",	45.113762, 7.454839);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (33, "start point", 0, 0, "Start point of anello Rocca sella e monte sapei", 45.134888, 7.343993);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (34, "end point", 0,	0, "End point of anello Rocca sella e monte sapei",	45.134431, 7.344251);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (35, "start point", 0, 0, "Start point of Cima del Bosco", 44.937484078109264373779296875, 6.86268364079296588897705078125);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (36, "end point", 0,	0, "End point of Cima del Bosco",	44.9376612715423107147216796875, 6.8631246127188205718994140625);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (37, "start point", 0, 0," Start point ofAnello Val Servin", 45.302128, 7.221029);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (38, "end point", 0,	0, "End point of  Anello Val Servin",	45.298574, 7.219757);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (39, "start point", 0, 0, "pian dell azaria", 45.539785, 7.534497);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (40, "end point", 0,	0, "End point of pian dell azaria",	45.565481, 7.501388);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (41, "start point", 0, 0, "Start point of  Monte Riba del Gias da Becetto", 44.597067581489682, 7.202494293451309);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (42, "end point", 0,	0, "End point of  Monte Riba del Gias da Becetto",	44.621665952727199, 7.200692351907492);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (43, "start point", 0, 0, "Start point of  Borgata Rua-Cima di Crosa", 44.596613, 7.201825);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (44, "end point", 0,	0, "End point of  Borgata Rua-Cima di Crosa",	44.615185, 7.177367);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (45, "start point", 0, 0, "Start point of Lago Panelatte", 46.172037,8.459393);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (46, "end point", 0,	0, "End point of Lago Panelatte",	46.20274, 8.450575);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (47, "start point", 0, 0, "Start Point of Hike_Zicher", 46.147128, 8.534505);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (48, "end point", 0,	0, "End point of Hike_Zicher",	46.163437, 8.534103);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (49, "start point", 0, 0, "Start point of Laghi Paione", 46.151141, 8.196038);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (50, "end point", 0,	0, "End point of Laghi Paione",	46.173033, 8.192136);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (51, "start point", 0, 0, "Start point rifugio paolo daviso", 45.364377, 7.223178);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (52, "end point", 0,	0, "End point of rifugio paolo daviso",	45.364041,7.222142);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (53, "start point", 0, 0, "Start point pietraborga da piossasco", 44.9941, 7.455977);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (54, "end point", 0,	0, "End point of pietraborga da piossasco",	45.021651, 7.421736);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (55, "start point", 0, 0, "Start point alpe dattia da ala", 45.316959, 7.304834);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (56, "end point", 0,	0, "End point of alpe dattia da ala",	45.331211, 7.298011);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (57, "start point", 0, 0, "Start point rifugio Alagna Valsesia - Sorgenti del Sesia", 45.866059, 7.936636);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (58, "end point", 0,	0, "End point of rifugio Alagna Valsesia - Sorgenti del Sesia",	45.900313, 7.907224);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (59, "start point", 0, 0, "Start point Lago di Afframont ",45.291582019999623, 7.237375248223543);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (60, "end point", 0,	0, "End point of Lago di Afframont ",	45.292359441518784,7.238771421834827);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (61, "start point", 0, 0, "Start point Laghetti Verdi e Lago Paschiet", 45.30031, 7.21939);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
+VALUES (62, "end point", 0,	0, "End point of Laghetti Verdi e Lago Paschiet",	45.30031,7.21939);
 
 /* Hike table data */		
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
@@ -308,22 +308,13 @@ VALUES (25, "Trail to Alagna Valsesia - Sorgenti del Sesia ", 2, "gpx/Alagna Val
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
 VALUES (26, "Trail to Lago di Afframont ", 2, "gpx/Lago di Afframont.gpx", 1034, 1, 1, 7.2, "02:40", 1564.2, 2002.88, "Professional hiker", "Bella passeggiata più impegnativa, in presenza di bambini, per via delle pendenze.", 59, 60);
 
-
-
-
-
-
-
-
 /* Hut table data */
-INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost")
-VALUES (1, "Rifugio Meleze'", 1, 1, 4017, 4, 1, 50, 50.0);
-INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost")
-VALUES (2, "Rifugio Blitz", 5, 1, 103024, 103, 1, 60, 60.0);
-INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost")
-VALUES (3, "Rifugio Aleve'", 11, 1, 4172, 4, 1, 60, 50.0);
-INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost")
-VALUES (4, "Monte Ferra Hut'", 22, 1, 4172, 4, 1, 60, 50.0);
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website")
+VALUES (1, "Rifugio Meleze'", 1, 1, 4017, 4, 1, 50, 50.0, 1757.43, "0175 956410", "meleze@meleze.it", "www.meleze.it");
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website")
+VALUES (2, "Rifugio Blitz", 5, 1, 103024, 103, 1, 60, 60.0, 1265.85, "331 457 2614", "rifugiodelblitz@gmail.com", "www.vallevigezzo.eu");
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website")
+VALUES (3, "Rifugio Aleve'", 11, 1, 4172, 4, 1, 60, 50.0, 1500.76, "347 719 3878", "rifugioaleve2021@gmail.com", "www.facebook.com/rifugioaleve");
 
 /* HikeHut data */
 INSERT INTO "HikeHut"("hikeId", "hutId")
@@ -332,16 +323,14 @@ INSERT INTO "HikeHut"("hikeId", "hutId")
 VALUES (3, 2);
 INSERT INTO "HikeHut"("hikeId", "hutId")
 VALUES (6, 3);
-INSERT INTO "HikeHut"("hikeId", "hutId")
-VALUES (1, 4);
 
 /* ParkingLot table data */
-INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId")
-VALUES (1, "Monte Ferra Parking 1", 19, 1);
-INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId")
-VALUES (2, "Monte Ferra Parking 2", 20, 1);
-INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId")
-VALUES (3, "Monte Ferra Parking 3", 21, 1);
+INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId", "capacity", "altitude")
+VALUES (1, "Monte Ferra Parking 1", 19, 1, 150, 1020.12);
+INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId", "capacity", "altitude")
+VALUES (2, "Monte Ferra Parking 2", 20, 1, 200, 1015.45);
+INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId", "capacity", "altitude")
+VALUES (3, "Monte Ferra Parking 3", 21, 1, 250, NULL);
 
 /* HikeParkingLot data */
 INSERT INTO "HikeParkingLot"("hikeId", "parkingLotId")

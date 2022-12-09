@@ -60,7 +60,7 @@ exports.getAllHikes = function (agent, itShould, expectedHTTPStatus, expectedLen
 	});
 }
 
-exports.getHikeById = function (agent, itShould, expectedHTTPStatus, hikeId, expectedHike = undefined) {
+exports.getHikeById = function (agent, itShould, expectedHTTPStatus, hikeId, expectedHike = null) {
 	it(`Should ${itShould}`, function (done) {
 		if (expectedHTTPStatus === 200) {
 			agent.get(`/api/hikes/${hikeId}`)
@@ -154,8 +154,8 @@ exports.getHikeGpxById = function (
 /*****************************************************************************************************
 *              Hut
 *****************************************************************************************************/
-exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude) {
-	const testHutData = { hutName: hutName, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude };
+exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude, phone, email, website) {
+	const testHutData = { hutName: hutName, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude, phone: phone, email: email, website: website };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/huts")
@@ -216,8 +216,8 @@ exports.getOneHut = function (
 /*****************************************************************************************************
 *              ParkingLot
 *****************************************************************************************************/
-exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credentials, parkingLotName, latitude, longitude, altitude) {
-	const testParkingLotData = { parkingLotName: parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude };
+exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credentials, parkingLotName, latitude, longitude, altitude, capacity) {
+	const testParkingLotData = { parkingLotName: parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude, capacity: capacity };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/parkingLots")

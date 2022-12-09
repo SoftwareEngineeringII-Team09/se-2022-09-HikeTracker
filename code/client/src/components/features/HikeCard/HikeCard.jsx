@@ -8,7 +8,7 @@ const HikeCard = ({ hike }) => {
                 <div className='mb-3'>
                     <h3 className='fw-bold'>{hike.title}</h3>
                     <span>
-                        Created by {hike.writer}
+                        Created by {hike.writer.writerName}
                         <span className='fw-bold bg-primary-light px-2 fs-6 py-1 ms-2 rounded-pill'>{hike.difficulty}</span>
                     </span>
                 </div>
@@ -32,7 +32,7 @@ const HikeCard = ({ hike }) => {
                         <dd className='m-0'>{hike.ascent} m</dd>
                     </div>
                 </dl>
-                <Link to={`/browse/${hike.hikeId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
+                <Link to={`/hikes/${hike.hikeId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
                     <Button variant="primary-dark" className="fw-bold mt-4 w-100">
                         See more details
                     </Button>

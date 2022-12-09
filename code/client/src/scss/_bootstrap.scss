@@ -146,7 +146,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 // @import "~bootstrap/scss/progress";
 @import "~bootstrap/scss/spinners";
 // @import "~bootstrap/scss/toasts";
-// @import "~bootstrap/scss/tooltip";
+@import "~bootstrap/scss/tooltip";
 
 // Helpers and Utils
 @import "~bootstrap/scss/helpers";
