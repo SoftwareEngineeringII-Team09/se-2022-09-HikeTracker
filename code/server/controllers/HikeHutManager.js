@@ -12,7 +12,7 @@ class HikeHutManager {
    * @param {HikeHut} newHikeHut 
    * @returns a Promise with the rowId value of the stored hikeHut 
    */
-  /* async storeHikeHut(newHikeHut) {
+  async storeHikeHut(newHikeHut) {
     // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeHut.hikeId);
     if (!hikeExists) {
@@ -31,7 +31,7 @@ class HikeHutManager {
     }
 
     return PersistentManager.store(HikeHut.tableName, newHikeHut);
-  } */
+  } 
 
   /**
    * Update a hikeHut
@@ -74,9 +74,9 @@ class HikeHutManager {
    * @param {any} value 
    * @returns a Promise without any value
    */
-  /* async deleteHikeHut(attributeName, value) {
+  async deleteHikeHut(attributeName, value) {
     return PersistentManager.delete(HikeHut.tableName, attributeName, value);
-  } */
+  } 
 
   /**
    * Delete all hikeHuts
@@ -135,7 +135,28 @@ class HikeHutManager {
 
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
-  // Insert other functions you need here
+
+  
+  // Update the start point of a hike by hikeId
+  async updatehutId(hikeId, newhutIds) { 
+    //search pointIds in hikerefpoint table
+    const hutIds= await this.loadAllByAttributeHikeHut("hikeId", hikeId);
+   //delete old hutId in huthike tablew
+   if (hutIds){
+      await Promise.all(
+        hutIds.map(async(p) =>{
+          await this.deleteHikeHut("hutId",p.hutId);
+        })
+      );    
+   }
+  //add new hutId 
+  await Promise.all(
+    newhutIds.map(async(p) =>{
+      await this.storeHikeHut(new HikeHut(hikeId, p));
+    })
+  )
+    return hikeId;
+  }
 }
 
 module.exports = new HikeHutManager();
