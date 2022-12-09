@@ -59,6 +59,12 @@
 #     - run: npm test
 #     - run: npm run integration
 
+#     - name: Archive code coverage results
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: code-coverage-report
+#         path: output/test/code-coverage.html
+
 #   sonarcloud:
 #     name: SonarCloud Analysis
 #     runs-on: ubuntu-latest
