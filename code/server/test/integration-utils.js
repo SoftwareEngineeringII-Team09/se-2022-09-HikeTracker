@@ -28,8 +28,6 @@ exports.clearAll = async function () {
 /*****************************************************************************************************
 *              Hike
 *****************************************************************************************************/
-const authentication = function (agent, credentials) {
-}
 
 exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx) {
 	const testHikeData = { title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region };
