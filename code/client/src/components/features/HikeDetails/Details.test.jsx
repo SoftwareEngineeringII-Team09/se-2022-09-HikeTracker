@@ -9,7 +9,7 @@ jest.mock("@lib/helpers/location", () => ({
 
 const testHike = {
     title: "title",
-    writer: "writer",
+    writer: { writerName: "writer", writerId: 0 },
     difficulty: "difficulty",
     province: 0,
     city: 0,
@@ -36,7 +36,7 @@ const testHike = {
 const expected = {
     base: [
         { label: "title", value: testHike.title },
-        { label: "writer", value: testHike.writer },
+        { label: "writer", value: testHike.writer.writerName },
         { label: "difficulty", value: testHike.difficulty },
         { label: "location", value: `c${testHike.city}, p${testHike.province}` },
         { label: "description", value: testHike.description },

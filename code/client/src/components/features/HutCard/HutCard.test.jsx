@@ -20,7 +20,7 @@ const testHut = {
 }
 
 const expected = {
-    url: `/browse/${testHut.id}`,
+    url: `/huts/${testHut.id}`,
     info: [
         { label: "name", value: testHut.name },
         { label: "altitude", value: /1200 m/i },

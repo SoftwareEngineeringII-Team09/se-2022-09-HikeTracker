@@ -3,7 +3,7 @@ const sqlite = require("sqlite3");
 
 class PersistentManager {
   constructor() {
-    this.dbName = process.env.NODE_ENV.trim() === "test" ? "DB.test.db" : "DB.db";
+    this.dbName = process.env.NODE_ENV === "test" ? "DB.test.db" : "DB.db";
   }
 
   store(tableName, object) {

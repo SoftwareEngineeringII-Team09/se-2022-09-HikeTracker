@@ -10,6 +10,14 @@ const hikes = {
     })
   },
 
+  getHikesForLocalGuide: (writerId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/writers/${writerId}`, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
   getHikeDetails: (hikeId) => {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/${hikeId}`)

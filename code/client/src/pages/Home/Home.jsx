@@ -14,7 +14,7 @@ const Home = () => {
                 <div>
                     <h1 className='text-white fw-black m-0 display-1'>Welcome to Hike Tracker</h1>
                     <p className='text-white fs-5 mb-5'>The most powerful platform for hikers, local guides, hut managers and emergency operators</p>
-                    <Link to="/browse">
+                    <Link to="/hikes">
                         <Button variant='primary-light fw-bold' size='lg'>
                             Let's browse hikes
                         </Button>

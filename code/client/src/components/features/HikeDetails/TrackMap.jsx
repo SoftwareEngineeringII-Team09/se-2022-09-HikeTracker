@@ -2,12 +2,12 @@ import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
 import { AuthContext } from '@contexts/authContext';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { useRef } from 'react';
 
 const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] }) => {
 
-    const popupElRef = useRef(null);
-    const closePopup = () => popupElRef && popupElRef.current && popupElRef.current._closeButton.click();
+    const closePopup = () => {
+        document.querySelector(".leaflet-popup-close-button")?.click();
+    };
 
     return (
         <div className="track-map mb-5 mb-xl-0">
@@ -19,12 +19,12 @@ const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] 
                         </Popup>
                     </Marker>
                 ))}
-                {potentials.map((ref, idx) => (
-                    <Marker key={idx} position={ref.coords}>
-                        <Popup className='text-center' ref={popupElRef}>
-                            <span className='fw-bold'>{ref.name}</span>
-                            <Button className='d-block mt-2' onClick={() => { closePopup(); ref.updatePoint(ref) }}>
-                                Set as {ref.pointType} point
+                {potentials.map((potential, idx) => (
+                    <Marker key={idx} position={potential.coords}>
+                        <Popup className='text-center'>
+                            <span className='fw-bold'>{potential.name}</span>
+                            <Button className='d-block mt-2' onClick={() => { closePopup(); potential.updatePoint(potential) }}>
+                                Set as {potential.pointType} point
                             </Button>
                         </Popup>
                     </Marker>

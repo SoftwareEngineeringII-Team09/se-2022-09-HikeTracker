@@ -19,7 +19,7 @@ const auth = require("./middlewares/auth");
 
 // import routers
 let testRouter;
-if (process.env.NODE_ENV.trim() === "test") {
+if (process.env.NODE_ENV === "test") {
   testRouter = require("./routes/test.router");
 }
 
@@ -67,7 +67,7 @@ app.use(passport.session());
 app.use(passport.authenticate("session"));
 
 // Setting up server routers
-if (process.env.NODE_ENV.trim() === "test")
+if (process.env.NODE_ENV === "test")
   app.use(`${API_PREFIX}/tests`, testRouter)
 
 // app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);

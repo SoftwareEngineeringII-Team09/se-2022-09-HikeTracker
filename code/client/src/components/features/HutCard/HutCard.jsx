@@ -28,7 +28,7 @@ const HutCard = ({ hut }) => {
                         <dd className='m-0'>{hut.numOfBeds}</dd>
                     </div>
                 </dl>
-                <Link to={`/search/${hut.hutId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
+                <Link to={`/huts/${hut.hutId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
                     <Button variant="primary-dark" className="fw-bold mt-4 w-100">
                         See more details
                     </Button>
