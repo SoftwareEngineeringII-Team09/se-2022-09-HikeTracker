@@ -17,7 +17,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --coverage --watchAll=false",
+    "test": "craco test --coverage --watchAll=false --detectOpenHandles --maxWorkers=2",
     "eject": "react-scripts eject",
     "cy:start": "concurrently -n \"CLIENT,CYPRESS\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run cy:client\" \"npm run cy:open\"",
     "cy:client": "craco -r @cypress/instrument-cra start",
