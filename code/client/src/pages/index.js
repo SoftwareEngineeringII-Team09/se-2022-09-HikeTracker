@@ -1,12 +1,8 @@
 export { default as Error } from './Error'
 export { default as Home } from './Home'
-export { default as HikeList } from './HikeList'
-export { default as HikeForm } from './HikeForm'
-export { default as HutList } from './HutList'
-export { default as HutForm } from './HutForm'
-export { default as Registration } from './Signup'
-export { default as Login } from './Login'
-export { default as ActivateAccount } from './ActivateAccount'
+
 export { BrowseHikes, Hike } from './BrowseHikes'
 export { SearchHuts, Hut } from './SearchHuts'
+
 export * as LocalGuide from './LocalGuide'
+export * as Authentication from './Authentication'

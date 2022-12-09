@@ -1,2 +1,3 @@
-export { default as AddParkingLot } from './AddParkingLot'
-export { default as ReferencePoints } from './ReferencePoints'
+export * as Hikes from './Hikes'
+export * as Huts from './Huts'
+export * as ParkingLots from './ParkingLots'
