@@ -75,8 +75,8 @@ const UpdateLinkedHuts = () => {
                     </p>
 
                     <MapContainer center={hike.startPoint.coords} zoom={12} scrollWheelZoom style={{ height: 480 }} className="mt-5">
-                        {huts.map((hut, idx) => (
-                            <Marker key={idx} position={hut.coords}>
+                        {huts.map((hut) => (
+                            <Marker key={hut.hutId} position={hut.coords}>
                                 <Popup>
                                     <p className='m-0'>{hut.hutName}</p>
                                     <Button variant="link" size="sm" className="p-0 mt-2" onClick={() => handleRemoveLink(hut)}>
@@ -85,8 +85,8 @@ const UpdateLinkedHuts = () => {
                                 </Popup>
                             </Marker>
                         ))}
-                        {linkableHuts.map((hut, idx) => (
-                            <Marker key={idx} position={hut.coords}>
+                        {linkableHuts.map((hut) => (
+                            <Marker key={hut.hutId} position={hut.coords}>
                                 <Popup>
                                     <p className='m-0'>{hut.hutName}</p>
                                     <Button variant="link" size="sm" className="p-0 mt-2" onClick={() => handleAddLink(hut)}>
