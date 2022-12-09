@@ -7,6 +7,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const auth = require("../middlewares/auth");
+const HikeHutManager = require("../controllers/HikeHutManager");
 
 const storage = multer.diskStorage({
   destination: "./gpx",
@@ -281,6 +282,33 @@ router.put(
   }
 );
 
+// PUT the list of hutid for a given hike
+router.put(
+  "/:hikeId/huts",
+  // auth.withAuth,
+  // auth.withRole(["Local Guide"]),
+  param("hikeId").isInt({ min: 0 }),
+  async (req, res) => {
+    const hikeId = req.params.hikeId;
+    try {
+      // Validation of body and/or parameters
+      const error = validationResult(req);
+      if (!error.isEmpty())
+        return res.status(422).json({ error: error.array()[0] });
+        await HikeHutManager.updatehutId(
+        hikeId,
+        req.body,
+      );
+
+      return res.status(201).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
 
 
 module.exports = router;

@@ -74,8 +74,8 @@ router.get(
 // GET hut by Id
 router.get(
   "/:hutId",
-  // auth.withAuth,
-  // auth.withRole(["Hiker"]), 
+  auth.withAuth,
+  auth.withRole(["Hiker"]), 
   async (req, res) => {
     try {
       const hutId = req.params.hutId;

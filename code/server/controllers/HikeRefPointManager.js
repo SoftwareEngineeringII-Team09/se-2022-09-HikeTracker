@@ -146,26 +146,25 @@ async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
 
 
   // Update the start point of a hike by hikeId
-  async updateRefPoint(hikeId, newRefPoints) {
-   
-    
+  async updateRefPoint(hikeId, newRefPoints) {   
     //search pointIds in hikerefpoint table
     const  pointIds= await this.loadAllByAttributeHikeRefPoint("hikeId", hikeId);
-    
-   
    //delete points in ref point 
     //delete old ref point in point table
-    await Promise.all(
-      pointIds.map(async(p) =>{
-        await this.deleteHikeRefPoint("pointId",p.pointId);
-        await PointManager.deletePoint("pointId", p.pointId);
-      })
-    );
+    if (pointIds){
+      
+      await Promise.all(
+        pointIds.map(async(p) =>{
+          await this.deleteHikeRefPoint("pointId",p.pointId);
+          await PointManager.deletePoint("pointId", p.pointId);
+        })
+      );     
+    }
+
  
   //add new ref point in point table
   await Promise.all(
-    newRefPoints.map(async(p) =>{
-      
+    newRefPoints.map(async(p) =>{ 
       let newRefPointId = await PointManager.storePoint(
         new Point(
           null,
@@ -175,12 +174,12 @@ async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
           p.name,
           p.coords[0],
           p.coords[1],
-          //hardcode altitude
-          1111
         )
       );
+      
       //add hikerefpoint
       await this.storeHikeRefPoint(new HikeRefPoint(hikeId, newRefPointId));
+    
     })
   )
 

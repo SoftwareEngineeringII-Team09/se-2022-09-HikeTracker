@@ -39,6 +39,8 @@ const testHut1 = new Hut(1, "testHutName1", testHutPoint1.pointId, testUser.user
 const testHut2 = new Hut(2, "testHutName2", testHutPoint2.pointId, testUser.userId, 2, 2, 2, 20, 20.0, 2000.0, "392012345678", "testHutEmail2@email.com", "www.testHutWebSite2.com");
 const testHut3 = new Hut(3, "testHutName3", testHutPoint3.pointId, testUser.userId, 3, 3, 3, 30, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com");
 const testHut4 = new Hut(4, "testHutName4", testHutPoint4.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail4@email.com", "www.testHutWebSite4.com");
+const testPotHutPoint1 = new Point(11, "hut", 0, 1, null, 45.0, 7.0);
+const testPotHut1 = new Hut(5, "testHutName5", testPotHutPoint1.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail5@email.com", "www.testHutWebSite5.com");
 const testParkingLot1 = new ParkingLot(1, "testParkingLotName1", testParkingLotPoint1.pointId, testUser.userId, 1000.0, 100);
 const testParkingLot2 = new ParkingLot(2, "testParkingLotName2", testParkingLotPoint2.pointId, testUser.userId, 2000.0, 200);
 const testParkingLot3 = new ParkingLot(3, "testParkingLotName3", testParkingLotPoint3.pointId, testUser.userId, 3000.0, 300);
@@ -52,7 +54,7 @@ const testHikeParkingLot2 = new HikeParkingLot(testHike1.hikeId, testParkingLot2
 const testHikeParkingLot3 = new HikeParkingLot(testHike1.hikeId, testParkingLot3.parkingLotId);
 const testHikeParkingLot4 = new HikeParkingLot(testHike1.hikeId, testParkingLot4.parkingLotId);
 const expectedGetPotentialStartEndPointsProperties = ["potentialStartPoints", "potentialEndPoints"];
-
+const expectedGetPotentialHutProperties = ["potentialHuts"];
 
 /*****************************************************************************************************
  *              storeHike()
@@ -580,4 +582,39 @@ describe("Test getPotentialStartEndPoints", () => {
   });
 
   Utils.testGetPotentialStartEndPoints("get all potential start/end points", testHike1.hikeId, expectedGetPotentialStartEndPointsProperties);
+});
+
+/*****************************************************************************************************
+ *             getPotentialHutsInfo()
+ *****************************************************************************************************/
+ describe("Test get potential hut info", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testStartPoint1),
+      PersistentManager.store(Point.tableName, testEndPoint1),
+      PersistentManager.store(Point.tableName, testHutPoint1),
+      PersistentManager.store(Point.tableName, testHutPoint2),
+      PersistentManager.store(Point.tableName,testPotHutPoint1),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hike.tableName, testHike1),
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hut.tableName, testHut1),
+      PersistentManager.store(Hut.tableName, testHut2),
+      PersistentManager.store(Hut.tableName, testPotHut1),
+
+    ]);
+   
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testGetPotentialHut("get potentional huts", testHike1.hikeId, expectedGetPotentialHutProperties);
 });

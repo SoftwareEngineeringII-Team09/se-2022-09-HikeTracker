@@ -448,18 +448,31 @@ class HikeManager {
   
 
     //calculate and add all possible huts in list
-    let res = new Set();
-    tracks.map(async(c) => {
+    let HutPointInfo = new Set();
+    let res =[] ;
+  
+    tracks.map((c) => {
       let cx = c[0];
       let cy = c[1];
-      hutsInfo.map((h) =>{
-        if(!res.has(h) && Math.pow((cx - h.latitude),2) + Math.pow((cy - h.longitude),2) < Math.pow(maxDiameter,2) ){          
-          res.add(h);
+      hutsInfo.map(async (h) =>{
+        if(!HutPointInfo.has(h) && Math.pow((cx - h.latitude),2) + Math.pow((cy - h.longitude),2) < Math.pow(maxDiameter,2) ){          
+          HutPointInfo.add(h);
         }
-      }                  
-      )     
+      }) 
+            
     }) 
-    return Array.from(res);
+  
+   let candiArray = Array.from(HutPointInfo);
+    await Promise.all(candiArray.map(async(h) =>{
+      let hutAllInfo = await HutManager.getHutByPointId(h.pointId);   
+      res.push(hutAllInfo);
+      
+    }) )
+    let potentialHuts = {
+      potentialHuts: res
+      
+    };   
+    return potentialHuts;
     
   }
 
