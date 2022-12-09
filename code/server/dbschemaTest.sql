@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS "Point" (
     "nameOfLocation" TEXT CHECK(typeof(nameOfLocation) == "text" OR typeof(nameOfLocation) == NULL),
     "latitude" REAL NOT NULL CHECK(typeof(latitude) == "real"),
     "longitude" REAL NOT NULL CHECK(typeof(longitude) == "real"),
-    "altitude" REAL NOT NULL CHECK(typeof(altitude) == "real"),
     PRIMARY KEY("pointId")
 );
 
@@ -33,6 +32,8 @@ CREATE TABLE IF NOT EXISTS "ParkingLot" (
     "parkingLotName" TEXT NOT NULL CHECK(typeof(parkingLotName) == "text"),
     "pointId" INTEGER NOT NULL CHECK(typeof(pointId) == "integer"),
     "writerId" INTEGER NOT NULL CHECK(typeof(writerId) == "integer"),
+    "capacity" INTEGER NOT NULL CHECK(typeof(capacity) == "integer"),
+    "altitude" REAL NOT NULL CHECK(typeof(altitude) == "real"),
     PRIMARY KEY("parkingLotId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")
@@ -49,6 +50,10 @@ CREATE TABLE IF NOT EXISTS "Hut" (
     "region" INTEGER NOT NULL CHECK(typeof(region) == "integer"),
     "numOfBeds" INTEGER NOT NULL CHECK(typeof(numOfBeds) == "integer"),
     "cost" REAL NOT NULL CHECK(typeof(cost) == "real"),
+    "altitude" REAL CHECK(typeof(altitude) == "real" OR typeof(altitude) == NULL),
+    "phone" TEXT NOT NULL CHECK(typeof(phone) == "text"),
+    "email" TEXT NOT NULL CHECK(typeof(email) == "text"),
+    "website" TEXT CHECK(typeof(website) == "text" OR typeof(website) == NULL),
     PRIMARY KEY("hutId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")

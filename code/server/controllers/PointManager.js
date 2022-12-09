@@ -4,7 +4,6 @@ const Point = require("../dao/model/Point");
 const PersistentManager = require("../dao/PersistentManager");
 
 class PointManager {
-  constructor() { }
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
    * Store a new point
@@ -22,7 +21,7 @@ class PointManager {
    * @param {any} value 
    * @returns a Promise without any value if the point exists, a rejected Promise with an object containing code and result otherwise
    */
-  /* async updatePoint(newPoint, attributeName, value) {
+  async updatePoint(newPoint, attributeName, value) {
     const exists = await this.existsPoint(attributeName, value);
     if (!exists) {
       return Promise.reject({
@@ -32,7 +31,7 @@ class PointManager {
     }
 
     return PersistentManager.update(Point.tableName, newPoint, attributeName, value);
-  } */
+  }
 
   /**
    * Delete a point
@@ -40,9 +39,9 @@ class PointManager {
    * @param {any} value 
    * @returns a Promise without any value
    */
-  /* async deletePoint(attributeName, value) {
+  async deletePoint(attributeName, value) {
     return PersistentManager.delete(Point.tableName, attributeName, value);
-  } */
+  }
 
   /**
    * Delete all points
@@ -94,9 +93,9 @@ class PointManager {
    * @param {any} value 
    * @returns a Promise with the list of points that satisfy the condition  
    */
-  /* async loadAllByAttributePoint(attributeName, value) {
+  async loadAllByAttributePoint(attributeName, value) {
     return PersistentManager.loadAllByAttribute(Point.tableName, attributeName, value);
-  } */
+  } 
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 

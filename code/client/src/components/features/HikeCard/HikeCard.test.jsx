@@ -14,7 +14,7 @@ jest.mock("react-bootstrap", () => {
 const testHike = {
     hikeId: 0,
     title: "title",
-    writer: "writer",
+    writer: { writerName: "writer", writerId: 0 },
     difficulty: "professional hiker",
     description: "description",
     maxElevation: 1200,

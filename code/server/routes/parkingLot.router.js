@@ -1,7 +1,7 @@
 "use strict";
 
 const ParkingLotManager = require("../controllers/ParkingLotManager");
-const { body, param, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require('../middlewares/auth')
@@ -13,7 +13,8 @@ router.post("/",
   body("parkingLotName").isString(),
   body("latitude").isFloat({ min: 0 }),
   body("longitude").isFloat({ min: 0 }),
-  // body("altitude").isFloat({ min: 0 }),
+  body("altitude").optional().isFloat({ min: 0 }),
+  body("capacity").isInt({ min: 0 }),
   async (req, res) => {
     const writerId = req.user.userId;
     try {
@@ -27,8 +28,10 @@ router.post("/",
         req.body.parkingLotName,
         req.body.latitude,
         req.body.longitude,
-        2000.0
+        req.body.altitude ?? null,
+        req.body.capacity
       );
+
       return res.status(201).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;

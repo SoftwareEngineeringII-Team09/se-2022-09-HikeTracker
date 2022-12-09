@@ -28,8 +28,6 @@ exports.clearAll = async function () {
 /*****************************************************************************************************
 *              Hike
 *****************************************************************************************************/
-const authentication = function (agent, credentials) {
-}
 
 exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx) {
 	const testHikeData = { title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region };
@@ -60,7 +58,7 @@ exports.getAllHikes = function (agent, itShould, expectedHTTPStatus, expectedLen
 	});
 }
 
-exports.getHikeById = function (agent, itShould, expectedHTTPStatus, hikeId, expectedHike = undefined) {
+exports.getHikeById = function (agent, itShould, expectedHTTPStatus, hikeId, expectedHike = null) {
 	it(`Should ${itShould}`, function (done) {
 		if (expectedHTTPStatus === 200) {
 			agent.get(`/api/hikes/${hikeId}`)
@@ -151,11 +149,56 @@ exports.getHikeGpxById = function (
   });
 };
 
+
+exports.putRefPoint = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, newRefpointList) {
+	const newRefPoints =  {referencePoints: newRefpointList};
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.put(`/api/hikes/${hikeId}/refPoints`)
+				.send(newRefPoints)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
+exports.putHutList = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, testHutList) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.put(`/api/hikes/${hikeId}/huts`)
+				.send(testHutList)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
+exports.getPotentialHut = function (agent, itShould, expectedHTTPStatus, credentials, hikeId) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/hikes/${hikeId}/linkable-huts`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
 /*****************************************************************************************************
 *              Hut
 *****************************************************************************************************/
-exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude) {
-	const testHutData = { hutName: hutName, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude };
+exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude, phone, email, website) {
+	const testHutData = { hutName: hutName, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude, phone: phone, email: email, website: website };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/huts")
@@ -204,20 +247,25 @@ exports.getOneHut = function (
           .get(`/api/huts/${hutId}`)
           .then(function (res) {
             res.should.have.status(expectedHTTPStatus);
-            res.body.hutId.should.be.eql(hutId);
-            done();
-          })
-          .catch((e) => console.log(e));
+			if (expectedHTTPStatus !== 401){
+				res.body.hutId.should.be.eql(hutId);
+			}
+            agent.delete("/api/auth/logout").then(function () {
+				done();
+			}).catch(logoutError => console.log(logoutError))
+		}).catch((e) => console.log(e));
       })
       .catch((loginError) => console.log(loginError));
   });
 };
 
+
+
 /*****************************************************************************************************
 *              ParkingLot
 *****************************************************************************************************/
-exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credentials, parkingLotName, latitude, longitude, altitude) {
-	const testParkingLotData = { parkingLotName: parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude };
+exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credentials, parkingLotName, latitude, longitude, altitude, capacity) {
+	const testParkingLotData = { parkingLotName: parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude, capacity: capacity };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/parkingLots")

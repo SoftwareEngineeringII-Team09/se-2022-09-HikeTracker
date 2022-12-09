@@ -10,6 +10,14 @@ const hikes = {
     })
   },
 
+  getHikesForLocalGuide: (writerId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/writers/${writerId}`, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
   getHikeDetails: (hikeId) => {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/${hikeId}`)
@@ -31,6 +39,22 @@ const hikes = {
       axios.post(`${SERVER_URL}/hikes`, data, { withCredentials: true })
         .then(res => resolve(res.data))
         .catch(err => reject(err));
+    })
+  },
+
+  getPotentialPoints: (hikeId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialStartEndPoints`, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
+  updateHikeEndpoints: (hikeId, points) => {
+    return new Promise((resolve, reject) => {
+      axios.put(`${SERVER_URL}/hikes/${hikeId}/startEndPoints`, points, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
     })
   },
 

@@ -42,9 +42,7 @@ const ActivateAccount = () => {
         if (!token || !userId) {
             navigate('/');
             toast.error("There has been an error with your activtion link, please try again", { theme: 'colored' })
-            activateAccount();
-        }
-
+        } else activateAccount();
     }, []); // eslint-disable-line
 
     return (

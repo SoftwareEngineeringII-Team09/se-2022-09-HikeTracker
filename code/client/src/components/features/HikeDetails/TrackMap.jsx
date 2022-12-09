@@ -1,6 +1,14 @@
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
+import { AuthContext } from '@contexts/authContext';
+import { NavLink } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
-const TrackMap = ({ start, end, references, track }) => {
+const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [] }) => {
+
+    const closePopup = () => {
+        document.querySelector(".leaflet-popup-close-button")?.click();
+    };
+
     return (
         <div className="track-map mb-5 mb-xl-0">
             <MapContainer center={start.coords} zoom={13} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
@@ -11,18 +19,34 @@ const TrackMap = ({ start, end, references, track }) => {
                         </Popup>
                     </Marker>
                 ))}
-                <Marker position={start.coords}>
-                    <Popup>
-                        <span className='fw-bold'>Start point</span>
-                        <p className='m-0'>{start.name}</p>
-                    </Popup>
-                </Marker>
-                <Marker position={end.coords}>
-                    <Popup>
-                        <span className='fw-bold'>End point</span>
-                        <p className='m-0'>{end.name}</p>
-                    </Popup>
-                </Marker>
+                {potentials.map((potential, idx) => (
+                    <Marker key={idx} position={potential.coords}>
+                        <Popup className='text-center'>
+                            <span className='fw-bold'>{potential.name}</span>
+                            <Button className='d-block mt-2' onClick={() => { closePopup(); potential.updatePoint(potential) }}>
+                                Set as {potential.pointType} point
+                            </Button>
+                        </Popup>
+                    </Marker>
+                ))}
+                <AuthContext.Consumer>
+                    {([user]) => <>
+                        <Marker position={start.coords} alt="Start marker">
+                            <Popup>
+                                <span className='fw-bold'>Start point</span>
+                                <p className='m-0'>{start.name}</p>
+                                {user.role === 'Local Guide' && hikeId && <NavLink to={`/hikes/${hikeId}/update-endpoints`}>Update Start Point</NavLink>}
+                            </Popup>
+                        </Marker>
+                        <Marker position={end.coords} alt="End marker">
+                            <Popup>
+                                <span className='fw-bold'>End point</span>
+                                <p className='m-0'>{end.name}</p>
+                                {user.role === 'Local Guide' && hikeId && <NavLink to={`/hikes/${hikeId}/update-endpoints`}>Update End Point</NavLink>}
+                            </Popup>
+                        </Marker>
+                    </>}
+                </AuthContext.Consumer>
                 <Polyline pathOptions={{ color: "red" }} positions={track} />
                 <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
             </MapContainer>

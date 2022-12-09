@@ -12,11 +12,13 @@ const navigation = {
     ],
     LocalGuide: [
         { label: "My hikes", url: "/account/hikes" },
-        { label: "Create a new hike", url: "/account/hikes/add" },
         { label: "My Huts", url: "/account/huts" },
+        { label: "Create a new hike", url: "/account/hikes/add" },
         { label: "Create a new hut", url: "/account/huts/add" },
         { label: "Create a new parking lot", url: "/account/parking-lots/add" },
     ],
 }
 
-export default (role) => __DEFAULT_NAVIGATION.concat(navigation[role])
+const getNavigation = (role) => __DEFAULT_NAVIGATION.concat(navigation[role])
+
+export default getNavigation

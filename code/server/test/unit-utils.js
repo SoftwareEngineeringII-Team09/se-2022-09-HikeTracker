@@ -5,7 +5,7 @@ const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
 const HikeParkingLot = require("../dao/model/HikeParkingLot");
-const HikeRefPoint = require("../dao/model/HikeRefPoint");
+const HikeRefPoint = require("../dao/model/HikeRefPoint");  
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
 const HikeManager = require("../controllers/HikeManager");
@@ -14,6 +14,10 @@ const PointManager = require("../controllers/PointManager");
 const HikeRefPointManager = require("../controllers/HikeRefPointManager");
 const HutManager = require("../controllers/HutManager");
 const UserManager = require("../controllers/UserManager");
+const HikeHutManager = require("../controllers/HikeHutManager");
+
+
+
 
 /* Reset DB content */
 exports.clearAll = async function () {
@@ -36,7 +40,7 @@ exports.clearAll = async function () {
 exports.testStoreHike = function (
   itShould,
   newHike,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -61,7 +65,7 @@ exports.testUpdateHike = function (
   newHike,
   attributeName,
   value,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -142,7 +146,7 @@ exports.testLoadOneByAttributeHike = function (
   itShould,
   attributeName,
   value,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -193,8 +197,8 @@ exports.testGetAllHikes = function (
 exports.testGetHikeByHikeId = function (
   itShould,
   hikeId,
-  expectedGetHikeByIdProperties = undefined,
-  expectedRejectionCode = undefined
+  expectedGetHikeByIdProperties = null,
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -215,8 +219,8 @@ exports.testGetHikeByHikeId = function (
 exports.testGetGpxPath = function (
   itShould,
   hikeId,
-  expectedGpxPath = undefined,
-  expectedRejectionCode = undefined
+  expectedGpxPath = null,
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -243,7 +247,7 @@ exports.testDefineHike = function (
   province,
   region,
   fileName,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -302,6 +306,43 @@ exports.testGetPotentialStartEndPoints = function (itShould, hikeId, expectedGet
   });
 }
 
+exports.testGetPotentialHut = function (itShould, hikeId, expectNum) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeManager.getPotentialHuts(hikeId);
+    expect(res.potentialHuts).toHaveLength(expectNum);
+    
+  });
+}
+
+
+
+/*****************************************************************************************************
+ *              HikeHut
+ *****************************************************************************************************/
+ exports.testUpdateHutId = function (
+  itShould,
+  hikeId,
+  newHutIdList,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await HikeHutManager.updatehutId(hikeId, newHutIdList);
+
+      const storedHikeHut = await PersistentManager.loadAll(HikeHut.tableName).then(
+        (hikeHut) => hikeHut[0]
+      );
+
+      expect(res).toEqual(hikeId);
+      expect(storedHikeHut.hutId).toEqual(newHutIdList[0]);
+    } else {
+      await expect(HutManager.storeHut(newHut)).rejects.toHaveProperty(
+        "code",
+        expectedRejectionCode
+      );
+    }
+  });
+};
 
 /*****************************************************************************************************
  *              Hut
@@ -309,7 +350,7 @@ exports.testGetPotentialStartEndPoints = function (itShould, hikeId, expectedGet
 exports.testStoreHut = function (
   itShould,
   newHut,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -371,7 +412,10 @@ exports.testDefineHut = function (
   latitude,
   longitude,
   altitude,
-  expectedRejectionCode = undefined
+  phone,
+  email,
+  website,
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -385,7 +429,10 @@ exports.testDefineHut = function (
         cost,
         latitude,
         longitude,
-        altitude
+        altitude,
+        phone,
+        email,
+        website,
       );
       const definedHut = await PersistentManager.loadAll(Hut.tableName).then(
         (Huts) => Huts[0]
@@ -401,9 +448,12 @@ exports.testDefineHut = function (
       expect(definedHut.region).toEqual(region);
       expect(definedHut.numOfBeds).toEqual(numOfBeds);
       expect(definedHut.cost).toEqual(cost);
+      expect(definedHut.altitude).toEqual(altitude);
+      expect(definedHut.phone).toEqual(phone);
+      expect(definedHut.email).toEqual(email);
+      expect(definedHut.website).toEqual(website);
       expect(definedHutPoint.latitude).toEqual(latitude);
       expect(definedHutPoint.longitude).toEqual(longitude);
-      expect(definedHutPoint.altitude).toEqual(altitude);
     } else {
       await expect(
         HutManager.defineHut(
@@ -416,12 +466,17 @@ exports.testDefineHut = function (
           cost,
           latitude,
           longitude,
-          altitude
+          altitude,
+          phone,
+          email,
+          website
         )
       ).rejects.toHaveProperty("code", expectedRejectionCode);
     }
   });
 };
+
+
 
 /*****************************************************************************************************
  *              ParkingLot
@@ -429,7 +484,7 @@ exports.testDefineHut = function (
 exports.testStoreParkingLot = function (
   itShould,
   newParkingLot,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -465,7 +520,7 @@ exports.testLoadOneByAttributeParkingLot = function (
   itShould,
   attributeName,
   value,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -490,7 +545,8 @@ exports.testDefineParkingLot = function (
   latitude,
   longitude,
   altitude,
-  expectedRejectionCode = undefined
+  capacity,
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -499,7 +555,8 @@ exports.testDefineParkingLot = function (
         parkingLotName,
         latitude,
         longitude,
-        altitude
+        altitude,
+        capacity
       );
       const definedParkingLot = await PersistentManager.loadAll(
         ParkingLot.tableName
@@ -512,7 +569,8 @@ exports.testDefineParkingLot = function (
       expect(definedParkingLot.parkingLotName).toEqual(parkingLotName);
       expect(definedParkingLotPoint.latitude).toEqual(latitude);
       expect(definedParkingLotPoint.longitude).toEqual(longitude);
-      expect(definedParkingLotPoint.altitude).toEqual(altitude);
+      expect(definedParkingLot.altitude).toEqual(altitude);
+      expect(definedParkingLot.capacity).toEqual(capacity);
     } else {
       await expect(
         ParkingLotManager.defineParkingLot(
@@ -520,7 +578,8 @@ exports.testDefineParkingLot = function (
           parkingLotName,
           latitude,
           longitude,
-          altitude
+          altitude,
+          capacity
         )
       ).rejects.toHaveProperty("code", expectedRejectionCode);
     }
@@ -533,7 +592,7 @@ exports.testDefineParkingLot = function (
 exports.testStorePoint = function (
   itShould,
   newPoint,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -570,7 +629,7 @@ exports.testLoadOneByAttributePoint = function (
   itShould,
   attributeName,
   value,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -594,7 +653,7 @@ exports.testLoadOneByAttributePoint = function (
 exports.testStoreHikeRefPoint = function (
   itShould,
   newHikeRefPoint,
-  expectedRejectionCode = undefined
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
@@ -649,7 +708,7 @@ exports.testLoadAllByAttributeHikeRefPoint = function (
 /*****************************************************************************************************
  *              User
  *****************************************************************************************************/
-exports.testStoreUser = function (itShould, newUser, expectedRejectionCode = undefined) {
+exports.testStoreUser = function (itShould, newUser, expectedRejectionCode = null) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
       const res = await UserManager.storeUser(newUser);
@@ -663,7 +722,7 @@ exports.testStoreUser = function (itShould, newUser, expectedRejectionCode = und
   });
 };
 
-exports.testUpdateUser = function (itShould, newUser, attributeName, value, expectedRejectionCode = undefined) {
+exports.testUpdateUser = function (itShould, newUser, attributeName, value, expectedRejectionCode = null) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
       let attributesName = [];
@@ -708,7 +767,7 @@ exports.testExistsUser = function (itShould, attributeName, value, expectedResul
   });
 };
 
-exports.testLoadOneByAttributeUser = function (itShould, attributeName, value, expectedRejectionCode = undefined) {
+exports.testLoadOneByAttributeUser = function (itShould, attributeName, value, expectedRejectionCode = null) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
       const res = await UserManager.loadOneByAttributeUser(attributeName, value);
@@ -743,7 +802,7 @@ exports.testUpdateVerificationCode = function (itShould, userId, verificationCod
   });
 }
 
-exports.testVerifyEmail = function (itShould, userId, verificationCode, expectedRejectionCode = undefined) {
+exports.testVerifyEmail = function (itShould, userId, verificationCode, expectedRejectionCode = null) {
   test(`Should ${itShould}`, async () => {
     if (!expectedRejectionCode) {
       await UserManager.verifyEmail(userId, verificationCode);

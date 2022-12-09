@@ -7,7 +7,7 @@ const Hut = require("../../dao/model/Hut");
 
 /* Some useful data to use for tests */
 const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
-const pointHut1 = new Point(1, "start point", 0, 1, null, 10.0, 10.0, 10.0);
+const pointHut1 = new Point(1, "start point", 0, 1, null, 10.0, 10.0);
 const pointHut2 = new Point(
   2,
   "reference point",
@@ -15,8 +15,7 @@ const pointHut2 = new Point(
   1,
   null,
   13.3245,
-  24.678,
-  4444.5675
+  24.678
 );
 const pointHut3 = new Point(
   3,
@@ -25,8 +24,7 @@ const pointHut3 = new Point(
   1,
   null,
   24.768,
-  35.87968,
-  499.647574
+  35.87968
 );
 
 const Hut1DailySchedule = new HutDailySchedule(1, 1, "9:00", "13:00");
@@ -40,7 +38,11 @@ const testHut1 = new Hut(
   2,
   1,
   50,
-  20
+  20,
+  1000.0,
+  "391012345678", 
+  "testHutEmail1@email1.com", 
+  "www.testHutWebSite1.com"
 );
 
 const testHut2 = new Hut(
@@ -52,7 +54,11 @@ const testHut2 = new Hut(
   2,
   1,
   50,
-  20
+  20,
+  2000.0,
+  "392012345678", 
+  "testHutEmail1@email2.com", 
+  "www.testHutWebSite2.com"
 );
 
 const testHut3 = new Hut(
@@ -64,7 +70,11 @@ const testHut3 = new Hut(
   2,
   1,
   50,
-  20
+  20,
+  3000.0,
+  "393012345678", 
+  "testHutEmail1@email3.com", 
+  "www.testHutWebSite3.com"
 );
 const testHuts = [testHut1, testHut2, testHut3];
 const nonExistPointId = 789999;
@@ -81,6 +91,9 @@ const expectedGetAllHutsProperties = [
   "latitude",
   "longitude",
   "altitude",
+  "phone",
+  "email",
+  "website",
   "schedule",
 ];
 
@@ -155,16 +168,16 @@ describe("Test existsHut", () => {
 // 	/* Test Setup */
 // 	beforeAll(async () => {
 // 		await Utils.clearAll();
-// 		// TODO: insert here if you need other test teardown function calls
+// 		// Insert here if you need other test teardown function calls
 // 	});
 
 // 	/* Test Teardown */
 // 	afterAll(async () => {
 // 		await Utils.clearAll();
-// 		// TODO: insert here if you need other test teardown function calls
+// 		// Insert here if you need other test teardown function calls
 // 	});
 
-// 	// TODO: insert here the functions calls to perform the tests. The function should be defined in unit-utils.js
+// 	// Insert here the functions calls to perform the tests. The function should be defined in unit-utils.js
 // })
 
 /*****************************************************************************************************
@@ -180,7 +193,7 @@ describe("Test defineHut", () => {
   /* Test Teardown */
   afterAll(async () => {
     await Utils.clearAll();
-    // TODO: insert here if you need other test teardown function calls
+    // Insert here if you need other test teardown function calls
   });
 
   Utils.testDefineHut(
@@ -194,7 +207,10 @@ describe("Test defineHut", () => {
     testHut1.cost,
     pointHut1.latitude,
     pointHut1.longitude,
-    pointHut1.altitude
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
+    testHut1.website, 
   );
   Utils.testDefineHut(
     "reject because of not existing writerId foreign key",
@@ -207,7 +223,10 @@ describe("Test defineHut", () => {
     testHut1.cost,
     pointHut1.latitude,
     pointHut1.longitude,
-    pointHut1.altitude,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
+    testHut1.website,
     404
   );
 });

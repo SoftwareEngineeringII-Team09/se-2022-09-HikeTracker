@@ -70,6 +70,7 @@ exports.deserializeUser = () => passport.deserializeUser((userId, done) => {
 exports.withAuth = (req, res, next) => {
 	// If the user is logged in, the server can execute
 	// the requested operation
+
 	if (req.isAuthenticated()) return next();
 
 	// If the user is not logged in, the server 
@@ -81,6 +82,7 @@ exports.withAuth = (req, res, next) => {
 
 exports.withRole = function (roles) {
 	return (req, res, next) => {
+
 		if (roles.some(r => r === req.user.role)) return next();
 
 		// If the role not match, the server 

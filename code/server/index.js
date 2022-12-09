@@ -70,7 +70,6 @@ app.use(passport.authenticate("session"));
 if (process.env.NODE_ENV === "test")
   app.use(`${API_PREFIX}/tests`, testRouter)
 
-// app.use(`${API_PREFIX}/parkinglots`, parkingLotRouter);
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
 app.use(`${API_PREFIX}/users`, userRouter);
 app.use(`${API_PREFIX}/huts`, hutRouter);

@@ -18,14 +18,15 @@ const BrowseHikes = () => {
     const [openFilters, setOpenFilters] = useState(false)
 
     useEffect(() => {
-        api.hikes.getHikes()
-            .then(hikes => setHikes(hikes))
-            .catch(err => {
-                toast.error(err, { theme: 'colored' })
-                setHikes([])
-            })
-            .finally(() => setLoading(false))
-    }, [])
+        if (loading)
+            api.hikes.getHikes()
+                .then(hikes => setHikes(hikes))
+                .catch(err => {
+                    toast.error(err, { theme: 'colored' })
+                    setHikes([])
+                })
+                .finally(() => setLoading(false))
+    }, [loading])
 
     if (!loading)
         return (

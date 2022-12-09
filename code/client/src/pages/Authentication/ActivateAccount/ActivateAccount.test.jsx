@@ -42,7 +42,7 @@ describe("<ActivateAccount />", () => {
         })
     };
 
-    /* Retrieve page elements */
+    /* Render component */
     beforeEach(setup);
 
     it("Correctly renders loading text and Makes API Call to verify mail on page load", async () => {

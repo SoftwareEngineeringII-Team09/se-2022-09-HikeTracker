@@ -47,15 +47,35 @@ Cypress.Commands.add('createUserWithDetails', ({ role }) => {
     cy.request('POST', `${SERVER_URL}/tests/addUser`, { ...user.withDetails, role })
 })
 
-/* Create hikes */
+/* Logins */
+Cypress.Commands.add('loginAsLocalGuide', () => {
+    cy.request('POST', `${SERVER_URL}/auth/login/password`, { username: user.withDetails.email, password: user.withDetails.password })
+})
 
+/* Create hikes */
 Cypress.Commands.add('createHike', () => {
     cy.createUserWithDetails({ role: "Local Guide" })
     cy.request('POST', `${SERVER_URL}/tests/addHike`, hike)
 })
 
-/* Logins */
+/* Create Parking Lot */
+Cypress.Commands.add('addParkingLot', (parkingLotData) => {
+    cy.loginLocalGuide();
 
-Cypress.Commands.add('loginAsLocalGuide', () => {
-    cy.request('POST', `${SERVER_URL}/auth/login/password`, { username: user.withDetails.email, password: user.withDetails.password })
-})
+    cy.request({
+        method: 'POST',
+        url: `${SERVER_URL}/parkingLots`,
+        body: parkingLotData
+    });
+});
+
+/* Create Hut */
+Cypress.Commands.add('addHut', (hutData) => {
+    cy.loginLocalGuide();
+
+    cy.request({
+        method: 'POST',
+        url: `${SERVER_URL}/huts`,
+        body: hutData
+    });
+});
