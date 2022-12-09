@@ -93,9 +93,9 @@ class PointManager {
    * @param {any} value 
    * @returns a Promise with the list of points that satisfy the condition  
    */
-  /* async loadAllByAttributePoint(attributeName, value) {
+  async loadAllByAttributePoint(attributeName, value) {
     return PersistentManager.loadAllByAttribute(Point.tableName, attributeName, value);
-  } */
+  } 
   /* ------------------------------------------------------------------------------------------------------------------- */
 
 

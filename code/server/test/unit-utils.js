@@ -14,6 +14,10 @@ const PointManager = require("../controllers/PointManager");
 const HikeRefPointManager = require("../controllers/HikeRefPointManager");
 const HutManager = require("../controllers/HutManager");
 const UserManager = require("../controllers/UserManager");
+const HikeHutManager = require("../controllers/HikeHutManager");
+
+
+
 
 /* Reset DB content */
 exports.clearAll = async function () {
@@ -302,6 +306,46 @@ exports.testGetPotentialStartEndPoints = function (itShould, hikeId, expectedGet
   });
 }
 
+exports.testGetPotentialHut = function (itShould, hikeId, expectNum) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeManager.getPotentialHuts(hikeId);
+    expect(res.potentialHuts).toHaveLength(expectNum);
+
+    
+    
+    
+  });
+}
+
+
+
+/*****************************************************************************************************
+ *              HikeHut
+ *****************************************************************************************************/
+ exports.testUpdateHutId = function (
+  itShould,
+  hikeId,
+  newHutIdList,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await HikeHutManager.updatehutId(hikeId, newHutIdList);
+
+      const storedHikeHut = await PersistentManager.loadAll(HikeHut.tableName).then(
+        (hikeHut) => hikeHut[0]
+      );
+
+      expect(res).toEqual(hikeId);
+      expect(storedHikeHut.hutId).toEqual(newHutIdList[0]);
+    } else {
+      await expect(HutManager.storeHut(newHut)).rejects.toHaveProperty(
+        "code",
+        expectedRejectionCode
+      );
+    }
+  });
+};
 
 /*****************************************************************************************************
  *              Hut
@@ -434,6 +478,8 @@ exports.testDefineHut = function (
     }
   });
 };
+
+
 
 /*****************************************************************************************************
  *              ParkingLot
