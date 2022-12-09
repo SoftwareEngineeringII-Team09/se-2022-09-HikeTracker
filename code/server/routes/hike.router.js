@@ -285,8 +285,8 @@ router.put(
 // PUT the list of hutid for a given hike
 router.put(
   "/:hikeId/huts",
-  // auth.withAuth,
-  // auth.withRole(["Local Guide"]),
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   param("hikeId").isInt({ min: 0 }),
   async (req, res) => {
     const hikeId = req.params.hikeId;

@@ -16,6 +16,9 @@ const HutManager = require("../controllers/HutManager");
 const UserManager = require("../controllers/UserManager");
 const HikeHutManager = require("../controllers/HikeHutManager");
 
+
+
+
 /* Reset DB content */
 exports.clearAll = async function () {
   await PersistentManager.deleteAll(HikeHut.tableName);
@@ -303,10 +306,13 @@ exports.testGetPotentialStartEndPoints = function (itShould, hikeId, expectedGet
   });
 }
 
-exports.testGetPotentialHut = function (itShould, hikeId, expectedGetPotentialHutProperties) {
+exports.testGetPotentialHut = function (itShould, hikeId, expectNum) {
   test(`Should ${itShould}`, async () => {
     const res = await HikeManager.getPotentialHuts(hikeId);
-    expect(res).toHaveProperty(expectedGetPotentialHutProperties);
+    expect(res.potentialHuts).toHaveLength(expectNum);
+
+    
+    
     
   });
 }

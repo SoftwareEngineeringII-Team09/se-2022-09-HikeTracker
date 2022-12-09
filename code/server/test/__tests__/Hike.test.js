@@ -616,5 +616,5 @@ describe("Test getPotentialStartEndPoints", () => {
     await Utils.clearAll();
   });
 
-  Utils.testGetPotentialHut("get potentional huts", testHike1.hikeId, expectedGetPotentialHutProperties);
+  Utils.testGetPotentialHut("get potentional huts", testHike1.hikeId, 1);
 });

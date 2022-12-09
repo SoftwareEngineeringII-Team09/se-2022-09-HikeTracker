@@ -12,6 +12,7 @@ const app = require("../index");
 let agent = chai.request.agent(app);
 
 /* Some useful data to use for tests */
+
 const testUserLocalGuide = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
 const testUserHiker = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
 const credentialsLocalGuide = { username: testUserLocalGuide.email, password: "Password1234." };
@@ -353,13 +354,7 @@ describe("GET /api/huts/:hutId", function () {
 	testHut1.hutId,
     wrongCredentials
   );
-  Utils.getOneHut(
-    agent,
-    "return 401 because of the wrong authorized user",
-    401,
-	testHut1.hutId,
-    credentialsLocalGuide
-  );
+
 
 });
 
@@ -395,7 +390,7 @@ describe("GET /api/huts", function () {
 
 	Utils.getAllHuts(agent, "return the list of huts", 200, credentialsHiker, testHuts.length);
 	Utils.getAllHuts(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHuts.length);
-	Utils.getAllHuts(agent, "return 401 because of not authorized user", 401, credentialsLocalGuide, testHuts.length);
+	
 });
 
 
