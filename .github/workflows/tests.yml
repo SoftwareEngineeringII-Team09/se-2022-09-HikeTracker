@@ -39,6 +39,24 @@ jobs:
         name: frontend-unit-coverage-report
         path: ./code/client/coverage/lcov.info
 
+    - name: Cypress E2E Tests
+      uses: cypress-io/github-action@v4
+      with:
+        start: npm run start:test --prefix ../server, npm start
+        working-directory: code/client
+        browser: firefox
+        install: false
+        build: npm i -D cypress
+
+    - name: Generate E2E coverage report
+      run: npm run cy:coverage
+
+    - name: Upload frontend E2E test coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-e2e-coverage-report
+        path: ./code/client/coverage/e2e/lcov.info
+
   backend-tests:
     name: Backend Tests
     runs-on: ubuntu-latest
@@ -74,24 +92,6 @@ jobs:
       with:
         name: backend-integration-coverage-report
         path: ./code/server/coverage/integration/lcov.info
-
-    - name: Cypress E2E Tests
-      uses: cypress-io/github-action@v4
-      with:
-        start: npm run start:test --prefix ../server, npm start
-        working-directory: code/client
-        browser: firefox
-        install: false
-        build: npm i -D cypress
-
-    - name: Generate E2E coverage report
-      run: npm run cy:coverage
-
-    - name: Upload frontend E2E test coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: frontend-e2e-coverage-report
-        path: ./code/client/coverage/e2e/lcov.info
 
   sonarcloud:
     name: SonarCloud Analysis
