@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Button, Spinner } from 'react-bootstrap';
 import { TbFilePlus } from 'react-icons/tb'
 import { FaMapMarkerAlt, FaInfoCircle, FaCrosshairs } from 'react-icons/fa'
-import { TbCrosshair } from 'react-icons/tb'
+import { GiHut } from 'react-icons/gi'
 
 import { Tooltip } from '@components/ui-core';
 import api from '@services/api';
@@ -25,6 +25,13 @@ const Hike = ({ hike }) => (
                 <Link to={`/account/hikes/${hike.hikeId}/update/reference-points`}>
                     <span className='text-primary-dark fw-bold mx-2'>
                         <FaMapMarkerAlt size={20} />
+                    </span>
+                </Link>
+            </Tooltip>
+            <Tooltip tip="Link huts">
+                <Link to={`/account/hikes/${hike.hikeId}/update/linked-huts`}>
+                    <span className='text-primary-dark fw-bold mx-2'>
+                        <GiHut size={20} />
                     </span>
                 </Link>
             </Tooltip>
