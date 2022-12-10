@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import Tooltip from './Tooltip'
 
 jest.mock('react-bootstrap', () => ({
-    Tooltip: ({ children }) => <span data-testid="tooltip-tip">{children}</span>,
+    Tooltip: (props) => <span data-testid="tooltip-tip">{props.children}</span>,
     OverlayTrigger: ({ overlay, ...props }) => (
         <div data-testid="tooltip-overlay">
             {overlay}
@@ -13,23 +13,28 @@ jest.mock('react-bootstrap', () => ({
 }))
 
 const props = {
-    tip: "tooltip shown"
+    placement: 'top',
+    tip: 'Test tip',
 }
 
-beforeEach(() => {
-    render(<Tooltip {...props}>This is a test</Tooltip>)
-})
+const setup = () => render(<Tooltip {...props}>Hover me</Tooltip>)
+
+beforeEach(() => setup())
 
 describe("Tooltip component", () => {
-    it("Component is correctly rendered", () => {
-        expect(screen.getByText(/this is a test/i)).toBeInTheDocument()
+    it('Component is correctly rendered', () => {
+        expect(screen.getByText(/hover me/i)).toBeInTheDocument()
     })
 
-    it("Overlay is correctly rendered", () => {
-        expect(screen.getByTestId(/tooltip-overlay/i)).toBeInTheDocument()
+    it('Placement is correctly set', () => {
+        expect(screen.getByTestId(/tooltip-overlay/i)).toHaveAttribute('placement', props.placement)
     })
 
     it("Tip is correctly set", () => {
         expect(screen.getByTestId(/tooltip-tip/i).innerHTML).toBe("tooltip shown")
+    })
+
+    it('Overlay is correctly set', () => {
+        expect(screen.getByTestId(/overlay/i)).toHaveAttribute('overlay')
     })
 })

@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Row, Col, Button, Modal } from "react-bootstrap"
-import { FaExclamationCircle } from 'react-icons/fa'
 
 import { Field, useFormikContext } from "formik"
 import { MapContainer, TileLayer } from 'react-leaflet'
@@ -14,23 +13,11 @@ const Position = ({ isOpen, close }) => {
     const { radius } = values.geoArea.position
     const { lat, lng } = values.geoArea.position.point
 
-    const [position, setPosition] = useState(null)
     const [point, setPoint] = useState({ lat, lng })
-    const [error, setError] = useState(null)
-
-    useEffect(() => {
-        if (!point.lat && !point.lng)
-            navigator.geolocation.getCurrentPosition(
-                (pos) => setPosition(pos.coords),
-                (err) => {
-                    setPosition({ latitude: 45.073811155764005, longitude: 7.687027960554972 })
-                    setError(err.message)
-                })
-    }, [point.lat, point.lng])
 
     const getCenter = () => {
-        if (position && !point.lat && !point.lng)
-            return [position.latitude, position.longitude]
+        if (!point.lat && !point.lng)
+            return [45.073811155764005, 7.687027960554972]
         else return [point.lat, point.lng]
     }
 
@@ -47,31 +34,24 @@ const Position = ({ isOpen, close }) => {
                 <Modal.Title className="fw-bold">Click a point on the map and select a radius</Modal.Title>
             </Modal.Header>
             <Modal.Body className="px-5">
-                {position || (point.lat && point.lng) ?
-                    <>
-                        <MapContainer center={getCenter()} zoom={13} scrollWheelZoom style={{ height: 500 }}>
-                            <RadiusOnPoint radius={radius} currentPoint={point} setCurrentPoint={setPoint} />
-                            <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
-                        </MapContainer>
-                        <div className="mt-5">
-                            <Row className="mb-3">
-                                {[
-                                    { coord: "lat", label: "Latitude" },
-                                    { coord: "lng", label: "Longitude" }
-                                ].map((item, idx) => (
-                                    <Col key={idx} xs={6} >
-                                        <Input id={`point-${item.coord}`} name={`geoArea.position.point.${item.coord}`} type="text" label={item.label} />
-                                    </Col>
-                                ))}
-                            </Row>
-                            <h6 className="fw-bold text-primary-dark mb-3">Radius</h6>
-                            <Field type="range" name="geoArea.position.radius" className="w-100" />
-                        </div>
-                    </>
-                    : <div data-testid="error-message" className="text-danger fw-bold d-flex align-items-end">
-                        <FaExclamationCircle size={24} className="me-2" />
-                        {error}
-                    </div>}
+                <MapContainer center={getCenter()} zoom={13} scrollWheelZoom style={{ height: 500 }}>
+                    <RadiusOnPoint radius={radius} currentPoint={point} setCurrentPoint={setPoint} />
+                    <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
+                </MapContainer>
+                <div className="mt-5">
+                    <Row className="mb-3">
+                        {[
+                            { coord: "lat", label: "Latitude" },
+                            { coord: "lng", label: "Longitude" }
+                        ].map((item, idx) => (
+                            <Col key={idx} xs={6} >
+                                <Input id={`point-${item.coord}`} name={`geoArea.position.point.${item.coord}`} type="text" label={item.label} />
+                            </Col>
+                        ))}
+                    </Row>
+                    <h6 className="fw-bold text-primary-dark mb-3">Radius</h6>
+                    <Field type="range" name="geoArea.position.radius" className="w-100" />
+                </div>
             </Modal.Body>
             <Modal.Footer className="px-5">
                 <Button variant="base" onClick={close} className="fw-bold">
