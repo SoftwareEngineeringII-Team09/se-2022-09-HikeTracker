@@ -22,7 +22,8 @@
     "eject": "react-scripts eject",
     "cy:start": "concurrently -n \"CLIENT,CYPRESS\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run cy:client\" \"npm run cy:open\"",
     "cy:client": "craco -r @cypress/instrument-cra start",
-    "cy:open": "npx cypress open"
+    "cy:open": "npx cypress open",
+    "cy:coverage": "npx nyc report --reporter=lcov --report-dir=coverage/e2e"
   },
   "eslintConfig": {
     "extends": [
@@ -83,10 +84,10 @@
     },
     "coverageThreshold": {
       "global": {
-        "statements": 50,
-        "branches": 50,
-        "functions": 60,
-        "lines": 80
+        "statements": 40,
+        "branches": 40,
+        "functions": 40,
+        "lines": 40
       }
     }
   }

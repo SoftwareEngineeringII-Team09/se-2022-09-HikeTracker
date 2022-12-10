@@ -33,17 +33,25 @@ jobs:
     - run: npm ci
     - run: npm run coverage
 
-    - name: Upload frontend code coverage report
+    - name: Cypress E2E Tests
+      uses: cypress-io/github-action@v4
+      with:
+        browser: firefox
+
+    - name: Generate E2E coverage report
+      run: npm run cy:coverage
+
+    - name: Upload frontend Unit test coverage report
       uses: actions/upload-artifact@v3
       with:
-        name: frontend-coverage-unit-report
+        name: frontend-unit-coverage-report
         path: ./code/client/coverage/lcov.info
 
-    # - name: Upload frontend E2E test coverage report
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: backend-e2e-coverage-report
-    #     path: ./code/client/coverage/e2e/lcov.info
+    - name: Upload frontend E2E test coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-e2e-coverage-report
+        path: ./code/client/coverage/e2e/lcov.info
 
   backend-tests:
     name: Backend Tests
