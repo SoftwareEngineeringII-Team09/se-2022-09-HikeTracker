@@ -61,7 +61,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: backend-coverage-report
-        path: ./coverage/lcov.info
+        path: ./code/server/coverage/lcov.info
 
   sonarcloud:
     name: SonarCloud Analysis
@@ -73,10 +73,10 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      # - name: Download artifacts
-      #   uses: actions/download-artifact@v3
-      #   with: 
-      #     name: backend-coverage-report
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with: 
+          name: backend-coverage-report
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
