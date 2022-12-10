@@ -2,9 +2,9 @@ import { isPointWithinRadius } from 'geolib'
 
 export const __DEFAULT_FILTERS = {
     difficulty: { tourist: true, hiker: true, professional: true },
-    length: { min: 1, max: 15 },
-    totalAscent: { min: 200, max: 1000 },
-    expectedTime: { min: 2.5, max: 5 },
+    length: { min: 1, max: 1000 },
+    totalAscent: { min: 1, max: 10000 },
+    expectedTime: { min: 0.5, max: 24 },
     geoArea: {
         location: {
             region: 0,

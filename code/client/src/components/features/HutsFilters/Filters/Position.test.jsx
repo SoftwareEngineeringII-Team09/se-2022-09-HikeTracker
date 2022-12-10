@@ -93,16 +93,6 @@ describe('Position filter test', () => {
         expect(screen.getByTestId(/map/i)).toBeInTheDocument()
     })
 
-    it('Map is not rendered if geolocation errors occurs', () => {
-        setup.error()
-        expect(screen.queryByTestId(/map/i)).not.toBeInTheDocument()
-    })
-
-    it('Error message is rendered if geolocation errors occurs', () => {
-        setup.error()
-        expect(screen.getByTestId(/error-message/i)).toBeInTheDocument()
-    })
-
     it('Confirm button is correctly rendered', () => {
         setup.open()
         expect(screen.getByRole('button', { name: /confirm/i })).toBeInTheDocument()
