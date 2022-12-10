@@ -1,5 +1,5 @@
 
-import { CLIENT_URL } from "../../src/services/config";
+import { CLIENT_URL } from "../../../src/services/config";
 
 describe('Create new hike', () => {
 
@@ -9,24 +9,24 @@ describe('Create new hike', () => {
     // Reset the database prior to every test
     cy.clearAll();
     // Create Local Guide user
-    cy.addLocalGuide();
+    cy.createUserWithDetails({ role: "Local Guide" })
     // Login as Local Guide
-    cy.loginLocalGuide();
+    cy.loginAsLocalGuide();
     // Create a hike
-    cy.fixture('../fixtures/tracks/gpxTestTrack.gpx').then((gpx) => {
-      cy.fixture('../fixtures/hikes/hike1.json').then((hike) => {
+    cy.fixture('tracks/gpxTestTrack.gpx').then((gpx) => {
+      cy.fixture('hike').then((hike) => {
         hike.gpx = new File([gpx], "gpxTestTrack.gpx");
-        cy.addHike(hike);
+        cy.createHike({ writer: 1 });
       });
     });
     // Create parking lot clost to start point
-    cy.fixture('../fixtures/parkingLots/parkingLot1.json').then((parkingLot) => {
+    cy.fixture('parking-lot').then((parkingLot) => {
       cy.addParkingLot(parkingLot);
       firstLatitude = parkingLot.latitude;
       firstLongitude = parkingLot.longitude;
     });
     // Create Hut close to end point
-    cy.fixture('../fixtures/huts/hut1.json').then((hut) => {
+    cy.fixture('hut').then((hut) => {
       cy.addHut(hut);
       lastLatitude = hut.latitude;
       lastLongitude = hut.longitude;
@@ -41,7 +41,7 @@ describe('Create new hike', () => {
   it('Updates hike start/end points', () => {
 
     const hikeId = 1;
-    cy.loginLocalGuide();
+    cy.loginAsLocalGuide();
 
     // Intercept the requests to the server
     cy.route({
@@ -73,7 +73,7 @@ describe('Create new hike', () => {
 
     cy.url().should('eq', `${CLIENT_URL}hikes/${hikeId}/update-endpoints`);
 
-    cy.wait('@get-hike-details').then(() => {});
+    cy.wait('@get-hike-details').then(() => { });
 
     // Wait for potential endpoints retrieval
     cy.wait('@get-potential-endpoints').then((request) => {
@@ -112,7 +112,7 @@ describe('Create new hike', () => {
       cy.contains(`Latitude: ${lastLatitude}`);
       cy.contains(`Longitude: ${lastLongitude}`);
 
-      cy.wait('@get-hike-details').then(() => {});
+      cy.wait('@get-hike-details').then(() => { });
 
       // Submit endpoints update
       cy.get('button').contains("Save points").click();
@@ -132,7 +132,7 @@ describe('Create new hike', () => {
         Object.keys(expectedBody).forEach(key => {
           expect(expectedBody[key]).to.deep.eq(xhr.request.body[key]);
         });
-        
+
         expect(Object.keys(expectedBody).length).to.eq(Object.keys(xhr.request.body).length);
 
         expect(xhr.status).to.equal(201);

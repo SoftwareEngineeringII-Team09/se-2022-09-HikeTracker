@@ -53,14 +53,13 @@ Cypress.Commands.add('loginAsLocalGuide', () => {
 })
 
 /* Create hikes */
-Cypress.Commands.add('createHike', () => {
-    cy.createUserWithDetails({ role: "Local Guide" })
-    cy.request('POST', `${SERVER_URL}/tests/addHike`, hike)
+Cypress.Commands.add('createHike', ({ writer }) => {
+    cy.request('POST', `${SERVER_URL}/tests/addHike`, { ...hike, writerId: writer })
 })
 
 /* Create Parking Lot */
 Cypress.Commands.add('addParkingLot', (parkingLotData) => {
-    cy.loginLocalGuide();
+    cy.loginAsLocalGuide();
 
     cy.request({
         method: 'POST',
@@ -71,7 +70,7 @@ Cypress.Commands.add('addParkingLot', (parkingLotData) => {
 
 /* Create Hut */
 Cypress.Commands.add('addHut', (hutData) => {
-    cy.loginLocalGuide();
+    cy.loginAsLocalGuide();
 
     cy.request({
         method: 'POST',

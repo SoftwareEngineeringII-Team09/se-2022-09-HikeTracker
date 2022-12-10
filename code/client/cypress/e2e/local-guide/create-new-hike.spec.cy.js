@@ -1,6 +1,3 @@
-
-import { SERVER_URL } from "../../src/services/config";
-
 describe('Create new hike', () => {
 
   before(() => {

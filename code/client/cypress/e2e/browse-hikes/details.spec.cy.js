@@ -1,7 +1,8 @@
 describe('Hike details', () => {
     before(() => {
         cy.clearAll()
-        cy.createHike()
+        cy.createUserWithDetails({ role: "Local Guide" })
+        cy.createHike({ writer: 1 })
     })
 
     after(() => cy.clearAll())
@@ -20,7 +21,6 @@ describe('Hike details', () => {
         cy.visit('/hikes')
         cy.findAllByRole("button", { name: /See more details/ }).first().click()
         cy.fixture('hike').then(json => {
-
             cy.findByText(json.title).should('be.visible')
             cy.findAllByRole("button", /download/i).should('exist')
             cy.get(".track-map").should('be.visible')

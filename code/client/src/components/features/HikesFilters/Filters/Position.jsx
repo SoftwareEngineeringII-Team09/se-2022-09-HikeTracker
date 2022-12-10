@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { Row, Col, Button, Modal } from "react-bootstrap"
 import { FaExclamationCircle } from 'react-icons/fa'
-import { toast } from "react-toastify"
 
 import { Field, useFormikContext } from "formik"
 import { MapContainer, TileLayer } from 'react-leaflet'
