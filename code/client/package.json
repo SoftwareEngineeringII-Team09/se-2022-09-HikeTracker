@@ -17,7 +17,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --coverage --watchAll=false",
+    "test": "craco test",
+    "coverage": "craco test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "cy:start": "concurrently -n \"CLIENT,CYPRESS\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run cy:client\" \"npm run cy:open\"",
     "cy:client": "craco -r @cypress/instrument-cra start",
@@ -82,10 +83,10 @@
     },
     "coverageThreshold": {
       "global": {
-        "statements": 10,
-        "branches": 10,
-        "functions": 10,
-        "lines": 10
+        "statements": 50,
+        "branches": 50,
+        "functions": 60,
+        "lines": 80
       }
     }
   }

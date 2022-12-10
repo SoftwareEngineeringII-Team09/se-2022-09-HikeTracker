@@ -43,6 +43,11 @@ router.post(
     }
   });
 
+router.get("/coverage", (req, res) => {
+    console.log("coverage test");
+    return res.status(200).end();
+});
+
 // router.post(
 //   "/verifyUser",
 //   async (req, res) => {
