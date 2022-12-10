@@ -33,8 +33,8 @@ jest.mock('@components/features', () => ({
 
 describe("SearchHuts page", () => {
     it("Page is correctly rendered", async () => {
-        // const huts = []
-        // api.huts.getHuts.mockResolvedValueOnce(huts)
+        const huts = []
+        api.huts.getHuts.mockResolvedValueOnce(huts)
 
         render(<SearchHuts />, { wrapper: MemoryRouter })
         expect(api.huts.getHuts).toHaveBeenCalledTimes(1)
