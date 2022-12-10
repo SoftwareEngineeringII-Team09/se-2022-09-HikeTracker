@@ -30,6 +30,7 @@ import 'cypress-file-upload';
 import { SERVER_URL } from '../fixtures/constants'
 import user from '../fixtures/user.json'
 import hike from '../fixtures/hike.json'
+import hut from '../fixtures/hut.json'
 
 /* General commands */
 
@@ -57,6 +58,11 @@ Cypress.Commands.add('createHike', ({ writer }) => {
     cy.request('POST', `${SERVER_URL}/tests/addHike`, { ...hike, writerId: writer })
 })
 
+/* Create hut */
+Cypress.Commands.add('createHut', ({ writer }) => {
+    cy.request('POST', `${SERVER_URL}/tests/addHut`, { ...hut, writerId: writer })
+})
+
 /* Create Parking Lot */
 Cypress.Commands.add('addParkingLot', (parkingLotData) => {
     cy.loginAsLocalGuide();
@@ -68,13 +74,13 @@ Cypress.Commands.add('addParkingLot', (parkingLotData) => {
     });
 });
 
-/* Create Hut */
-Cypress.Commands.add('addHut', (hutData) => {
-    cy.loginAsLocalGuide();
+// /* Create Hut */
+// Cypress.Commands.add('addHut', (hutData) => {
+//     cy.loginAsLocalGuide();
 
-    cy.request({
-        method: 'POST',
-        url: `${SERVER_URL}/huts`,
-        body: hutData
-    });
-});
+//     cy.request({
+//         method: 'POST',
+//         url: `${SERVER_URL}/huts`,
+//         body: hutData
+//     });
+// });

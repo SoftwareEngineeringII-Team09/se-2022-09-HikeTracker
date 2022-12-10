@@ -1,11 +1,13 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { Row } from 'react-bootstrap'
 import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
+import { HutCard } from '@components/features'
 
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
@@ -84,6 +86,16 @@ const Details = ({ hike }) => {
                     </dl>
                 </div>
             </div>
+            {hike.huts.length ?
+                <div className='mt-5'>
+                    <h3 className='fw-bold'>Linked huts</h3>
+                    <Row className='g-4 mt-3'>
+                        {hike.huts.map(hut => (
+                            <HutCard key={hut.hutId} hut={hut} />
+                        ))}
+                    </Row>
+                </div> : null
+            }
         </div>
     )
 }

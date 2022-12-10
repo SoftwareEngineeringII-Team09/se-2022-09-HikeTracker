@@ -10,7 +10,7 @@ const HutCard = ({ hut }) => {
                     <h3 className='fw-bold'>{hut.hutName}</h3>
                 </div>
 
-                <dl className='d-flex mt-4 justify-content-between'>
+                {hut.city && <dl className='d-flex mt-4 justify-content-between'>
                     <div className='d-flex flex-column'>
                         <dt>City, province, region</dt>
                         <dd className='m-0'>{getLocationFullName(hut.province, hut.city) + ', ' + getLocationRegion(hut.region)}</dd>
@@ -27,7 +27,7 @@ const HutCard = ({ hut }) => {
                         <dt>Number of beds</dt>
                         <dd className='m-0'>{hut.numOfBeds}</dd>
                     </div>
-                </dl>
+                </dl>}
                 <Link to={`/huts/${hut.hutId}`} className="text-decoration-none w-100" style={{ color: "currentcolor" }}>
                     <Button variant="primary-dark" className="fw-bold mt-4 w-100">
                         See more details

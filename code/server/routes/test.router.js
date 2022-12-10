@@ -3,6 +3,7 @@
 const express = require("express");
 const UserManager = require("../controllers/UserManager");
 const HikeManager = require("../controllers/HikeManager")
+const HutManager = require("../controllers/HutManager");
 const router = express.Router();
 const TestUtils = require("../test/integration-utils");
 
@@ -59,6 +60,35 @@ router.post(
         req.body.region,
         req.body.filename,
       )
+      return res.status(204).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  });
+
+router.post(
+  "/addHut",
+  async (req, res) => {
+    try {
+      await HutManager.defineHut(
+        req.body.hutName,
+        req.body.writerId,
+        req.body.city,
+        req.body.province,
+        req.body.region,
+        req.body.numOfBeds,
+        req.body.cost,
+        req.body.latitude,
+        req.body.longitude,
+        req.body.altitude,
+        req.body.phone,
+        req.body.email,
+        req.body.website,
+      )
+
       return res.status(204).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;

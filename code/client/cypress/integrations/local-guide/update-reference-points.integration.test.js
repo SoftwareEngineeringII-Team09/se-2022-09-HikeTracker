@@ -1,6 +1,5 @@
 import { SERVER_URL, CLIENT_URL, TOAST_ERROR_NOTIFICATION, TOAST_SUCCESS_NOTIFICATION } from '../../fixtures/constants'
 
-
 describe('Update reference points (Not authenticated)', () => {
     beforeEach(() => {
         cy.fixture('local-guide/auth-current-response').then(json => {
@@ -47,9 +46,6 @@ describe('Update reference points (Authenticated but Unauthorized)', () => {
         })
     })
 })
-
-
-
 
 describe('Update reference points', () => {
 

@@ -1,6 +1,6 @@
 import { SERVER_URL } from '../../fixtures/constants'
 
-describe('List hikes for a Local Guide', () => {
+describe('Update reference points', () => {
     before(() => {
         cy.clearAll()
         cy.createUserWithDetails({ role: "Local Guide" })
