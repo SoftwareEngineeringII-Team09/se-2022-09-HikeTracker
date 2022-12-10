@@ -36,6 +36,7 @@ jobs:
     - name: Cypress E2E Tests
       uses: cypress-io/github-action@v4
       with:
+        project: ./code/client
         browser: firefox
 
     - name: Generate E2E coverage report
