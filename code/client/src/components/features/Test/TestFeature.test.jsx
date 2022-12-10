@@ -11,7 +11,7 @@ describe("HutDetails.Details component", () => {
                 <TestFeature />
             </MemoryRouter>
         )
-        expect(screen.getByText("Test coverage")).toBeInTheDocument()
+        expect(screen.getByText("Test coverage title")).toBeInTheDocument()
     })
 
 })

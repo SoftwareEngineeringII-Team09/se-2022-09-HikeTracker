@@ -12,7 +12,7 @@ const TestFeature = () => {
 
     return (
         <div>
-            <h2>Test coverage</h2>
+            <h2>Test coverage title</h2>
             <button onClick={testCoverage}>Test coverage</button>
         </div>
     )
