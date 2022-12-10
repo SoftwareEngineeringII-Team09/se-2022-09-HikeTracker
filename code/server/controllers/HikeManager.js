@@ -433,6 +433,69 @@ class HikeManager {
     return Promise.resolve(gpxPath);
   }
 
+  //Return the list of potential huts info for a given hike
+  async getPotentialHuts(hikeId){
+    const maxDiameter = 5;
+    // get all coor in file
+    let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
+    const gpx = new gpxParser();
+    const gpxString = fs.readFileSync(hike.trackPath).toString();
+    gpx.parse(gpxString);
+    let tracks = gpx.tracks[0].points.map((p) => [p.lat, p.lon]);
+   
+    //get all huts coordinate
+    let hutsInfo = await PointManager.loadAllByAttributePoint("hut",1);
+  
+
+    //calculate and add all possible huts in list
+    let HutPointInfo = new Set();
+    let res =[] ;
+  
+    function rad(d){
+      return d * Math.PI / 180.0;
+    }
+
+    tracks.map((tr) => {
+      let lon1 = tr[1];
+      let lat1 = tr[0];
+     
+      hutsInfo.map(async (h) =>{
+        let R = 6371;
+        let dLat = rad(h.latitude - lat1);
+        let dLon = rad(h.longitude - lon1);
+
+        let radlat1 = rad(lat1);
+        let radlat2 = rad(h.latitude);  
+       
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radlat1 ) * Math.cos(radlat2 ) * Math.sin(dLon/2) * Math.sin(dLon/2);
+	      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	      var d = R * c;    
+        if(!HutPointInfo.has(h) && d < maxDiameter){          
+          HutPointInfo.add(h);
+        }
+      }) 
+            
+    }) 
+
+  
+  
+   let candiArray = Array.from(HutPointInfo);
+    await Promise.all(candiArray.map(async(h) =>{
+      let hutAllInfo = await HutManager.getHutByPointId(h.pointId);   
+      res.push(hutAllInfo);
+      
+    }) )
+    let potentialHuts = {
+      potentialHuts: res
+      
+    };   
+    return potentialHuts;
+    
+  }
+
+
+
+
   // Return the list of potential start and end points for a given hike
   async getPotentialStartEndPoints(hikeId) {
     const maxDistance = 5.0;
@@ -517,11 +580,7 @@ class HikeManager {
     // Filtering end point huts by distance from end point
     potentialEndPointHuts = potentialEndPointHuts.filter(peph => {
       const distanceFromEndPoint = geodist({ lat: peph.coords[0], lon: peph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
-      if (distanceFromEndPoint > maxDistance) {
-        return false;
-      } else {
-        return true;
-      }
+      return !(distanceFromEndPoint > maxDistance);
     });
 
     // Filtering start point parking lots by distance from start point and selecting between parking lots that are close to both the start point and the end point
@@ -546,11 +605,7 @@ class HikeManager {
     // Filtering end point parking lots by distance from end point
     potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => {
       const distanceFromEndPoint = geodist({ lat: peppl.coords[0], lon: peppl.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
-      if (distanceFromEndPoint > maxDistance) {
-        return false;
-      } else {
-        return true;
-      }
+      return !(distanceFromEndPoint > maxDistance);
     });
 
     let potentialStartEndPoints = {

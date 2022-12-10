@@ -60,7 +60,23 @@ const hikes = {
 
   updateReferencePoints: (hikeId, data) => {
     return new Promise((resolve, reject) => {
-      axios.post(`${SERVER_URL}/hikes/${hikeId}/refPoints`, { referencePoints: data }, { withCredentials: true })
+      axios.put(`${SERVER_URL}/hikes/${hikeId}/refPoints`, { referencePoints: data }, { withCredentials: true })
+        .then(() => resolve())
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
+  getLinkableHuts: (hikeId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/${hikeId}/linkable-huts`, { withCredentials: true })
+        .then(res => resolve(res.data.potentialHuts))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
+  updateLinkedHuts: (hikeId, data) => {
+    return new Promise((resolve, reject) => {
+      axios.put(`${SERVER_URL}/hikes/${hikeId}/huts`, data, { withCredentials: true })
         .then(() => resolve())
         .catch(err => reject(err.response.data.error));
     })

@@ -12,7 +12,7 @@ const huts = {
 
   getHutDetails: (hutId) => {
     return new Promise((resolve, reject) => {
-      axios.get(`${SERVER_URL}/huts/${hutId}`)
+      axios.get(`${SERVER_URL}/huts/${hutId}`, { withCredentials: true })
         .then(res => resolve(res.data))
         .catch(err => reject(err));
     })
