@@ -86,7 +86,7 @@ jobs:
         build: npm i -D cypress
 
     - name: Generate E2E coverage report
-      working-directory: ../client
+      working-directory: code/client
       run: npm run cy:coverage
 
     - name: Upload frontend E2E test coverage report
