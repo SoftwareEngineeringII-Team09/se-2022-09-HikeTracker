@@ -1,12 +1,39 @@
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa'
+
 import { getLocationFullName } from '@lib/helpers/location'
+import { AuthContext } from '@contexts/authContext'
+import { Tooltip } from '@components/ui-core'
 
 const Details = ({ hike }) => {
+    const [user] = useContext(AuthContext)
+
     return (
         <div className=''>
             <div className='mb-5'>
-                <h1 className='fw-black'>{hike.title}</h1>
+                <h1 className='fw-black'>
+                    {hike.title}
+                    {(user.role === "Local Guide" && hike.writer.writerId === user.userId) &&
+                        <span>
+                            <Tooltip tip="Link start/end point">
+                                <Link to={`/account/hikes/${hike.hikeId}/update/endpoints`}>
+                                    <span className='text-primary fw-bold ms-4'>
+                                        <FaCrosshairs size={20} />
+                                    </span>
+                                </Link>
+                            </Tooltip>
+                            <Tooltip tip="Update reference points">
+                                <Link to={`/account/hikes/${hike.hikeId}/update/reference-points`}>
+                                    <span className='text-primary fw-bold ms-2'>
+                                        <FaMapMarkerAlt size={25} />
+                                    </span>
+                                </Link>
+                            </Tooltip>
+                        </span>}
+                </h1>
                 <h5 className='mb-2'>
-                    Created by <span className='fw-bold'>{hike.writer}</span>{" "}
+                    Created by <span className='fw-bold'>{hike.writer.writerName}</span>{" "}
                     for <span className='fw-bold bg-primary-light px-3 fs-6 py-1 rounded-pill'>{hike.difficulty}</span>
                 </h5>
                 <span>{getLocationFullName(hike.province, hike.city)}</span>

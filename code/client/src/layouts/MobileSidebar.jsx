@@ -44,20 +44,16 @@ const MobileSidebar = ({ isOpen, close }) => {
                             Create an account now
                         </Link>}
                     </Alert>}
-                    {!user.loggedIn ? navigation.default.mobile.map((link, idx) => (
+                    {navigation(user.loggedIn ? user.role.replace(" ", "") : "Visitor").map((link, idx) => (
                         <NavLink key={idx} url={link.url} className="fs-5 text-primary-dark pt-3 fw-bold">
                             {link.label}
-                        </NavLink>)) :
-                        navigation[user.role.replace(" ", "")].map((link, idx) => (
-                            <NavLink key={idx} url={link.url} className="fs-5 text-primary-dark pt-3 fw-bold">
-                                {link.label}
-                            </NavLink>
-                        ))}
+                        </NavLink>
+                    ))}
                 </div>
                 {user.loggedIn &&
-                <Button variant="primary-dark" size="lg" className="d-block py-3 fw-bold w-100" onClick={handleLogout}>
-                    Logout
-                </Button>
+                    <Button variant="primary-dark" size="lg" className="d-block py-3 fw-bold w-100" onClick={handleLogout}>
+                        Logout
+                    </Button>
                 }
             </Offcanvas.Body>
         </Offcanvas>
