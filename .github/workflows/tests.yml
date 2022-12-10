@@ -82,6 +82,7 @@ jobs:
         working-directory: code/client
         browser: firefox
         install: false
+        build: npm i -D cypress
 
     - name: Generate E2E coverage report
       run: npm run cy:coverage
