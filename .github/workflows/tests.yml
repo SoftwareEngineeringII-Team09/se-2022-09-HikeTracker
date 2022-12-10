@@ -79,6 +79,7 @@ jobs:
     - name: Cypress E2E Tests
       uses: cypress-io/github-action@v4
       with:
+        name: Start Client and Server for E2E tests
         start: npm run start:test --prefix ../server, npm run cy:client
         working-directory: code/client
         browser: firefox
