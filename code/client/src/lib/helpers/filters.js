@@ -88,6 +88,7 @@ export const filterHuts = (huts, filters, active) => {
 
     if (active)
         return huts.filter(hut => {
+            console.log(hut)
             return (
                 // Altitude filter
                 (hut.altitude >= altitude.min && hut.altitude <= altitude.max)
@@ -101,7 +102,7 @@ export const filterHuts = (huts, filters, active) => {
                 && (!parseInt(region) || (parseInt(region) && parseInt(region) === hut.region))
                 // Position filter
                 && ((!point.lat && !point.lng) || (isPointWithinRadius(
-                    { latitude: hut.coords[0], longitude: hut.coords[1] },
+                    { latitude: hut.latitude, longitude: hut.longitude },
                     { latitude: point.lat, longitude: point.lng },
                     radius * 1000
                 )))
