@@ -75,11 +75,10 @@ jobs:
         name: backend-integration-coverage-report
         path: ./code/server/coverage/integration/lcov.info
 
-    - run: npm run start:test
-
     - name: Cypress E2E Tests
       uses: cypress-io/github-action@v4
       with:
+        start: npm run start:test --prefix code/server
         working-directory: code/client
         browser: firefox
         install: false
