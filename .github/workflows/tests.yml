@@ -33,6 +33,12 @@ jobs:
     - run: npm ci
     - run: npm test
 
+    - name: Upload frontend code coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-coverage-unit-report
+        path: ./code/client/coverage/lcov.info
+
   backend-tests:
     name: Backend Tests
     runs-on: ubuntu-latest
@@ -57,10 +63,10 @@ jobs:
     - run: npm test
     - run: npm run integration
 
-    - name: Archive backend code coverage results
+    - name: Upload backend code coverage reports
       uses: actions/upload-artifact@v3
       with:
-        name: backend-coverage-report
+        name: backend-unit-coverage-report
         path: ./code/server/coverage/lcov.info
 
   sonarcloud:
@@ -75,8 +81,6 @@ jobs:
 
       - name: Download artifacts
         uses: actions/download-artifact@v3
-        with: 
-          name: backend-coverage-report
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
