@@ -36,8 +36,9 @@ jobs:
     - name: Cypress E2E Tests
       uses: cypress-io/github-action@v4
       with:
-        project: ./code/client
+        working-directory: code/client
         browser: firefox
+        install: false
 
     - name: Generate E2E coverage report
       run: npm run cy:coverage
