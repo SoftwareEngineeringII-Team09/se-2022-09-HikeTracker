@@ -2,11 +2,11 @@ import { useContext } from "react"
 import { Offcanvas } from "react-bootstrap"
 import { RiCloseLine } from 'react-icons/ri'
 
-import { FiltersContext } from "@contexts/FiltersContext"
+import { FiltersContextHuts } from "@contexts/FiltersContextHuts"
 import FiltersForm from "./FiltersForm"
 
 const HutsFilters = ({ isOpen, close }) => {
-    const { apply, reset } = useContext(FiltersContext)
+    const { apply, reset } = useContext(FiltersContextHuts)
 
     const handleSubmit = (filters) => {
         if (apply(filters))
