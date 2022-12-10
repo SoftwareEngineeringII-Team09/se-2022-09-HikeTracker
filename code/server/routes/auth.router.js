@@ -28,7 +28,9 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 			req.body.password,
 			verificationCode
 		);
-		await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
+
+		if (process.env.NODE_ENV !== "test")
+			await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
 
 		return res.status(201).json(userId);
 	} catch (exception) {
@@ -71,7 +73,7 @@ router.put('/verifyEmail', authValidation.verifyEmail, async (req, res) => {
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ error: errors.array()[0] });
 		}
-		
+
 		await UserManager.verifyEmail(req.body.userId, req.body.token);
 
 		return res.status(201).end();
