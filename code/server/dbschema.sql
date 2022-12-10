@@ -250,7 +250,103 @@ VALUES (60, "end point", 0,	0, "End point of Lago di Afframont ",	45.29235944151
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
 VALUES (61, "start point", 0, 0, "Start point Laghetti Verdi e Lago Paschiet", 45.30031, 7.21939, 1446.4);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (62, "end point", 0,	0, "End point of Laghetti Verdi e Lago Paschiet",	45.30031,7.21939, 1446.4);
+VALUES (62, "end point", 0,	0, "End point of Laghetti Verdi e Lago Paschiet",	45.30031, 7.21939, 1446.4);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (63, "start point", 0, 0, "Start point Vallone di Massello", 44.964905, 7.031857, 1384198975);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (64, "end point", 0, 0, "End point Vallone di Massello", 44.978063, 6.997145, 2217.675293);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (65, "start point", 0, 0, "Start point Chaberton", 44.93603, 6.7386, 1870.6287915);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (66, "end point", 0, 0, "End point Chaberton", 44.9645239, 6.7513105273, 3104.0884112012263);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (67, "start point", 0, 0, "Start point Bivacco Boarelli", 44.6142404, 7.0526047, 1573.3299999);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (68, "end point", 0, 0, "End point Bivacco Boarelli", 44.61450671, 7.052683699, 1594.96);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (69, "start point", 0, 0, "Start point Rocche San Martino", 45.403648, 7.592662, 985.07697);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (70, "end point", 0, 0, "End point Rocche San Martino", 45.39491, 7.5809, 1434.78474);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (71, "start point", 0, 0, "Start point Monte Freidour", 44.96472, 7.284098, 1134.00073);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (72, "end point", 0, 0, "End point Monte Freidour", 44.964785, 7.284125, 1071.30139);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (73, "start point", 0, 0, "Start point Roc dle masche", 45.368895, 7.359237, 1244.068115);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (74, "end point", 0, 0, "End point Roc dle masche", 45.376267, 7.365979, 1556.258789);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (75, "start point", 0, 0, "Start point Bric Costa Rossa", 44.218490123, 7.580845355, NULL);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (76, "end point", 0, 0, "End point Bric Costa Rossa", 44.250590801, 7.6000499, NULL);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (77, "start point", 0, 0, "Start point Quintino Sella e Viso Mozzo", 44.70125044, 7.09460620768, 2023.71);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (78, "end point", 0, 0, "End point Quintino Sella e Viso Mozzo", 44.665757864, 7.10986361, 2645.21);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (79, "start point", 0, 0, "Start point Rifugio Giacoletti", 44.70092952, 7.0957500021, 2020.3499999);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (80, "end point", 0, 0, "End point Rifugio Giacoletti", 44.696727236, 7.0761852152, 2735.57);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (81, "start point", 0, 0, "-Start point Stagno del Prè", 45.478838, 7.973679, 601.131348);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (82, "end point", 0, 0, "End point Stagno del Prè", 45.51121, 7.923241, 695.924194);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (83, "start point", 0, 0, "Start point Bertorello", 44.645612034, 7.256143788, 1169.985);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (84, "end point", 0, 0, "End point Bertorello", 44.636631891, 7.245265664, 1366.747);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (85, "start point", 0, 0, "Start point Rifugio Pontese", 45.483421, 7.372313, 1890.230957);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (86, "end point", 0, 0, "End point Rifugio Pontese", 45.502099, 7.360826, 2217.214111);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (87, "start point", 0, 0, "Start point Croce del faggio", 45.397663, 7.461748, 1115.835938);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (88, "end point", 0, 0, "End point Croce del faggio", 45.393234, 7.446694, 1427.154785);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (89, "start point", 0, 0, "Start point Fondo e Tallorno", 45.531308, 7.686002, 1066.706421);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (90, "end point", 0, 0, "End point Fondo e Tallorno", 45.531333, 7.68572, 1067.88916);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (91, "start point", 0, 0, "Start point Arlaud", 45.044474, 6.873244, 1661.330322);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (92, "end point", 0, 0, "End point Arlaud", 45.058256, 6.908350, 1759.335938);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (93, "start point", 0, 0, "Start point Amprimo", 45.102780737, 7.165559804, 1264.868);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (94, "end point", 0, 0, "End point Amprimo", 45.099887898, 7.14299586, 1403.479);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (95, "start point", 0, 0, "Start point Augusto Monti", 45.023155, 7.335396, 586.3);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (96, "end point", 0, 0, "End point Augusto Monti", 45.022919, 7.334631, 590.7);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (97, "start point", 0, 0, "Start point Monte Muretto", 44.918242, 7.31544, 558.64325);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (98, "end point", 0, 0, "End point Monte Muretto", 44.929433, 7.309893, 813.302368);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (98, "start point", 0, 0, "Start point Lago Fauri", 44.98595737, 6.92071566, 1604.371665797204);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (100, "end point", 0, 0, "End point Lago Fauri", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (101, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (102, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (103, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (104, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (105, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (106, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (107, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (108, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
+VALUES (109, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
+VALUES (110, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
 
 
 
@@ -308,53 +404,53 @@ VALUES (25, "Trail to Alagna Valsesia - Sorgenti del Sesia ", 2, "gpx/Alagna_Val
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
 VALUES (26, "Trail to Lago di Afframont ", 2, "gpx/Lago_di_Afframont.gpx", 1034, 1, 1, 7.2, "02:40", 1564.2, 2002.88, "Professional hiker", "Beautiful walk, more demanding, in the presence of children, due to the slopes.", 59, 60);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (27, "Trail to the Bergerie di Valloncrò", 2, "gpx/Vallone_di_massello.gpx", 1145, 1, 1, 11.2, "02:40", 803.7, 2150.9, "Tourist", "Trail 216 starts among the houses before the bridge and begins to climb the valley on the orographic left of the stream. Going up the valley you find yourself in front of a beautiful basin, dominated by the imposing Pis waterfall, already visible from afar. The trail heads straight at first towards the base of the waterfall; then it begins to go up the rocky slope to the right, passing near the Lausoun mountain huts.", 61, 62);
+VALUES (27, "Trail to the Bergerie di Valloncrò", 2, "gpx/Vallone_di_massello.gpx", 1145, 1, 1, 11.2, "02:40", 803.7, 2150.9, "Tourist", "Trail 216 starts among the houses before the bridge and begins to climb the valley on the orographic left of the stream. Going up the valley you find yourself in front of a beautiful basin, dominated by the imposing Pis waterfall, already visible from afar. The trail heads straight at first towards the base of the waterfall; then it begins to go up the rocky slope to the right, passing near the Lausoun mountain huts.", 63, 64);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (28, "Path to Monte Chaberton", 2, "gpx/Chaberton.gpx", 1270, 1, 1, 15002, "05:50", 1280, 1850, "Professional hiker", "Take the road to the right, immediately after the French border, leave your car in one of the many spaces on the right. The walking itinerary starts from a mule track on the left, equipped with a barrier, near a wooden sign illustrating the history of the Chaberton.", 63, 64);
+VALUES (28, "Path to Monte Chaberton", 2, "gpx/Chaberton.gpx", 1270, 1, 1, 15002, "05:50", 1280, 1850, "Professional hiker", "Take the road to the right, immediately after the French border, leave your car in one of the many spaces on the right. The walking itinerary starts from a mule track on the left, equipped with a barrier, near a wooden sign illustrating the history of the Chaberton.", 65, 66);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (29, "Path to Bivacco Boarelli e laghi delle Forcioline", 2, "gpx/Sentiero_per_Bivacco_Boarelli_e_laghi_delle_Forcioline.gpx", 4172, 4, 1, 15006, "06:30", 1200, 2820, "Professional hiker", "We turn right entering the Forciolline valley and after about 50m we meet a second crossroads where we keep right in the direction of the Boarelli shelter which is about 2.30 hours from here.", 65, 66);
+VALUES (29, "Path to Bivacco Boarelli e laghi delle Forcioline", 2, "gpx/Sentiero_per_Bivacco_Boarelli_e_laghi_delle_Forcioline.gpx", 4172, 4, 1, 15006, "06:30", 1200, 2820, "Professional hiker", "We turn right entering the Forciolline valley and after about 50m we meet a second crossroads where we keep right in the direction of the Boarelli shelter which is about 2.30 hours from here.", 67, 68);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (30, "Path to Rocche San Martino and Monte Soffietto", 2, "gpx/Rocche_di_san_martino.gpx", 1007, 1, 1, 6500, "02:55", 460, 1448, "Tourist", "Reach the bottom of the Nero hamlet and park the car in the square that marks the end of the road. Take the path that descends to your right and continue along the wide roadway. Characteristic of this stretch is the beech forest.", 67, 68);
+VALUES (30, "Path to Rocche San Martino and Monte Soffietto", 2, "gpx/Rocche_di_san_martino.gpx", 1007, 1, 1, 6500, "02:55", 460, 1448, "Tourist", "Reach the bottom of the Nero hamlet and park the car in the square that marks the end of the road. Take the path that descends to your right and continue along the wide roadway. Characteristic of this stretch is the beech forest.", 69, 70);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (31, "Path to Monte Freidour", 2, "gpx/Anello_monte_freidour.gpx", 1272, 1, 1, 8500, "05:00", 596, 1445, "Hiker", "Following the trail and the indications on the signs, you reach Colle Ciardonet (about 1080 meters above sea level), from which you continue along the forest road that develops to the right, in the direction of the Melano refuge (Casa Canada).", 69, 70);
+VALUES (31, "Path to Monte Freidour", 2, "gpx/Anello_monte_freidour.gpx", 1272, 1, 1, 8500, "05:00", 596, 1445, "Hiker", "Following the trail and the indications on the signs, you reach Colle Ciardonet (about 1080 meters above sea level), from which you continue along the forest road that develops to the right, in the direction of the Melano refuge (Casa Canada).", 71, 72);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (32, "Path to Roc d'le Masche", 2, "gpx/Roc_dle_masche.gpx", 1075, 1, 1, 990, "01:15", 340, 1570, "Tourist", "The route begins by crossing a pasture area, and then climbs the slopes in the woods. The path is easily identifiable thanks to the numerous white-red signs and trail markers. Gradually the forest thins out and you reach a rocky ledge, a panoramic point", 71, 72);
+VALUES (32, "Path to Roc d'le Masche", 2, "gpx/Roc_dle_masche.gpx", 1075, 1, 1, 990, "01:15", 340, 1570, "Tourist", "The route begins by crossing a pasture area, and then climbs the slopes in the woods. The path is easily identifiable thanks to the numerous white-red signs and trail markers. Gradually the forest thins out and you reach a rocky ledge, a panoramic point", 73, 74);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (33, "Path to Bric Costa Rossa", 2, "gpx/Sentiero_per_Bric_Costa_Rossa.gpx", 4110, 4, 1, 14003, "08:30", 1350, 2403, "Professional hiker", "The Bisalta, Cuneo's symbol mountain, is clearly distinguishable along the plain towards the city by its characteristic profile with two peaks: Cima Besimauda 2230m and Bric Costa Rossa 2403m.", 73, 74);
+VALUES (33, "Path to Bric Costa Rossa", 2, "gpx/Sentiero_per_Bric_Costa_Rossa.gpx", 4110, 4, 1, 14003, "08:30", 1350, 2403, "Professional hiker", "The Bisalta, Cuneo's symbol mountain, is clearly distinguishable along the plain towards the city by its characteristic profile with two peaks: Cima Besimauda 2230m and Bric Costa Rossa 2403m.", 75, 76);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (34, "Path to Rifugio Quintino Sella and Viso Mozzo", 2, "gpx/Sentiero_per_Rifugio_Quintino_Sella_e_Viso_Mozzo.gpx", 4078, 4, 1, 14500, "07:30", 600, 2020, "Hiker", "After leaving the car in the large Pian del Re car park, we walk along the path that heads towards the source of the Po and then pass it by continuing along an initial short uphill stretch that allows us to reach Lake Fiorenza at an altitude of approximately 2113m. (25 min from Pian del Re)", 75, 76);
+VALUES (34, "Path to Rifugio Quintino Sella and Viso Mozzo", 2, "gpx/Sentiero_per_Rifugio_Quintino_Sella_e_Viso_Mozzo.gpx", 4078, 4, 1, 14500, "07:30", 600, 2020, "Hiker", "After leaving the car in the large Pian del Re car park, we walk along the path that heads towards the source of the Po and then pass it by continuing along an initial short uphill stretch that allows us to reach Lake Fiorenza at an altitude of approximately 2113m. (25 min from Pian del Re)", 77, 78);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (35, "Path to Rifugio Giacoletti", 2, "gpx/Sentiero_per_il_Rifugio_Giacoletti.gpx", 4078, 4, 1, 8004, "04:30", 700, 2741, "Tourist", "Leave the car in the Pian del Re car park (cost €10 per day), walk along path V16 with indications for Colle delle Traversette for about 700m as far as the crossroads where we turn left continuing on path V17 to the Giacoletti refuge.", 77, 78);
+VALUES (35, "Path to Rifugio Giacoletti", 2, "gpx/Sentiero_per_il_Rifugio_Giacoletti.gpx", 4078, 4, 1, 8004, "04:30", 700, 2741, "Tourist", "Leave the car in the Pian del Re car park (cost €10 per day), walk along path V16 with indications for Colle delle Traversette for about 700m as far as the crossroads where we turn left continuing on path V17 to the Giacoletti refuge.", 79, 80);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (36, "Path to Stagno del Prè", 2, "gpx/Stagno_del_prè.gpx", 1177, 1, 1, 12008, "03:20", 160, 700, "Tourist", "A pleasant and quiet path, particularly suitable when you don't want to practice great differences in altitude. The path to the Stagno di Prè extends over a stretch of the Cammino di Oropa, at the foot of the Serra di Ivrea.", 79, 80);
+VALUES (36, "Path to Stagno del Prè", 2, "gpx/Stagno_del_prè.gpx", 1177, 1, 1, 12008, "03:20", 160, 700, "Tourist", "A pleasant and quiet path, particularly suitable when you don't want to practice great differences in altitude. The path to the Stagno di Prè extends over a stretch of the Cammino di Oropa, at the foot of the Serra di Ivrea.", 81, 82);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (37, "Path to Rifugio Bertorello", 2, "gpx/Bertorello.gpx", 4157, 4, 1, 5009, "01:45", 205, 1375, "Tourist", "The starting point can be reached by taking the road to Pian Munè from Paesana. After about 7km you reach San Lorenzo at 1080m above sea level, continue by car for about 1200m until you reach a hairpin bend, from which the dirt road branches off to the left   for Rifugio Bertorello.", 81, 82);
+VALUES (37, "Path to Rifugio Bertorello", 2, "gpx/Bertorello.gpx", 4157, 4, 1, 5009, "01:45", 205, 1375, "Tourist", "The starting point can be reached by taking the road to Pian Munè from Paesana. After about 7km you reach San Lorenzo at 1080m above sea level, continue by car for about 1200m until you reach a hairpin bend, from which the dirt road branches off to the left   for Rifugio Bertorello.", 83, 84);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (38, "Path to Rifugio Pontese", 2, "gpx/Rifugio_Pontese.gpx", 1134, 1, 1, 6006, "01:25", 370, 2217, "Hiker", "Once you arrive at the level of the dam you will immediately find the signs indicating the path to the Rifugio Pontese. The route initially runs along the lake, then a steep climb will follow, which will allow you to admire the splendid panorama from above.", 83, 84);
+VALUES (38, "Path to Rifugio Pontese", 2, "gpx/Rifugio_Pontese.gpx", 1134, 1, 1, 6006, "01:25", 370, 2217, "Hiker", "Once you arrive at the level of the dam you will immediately find the signs indicating the path to the Rifugio Pontese. The route initially runs along the lake, then a steep climb will follow, which will allow you to admire the splendid panorama from above.", 85, 86);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (39, "Path to Croce del faggio", 2, "gpx/Croce_del_faggio.gpx", 1134, 1, 1, 5007, "01:10", 340, 1400, "Hiker", "The Path to the Croce del Beech is really simple and easily identifiable. It's short, which makes it perfect for beginners and to be ridden all year round.", 85, 86);
+VALUES (39, "Path to Croce del faggio", 2, "gpx/Croce_del_faggio.gpx", 1134, 1, 1, 5007, "01:10", 340, 1400, "Hiker", "The Path to the Croce del Beech is really simple and easily identifiable. It's short, which makes it perfect for beginners and to be ridden all year round.", 87, 88);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (40, "Path to Fondo and Tallorno", 2, "gpx/Fondo_e_tallorno.gpx", 1278, 1, 1, 4600, "01:10", 200, 1222, "Tourist", "The path to the Fondo and Tallorno waterfall starts on the left of the bar over the bridge and runs alongside the river on a clearly visible mule track.", 87, 88);
+VALUES (40, "Path to Fondo and Tallorno", 2, "gpx/Fondo_e_tallorno.gpx", 1278, 1, 1, 4600, "01:10", 200, 1222, "Tourist", "The path to the Fondo and Tallorno waterfall starts on the left of the bar over the bridge and runs alongside the river on a clearly visible mule track.", 89, 90);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (41, "Path to Rifugio Arlaud", 2, "gpx/Rifugio_Arlaud.gpx", 1175, 1, 1, 10007, "03:20", 250, 1800, "Tourist", "The route develops within the Gran Bosco di Salbertrand Natural Park, it is truly suggestive in winter because the snow that covers the trees is a unique spectacle.", 89, 90);
+VALUES (41, "Path to Rifugio Arlaud", 2, "gpx/Rifugio_Arlaud.gpx", 1175, 1, 1, 10007, "03:20", 250, 1800, "Tourist", "The route develops within the Gran Bosco di Salbertrand Natural Park, it is truly suggestive in winter because the snow that covers the trees is a unique spectacle.", 91, 92);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (42, "Path to Rifugio Amprimo", 2, "gpx/Amprimo.gpx", 1245, 1, 1, 4538, "01:25", 120, 1385, "Tourist", "The path to the Amprimo Hut from the town of Cortavetto is an easy destination for everyone, even those approaching the mountain for the first time, but no less fascinating for this.", 91, 92);
+VALUES (42, "Path to Rifugio Amprimo", 2, "gpx/Amprimo.gpx", 1245, 1, 1, 4538, "01:25", 120, 1385, "Tourist", "The path to the Amprimo Hut from the town of Cortavetto is an easy destination for everyone, even those approaching the mountain for the first time, but no less fascinating for this.", 93, 94);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (43, "Anello Augusto Monti", 2, "gpx/Sentiero_Augusto_Monti.gpx", 1115, 1, 1, 8500, "02:30", 270, 814, "Tourist", "The start of the itinerary is in the immediate vicinity of the hamlet, there are panels that intend to show the origin of the itinerary.", 93, 94);
+VALUES (43, "Anello Augusto Monti", 2, "gpx/Sentiero_Augusto_Monti.gpx", 1115, 1, 1, 8500, "02:30", 270, 814, "Tourist", "The start of the itinerary is in the immediate vicinity of the hamlet, there are panels that intend to show the origin of the itinerary.", 95, 96);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (44, "Path to Monte Muretto", 2, "gpx/Monte_Muretto.gpx", 1191, 1, 1, 4300, "01:40", 270, 820, "Tourist", "Particularly easy excursion and suitable for the whole family, also for the beautiful panorama visible from the top, obviously if the weather permits.", 95, 96);
+VALUES (44, "Path to Monte Muretto", 2, "gpx/Monte_Muretto.gpx", 1191, 1, 1, 4300, "01:40", 270, 820, "Tourist", "Particularly easy excursion and suitable for the whole family, also for the beautiful panorama visible from the top, obviously if the weather permits.", 97, 98);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (45, "Path to Lago Fauri", 2, "gpx/Lago_Fauri.gpx", 1201, 1, 1, 22500, "07:30", 1273, 2857, "Hiker", "ou reach the locality of Pattemouche, shortly after the main town of Pragelato, and continue by car along the road until you reach a large dirt clearing, before a bridge over the Chisone stream.", 97, 98);
+VALUES (45, "Path to Lago Fauri", 2, "gpx/Lago_Fauri.gpx", 1201, 1, 1, 22500, "07:30", 1273, 2857, "Hiker", "ou reach the locality of Pattemouche, shortly after the main town of Pragelato, and continue by car along the road until you reach a large dirt clearing, before a bridge over the Chisone stream.", 99, 100);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (46, "Path to Colle della Croce Intror", 2, "gpx/Sentiero_per_Croce_Intror.gpx", 1272, 1, 1, 13500, "08:00", 1100, 1947, "Hiker", "The path climbs in a beautiful wood of hazelnut and chestnut trees and gradually gives way to majestic beech trees, where in spring we will be surrounded by the melodious song of birds and in autumn by carpets of dry leaves.", 99, 100);
+VALUES (46, "Path to Colle della Croce Intror", 2, "gpx/Sentiero_per_Croce_Intror.gpx", 1272, 1, 1, 13500, "08:00", 1100, 1947, "Hiker", "The path climbs in a beautiful wood of hazelnut and chestnut trees and gradually gives way to majestic beech trees, where in spring we will be surrounded by the melodious song of birds and in autumn by carpets of dry leaves.", 101, 102);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (47, "Path to Cima di Bard", 2, "gpx/Cima_di_Bard.gpx", 1157, 1, 1, 14010, "05:30", 1442, 3168, "Professional hiker", "Traveling along the SS25 from Susa in the direction of the Moncenisio pass, you pass through the hamlet of Bar Cenisio where, once you have passed the few houses present, on the left, near a concrete house, an easy-to-travel dirt road begins with an even surface , which in a short time will take you to Lake Arpone (or Lake Arpon), where this excursion begins.", 101, 102);
+VALUES (47, "Path to Cima di Bard", 2, "gpx/Cima_di_Bard.gpx", 1157, 1, 1, 14010, "05:30", 1442, 3168, "Professional hiker", "Traveling along the SS25 from Susa in the direction of the Moncenisio pass, you pass through the hamlet of Bar Cenisio where, once you have passed the few houses present, on the left, near a concrete house, an easy-to-travel dirt road begins with an even surface , which in a short time will take you to Lake Arpone (or Lake Arpon), where this excursion begins.", 103, 104);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (48, "Path for Colle della Crocetta", 2, "gpx/Colle_della_crocetta.gpx", 1073, 1, 1, 10400, "05:15", 1020, 2641, "Professional hiker", "Reach the starting point of the Path for Colle della Crocetta by  setting the navigator to 'Ceresole Reale'. At this point you can decide whether to park near the dam, cross it and head towards Villa Poma on foot, or you can continue to the end of the lake, turning left behind the Massimo Mila refuge, thus lengthening the itinerary.", 103, 104);
+VALUES (48, "Path for Colle della Crocetta", 2, "gpx/Colle_della_crocetta.gpx", 1073, 1, 1, 10400, "05:15", 1020, 2641, "Professional hiker", "Reach the starting point of the Path for Colle della Crocetta by  setting the navigator to 'Ceresole Reale'. At this point you can decide whether to park near the dam, cross it and head towards Villa Poma on foot, or you can continue to the end of the lake, turning left behind the Massimo Mila refuge, thus lengthening the itinerary.", 105, 106);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (49, "Red lake from Cortavetto", 2, "gpx/Lago_Rosso_passando_da_rifugi_Toesca_e_Valgravio.gpx.gpx", 1245, 1, 1, 20500, "07:30", 1100, 2280, "Professional hiker", "This loop excursion immersed in the Orsiera-Rocciavrè Nature Park offers beautiful landscape views and a route that is always very varied and never monotonous.", 105, 106);
+VALUES (49, "Red lake from Cortavetto", 2, "gpx/Lago_Rosso_passando_da_rifugi_Toesca_e_Valgravio.gpx.gpx", 1245, 1, 1, 20500, "07:30", 1100, 2280, "Professional hiker", "This loop excursion immersed in the Orsiera-Rocciavrè Nature Park offers beautiful landscape views and a route that is always very varied and never monotonous.", 107, 108);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (50, "Path to lake Mongioia and Monte Mongioia", 2, "gpx/Lago_e_Monte_Mongioia.gpx", 4017, 4, 1, 15030, "08:00", 1250, 3340, "Hiker", "After Chiazale, follow the signs for Sant'Anna di Bellino and once you get there, continue for another 500m following the signs for the Melezè refuge.", 107, 108);
+VALUES (50, "Path to lake Mongioia and Monte Mongioia", 2, "gpx/Lago_e_Monte_Mongioia.gpx", 4017, 4, 1, 15030, "08:00", 1250, 3340, "Hiker", "After Chiazale, follow the signs for Sant'Anna di Bellino and once you get there, continue for another 500m following the signs for the Melezè refuge.", 109, 110);
 
 
 
