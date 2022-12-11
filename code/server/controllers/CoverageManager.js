@@ -1,10 +1,10 @@
 "use strict";
 
-class TestClass {
+class CoverageClass {
     testFunction() {
         const x = 2;
         console.log(x);
     }
 }
 
-module.exports = new TestClass();
+module.exports = new CoverageClass();

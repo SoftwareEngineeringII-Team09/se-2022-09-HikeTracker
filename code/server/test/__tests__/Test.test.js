@@ -1,10 +1,9 @@
-const TestManager = require('../../controllers/TestManager');
+const CoverageManager = require('../../controllers/CoverageManager');
 
 describe("Test", function () {
 
     test(`Should call test function`, function () {
-        TestManager.testFunction();
+        CoverageManager.testFunction();
     });
-
 
 });
