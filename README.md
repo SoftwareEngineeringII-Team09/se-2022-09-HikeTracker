@@ -968,7 +968,7 @@ city
 province
 region
 length
-expected_time
+expectedTime
 ascent
 maxElevation
 difficulty
@@ -989,7 +989,6 @@ hut
 nameOfLocation
 latitude
 longitude
-altitude
 ```
 
 ### `Hut`
@@ -1006,6 +1005,10 @@ province
 region
 numOfBeds
 cost
+altitude
+phone
+email
+website
 ```
 
 ### `HutDailySchedule`
@@ -1037,6 +1040,8 @@ parkingLotId
 parkingLotName
 pointId
 writerId
+capacity
+altitude
 ```
 
 ### `HikeParkingLot`

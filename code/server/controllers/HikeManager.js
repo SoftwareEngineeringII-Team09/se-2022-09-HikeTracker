@@ -5,7 +5,7 @@ const gpxParser = require("gpxparser");
 const geodist = require('geodist')
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
-const { lastIndexOfRegex } = require('index-of-regex');
+const {lastIndexOfRegex } = require('index-of-regex');
 const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
@@ -292,6 +292,7 @@ class HikeManager {
   // Load a hike by hikeId
   async getHikeById(hikeId) {
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
+   
     const writer = await UserManager.loadOneByAttributeUser(
       "userId",
       hike.writerId
@@ -304,7 +305,7 @@ class HikeManager {
       "pointId",
       hike.endPoint
     );
-
+    
     if (startPoint.hut) {
       const hutName = await HutManager.loadOneByAttributeHut(
         "pointId",
