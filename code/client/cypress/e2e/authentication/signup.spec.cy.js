@@ -1,12 +1,13 @@
-describe('Login', () => {
+const { SERVER_URL } = require("../../fixtures/constants");
 
-  beforeEach(() => {
-    // Reset and seed the database prior to every test
-  });
+describe('Signup', () => {
+
+  before(() => cy.clearAll())
+  beforeEach(() => cy.visit('/signup'))
+  after(() => cy.clearAll())
+
 
   it('Shows error to non existing user', () => {
-    cy.visit('/signup');
-
     const email = "email@example.com";
     const password = "Secure!p4ssw0rd";
     const mobile = "+39 3921234567";

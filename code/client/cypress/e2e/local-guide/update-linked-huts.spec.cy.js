@@ -22,7 +22,7 @@ describe('Update linked huts', () => {
         cy.get('img[alt="Marker"]').click({ force: true });
         cy.findByRole('button', { name: /Link this hut to the hike/i }).click()
         cy.findByRole('button', { name: /save changes/i }).click()
-        cy.wait('@update-linked-huts-xhr').then((xhr) => {
+        cy.wait('@update-linked-huts-xhr').then(() => {
             cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', "Linked huts have been correctly updated");
         })
     })
