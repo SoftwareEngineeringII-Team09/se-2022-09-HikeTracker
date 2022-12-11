@@ -6,7 +6,6 @@ const crypto = require('crypto');
 const transporter = require("../middlewares/mail");
 
 class UserManager {
-  costructor() { }
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
    * Store a new user

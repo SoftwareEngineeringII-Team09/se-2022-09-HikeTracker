@@ -5,7 +5,7 @@ const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
 const HikeParkingLot = require("../dao/model/HikeParkingLot");
-const HikeRefPoint = require("../dao/model/HikeRefPoint");
+const HikeRefPoint = require("../dao/model/HikeRefPoint");  
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
 const HikeManager = require("../controllers/HikeManager");
@@ -310,9 +310,6 @@ exports.testGetPotentialHut = function (itShould, hikeId, expectNum) {
   test(`Should ${itShould}`, async () => {
     const res = await HikeManager.getPotentialHuts(hikeId);
     expect(res.potentialHuts).toHaveLength(expectNum);
-
-    
-    
     
   });
 }

@@ -26,6 +26,7 @@ const App = () => {
           <Route path='/account/hikes/add' element={<Pages.LocalGuide.Hikes.Add />} />
           <Route path='/account/hikes/:hikeId/update/endpoints' element={<Pages.LocalGuide.Hikes.UpdateEndpoints />} />
           <Route path='/account/hikes/:hikeId/update/reference-points' element={<Pages.LocalGuide.Hikes.UpdateReferencePoints />} />
+          <Route path='/account/hikes/:hikeId/update/linked-huts' element={<Pages.LocalGuide.Hikes.UpdateLinkedHuts />} />
           <Route path='/account/huts' element={<Pages.LocalGuide.Huts.List />} />
           <Route path='/account/huts/add' element={<Pages.LocalGuide.Huts.Add />} />
           <Route path='/account/parking-lots/add' element={<Pages.LocalGuide.ParkingLots.Add />} />

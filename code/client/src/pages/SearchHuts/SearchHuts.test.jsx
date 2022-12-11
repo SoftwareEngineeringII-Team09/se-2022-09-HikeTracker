@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 
 import api from '@services/api'
@@ -33,11 +33,10 @@ jest.mock('@components/features', () => ({
 
 describe("SearchHuts page", () => {
     it("Page is correctly rendered", async () => {
-        // const huts = []
-        // api.huts.getHuts.mockResolvedValueOnce(huts)
+        const huts = []
+        api.huts.getHuts.mockResolvedValueOnce(huts)
 
-        // render(<SearchHuts />, { wrapper: MemoryRouter })
-        // expect(api.huts.getHuts).toHaveBeenCalledTimes(1)
-        // await waitFor(() => expect(screen.getByText('Search huts')).toBeInTheDocument())
+        render(<SearchHuts />, { wrapper: MemoryRouter })
+        expect(api.huts.getHuts).toHaveBeenCalledTimes(1)
     })
 })

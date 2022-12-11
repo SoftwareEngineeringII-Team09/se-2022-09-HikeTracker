@@ -1,7 +1,7 @@
 "use strict";
 
 const ParkingLotManager = require("../controllers/ParkingLotManager");
-const { body, param, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require('../middlewares/auth')
@@ -31,6 +31,7 @@ router.post("/",
         req.body.altitude ?? null,
         req.body.capacity
       );
+
       return res.status(201).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;

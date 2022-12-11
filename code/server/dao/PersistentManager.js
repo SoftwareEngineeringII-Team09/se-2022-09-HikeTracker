@@ -14,7 +14,7 @@ class PersistentManager {
       let attributesValue = [];
 
       //Loop through all the object attributes and push them into the arrays
-      for (var prop in object) {
+      for (let prop in object) {
         if (Object.prototype.hasOwnProperty.call(object, prop)) {
           attributesName.push(prop);
           attributesValue.push(object[prop]);
@@ -58,7 +58,7 @@ class PersistentManager {
       let attributesValue = [];
 
       //Loop through all the object attributes and push them into the arrays
-      for (var prop in object) {
+      for (let prop in object) {
         if (Object.prototype.hasOwnProperty.call(object, prop)) {
           attributesName.push(prop + "= ?");
           attributesValue.push(object[prop]);
