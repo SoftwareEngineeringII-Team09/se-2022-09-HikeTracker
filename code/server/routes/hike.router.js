@@ -212,8 +212,8 @@ router.get(
 // GET potential huts
 router.get(
   "/:hikeId/linkable-huts",
-  // auth.withAuth,
-  // auth.withRole(["Local Guide"]),
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
