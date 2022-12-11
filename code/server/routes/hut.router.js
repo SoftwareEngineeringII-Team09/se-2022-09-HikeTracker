@@ -6,11 +6,6 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 
-router.get("/coverage", (req, res) => {
-  console.log("coverage test");
-  return res.status(200).end();
-});
-
 // POST a hut
 router.post(
   "/",
