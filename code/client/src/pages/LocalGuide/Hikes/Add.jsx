@@ -55,7 +55,7 @@ const AddHike = () => {
             });
     };
 
-    const handleFileChange = (event) => {
+    function handleFileChange(event) {
         if (event.target.files && event.target.files[0])    
             setGpxFile(event.target.files[0]);
     };

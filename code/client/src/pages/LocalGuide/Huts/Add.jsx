@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LoadingButton } from '@components/form';
 import { toast } from 'react-toastify'
 import { Formik, Form } from 'formik'
 
 import { MarkerOnPoint } from '@components/features/Map'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import { Select, Input } from '@components/form'
+import { Select, Input, LoadingButton } from '@components/form'
 import { HutSchema } from '@lib/validations'
 
 import regions from '@data/locations/regioni'
@@ -22,7 +21,7 @@ const AddHut = () => {
 
     const navigate = useNavigate()
 
-    const handleSubmit = (values) => {
+    function handleSubmit(values) {
         setLoading(true);
         api.huts.createHut({
             hutName: values.hutName,
@@ -74,7 +73,7 @@ const AddHut = () => {
                 <div className='mb-5'>
                     <h1 className='fw-black m-0 display-1'>Insert hut data</h1>
                 </div>
-                <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={(values) => handleSubmit(values)}>
+                <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={handleSubmit}>
                     {({ values }) => {
                         return (<Form data-testid="hut-form">
                             <Input id="hutName" name="hutName" type="text" label="Name:" placeholder="Hut name" className="mb-3" />

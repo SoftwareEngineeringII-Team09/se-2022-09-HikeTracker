@@ -34,7 +34,6 @@ class PersistentManager {
       const db = new sqlite.Database(this.dbName, (err) => {
         if (err) {
           reject(err);
-          return;
         }
       });
       db.get("PRAGMA foreign_keys = ON");
@@ -126,7 +125,6 @@ class PersistentManager {
       const db = new sqlite.Database(this.dbName, (err) => {
         if (err) {
           reject(err);
-          return;
         }
       });
       db.get("PRAGMA foreign_keys = ON");
@@ -144,11 +142,7 @@ class PersistentManager {
   async exists(tableName, attributeName, value) {
     try {
       let row = await this.loadOneByAttribute(tableName, attributeName, value);
-      if (row) {
-        return true;
-      } else {
-        return false;
-      }
+      return !!row;
     } catch (err) {
       return Promise.reject(err);
     }

@@ -89,7 +89,7 @@ const UpdateEndpoints = () => {
         }
     }, [hikeId, trackUpdated]); // eslint-disable-line
 
-    const savePoints = () => {
+    function savePoints() {
 
         const pointsUpdated = !startPoint.hasOwnProperty('original') || !endPoint.hasOwnProperty('original');
 
@@ -123,13 +123,17 @@ const UpdateEndpoints = () => {
             });
     };
 
+    function navigateBack() {
+        navigate(-1);
+    }
+
     if (loading)
         return <Spinner />;
 
     if (error)
         return <Alert variant='danger'>
             There has been a problem loading the hike: {error}
-            <Button className='d-block mt-3' variant="light" onClick={() => navigate(-1)}>Go back</Button>
+            <Button className='d-block mt-3' variant="light" onClick={navigateBack}>Go back</Button>
         </Alert>;
 
 

@@ -26,8 +26,8 @@ const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [],
                         </Popup>
                     </Marker>
                 ))}
-                {potentials.map((potential, idx) => (
-                    <Marker key={idx} position={potential.coords}>
+                {potentials.map((potential) => (
+                    <Marker key={potential.id + potential.pointType + (potential.potential || "")} position={potential.coords}>
                         <Popup className='text-center'>
                             <span className='fw-bold'>{potential.name}</span>
                             <Button className='d-block mt-2' onClick={() => { closePopup(); potential.updatePoint(potential) }}>
