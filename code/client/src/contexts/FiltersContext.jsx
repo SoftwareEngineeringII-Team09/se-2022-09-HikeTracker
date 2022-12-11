@@ -1,4 +1,4 @@
-import { useState, createContext } from 'react';
+import { useState, createContext, useMemo } from 'react';
 
 import { __DEFAULT_FILTERS, haveGeoAreaConflict } from '@lib/helpers/filters'
 import { toast } from 'react-toastify';
@@ -24,7 +24,7 @@ export const FiltersProvider = ({ children }) => {
         setActive(false)
     }
 
-    const ctx = { filters: filters, active: active, apply: handleApply, reset: handleReset }
+    const ctx = useMemo(() => ({ filters: filters, active: active, apply: handleApply, reset: handleReset }), [active, filters]);
 
     return (
         <FiltersContext.Provider value={ctx}>

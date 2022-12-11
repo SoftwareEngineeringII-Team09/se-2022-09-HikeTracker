@@ -3,7 +3,7 @@ import { AuthContext } from '@contexts/authContext';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [], linkedHuts = [] }) => {
+const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], potentials = [], linkedHuts = [] }) => {
 
     const closePopup = () => {
         document.querySelector(".leaflet-popup-close-button")?.click();
