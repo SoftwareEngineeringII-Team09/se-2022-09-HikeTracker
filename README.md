@@ -1,4 +1,5 @@
 ![tests workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/tests.yml/badge.svg)
+<!-- ![sonarcloud analysis workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/sonarcloud.yml/badge.svg) -->
 ![docker build workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-build.yml/badge.svg)
 
 ---
@@ -57,9 +58,16 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 	    - [`GET /api/hikes/:hikeId`](#get-apihikeshikeid)
 	    - [`GET /api/hikes/:hikeId/download`](#get-apihikeshikeiddownload)
 	    - [`POST /api/hikes/refPoints/:hikeId`](#post-apihikesrefpointshikeid)
+       - [`GET /api/hikes/writers/:writerId`](#get-apihikeswriterswriterid)
+       - [`GET /api/hikes/:hikeId/potentialStartEndPoints`](#get-apihikeshikeidpotentialstartendpoints)
+       - [`GET /api/hikes/:hikeId/linkable-huts`](#get-apihikeshikeidlinkable-huts)
+       - [`PUT /api/hikes/:hikeId/refPoints`](#put-apihikeshikeidrefpoints)
+       - [`PUT /api/hikes/:hikeId/startEndPoints`](#put-apihikeshikeidstartendpoints)
+       - [`PUT /api/hikes/:hikeId/huts`](#put-apihikeshikeidhuts)
     - [Hut Routes](#hut-routes)
 	    - [`POST /api/huts`](#post-apihuts)
 	    - [`GET /api/huts`](#get-apihuts)
+       - [`GET /api/huts/:hutId`](#get-apihutshutid)
     - [Parking Lot Routes](#parking-lot-routes)
 	    - [`POST /api/parkingLots`](#post-apiparkinglots)
 6. [Database Tables](#database-tables)
@@ -709,8 +717,7 @@ Get a hike by hikeId.
 }
 ```
 
-**Error responses**
-
+**Error responses:**
 - `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
@@ -721,18 +728,17 @@ Get a hike by hikeId.
 Get gpx file according to the hike Id.
 
 **Request header:**
-
 `Content-Type: application/json`
-
 `Params: req.params.hikeId to retrieve the id of the hike.`
 
-**Response body**
+**Response body:**
+`None`
 
-`HTTP status code 200 OK`
+**Response header:**
+- `HTTP status code 200 OK`
 `file requested from frontend`
 
-**Error responses**
-
+**Error responses:**
 - `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
@@ -755,23 +761,21 @@ JSON object containing reference point information of specific hike.
 ```json
 {
    "referencePoints":[
-   {
-      "name": "refName1",
-      "coords": [12334.555,123.5675]
-   },
-   {
-      "name": "refName2",
-      "coords": [563.3452,8564.345234]
-   }
-  
-]
-  
+      {
+         "name": "refName1",
+         "coords": [12334.555,123.5675]
+      },
+      {
+         "name": "refName2",
+         "coords": [563.3452,8564.345234]
+      },
+      ...
+   ]
 }
 ```
 
-**Response header**
-
-`HTTP status code 201 Created(success)`
+**Response header:**
+- `HTTP status code 201 Created(success)`
 
 **Response body**
 `None`
@@ -780,8 +784,356 @@ JSON object containing reference point information of specific hike.
 `Local Guide, Manager`
 
 **Error responses**
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
 
-- `HTTP status code 503 Internal Server Error` (generic server error)
+
+#### `GET /api/hikes/writers/:writerId`
+
+Get the hikes of a specific writer. 
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.writerId of the writer.`
+
+**Request body:**
+`None`
+
+**Response header**
+- `HTTP status code 200 OK`
+
+**Response body:**
+```json
+{
+   [
+      {
+         "hikeId": 1,
+         "title": "Trail to Monte Ferra",
+         "writer": {
+            "writerId": 2,
+            "writerName": "Mario Rossi"
+         },
+         "city": 4017,
+         "province": 4,
+         "region": 1,
+         "length": 13.1,
+         "expectedTime": {
+            "hours": "01",
+            "minutes": "20"
+         },
+         "ascent": 237.7,
+         "maxElevation": 3094.14,
+         "difficulty": "Professional hiker",
+         "description": "Hike decription",
+         "startPoint": {
+            "coords": [
+               44.57425086759031,
+               6.982689192518592
+            ]
+        }
+      },
+      {
+         "hikeId": 2,
+         "title": "Trail to Rocca Patanua",
+         "writer": {
+            "writerId": 2,
+            "writerName": "Mario Rossi"
+         },
+         "city": 1093,
+         "province": 1,
+         "region": 1,
+         "length": 9.2,
+         "expectedTime": {
+            "hours": "03",
+            "minutes": "00"
+         },
+         "ascent": 985.3,
+         "maxElevation": 2352.9619286962,
+         "difficulty": "Hiker",
+         "description": "Hike description",
+         "startPoint": {
+            "coords": [
+               45.14908790588379,
+               7.237061262130737
+            ]
+         }
+      },
+      ...
+   ]
+}
+```
+
+**Permission allowed**
+`Local Guide, Manager`
+
+**Error responses**
+
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `GET /api/hikes/:hikeId/potentialStartEndPoints`
+
+Get the potential start and end points for a specific hike. 
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.hikeId of the hike.`
+
+**Request body:**
+`None`
+
+**Response header:**
+- `HTTP status code 200 OK`
+
+**Response body:**
+```json
+{
+    "potentialStartPoints": [
+        {
+            "type": "hut",
+            "id": 4,
+            "name": "Rifugio Lou Saret'",
+            "coords": [
+                44.57736621029435,
+                6.999171627929085
+            ]
+        },
+        {
+            "type": "parking lot",
+            "id": 2,
+            "name": "Monte Ferra Parking 2",
+            "coords": [
+                44.5749908675903,
+                6.98998919251859
+            ]
+        }
+    ],
+    "potentialEndPoints": [
+        {
+            "type": "parking lot",
+            "id": 1,
+            "name": "Monte Ferra Parking 1",
+            "coords": [
+                44.5799508675903,
+                6.98408919299859
+            ]
+        },
+        {
+            "type": "parking lot",
+            "id": 3,
+            "name": "Monte Ferra Parking 3",
+            "coords": [
+                44.5749939993593,
+                6.98269703999564
+            ]
+        }
+    ]
+}
+```
+
+**Permission allowed:**
+`Local Guide, Manager`
+
+**Error responses:**
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `GET /api/hikes/:hikeId/linkable-huts`
+
+Get the linkable huts for a specific hike. 
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.hikeId of the hike.`
+
+**Request body:**
+`None`
+
+**Response header:**
+- `HTTP status code 200 OK`
+
+**Response body:**
+```json
+{
+    "potentialHuts": [
+        {
+            "hutId": 1,
+            "hutName": "Rifugio Meleze'",
+            "pointId": 1,
+            "writerId": 2,
+            "city": 4017,
+            "province": 4,
+            "region": 1,
+            "numOfBeds": 50,
+            "cost": 50,
+            "altitude": 1757.43,
+            "phone": "0175 956410",
+            "email": "meleze@meleze.it",
+            "website": "www.meleze.it",
+            "type": "start point",
+            "parkingLot": 0,
+            "hut": 1,
+            "nameOfLocation": null,
+            "latitude": 44.57425086759031,
+            "longitude": 6.982689192518592
+        },
+        {
+            "hutId": 4,
+            "hutName": "Rifugio Lou Saret'",
+            "pointId": 22,
+            "writerId": 2,
+            "city": 4017,
+            "province": 4,
+            "region": 1,
+            "numOfBeds": 80,
+            "cost": 70,
+            "altitude": 1756.76,
+            "phone": "347 975 3899",
+            "email": "lousaret@libero.it",
+            "website": "www.agriturismolousaret.it",
+            "type": "hut",
+            "parkingLot": 0,
+            "hut": 1,
+            "nameOfLocation": null,
+            "latitude": 44.57736621029435,
+            "longitude": 6.999171627929085
+        }
+    ]
+}
+```
+
+**Permission allowed:**
+`Local Guide, Manager`
+
+**Error responses:**
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `PUT /api/hikes/:hikeId/refPoints`
+
+Update reference points for a specific hike.
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.hikeId of the hike.`
+
+**Request body:**
+```json
+{
+   "referencePoints": [
+      {
+         "name": "view",
+         "coords": [44.521, 6.534]
+      },
+      {
+         "name": "fountain",
+         "coords": [45.864, 7.924]
+      },
+      ...
+   ]
+}
+```
+
+**Response header:**
+- `HTTP status code 201 Created(success)`
+
+**Response body:**
+`None`
+
+**Permission allowed:**
+`Local Guide, Manager`
+
+**Error responses**
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `PUT /api/hikes/:hikeId/startEndPoints`
+
+Update start and/or end point for a specific hike.
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.hikeId of the hike.`
+
+**Request body:**
+```json
+{
+   "newStartPoint": [
+      {
+         "type": "hut",
+         "id": 1
+      },
+      {
+         "type": "parking lot",
+         "id": 2
+      },
+      ...
+   ]
+}
+```
+
+**Response header:**
+- `HTTP status code 201 Created(success)`
+
+**Response body:**
+`None`
+
+**Permission allowed:**
+`Local Guide, Manager`
+
+**Error responses**
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `PUT /api/hikes/:hikeId/huts`
+
+Update huts for a specific hike.
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.hikeId of the hike.`
+
+**Request body:**
+```json
+{
+   [
+      1,
+      2,
+      5,
+      10,
+      ...
+   ]
+}
+```
+
+**Response header:**
+- `HTTP status code 201 Created(success)`
+
+**Response body:**
+`None`
+
+**Permission allowed:**
+`Local Guide, Manager`
+
+**Error responses**
+- `HTTP status code 500 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 - `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
@@ -884,6 +1236,60 @@ Get all huts
 - `HTTP status code 503 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
+
+
+#### `GET /api/huts/:hutId`
+
+Get a specific hut by Id. 
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.hutId of the hut.`
+
+**Request body:**
+`None`
+
+**Response header:**
+- `HTTP status code 200 OK`
+
+**Response body:**
+```json
+{
+   "hut": {
+      "hutId": 1,
+      "hutName": "HutName",
+      "pointId": 1,
+      "writerId": 2,
+      "city": 1013,
+      "province": 1,
+      "region": 1,
+      "numOfBeds": 50,
+      "cost": 50.0,
+      "altitude": 1860.12,
+      "phone": "39012345678",
+      "email": "hutemail@gmail.com",
+      "website": "www.hutwebsite.it" 
+   },
+   "point": {
+      "pointId": 1,
+      "type": "hut",
+      "parkingLot": 0,
+      "hut": 1,
+      "nameOfLocation": null,
+      "latitude": 44.124521,
+      "longitude": 6.587514
+   }
+}
+```
+
+**Permission allowed:**
+`Local Guide, Hiker, Manager`
+
+**Error responses:**
+- `HTTP status code 500 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
 
 
 ### **Parking Lot Routes**
