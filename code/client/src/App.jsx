@@ -3,7 +3,7 @@ import ProtectedRoute from './components/features/ProtectedRoute/ProtectedRoute'
 
 import { Layout } from '@layouts';
 import * as Pages from '@pages';
-import CoverageFeature from './components/features/Coverage/CoverageFeature';
+import CoverageFeature from './components/features/HikeCov/HikeCov';
 
 const App = () => {
   const location = useLocation();
