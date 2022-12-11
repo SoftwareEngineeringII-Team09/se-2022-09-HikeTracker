@@ -114,6 +114,7 @@ const UpdateEndpoints = () => {
             .then(() => {
                 toast.success("Points have been successfully updated", { theme: "colored" });
                 setTrackUpdated(true);
+                navigate(`/hikes/${hikeId}`)
             })
             .catch((error) => {
                 toast.error(error, { theme: "colored" });

@@ -40,7 +40,7 @@ const AddHike = () => {
                     theme: "colored"
                 });
                 // Redirect to the newly created hike
-                navigate(`/reference-points/${res.hikeId}`);
+                navigate(`/account/hikes/${res.hikeId}/update/reference-points`);
             })
             .catch((error) => {
                 toast.error(error.message, {
@@ -50,7 +50,7 @@ const AddHike = () => {
     };
 
     const handleFileChange = (event) => {
-        if (event.target.files && event.target.files[0])    
+        if (event.target.files && event.target.files[0])
             setGpxFile(event.target.files[0]);
     };
 
@@ -79,10 +79,10 @@ const AddHike = () => {
                         <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
                             <option value={0}>Select a provice</option>
                             {provinces
-                            .filter(province => province.regione === region)
-                            .map(province => (
-                                <option key={province.provincia} value={province.provincia}>{province.nome}</option>
-                            ))}
+                                .filter(province => province.regione === region)
+                                .map(province => (
+                                    <option key={province.provincia} value={province.provincia}>{province.nome}</option>
+                                ))}
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>

@@ -11,8 +11,9 @@ const navigation = {
         { label: "Search huts", url: "/huts", variant: "link" },
     ],
     LocalGuide: [
-        { label: "My hikes", url: "/account/hikes" },
-        { label: "My Huts", url: "/account/huts" },
+        { label: "Search huts", url: "/huts", variant: "link" },
+        { label: "My Hikes", url: "/account/hikes" },
+        // { label: "My Huts", url: "/account/huts" },
         { label: "Create a new hike", url: "/account/hikes/add" },
         { label: "Create a new hut", url: "/account/huts/add" },
         { label: "Create a new parking lot", url: "/account/parking-lots/add" },

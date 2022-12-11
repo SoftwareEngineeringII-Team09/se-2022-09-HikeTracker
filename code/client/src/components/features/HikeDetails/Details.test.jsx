@@ -7,6 +7,10 @@ jest.mock("@lib/helpers/location", () => ({
     getLocationFullName: (province, city) => `c${city}, p${province}`
 }))
 
+jest.mock("@components/features", () => ({
+    HutCard: jest.fn()
+}))
+
 const testHike = {
     title: "title",
     writer: { writerName: "writer", writerId: 0 },
@@ -23,6 +27,13 @@ const testHike = {
     referencePoints: [
         { name: "ref1" },
         { name: "ref2" },
+    ],
+    huts: [
+        {
+            hutId: 1,
+            hutName: "Rifugio test",
+            coords: []
+        }
     ],
     maxElevation: 1200,
     length: 1,

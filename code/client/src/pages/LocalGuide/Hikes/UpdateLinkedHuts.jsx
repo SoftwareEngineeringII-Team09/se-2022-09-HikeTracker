@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { Button } from "react-bootstrap"
+import { Button, Spinner } from "react-bootstrap"
 
 import { MapContainer, Marker, TileLayer, Popup, Polyline } from "react-leaflet"
 
@@ -15,7 +15,7 @@ const UpdateLinkedHuts = () => {
 
     const [loading, setLoading] = useState(true)
     const [hike, setHike] = useState(null)
-    const [linkableHuts, setLinkableHuts] = useState([])
+    const [linkableHuts, setLinkableHuts] = useState(null)
     const [huts, setHuts] = useState([])
 
     useEffect(() => {
@@ -39,8 +39,10 @@ const UpdateLinkedHuts = () => {
                         .catch(err => toast.error(err, { theme: 'colored' }))
                         .finally(() => setLoading(false))
                 })
-                .catch(err => toast.error(err, { theme: 'colored' }))
-                .finally(() => setLoading(false))
+                .catch(err => {
+                    toast.error(err, { theme: 'colored' })
+                    setLoading(false)
+                })
     }, [loading]) // eslint-disable-line
 
     const handleAddLink = (hut) => {
@@ -62,7 +64,7 @@ const UpdateLinkedHuts = () => {
             .catch(err => toast.error(err, { theme: 'colored' }))
     }
 
-    if (!loading)
+    if (!loading && linkableHuts)
         return (
             <div className="my-5">
                 <div>
@@ -105,6 +107,17 @@ const UpdateLinkedHuts = () => {
                 </div>
             </div>
         )
+    else if (!loading && !linkableHuts)
+        return (
+            <div className="my-5 d-flex justify-content-center">
+                <h3 className="fw-bold text-danger">Ops... something went wrong</h3>
+            </div>
+        )
+    else return (
+        <div role="status" className='h-100vh position-absolute top-50 start-50'>
+            <Spinner animation="border" variant="primary-dark" />
+        </div>
+    )
 }
 
 export default UpdateLinkedHuts

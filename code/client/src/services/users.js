@@ -8,7 +8,7 @@ const users = {
         return new Promise((resolve, reject) => {
             axios.post(`${SERVER_URL}/auth/signup`, user)
                 .then((res) => resolve(res.data))
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
         });
     },
 
@@ -16,15 +16,15 @@ const users = {
         return new Promise((resolve, reject) => {
             axios.post(`${SERVER_URL}/auth/login/password`, credentials, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
         });
     },
 
     sendVerificationCode: (userId) => {
         return new Promise((resolve, reject) => {
-            axios.put(`${SERVER_URL}/auth/sendVerificationCode`, {userId})
+            axios.put(`${SERVER_URL}/auth/sendVerificationCode`, { userId })
                 .then(() => resolve())
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
         });
     },
 
@@ -32,7 +32,7 @@ const users = {
         return new Promise((resolve, reject) => {
             axios.put(`${SERVER_URL}/auth/verifyEmail`, data)
                 .then(() => resolve())
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
         });
     },
 
@@ -40,7 +40,7 @@ const users = {
         return new Promise((resolve, reject) => {
             axios.delete(`${SERVER_URL}/auth/logout`, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
         });
     },
 
@@ -48,7 +48,8 @@ const users = {
         return new Promise((resolve, reject) => {
             axios.get(`${SERVER_URL}/auth/current`, { withCredentials: true })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err.response.data.error));
+                .catch(err => reject(err.response ? err.response.data.error : err.message));
+
         });
     }
 };

@@ -1,0 +1,31 @@
+{
+    "response": {
+        "NotFound": {
+            "statusCode": 404,
+            "body": {
+                "error": "User not found"
+            }
+        },
+        "InternalServerError": {
+            "statusCode": 500,
+            "body": {
+                "error": "Generic error"
+            }
+        },
+        "UnprocessableEntity": {
+            "statusCode": 422,
+            "body": {
+                "error": "Validation error"
+            }
+        },
+        "SuccessWithDetails": {
+            "statusCode": 201,
+            "body": {
+                "firstname": "Tony"
+            }
+        },
+        "SuccessHiker": {
+            "statusCode": 201
+        }
+    }
+}

@@ -1,12 +1,9 @@
-describe('Registration', () => {
-
-  beforeEach(() => {
-    // Reset the database prior to every test
-    cy.clearAll();
-  });
+describe('Signup', () => {
+  before(() => cy.clearAll())
+  beforeEach(() => cy.visit('/signup'))
+  after(() => cy.clearAll())
 
   it('Correctly register a new user', () => {
-    cy.visit('/signup');
 
     const email = "email@example.com";
     const password = "Secure!p4ssw0rd";
