@@ -117,7 +117,7 @@ class PersistentManager {
   async exists(tableName, attributeName, value) {
     try {
       let row = await this.loadOneByAttribute(tableName, attributeName, value);
-      return !(row === undefined);
+      return row !== undefined;
     } catch (err) {
       return Promise.reject(err);
     }

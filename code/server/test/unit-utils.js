@@ -4,7 +4,7 @@ const Point = require("../dao/model/Point");
 const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
-// const HikeParkingLot = require("../dao/model/HikeParkingLot");
+// HikeParkingLot
 const HikeRefPoint = require("../dao/model/HikeRefPoint");
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
@@ -22,7 +22,7 @@ const HikeHutManager = require("../controllers/HikeHutManager");
 /* Reset DB content */
 exports.clearAll = async function () {
   await PersistentManager.deleteAll(HikeHut.tableName);
-  // await PersistentManager.deleteAll(HikeParkingLot.tableName);
+  // delete HikeParkingLot
   await PersistentManager.deleteAll(HikeRefPoint.tableName);
   await PersistentManager.deleteAll(HutDailySchedule.tableName);
   await PersistentManager.deleteAll(Hut.tableName);
@@ -649,7 +649,7 @@ exports.testDefineParkingLot = function (
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
-    const parkingLotData = { writerId: writerId, parkingLotName, parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude, capacity: capacity };
+    const parkingLotData = { writerId: writerId, parkingLotName: parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude, capacity: capacity };
     if (!expectedRejectionCode) {
       await ParkingLotManager.defineParkingLot(parkingLotData);
       const definedParkingLot = await PersistentManager.loadAll(
