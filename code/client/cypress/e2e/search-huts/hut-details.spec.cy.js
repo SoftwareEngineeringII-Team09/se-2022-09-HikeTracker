@@ -8,7 +8,6 @@ describe('Hut details', () => {
     after(() => cy.clearAll())
 
     it('should allow logged in hikers to see hut details', () => {
-        cy.loginAsHiker()
         cy.visit('/huts')
         cy.findAllByRole("button", { name: /See more details/ }).first().click()
         cy.fixture('hut').then(json => {
