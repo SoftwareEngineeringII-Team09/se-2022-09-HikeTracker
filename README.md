@@ -1,7 +1,5 @@
 ![tests workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/tests.yml/badge.svg)
-![sonarcloud analysis workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/sonarcloud.yml/badge.svg)
 ![docker build workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-build.yml/badge.svg)
-![docker release workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-release.yml/badge.svg)
 
 ---
 
