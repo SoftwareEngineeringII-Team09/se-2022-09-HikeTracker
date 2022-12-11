@@ -553,8 +553,7 @@ class HikeManager {
       const distanceFromEndPoint = potentialEndPointHuts.some(peph => peph.id === psph.id) && geodist({ lat: psph.coords[0], lon: psph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
       if (distanceFromStartPoint > maxDistance) {
         return false;
-      }
-      else if (distanceFromEndPoint) {
+      } else if (distanceFromEndPoint !== false) {
         if (distanceFromStartPoint <= distanceFromEndPoint) {
           potentialEndPointHuts = potentialEndPointHuts.filter(peph => peph.id !== psph.id);
           return true;
@@ -579,7 +578,7 @@ class HikeManager {
       if (distanceFromStartPoint > maxDistance) {
         return false;
       }
-      else if (distanceFromEndPoint) {
+      else if (distanceFromEndPoint !== false) {
         if (distanceFromStartPoint <= distanceFromEndPoint) {
           potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => peppl.id !== psppl.id);
           return true;
@@ -635,13 +634,6 @@ class HikeManager {
       await PointManager.updatePoint({ ...oldStartPoint, type: "hut" }, "pointId", oldStartPoint.pointId);
     }
 
-    // Update GPX start point
-    const oldGpx = fs.readFileSync(hike.trackPath).toString();
-    const regex = new RegExp(/<trkpt.*>/);
-    const newTrkpt = `<trkpt lat="${newStartPointData.latitude}" lon="${newStartPointData.longitude}">`;
-    const newGpx = oldGpx.replace(regex, newTrkpt);
-    fs.writeFileSync(hike.trackPath, newGpx);
-
     return Promise.resolve();
   }
 
@@ -674,16 +666,6 @@ class HikeManager {
     } else if (oldEndPoint.hut) {
       await PointManager.updatePoint({ ...oldEndPoint, type: "hut" }, "pointId", oldEndPoint.pointId);
     }
-
-    // Update GPX end point
-    const oldGpx = fs.readFileSync(hike.trackPath).toString();
-    const regex = new RegExp(/<trkpt.*>/g);
-    const trkptMatches = oldGpx.match(regex);
-    const oldTrkptLength = trkptMatches[trkptMatches.length - 1].length;
-    const lastIndex = lastIndexOfRegex(oldGpx, regex);
-    const newTrkpt = `<trkpt lat="${newEndPointData.latitude}" lon="${newEndPointData.longitude}">`;
-    const newGpx = oldGpx.substring(0, lastIndex) + newTrkpt + oldGpx.substring(lastIndex + oldTrkptLength);
-    fs.writeFileSync(hike.trackPath, newGpx);
 
     return Promise.resolve();
   }

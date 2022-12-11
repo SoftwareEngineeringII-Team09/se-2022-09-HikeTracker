@@ -174,7 +174,7 @@ VALUES (20, "parking lot", 1, 0, NULL, 44.5749908675903, 6.98998919251859);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
 VALUES (21, "parking lot", 1, 0, NULL, 44.5749939993593, 6.98269703999564); 
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")
-VALUES (22, "hut", 0, 1, NULL, 44.5799639433993, 6.98994703154964); 
+VALUES (22, "hut", 0, 1, NULL, 44.57736621029435, 6.999171627929085); 
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
 VALUES (23, "start point", 0, 0, "Start point of Trial to Poggio Tre Croci Ciaspole", 45.079073, 6.695705);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude")  
@@ -521,6 +521,8 @@ INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province",
 VALUES (2, "Rifugio Blitz", 5, 2, 103024, 103, 1, 60, 60.0, 1265.85, "331 457 2614", "rifugiodelblitz@gmail.com", "www.vallevigezzo.eu");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website")
 VALUES (3, "Rifugio Aleve'", 11, 2, 4172, 4, 1, 60, 50.0, 1500.76, "347 719 3878", "rifugioaleve2021@gmail.com", "www.facebook.com/rifugioaleve");
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website")
+VALUES (4, "Rifugio Lou Saret'", 22, 2, 4017, 4, 1, 80, 70.0, 1756.76, "347 975 3899", "lousaret@libero.it", "www.agriturismolousaret.it");
 
 /* HikeHut data */
 INSERT INTO "HikeHut"("hikeId", "hutId")
