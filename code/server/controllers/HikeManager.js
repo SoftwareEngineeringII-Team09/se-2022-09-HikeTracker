@@ -608,19 +608,16 @@ class HikeManager {
   async updateStartPoint(hikeId, newStartPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldStartPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
-    let newStartPointData;
 
     // Check if the start point is a hut or a parking lot and update the hike
     if (newStartPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newStartPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      newStartPointData = hutPoint;
       await PointManager.updatePoint({ ...hutPoint, type: "start point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, startPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newStartPoint.type === "parking lot") {
       const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newStartPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      newStartPointData = parkingLotPoint;
       await PointManager.updatePoint({ ...parkingLotPoint, type: "start point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
     }
@@ -641,19 +638,16 @@ class HikeManager {
   async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
-    let newEndPointData;
-
+    
     // Check if the end point is a hut or a parking lot and update the hike
     if (newEndPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newEndPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      newEndPointData = hutPoint;
       await PointManager.updatePoint({ ...hutPoint, type: "end point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, endPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newEndPoint.type === "parking lot") {
       const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newEndPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      newEndPointData = parkingLotPoint;
       await PointManager.updatePoint({ ...parkingLotPoint, type: "end point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, endPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
     }
