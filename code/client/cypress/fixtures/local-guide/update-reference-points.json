@@ -1,0 +1,22 @@
+{
+    "response": {
+        "InternalServerError": {
+            "statusCode": 500,
+            "body": {
+                "error": "Internal Server Error"
+            }
+        },
+        "Success": {
+            "statusCode": 201
+        }
+    },
+    "body": {
+        "referencePoints": [{
+            "name": "Amazing view",
+            "coords": [
+                44.600969357416034,
+                6.987096648663282
+            ]
+        }]
+    }
+}

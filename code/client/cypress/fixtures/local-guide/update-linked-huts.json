@@ -1,0 +1,16 @@
+{
+    "response": {
+        "InternalServerError": {
+            "statusCode": 500,
+            "body": {
+                "error": "Internal Server Error"
+            }
+        },
+        "Success": {
+            "statusCode": 200,
+            "body": {
+                "potentialHuts": []
+            }
+        }
+    }
+}

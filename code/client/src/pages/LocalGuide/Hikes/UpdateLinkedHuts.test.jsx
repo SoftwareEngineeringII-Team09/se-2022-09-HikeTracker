@@ -6,7 +6,8 @@ import api from '@services/api'
 import UpdateLinkedHuts from './UpdateLinkedHuts'
 
 jest.mock('react-bootstrap', () => ({
-    Button: ({ children, ...props }) => <button {...props}>{children}</button>
+    Button: ({ children, ...props }) => <button {...props}>{children}</button>,
+    Spinner: jest.fn()
 }))
 
 jest.mock('react-leaflet', () => ({

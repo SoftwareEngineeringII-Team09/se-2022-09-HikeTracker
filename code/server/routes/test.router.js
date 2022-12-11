@@ -2,6 +2,9 @@
 
 const express = require("express");
 const UserManager = require("../controllers/UserManager");
+const HikeManager = require("../controllers/HikeManager")
+const HutManager = require("../controllers/HutManager");
+const ParkingLotManager = require("../controllers/ParkingLotManager");
 const router = express.Router();
 const TestUtils = require("../test/integration-utils");
 
@@ -43,4 +46,61 @@ router.post(
     }
   });
 
+router.post(
+  "/addHike",
+  async (req, res) => {
+    try {
+      await HikeManager.defineHike(req.body)
+      return res.status(204).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  });
+
+router.post(
+  "/addHut",
+  async (req, res) => {
+    try {
+      await HutManager.defineHut(req.body)
+      return res.status(204).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  });
+
+router.post(
+  "/addParkingLot",
+  async (req, res) => {
+    try {
+      await ParkingLotManager.defineParkingLot(req.body)
+
+      return res.status(204).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  });
+
+// router.post(
+//   "/verifyUser",
+//   async (req, res) => {
+//     try {
+//       const user = UserManager.loadAllByAttributeUser('userId', req.body.userId)
+//       await UserManager.verifyEmail(req.body.userId, user.token);
+//       return res.status(204).end();
+//     } catch (exception) {
+//       const errorCode = exception.code ?? 503;
+//       const errorMessage =
+//         exception.result ?? "Something went wrong, please try again";
+//       return res.status(errorCode).json({ error: errorMessage });
+//     }
+// });
 module.exports = router;

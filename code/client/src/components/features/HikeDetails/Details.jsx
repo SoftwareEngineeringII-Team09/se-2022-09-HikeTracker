@@ -1,11 +1,13 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { Row } from 'react-bootstrap'
 import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
+import { HutCard } from '@components/features'
 
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
@@ -52,7 +54,7 @@ const Details = ({ hike }) => {
                     { label: "Start", ...hike.startPoint },
                     { label: "End", ...hike.endPoint }
                 ].map((point, idx) => (
-                    <div key={idx} className="mb-5 w-100 w-lg-50 px-lg-3">
+                    <div key={`point-${idx}`} className="mb-5 w-100 w-lg-50 px-lg-3">
                         <h4 className='me-2 m-0'>{point.label} point</h4>
                         <p className='m-0'>{point.name}</p>
                     </div>
@@ -63,7 +65,7 @@ const Details = ({ hike }) => {
                     <h4>Reference points</h4>
                     <div className='d-flex flex-column'>
                         {hike.referencePoints.map((point, idx) => (
-                            <span key={idx} className='m-0'>{point.name}</span>
+                            <span key={`reference-point-${idx}`} className='m-0'>{point.name}</span>
                         ))}
                     </div>
                 </div>
@@ -76,7 +78,7 @@ const Details = ({ hike }) => {
                             { label: "Ascent", value: `${hike.ascent} m` },
                             { label: "Expected RT time", value: `${hike.expectedTime.hours}h : ${hike.expectedTime.minutes}m` },
                         ].map((info, idx) => (
-                            <div key={idx} className='d-flex mb-2'>
+                            <div key={`info-${idx}`} className='d-flex mb-2'>
                                 <dt className='me-2'>{info.label} |</dt>
                                 <dd className='m-0'>{info.value}</dd>
                             </div>
@@ -84,6 +86,16 @@ const Details = ({ hike }) => {
                     </dl>
                 </div>
             </div>
+            {hike.huts.length ?
+                <div className='mt-5'>
+                    <h3 className='fw-bold'>Linked huts</h3>
+                    <Row className='g-4 mt-3'>
+                        {hike.huts.map(hut => (
+                            <HutCard key={hut.hutId} hut={hut} />
+                        ))}
+                    </Row>
+                </div> : null
+            }
         </div>
     )
 }

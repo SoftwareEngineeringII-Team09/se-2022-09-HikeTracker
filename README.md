@@ -1,7 +1,6 @@
 ![tests workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/tests.yml/badge.svg)
 <!-- ![sonarcloud analysis workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/sonarcloud.yml/badge.svg) -->
 ![docker build workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-build.yml/badge.svg)
-![docker release workflow](https://github.com/SoftwareEngineeringII-Team09/se-2022-09-HikeTracker/actions/workflows/docker-release.yml/badge.svg)
 
 ---
 
@@ -25,7 +24,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [Development](#development)
     - [Tests](#tests)
     - [Production](#production)
-	  - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
+	 - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
     - [Pull from Docker Hub](#Pull-from-Docker-Hub)
 2. [Technical Dept Strategy](#technical-dept-strategy)
 3. [Technologies](#technologies)

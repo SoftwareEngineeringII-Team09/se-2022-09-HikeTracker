@@ -14,5 +14,11 @@ module.exports = defineConfig({
       require('@cypress/code-coverage/task')(on, config)
       return config
     },
+    screenshotOnRunFailure: false,
+    video: false,
+    specPattern: [
+      "cypress/e2e/**/*.cy.{js,jsx}",
+      "cypress/integrations/**/*.integration.test.{js,jsx}"
+    ],
   },
 });
