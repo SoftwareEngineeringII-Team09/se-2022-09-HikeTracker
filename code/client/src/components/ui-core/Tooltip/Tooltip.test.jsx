@@ -5,7 +5,7 @@ import Tooltip from './Tooltip'
 jest.mock('react-bootstrap', () => ({
     Tooltip: (props) => <span data-testid="tooltip-tip">{props.children}</span>,
     OverlayTrigger: ({ overlay, ...props }) => (
-        <div data-testid="tooltip-overlay">
+        <div placement={props.placement} data-testid="tooltip-overlay">
             {overlay}
             {props.children}
         </div>
@@ -31,10 +31,6 @@ describe("Tooltip component", () => {
     })
 
     it("Tip is correctly set", () => {
-        expect(screen.getByTestId(/tooltip-tip/i).innerHTML).toBe("tooltip shown")
-    })
-
-    it('Overlay is correctly set', () => {
-        expect(screen.getByTestId(/overlay/i)).toHaveAttribute('overlay')
+        expect(screen.getByTestId(/tooltip-tip/i).innerHTML).toBe(props.tip)
     })
 })

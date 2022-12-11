@@ -31,6 +31,7 @@ import { SERVER_URL } from '../fixtures/constants'
 import user from '../fixtures/user.json'
 import hike from '../fixtures/hike.json'
 import hut from '../fixtures/hut.json'
+import parkingLot from '../fixtures/parking-lot.json'
 
 /* General commands */
 
@@ -64,23 +65,6 @@ Cypress.Commands.add('createHut', ({ writer }) => {
 })
 
 /* Create Parking Lot */
-Cypress.Commands.add('addParkingLot', (parkingLotData) => {
-    cy.loginAsLocalGuide();
-
-    cy.request({
-        method: 'POST',
-        url: `${SERVER_URL}/parkingLots`,
-        body: parkingLotData
-    });
-});
-
-// /* Create Hut */
-// Cypress.Commands.add('addHut', (hutData) => {
-//     cy.loginAsLocalGuide();
-
-//     cy.request({
-//         method: 'POST',
-//         url: `${SERVER_URL}/huts`,
-//         body: hutData
-//     });
-// });
+Cypress.Commands.add('createParkingLot', ({ writer }) => {
+    cy.request('POST', `${SERVER_URL}/tests/addParkingLot`, { ...parkingLot, writerId: writer })
+})

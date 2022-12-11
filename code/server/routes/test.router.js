@@ -4,6 +4,7 @@ const express = require("express");
 const UserManager = require("../controllers/UserManager");
 const HikeManager = require("../controllers/HikeManager")
 const HutManager = require("../controllers/HutManager");
+const ParkingLotManager = require("../controllers/ParkingLotManager");
 const router = express.Router();
 const TestUtils = require("../test/integration-utils");
 
@@ -87,6 +88,28 @@ router.post(
         req.body.phone,
         req.body.email,
         req.body.website,
+      )
+
+      return res.status(204).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  });
+
+router.post(
+  "/addParkingLot",
+  async (req, res) => {
+    try {
+      await ParkingLotManager.defineParkingLot(
+        req.body.writerId,
+        req.body.parkingLotName,
+        req.body.latitude,
+        req.body.longitude,
+        req.body.altitude,
+        req.body.capacity,
       )
 
       return res.status(204).end();

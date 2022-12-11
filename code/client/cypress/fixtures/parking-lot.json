@@ -1,5 +1,7 @@
 {
-    "parkingLotName": "Test Parking Lot",
+    "parkingLotName": "Only good cars",
     "latitude": 45.175,
-    "longitude": 7.087
+    "longitude": 7.087,
+    "altitude": 600,
+    "capacity": 100
 }
