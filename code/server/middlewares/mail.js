@@ -7,10 +7,15 @@ const smtpTransport = require('nodemailer-smtp-transport');
 // Create nodemailer transporter associated with the email account
 // used to send mails to users
 const transporter = nodemailer.createTransport({
-    service: "hotmail",
+    host: 'smtp.zoho.eu',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.NODEMAILER_EMAIL,
         pass: process.env.NODEMAILER_PASSWORD,
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 

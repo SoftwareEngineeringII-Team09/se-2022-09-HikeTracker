@@ -137,14 +137,7 @@ class ParkingLotManager {
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Define a new parking lot
-  async defineParkingLot(
-    writerId,
-    parkingLotName,
-    latitude,
-    longitude,
-    altitude,
-    capacity
-  ) {
+  async defineParkingLot(parkingLotData) {
     // Defining parking lot point
     const newPoint = new Point(
       null,
@@ -152,19 +145,19 @@ class ParkingLotManager {
       1,
       0,
       null,
-      latitude,
-      longitude
+      parkingLotData.latitude,
+      parkingLotData.longitude
     );
     const newPointId = await PointManager.storePoint(newPoint);
 
     // Defining parking lot
     const newParkingLot = new ParkingLot(
       null,
-      parkingLotName,
+      parkingLotData.parkingLotName,
       newPointId,
-      writerId,
-      altitude,
-      capacity
+      parkingLotData.writerId,
+      parkingLotData.altitude,
+      parkingLotData.capacity
     ); 
 
     return this.storeParkingLot(newParkingLot);

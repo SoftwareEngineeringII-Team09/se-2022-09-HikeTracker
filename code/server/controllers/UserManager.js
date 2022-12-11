@@ -6,7 +6,6 @@ const crypto = require('crypto');
 const transporter = require("../middlewares/mail");
 
 class UserManager {
-  costructor() { }
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
    * Store a new user
@@ -112,22 +111,16 @@ class UserManager {
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Function to create a new entry for a user within the DB
   async defineUser(
-    role,
-    firstname,
-    lastname,
-    mobile,
-    email,
-    password,
-    verificationCode
+    userData
   ) {
     return new Promise((resolve, reject) => {
       const salt = crypto.randomBytes(16);
 
-      crypto.pbkdf2(password, salt, 310000, 32, 'sha256', async (err, hashedPassword) => {
+      crypto.pbkdf2(userData.password, salt, 310000, 32, 'sha256', async (err, hashedPassword) => {
         if (err) {
           reject();
         }
-        const newUser = new User(null, email, salt.toString("hex"), hashedPassword.toString("hex"), verificationCode, firstname, lastname, mobile, role, 0);
+        const newUser = new User(null, userData.email, salt.toString("hex"), hashedPassword.toString("hex"), userData.verificationCode, userData.firstname, userData.lastname, userData.mobile, userData.role, 0);
         this.storeUser(newUser)
           .then((userId) => resolve(userId))
           .catch((err) => reject(err));

@@ -16,19 +16,19 @@ const Hike = () => {
     const { hikeId } = useParams()
 
     useEffect(() => {
-        api.hikes.getHikeDetails(hikeId)
-            .then(hike => setHike(hike))
-            .catch(err => {
-                setHike(null)
-                toast.error(err, { theme: 'colored' })
-            })
-            .finally(() => setLoading(false))
-    }, []) // eslint-disable-line
+        if (loading)
+            api.hikes.getHikeDetails(hikeId)
+                .then(hike => setHike(hike))
+                .catch(err => {
+                    setHike(null)
+                    toast.error(err, { theme: 'colored' })
+                })
+                .finally(() => setLoading(false))
+    }, [loading]) // eslint-disable-line
 
     const handleDownload = () => {
         api.hikes.getHikeGPXFile(hikeId)
             .then((res) => {
-                console.log(res)
                 const url = window.URL.createObjectURL(new Blob([res]))
                 const link = document.createElement('a')
                 link.href = url
@@ -43,7 +43,7 @@ const Hike = () => {
         return (
             <Col xs={12} xl={user.loggedIn ? 6 : 10} className={`${user.loggedIn ? "ms-auto" : "mx-auto"} my-5`}>
                 {user.loggedIn &&
-                    <HikeDetails.TrackMap hikeId={hikeId} start={hike.startPoint} end={hike.endPoint} track={hike.track} references={hike.referencePoints} />}
+                    <HikeDetails.TrackMap hikeId={hikeId} start={hike.startPoint} end={hike.endPoint} track={hike.track} references={hike.referencePoints} linkedHuts={hike.huts} />}
                 {!user.loggedIn &&
                     <Alert variant='warning' className='mb-5'>
                         You should be an autenticated hiker to see the map and to be able to download the track as a <code style={{ color: "currentcolor" }}>.gpx</code> file

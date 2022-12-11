@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa'
+import { GiHut } from 'react-icons/gi'
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
@@ -27,6 +28,13 @@ const Details = ({ hike }) => {
                                 <Link to={`/account/hikes/${hike.hikeId}/update/reference-points`}>
                                     <span className='text-primary fw-bold ms-2'>
                                         <FaMapMarkerAlt size={25} />
+                                    </span>
+                                </Link>
+                            </Tooltip>
+                            <Tooltip tip="Link huts">
+                                <Link to={`/account/hikes/${hike.hikeId}/update/linked-huts`}>
+                                    <span className='text-primary fw-bold ms-2'>
+                                        <GiHut size={25} />
                                     </span>
                                 </Link>
                             </Tooltip>

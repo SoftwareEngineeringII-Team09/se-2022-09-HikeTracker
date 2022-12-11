@@ -4,7 +4,6 @@ const Point = require("../dao/model/Point");
 const PersistentManager = require("../dao/PersistentManager");
 
 class PointManager {
-  constructor() { }
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
    * Store a new point

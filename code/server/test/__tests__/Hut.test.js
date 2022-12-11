@@ -77,9 +77,9 @@ const testHut3 = new Hut(
   "www.testHutWebSite3.com"
 );
 const testHuts = [testHut1, testHut2, testHut3];
-const nonExistPointId = 789999;
+const notExistingPoint = pointHut1.pointId + pointHut2.pointId + pointHut3.pointId;
 const notExistingUser = testUser.userId + 66;
-const notExistHutId = 4534353;
+const notExistingHut = testHut1.hutId + testHut2.hutId + testHut3.hutId;
 const expectedGetAllHutsProperties = [
   "hutId",
   "hutName",
@@ -120,7 +120,7 @@ describe("Test storeHut", () => {
   Utils.testStoreHut("store the hut successfully", testHut1);
   Utils.testStoreHut(
     "reject because of not existing point",
-    { ...testHut1, pointId: nonExistPointId },
+    { ...testHut1, pointId: notExistingPoint },
     404
   );
 
@@ -158,27 +158,45 @@ describe("Test existsHut", () => {
   });
 
   Utils.testExistsHut("return true", "hutId", testHut1.hutId, true);
-  Utils.testExistsHut("return false", "hutId", notExistHutId, false);
+  Utils.testExistsHut("return false", "hutId", notExistingHut, false);
 });
 
 /*****************************************************************************************************
  *              loadOneByAttributeHut()
  *****************************************************************************************************/
-// describe("Test loadOneByAttributeHut", () => {
-// 	/* Test Setup */
-// 	beforeAll(async () => {
-// 		await Utils.clearAll();
-// 		// TODO: insert here if you need other test teardown function calls
-// 	});
+describe("Test loadOneByAttributeHut", () => {
+	beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, pointHut1),
+      PersistentManager.store(Point.tableName, pointHut2),
+      PersistentManager.store(Point.tableName, pointHut3)
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hut.tableName, testHut1),
+      PersistentManager.store(Hut.tableName, testHut2),
+      PersistentManager.store(Hut.tableName, testHut3),
+    ]);
+  });
 
-// 	/* Test Teardown */
-// 	afterAll(async () => {
-// 		await Utils.clearAll();
-// 		// TODO: insert here if you need other test teardown function calls
-// 	});
+	/* Test Teardown */
+	afterAll(async () => {
+		await Utils.clearAll();
+	});
 
-// 	// TODO: insert here the functions calls to perform the tests. The function should be defined in unit-utils.js
-// })
+	Utils.testLoadOneByAttributeHut(
+    "load a hut by attribute",
+    "hutId",
+    testHut1.hutId
+  );
+  Utils.testLoadOneByAttributeHut(
+    "reject because of not existing hut",
+    "hutId",
+    notExistingHut,
+    404
+  );
+})
 
 /*****************************************************************************************************
  *              defineHut()
@@ -193,7 +211,7 @@ describe("Test defineHut", () => {
   /* Test Teardown */
   afterAll(async () => {
     await Utils.clearAll();
-    // TODO: insert here if you need other test teardown function calls
+    // Insert here if you need other test teardown function calls
   });
 
   Utils.testDefineHut(
@@ -230,6 +248,69 @@ describe("Test defineHut", () => {
     404
   );
 });
+
+
+/*****************************************************************************************************
+ *              getHutById()
+ *****************************************************************************************************/
+describe("Test getHutById", () => {
+	beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, pointHut1),
+      PersistentManager.store(Point.tableName, pointHut2),
+      PersistentManager.store(Point.tableName, pointHut3)
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hut.tableName, testHut1),
+      PersistentManager.store(Hut.tableName, testHut2),
+      PersistentManager.store(Hut.tableName, testHut3),
+    ]);
+  });
+
+	/* Test Teardown */
+	afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.testGetHutById(
+    "get a hut by hutId",
+    testHut1.hutId
+  );
+})
+
+
+/*****************************************************************************************************
+ *              getHutByPointId()
+ *****************************************************************************************************/
+describe("Test getHutByPointId", () => {
+	beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, pointHut1),
+      PersistentManager.store(Point.tableName, pointHut2),
+      PersistentManager.store(Point.tableName, pointHut3)
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hut.tableName, testHut1),
+      PersistentManager.store(Hut.tableName, testHut2),
+      PersistentManager.store(Hut.tableName, testHut3),
+    ]);
+  });
+
+	/* Test Teardown */
+	afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.testGetHutByPointId(
+    "get a hut by pointId",
+    testHut1.pointId
+  );
+})
+
 
 /*****************************************************************************************************
  *              getAllHuts()

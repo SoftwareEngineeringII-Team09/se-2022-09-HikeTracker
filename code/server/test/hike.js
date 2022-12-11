@@ -16,8 +16,8 @@ const agent = chai.request.agent(app);
 
 
 /* Some useful data to use for tests */
-const testGpx = "rocciamelone.gpx";
-// const testUser = { userId: 1, email: "test@email.it", salt: "testSalt", password: "testPassword", firstname: "testFirstname", lastname: "testLastname", mobile: "390123456789", role: "testRole", active: 0 };
+const testGpx = "test.gpx";
+const testEditableGpx = "test_editable.gpx";
 const testUser = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
 const notAuthorizedUser = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
 const credentials = { username: testUser.email, password: "Password1234." };
@@ -70,7 +70,7 @@ describe("POST /api/hikes", function () {
 	Utils.postHike(agent, "post a hike", 201, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
 	Utils.postHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
 	Utils.postHike(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
-	/* TODO add these tests with wrong body data format after solving body validation issue */
+	/* Add these tests with wrong body data format after solving body validation issue */
 	// Utils.postHike(agent, "should return 422 because of wrong title format", 422, credentials, 1, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region), testGpx;
 	// Utils.postHike(agent, "should return 422 because of wrong expectedTime format", 422, credentials, testHike1.title, 1, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
 	// Utils.postHike(agent, "should return 422 because of wrong difficulty format", 422, credentials, testHike1.title, testHike1.expectedTime, 1, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
@@ -133,19 +133,14 @@ describe("PUT /api/hikes/:hikeId/huts", function () {
 			PersistentManager.store(Point.tableName, testStartPoint2),
 			PersistentManager.store(Point.tableName, testEndPoint2),
 			PersistentManager.store(Point.tableName,testHutPoint1),
-			PersistentManager.store(Point.tableName,testHutPoint2),
-		
+			PersistentManager.store(Point.tableName,testHutPoint2)
 		]);
 		await Promise.all([			
 			PersistentManager.store(Hike.tableName, testHike1),
 			PersistentManager.store(Hike.tableName, testHike2),	
 			PersistentManager.store(Hut.tableName, testHut1),
-			PersistentManager.store(Hut.tableName, testHut2),
-				
+			PersistentManager.store(Hut.tableName, testHut2)
 		]);
-		
-		// Add here other useful functions
-
 	});
 
 	/* Test Teardown */
@@ -226,39 +221,39 @@ describe("GET /api/hikes/:hikeId", function () {
 /*****************************************************************************************************
 *              GET /api/hikes/:hikeId/download
 *****************************************************************************************************/
-// describe("GET /api/hikes/:hikeId/download", function () {
-// 	/* Test Setup */
-// 	this.beforeAll(async () => {
-// 		await Utils.clearAll();
-// 		await Promise.all([
-// 			PersistentManager.store(User.tableName, testUser),
-// 			PersistentManager.store(User.tableName, notAuthorizedUser)
-// 		]);
-// 		await Promise.all([
-// 			PersistentManager.store(Point.tableName, testStartPoint1),
-// 			PersistentManager.store(Point.tableName, testEndPoint1),
-// 			PersistentManager.store(Point.tableName, testStartPoint2),
-// 			PersistentManager.store(Point.tableName, testEndPoint2),
-// 			PersistentManager.store(Point.tableName, testStartPoint3),
-// 			PersistentManager.store(Point.tableName, testEndPoint3)
-// 		]);
-// 		await Promise.all([
-// 			PersistentManager.store(Hike.tableName, testHike1),
-// 			PersistentManager.store(Hike.tableName, testHike2),
-// 			PersistentManager.store(Hike.tableName, testHike3)
-// 		]);
-// 	});
+describe("GET /api/hikes/:hikeId/download", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+			PersistentManager.store(Point.tableName, testStartPoint3),
+			PersistentManager.store(Point.tableName, testEndPoint3)
+		]);
+		await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+			PersistentManager.store(Hike.tableName, testHike3)
+		]);
+	});
 
-// 	/* Test Teardown */
-// 	this.afterAll(async () => {
-// 		await Utils.clearAll();
-// 	});
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
 
-// 	Utils.getHikeGpxById(agent, "return 200 because of correct download of hike's gpx", 200, credentials, testHike1.hikeId);
-// 	Utils.getHikeGpxById(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId);
-// 	Utils.getHikeGpxById(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingHike);
-// 	Utils.getHikeGpxById(agent, "return 422 because of wrong :hikeId format", 422, credentials, "wrongHikeIdFormat");
-// });
+	Utils.getHikeGpxById(agent, "return 200 because of correct download of hike's gpx", 200, credentials, testHike1.hikeId);
+	Utils.getHikeGpxById(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId);
+	Utils.getHikeGpxById(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingHike);
+	Utils.getHikeGpxById(agent, "return 422 because of wrong :hikeId format", 422, credentials, "wrongHikeIdFormat");
+});
 
 
 /*****************************************************************************************************
@@ -295,40 +290,40 @@ describe("GET /api/hikes/:hikeId/potentialStartEndPoints", function () {
 /*****************************************************************************************************
 *              PUT /api/hikes/:hikeId/startEndPoints
 *****************************************************************************************************/
-// describe("PUT /api/hikes/:hikeId/startEndPoints", function () {
-// 	/* Test Setup */
-// 	this.beforeAll(async () => {
-// 		await Utils.clearAll();
-// 		await Promise.all([
-// 			PersistentManager.store(User.tableName, testUser),
-// 			PersistentManager.store(User.tableName, notAuthorizedUser)
-// 		]);
-// 		await Promise.all([
-// 			PersistentManager.store(Point.tableName, testStartPoint1),
-// 			PersistentManager.store(Point.tableName, testEndPoint1),
-// 			PersistentManager.store(Point.tableName, testHutPoint),
-// 			PersistentManager.store(Point.tableName, testParkingLotPoint),
-// 		]);
-// 		await PersistentManager.store(ParkingLot.tableName, testParkingLot);
-// 		await PersistentManager.store(Hut.tableName, testHut);
-// 		await PersistentManager.store(Hike.tableName, testHike1);
-// 	});
+describe("PUT /api/hikes/:hikeId/startEndPoints", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testHutPoint1),
+			PersistentManager.store(Point.tableName, testParkingLotPoint),
+		]);
+		await PersistentManager.store(ParkingLot.tableName, testParkingLot);
+		await PersistentManager.store(Hut.tableName, testHut1);
+		await PersistentManager.store(Hike.tableName, { ...testHike1, trackPath: `gpx/${testEditableGpx}` });
+	});
 
-// 	/* Test Teardown */
-// 	this.afterAll(async () => {
-// 		await Utils.clearAll();
-// 	});
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
 
-// 	Utils.putHikeStartEndPoints(agent, "update hike's start/end points", 201, credentials, testHike1.hikeId, "hut", testHut.hutId, "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId, "hut", testHut.hutId, "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.hikeId, "hut", testHut.hutId, "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingHike, "hut", testHut.hutId, "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong :hikeId format", 422, credentials, "wrongHikeIdFormat", "hut", testHut.hutId, "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new start point type format", 422, credentials, testHike1.hikeId, credentials, 1, testHut.hutId, "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new start point id format", 422, credentials, testHike1.hikeId, credentials, "hut", "wrongIdFormat", "parking lot", testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new end point type format", 422, credentials, testHike1.hikeId, credentials, "hut", testHut.hutId, 1, testParkingLot.parkingLotId);
-// 	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new end point id format", 422, credentials, testHike1.hikeId, credentials, "hut", testHut.hutId, "parking lot", "wrongIdFormat");
-// });
+	Utils.putHikeStartEndPoints(agent, "update hike's start/end points", 201, credentials, testHike1.hikeId, "hut", testHut1.hutId, "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId, "hut", testHut1.hutId, "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.hikeId, "hut", testHut1.hutId, "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingHike, "hut", testHut1.hutId, "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong :hikeId format", 422, credentials, "wrongHikeIdFormat", "hut", testHut1.hutId, "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new start point type format", 422, credentials, testHike1.hikeId, credentials, 1, testHut1.hutId, "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new start point id format", 422, credentials, testHike1.hikeId, credentials, "hut", "wrongIdFormat", "parking lot", testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new end point type format", 422, credentials, testHike1.hikeId, credentials, "hut", testHut1.hutId, 1, testParkingLot.parkingLotId);
+	Utils.putHikeStartEndPoints(agent, "return 422 because of wrong new end point id format", 422, credentials, testHike1.hikeId, credentials, "hut", testHut1.hutId, "parking lot", "wrongIdFormat");
+});
 
 
 /*****************************************************************************************************

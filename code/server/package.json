@@ -38,6 +38,7 @@
     "nodemailer": "^6.8.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.20",
+    "nyc": "^15.1.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "random-words": "^1.2.0",
@@ -56,7 +57,7 @@
     "mochawesome-report-generator": "^6.2.0"
   },
   "scripts": {
-    "integration": "mocha test --timeout 10000 --require test/mocha.env.js --exit",
+    "integration": "nyc --reporter=lcov --report-dir=coverage/integration mocha test --timeout 10000 --require test/mocha.env.js --exit",
     "test": "cross-env NODE_ENV=test jest --runInBand --coverage",
     "dev": "cross-env NODE_ENV=development && nodemon index.js",
     "start": "node index.js",

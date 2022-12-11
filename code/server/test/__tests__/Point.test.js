@@ -30,6 +30,42 @@ describe("Test storePoint", () => {
 
 
 /*****************************************************************************************************
+ *              updatePoint()
+ *****************************************************************************************************/
+describe("Test updatePoint", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+    await PersistentManager.store(User.tableName, testUser);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testPoint1),
+      PersistentManager.store(Point.tableName, testPoint2),
+      PersistentManager.store(Point.tableName, testPoint3)
+    ]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testUpdatePoint(
+    "update the hike",
+    { ...testPoint1, type: "newType" },
+    "pointId",
+    testPoint1.pointId
+  );
+  Utils.testUpdatePoint(
+    "reject because of not existing point with attributeName = value",
+    { ...testPoint1, type: "newType" },
+    "pointId",
+    notExistingPoint,
+    404
+  );
+});
+
+
+/*****************************************************************************************************
 *              existsPoint()
 *****************************************************************************************************/
 describe("Test existsPoint", () => {
