@@ -326,27 +326,27 @@ VALUES (98, "end point", 0, 0, "End point Monte Muretto", 44.929433, 7.309893, 8
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
 VALUES (98, "start point", 0, 0, "Start point Lago Fauri", 44.98595737, 6.92071566, 1604.371665797204);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (100, "end point", 0, 0, "End point Lago Fauri", 00, 00, 00);
+VALUES (100, "end point", 0, 0, "End point Lago Fauri", 44.906253358, 6.9504943, 2877.307842);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (101, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+VALUES (101, "start point", 0, 0, "Start point Croce Intror", 45.318380221, 7.47343495, 884);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (102, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+VALUES (102, "end point", 0, 0, "End point Croce Intror", 45.361841395, 7.47810602188, 1943);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (103, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+VALUES (103, "start point", 0, 0, "Start point Cima di Bard", 45.197250, 6.96859, 1824);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (104, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+VALUES (104, "end point", 0, 0, "End point Cima di Bard", 45.192301, 6.932539, 3142);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (105, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+VALUES (105, "start point", 0, 0, "Start point Colle della Crocetta", 45.425417, 7.239957, 1620.013184);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (106, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+VALUES (106, "end point", 0, 0, "End point Colle della Crocetta", 45.407683, 7.267152, 2635.275879);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (107, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+VALUES (107, "start point", 0, 0, "Start point Lago Rosso", 45.10358749, 7.1687279, 1234.40002441);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (108, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+VALUES (108, "end point", 0, 0, "End point Lago Rosso", 45.10349144227, 7.1689715422, 1240);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (109, "start point", 0, 0, "Start point Monte Freidou", 00, 00, 00);
+VALUES (109, "start point", 0, 0, "Start point Monte Mongioia", 44.573331959, 6.97398299351, 1849.233154);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (110, "end point", 0, 0, "End point Monte Freidour", 00, 00, 00);
+VALUES (110, "end point", 0, 0, "End point Monte Mongioia", 44.57325199, 6.974, 1858.3657229);
 
 
 
