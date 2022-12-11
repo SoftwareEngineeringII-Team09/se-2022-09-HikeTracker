@@ -60,7 +60,7 @@ describe('Create new hike', () => {
     }).as('hike-update-endpoints');
 
     /* Navigate to start/end point update page */
-    cy.visit(`/browse/${hikeId}`);
+    cy.visit(`/hikes/${hikeId}`);
 
     // Click on start point marker
     cy.get('img[alt="Start marker"]').click({ force: true });
@@ -71,7 +71,7 @@ describe('Create new hike', () => {
     // Click on "Update start point" link
     cy.get('a').contains("Update Start Point").click({ force: true });
 
-    cy.url().should('eq', `${CLIENT_URL}hikes/${hikeId}/update-endpoints`);
+    cy.url().should('eq', `${CLIENT_URL}account/hikes/${hikeId}/update/endpoints`);
 
     cy.wait('@get-hike-details').then(() => {});
 

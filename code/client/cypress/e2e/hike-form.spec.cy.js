@@ -24,7 +24,7 @@ describe('Create new hike', () => {
       url: `**/hikes`,
     }).as('hike-creation-request')
 
-    cy.visit('/hikes/add');
+    cy.visit('/account/hikes/add', { headers: { "Accept-Encoding": "gzip, deflate" } });
 
     /* Fill out the login form and submit it  */
     const hikeTitle = "Hike title";

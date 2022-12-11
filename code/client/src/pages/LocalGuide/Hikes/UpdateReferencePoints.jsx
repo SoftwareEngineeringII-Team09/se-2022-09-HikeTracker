@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Row, Col, Button } from 'react-bootstrap'
 import { toast } from "react-toastify"
@@ -10,12 +10,12 @@ import { MarkerOnPoint } from "@components/features/Map"
 import { Formik, Form } from 'formik'
 import { ReferencePointSchema } from "@lib/validations"
 
+import { AuthContext } from '@contexts/authContext'
 import { Input } from '@components/form'
-
-
 import api from '@services/api'
 
 const UpdateReferencePoints = () => {
+    const [user] = useContext(AuthContext)
     const [points, setPoints] = useState([])
     const [hike, setHike] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -26,12 +26,16 @@ const UpdateReferencePoints = () => {
         if (loading)
             api.hikes.getHikeDetails(hikeId)
                 .then(hike => {
+                    if (hike.writer.writerId !== user.userId) {
+                        toast.error('Unauthorized operation', { theme: 'colored' })
+                        navigate('/account/hikes')
+                    }
                     setHike(hike)
                     setPoints(hike.referencePoints)
                 })
                 .catch(err => toast.error(err, { theme: 'colored' }))
                 .finally(() => setLoading(false))
-    }, [loading, hikeId])
+    }, [loading, hikeId]) // eslint-disable-line
 
     const initialValues = {
         referencePointName: "",
@@ -50,10 +54,10 @@ const UpdateReferencePoints = () => {
     const handleSaveChanges = () => {
         api.hikes.updateReferencePoints(hikeId, points)
             .then(() => {
-                toast.success("Reference points have been correctly updated!", {theme: 'colored'})
+                toast.success("Reference points have been correctly updated!", { theme: 'colored' })
                 navigate(`/hikes/${hikeId}`, { replace: true })
             })
-            .catch(err => toast.error(err, {theme: 'colored'}))
+            .catch(err => toast.error(err, { theme: 'colored' }))
     }
 
     if (!loading)
@@ -70,7 +74,7 @@ const UpdateReferencePoints = () => {
                         Have you already done? Click on Save changes button on the bottom!
                     </p>
                     <Formik initialValues={initialValues} validationSchema={ReferencePointSchema} onSubmit={(values, { resetForm }) => handleAddPoint(values, { resetForm })}>
-                        {({ values, touched, isValid, setFieldValue, setFieldTouched, resetForm }) => {
+                        {({ values, touched, isValid, setFieldValue, setFieldTouched }) => {
                             const disabled = (!touched.referencePointName
                                 && (!touched.point || (touched.point && !touched.point.latitude && !touched.point.longitude)))
                                 || !isValid
@@ -105,7 +109,7 @@ const UpdateReferencePoints = () => {
                                             </Button>
                                         </Col>
                                     </Row>
-                                    <MapContainer center={hike.startPoint.coords} zoom={13} scrollWheelZoom style={{ height: 480 }} className="mt-5">
+                                    <MapContainer center={hike.startPoint.coords} zoom={12} scrollWheelZoom style={{ height: 480 }} className="mt-5">
                                         <MarkerOnPoint point={values.point} setPoint={handleClick} />
                                         {points.map((point, idx) => (
                                             <Marker key={idx} position={point.coords}>

@@ -3,12 +3,12 @@ import { Button } from "react-bootstrap"
 import { Formik, Form } from "formik"
 
 import { FiltersSchema } from '@lib/validations'
-import { FiltersContext } from "@contexts/FiltersContext"
+import { FiltersContextHuts } from "@contexts/FiltersContextHuts"
 
 import * as Filters from './Filters'
 
 const FiltersForm = ({ onSubmit, onReset }) => {
-    const { filters } = useContext(FiltersContext)
+    const { filters } = useContext(FiltersContextHuts)
 
     return (
         <Formik initialValues={filters} validationSchema={FiltersSchema} onSubmit={(values) => onSubmit(values)} onReset={onReset}>

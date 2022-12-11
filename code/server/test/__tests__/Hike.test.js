@@ -39,7 +39,8 @@ const testHut1 = new Hut(1, "testHutName1", testHutPoint1.pointId, testUser.user
 const testHut2 = new Hut(2, "testHutName2", testHutPoint2.pointId, testUser.userId, 2, 2, 2, 20, 20.0, 2000.0, "392012345678", "testHutEmail2@email.com", "www.testHutWebSite2.com");
 const testHut3 = new Hut(3, "testHutName3", testHutPoint3.pointId, testUser.userId, 3, 3, 3, 30, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com");
 const testHut4 = new Hut(4, "testHutName4", testHutPoint4.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail4@email.com", "www.testHutWebSite4.com");
-const testPotHutPoint1 = new Point(15, "hut", 0, 1, null, 45.0, 7.0);
+// const testPotHutPoint1 = new Point(15, "hut", 0, 1, null, 45.0, 7.0);
+const testPotHutPoint1 = new Point(15, "hut", 0, 1, null, 45.178591, 7.08);
 const testPotHut1 = new Hut(5, "testHutName5", testPotHutPoint1.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail5@email.com", "www.testHutWebSite5.com");
 const testParkingLot1 = new ParkingLot(1, "testParkingLotName1", testParkingLotPoint1.pointId, testUser.userId, 1000.0, 100);
 const testParkingLot2 = new ParkingLot(2, "testParkingLotName2", testParkingLotPoint2.pointId, testUser.userId, 2000.0, 200);
@@ -576,16 +577,6 @@ describe("Test getPotentialStartEndPoints", () => {
       PersistentManager.store(ParkingLot.tableName, testParkingLot3),
       PersistentManager.store(ParkingLot.tableName, testParkingLot4)
     ]);
-    /* await Promise.all([
-      PersistentManager.store(HikeHut.tableName, testHikeHut1),
-      PersistentManager.store(HikeHut.tableName, testHikeHut2),
-      PersistentManager.store(HikeHut.tableName, testHikeHut3),
-      PersistentManager.store(HikeHut.tableName, testHikeHut4),
-      PersistentManager.store(HikeParkingLot.tableName, testHikeParkingLot1),
-      PersistentManager.store(HikeParkingLot.tableName, testHikeParkingLot2),
-      PersistentManager.store(HikeParkingLot.tableName, testHikeParkingLot3),
-      PersistentManager.store(HikeParkingLot.tableName, testHikeParkingLot4)
-    ]); */
   });
 
   /* Test Teardown */

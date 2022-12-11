@@ -2,11 +2,13 @@ import { Spinner, Alert, Container, Row, Col, Button } from 'react-bootstrap';
 import HikeEndpoint from '@components/features/HikeDetails/HikeEndpoint';
 import TrackMap from '@components/features/HikeDetails/TrackMap';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
+import { AuthContext } from '@contexts/authContext'
 import api from '@services/api';
 
 const UpdateEndpoints = () => {
+    const [user] = useContext(AuthContext)
 
     // Get the hike id from the url
     const { hikeId } = useParams();
@@ -22,7 +24,7 @@ const UpdateEndpoints = () => {
     const [trackUpdated, setTrackUpdated] = useState(true);
 
     if (!hikeId)
-        navigate('/browse');
+        navigate('/hikes');
 
     const updatePoint = (point) => {
         const updateFunction = point.pointType === 'start' ? setStartPoint : setEndPoint;
@@ -30,7 +32,7 @@ const UpdateEndpoints = () => {
             // Add point to potentialPoints if it was the original one (to put back things as they were)
             if (oldPoint && oldPoint.hasOwnProperty('original')) {
                 oldPoint.name = `Old ${oldPoint.pointType} point`;
-                setPotentialPoints(potentialPoints => [...potentialPoints, {...oldPoint, potential: true}]);
+                setPotentialPoints(potentialPoints => [...potentialPoints, { ...oldPoint, potential: true }]);
             }
             // Remove point from potentialPoints if it is the original one (avoid having it twice on the map)
             if (point.hasOwnProperty('original')) {
@@ -51,26 +53,31 @@ const UpdateEndpoints = () => {
                 api.hikes.getPotentialPoints(hikeId)
             ])
                 .then((results) => {
-                    setHike(results[0]);
-                    const potentialStartPoints = results[1].potentialStartPoints.map((point) => ({ ...point, pointType: 'start', updatePoint }))
-                    const potentialEndPoints = results[1].potentialEndPoints.map((point) => ({ ...point, pointType: 'end', updatePoint }))
-                    setPotentialPoints(
-                        /* Add type "start" or "end" to each point */
-                        potentialStartPoints.concat(potentialEndPoints)
-                    );
-                    /* Set initial start/end points */
-                    results[0].startPoint.original = true;
-                    results[0].endPoint.original = true;
-                    results[0].startPoint.pointType = 'start';
-                    results[0].endPoint.pointType = 'end';
-                    results[0].startPoint.updatePoint = updatePoint;
-                    results[0].endPoint.updatePoint = updatePoint;
-                    if (!results[0].startPoint.name)
-                        results[0].startPoint.name = "Start point";
-                    if (!results[0].endPoint.name)
-                        results[0].endPoint.name = "End point";
-                    setStartPoint(results[0].startPoint);
-                    setEndPoint(results[0].endPoint);
+                    if (results[0].writer.writerId !== user.userId) {
+                        navigate('/account/hikes')
+                        toast.error('Unauthorized operation', { theme: 'colored' })
+                    } else {
+                        setHike(results[0]);
+                        const potentialStartPoints = results[1].potentialStartPoints.map((point) => ({ ...point, pointType: 'start', updatePoint }))
+                        const potentialEndPoints = results[1].potentialEndPoints.map((point) => ({ ...point, pointType: 'end', updatePoint }))
+                        setPotentialPoints(
+                            /* Add type "start" or "end" to each point */
+                            potentialStartPoints.concat(potentialEndPoints)
+                        );
+                        /* Set initial start/end points */
+                        results[0].startPoint.original = true;
+                        results[0].endPoint.original = true;
+                        results[0].startPoint.pointType = 'start';
+                        results[0].endPoint.pointType = 'end';
+                        results[0].startPoint.updatePoint = updatePoint;
+                        results[0].endPoint.updatePoint = updatePoint;
+                        if (!results[0].startPoint.name)
+                            results[0].startPoint.name = "Start point";
+                        if (!results[0].endPoint.name)
+                            results[0].endPoint.name = "End point";
+                        setStartPoint(results[0].startPoint);
+                        setEndPoint(results[0].endPoint);
+                    }
                 })
                 .catch((error) => {
                     setError(error);
@@ -80,7 +87,7 @@ const UpdateEndpoints = () => {
                     setLoading(false);
                 });
         }
-    }, [hikeId, trackUpdated]);
+    }, [hikeId, trackUpdated]); // eslint-disable-line
 
     const savePoints = () => {
 

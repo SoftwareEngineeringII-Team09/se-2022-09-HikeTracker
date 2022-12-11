@@ -28,7 +28,9 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 			password: req.body.password,
 			verificationCode: verificationCode
 		});
-		await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
+
+		if (process.env.NODE_ENV !== "test")
+			await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
 
 		return res.status(201).json(userId);
 	} catch (exception) {
