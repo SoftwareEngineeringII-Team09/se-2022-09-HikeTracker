@@ -13,7 +13,7 @@ class HikeRefPointManager {
    * @param {HikeRefPoint} newHikeRefPoint
    * @returns a Promise with the rowId value of the stored hikeRefPoint
    */
-   async storeHikeRefPoint(newHikeRefPoint) {
+  async storeHikeRefPoint(newHikeRefPoint) {
     // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newHikeRefPoint.hikeId);
     if (!hikeExists) {
@@ -30,7 +30,7 @@ class HikeRefPointManager {
         result: `No available refPoint with pointId = ${newHikeRefPoint.pointId}`,
       });
     }
-   
+
     return PersistentManager.store(HikeRefPoint.tableName, newHikeRefPoint);
   }
 
@@ -41,7 +41,7 @@ class HikeRefPointManager {
    * @param {any} value
    * @returns a Promise without any value if the hikeRefPoint exists, a rejected Promise with an object containing code and result otherwise
    */
-async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
+  async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
     const exists = await this.existsHikeRefPoint(attributeName, value);
     if (!exists) {
       return Promise.reject({
@@ -67,7 +67,7 @@ async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
     }
 
     return PersistentManager.update(HikeRefPoint.tableName, newHikeRefPoint, attributeName, value);
-  } 
+  }
 
   /**
    * Delete a hikeRefPoint
@@ -75,9 +75,9 @@ async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
    * @param {any} value
    * @returns a Promise without any value
    */
-   async deleteHikeRefPoint(attributeName, value) {
+  async deleteHikeRefPoint(attributeName, value) {
     return PersistentManager.delete(HikeRefPoint.tableName, attributeName, value);
-  } 
+  }
 
   /**
    * Delete all hikeRefPoints
@@ -145,43 +145,40 @@ async updateHikeRefPoint(newHikeRefPoint, attributeName, value) {
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
 
 
-  // Update the start point of a hike by hikeId
-  async updateRefPoint(hikeId, newRefPoints) {   
-    //search pointIds in hikerefpoint table
-    const  pointIds= await this.loadAllByAttributeHikeRefPoint("hikeId", hikeId);
-   //delete points in ref point 
-    //delete old ref point in point table
-    if (pointIds){
-      
+  // Update the ref points of a hike by hikeId
+  async updateRefPoint(hikeId, newRefPoints) {
+    // Search pointIds in HikeRefPoint table
+    const pointIds = await this.loadAllByAttributeHikeRefPoint("hikeId", hikeId); 
+
+    // Delete old ref points in Point table
+    if (pointIds) {
       await Promise.all(
-        pointIds.map(async(p) =>{
-          await this.deleteHikeRefPoint("pointId",p.pointId);
+        pointIds.map(async (p) => {
+          await this.deleteHikeRefPoint("pointId", p.pointId);
           await PointManager.deletePoint("pointId", p.pointId);
         })
-      );     
+      );
     }
 
- 
-  //add new ref point in point table
-  await Promise.all(
-    newRefPoints.map(async(p) =>{ 
-      let newRefPointId = await PointManager.storePoint(
-        new Point(
-          null,
-          "reference point",
-          0,
-          0,
-          p.name,
-          p.coords[0],
-          p.coords[1],
-        )
-      );
-      
-      //add hikerefpoint
-      await this.storeHikeRefPoint(new HikeRefPoint(hikeId, newRefPointId));
-    
-    })
-  )
+    // Add new ref points in Point table
+    await Promise.all(
+      newRefPoints.map(async (p) => {
+        let newRefPointId = await PointManager.storePoint(
+          new Point(
+            null,
+            "reference point",
+            0,
+            0,
+            p.name,
+            p.coords[0],
+            p.coords[1],
+          )
+        );
+
+        // Add hikeRefPoint
+        await this.storeHikeRefPoint(new HikeRefPoint(hikeId, newRefPointId));
+      })
+    )
 
 
     return Promise.resolve();

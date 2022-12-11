@@ -15,7 +15,7 @@ class HutManager {
    * @param {Hut} newHut
    * @returns a Promise with the hutId value of the stored hut
    */
-   async storeHut(newHut) {
+  async storeHut(newHut) {
     // Check if foreign key pointId exists
     const pointExists = await PersistentManager.exists(Point.tableName, "pointId", newHut.pointId);
     if (!pointExists) {
@@ -142,21 +142,7 @@ class HutManager {
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Define a new hut
-  async defineHut(
-    hutName,
-    writerId,
-    city,
-    province,
-    region,
-    numOfBeds,
-    cost,
-    latitude,
-    longitude,
-    altitude,
-    phone,
-    email,
-    website
-  ) {
+  async defineHut(hutData) {
     // Defining hut point
     const newPoint = new Point(
       null,
@@ -164,26 +150,26 @@ class HutManager {
       0,
       1,
       null,
-      latitude,
-      longitude
+      hutData.latitude,
+      hutData.longitude
     );
     const newPointId = await PointManager.storePoint(newPoint);
 
     // Defining hut
     const newHut = new Hut(
       null,
-      hutName,
+      hutData.hutName,
       newPointId,
-      writerId,
-      city,
-      province,
-      region,
-      numOfBeds,
-      cost,
-      altitude,
-      phone,
-      email,
-      website
+      hutData.writerId,
+      hutData.city,
+      hutData.province,
+      hutData.region,
+      hutData.numOfBeds,
+      hutData.cost,
+      hutData.altitude,
+      hutData.phone,
+      hutData.email,
+      hutData.website
     );
 
     return this.storeHut(newHut);
@@ -195,7 +181,7 @@ class HutManager {
     //shcedule time needed
     huts = await Promise.all(
       huts.map(async (h) => {
-        const shceduleTime =
+        const scheduleTime =
           await HutDailyScheduleManager.loadAllByAttributeHutDailySchedule(
             "hutId",
             h.hutId
@@ -220,7 +206,7 @@ class HutManager {
           phone: h.phone,
           email: h.email,
           website: h.website,
-          schedule: shceduleTime.map((s) => {
+          schedule: scheduleTime.map((s) => {
             let time = {
               day: s.day,
               openTime: s.openTime,
@@ -254,21 +240,21 @@ class HutManager {
   }
 
 
-    // Load a hutInfo by pointId
-    async getHutByPointId(pointId) {
-      let hut = await this.loadOneByAttributeHut("pointId", pointId);
-      let point = await PointManager.loadOneByAttributePoint(
-        "pointId",
-        hut.pointId
-      );
-  
-      hut = {
-        ...hut,
-        ...point
-      }
-  
-      return Promise.resolve(hut);
+  // Load a hutInfo by pointId
+  async getHutByPointId(pointId) {
+    let hut = await this.loadOneByAttributeHut("pointId", pointId);
+    let point = await PointManager.loadOneByAttributePoint(
+      "pointId",
+      hut.pointId
+    );
+
+    hut = {
+      ...hut,
+      ...point
     }
+
+    return Promise.resolve(hut);
+  }
   /*async getOneHut(atrName, val) {
     let hut = await this.loadOneByAttributeHut(atrName, val);
     //position coord needed
@@ -276,7 +262,7 @@ class HutManager {
     console.log(hut)
     hut = await Promise.all(
       hut.map(async (h) => {
-        const shceduleTime =
+        const scheduleTime =
           await HutDailyScheduleManager.loadAllByAttributeHutDailySchedule(
             "hutId",
             h.hutId
@@ -301,7 +287,7 @@ class HutManager {
           phone: h.phone,
           email: h.email,
           website: h.website,
-          schedule: shceduleTime.map((s) => {
+          schedule: scheduleTime.map((s) => {
             let time = {
               day: s.day,
               openTime: s.openTime,
