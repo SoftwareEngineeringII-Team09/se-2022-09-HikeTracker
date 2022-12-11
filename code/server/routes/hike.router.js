@@ -15,7 +15,12 @@ const storage = multer.diskStorage({
     callback(null, file.originalname);
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 8000000
+  }
+});
 
 // POST a hike
 router.post(
@@ -32,17 +37,18 @@ router.post(
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
 
-      const hikeId = await HikeManager.defineHike(
-        writerId,
-        req.body.title,
-        req.body.expectedTime,
-        req.body.difficulty,
-        req.body.description,
-        req.body.city,
-        req.body.province,
-        req.body.region,
-        fileName
-      );
+      const hikeId = await HikeManager.defineHike({
+        writerId: writerId,
+        title: req.body.title,
+        expectedTime: req.body.expectedTime,
+        difficulty: req.body.difficulty,
+        description: req.body.description,
+        city: req.body.city,
+        province: req.body.province,
+        region: req.body.region,
+        fileName: fileName
+      });
+
       return res.status(201).send({ hikeId });
     } catch (exception) {
       const errorCode = exception.code ?? 503;
@@ -52,10 +58,6 @@ router.post(
     }
   }
 );
-
-
-
-
 
 // PUT the list of reference points for a given hike
 router.put(
@@ -70,7 +72,7 @@ router.put(
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-      
+
       await HikeRefPointManager.updateRefPoint(
         hikeId,
         req.body.referencePoints,
@@ -100,33 +102,33 @@ router.get("/", async (req, res) => {
 
 // GET the list of all hikes by writerId
 router.get(
-  "/writers/:writerId", 
-    auth.withAuth,
-    auth.withRole(["Local Guide"]),
+  "/writers/:writerId",
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   param("writerId")
     .isInt({ min: 1 })
     .toInt()
     .withMessage("Provide a valid writerId"),
   async (req, res) => {
-  try {
-    // Validation of body and/or parameters
-    const error = validationResult(req);
-    if (!error.isEmpty())
-      return res.status(422).json({ error: error.array()[0] });
+    try {
+      // Validation of body and/or parameters
+      const error = validationResult(req);
+      if (!error.isEmpty())
+        return res.status(422).json({ error: error.array()[0] });
 
-    if (req.params.writerId !== req.user.userId) {
-      return res.status(401).json({ error: `The user is not authorized, :writerId ${req.params.writerId} not corresponding to actual userId ${req.user.userId}` });
+      if (req.params.writerId !== req.user.userId) {
+        return res.status(401).json({ error: `The user is not authorized, :writerId ${req.params.writerId} not corresponding to actual userId ${req.user.userId}` });
+      }
+
+      const hikes = await HikeManager.getAllHikes().then(hikes => hikes.filter(h => h.writer.writerId === req.params.writerId));
+
+      return res.status(200).json(hikes);
+    } catch (exception) {
+      const errorCode = exception.code ?? 500;
+      const errorMessage = exception.result ?? "Something went wrong, try again";
+      return res.status(errorCode).json({ error: errorMessage });
     }
-
-    const hikes = await HikeManager.getAllHikes().then(hikes => hikes.filter(h => h.writer.writerId === req.params.writerId));
-    
-    return res.status(200).json(hikes);
-  } catch (exception) {
-    const errorCode = exception.code ?? 500;
-    const errorMessage = exception.result ?? "Something went wrong, try again";
-    return res.status(errorCode).json({ error: errorMessage });
-  }
-});
+  });
 
 // GET a hike by hikeId
 router.get(
@@ -212,8 +214,8 @@ router.get(
 // GET potential huts
 router.get(
   "/:hikeId/linkable-huts",
-  // auth.withAuth,
-  // auth.withRole(["Local Guide"]),
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   param("hikeId")
     .isInt({ min: 1 })
     .toInt()
@@ -221,14 +223,14 @@ router.get(
   async (req, res) => {
     try {
       // Validation of body and/or parameters
-      
+
       const errors = validationResult(req);
       if (!errors.isEmpty())
         return res.status(422).json({ error: errors.array()[0] });
 
       const hikeId = req.params.hikeId;
       const potentiaHuts = await HikeManager.getPotentialHuts(hikeId);
-    
+
       return res.status(200).json(potentiaHuts);
     } catch (exception) {
       const errorCode = exception.code ?? 500;
@@ -248,19 +250,19 @@ router.put(
     .isInt({ min: 1 })
     .toInt()
     .withMessage("Provide a valid hikeId"),
-    body("newStartPoint").optional().isObject(), 
-    body("newStartPoint.type").optional().isString(), 
-    body("newStartPoint.id").optional().isInt({ min: 1 }),
-    body("newEndPoint").optional().isObject(),  
-    body("newEndPoint.type").optional().isString(), 
-    body("newEndPoint.id").optional().isInt({ min: 1 }), 
+  body("newStartPoint").optional().isObject(),
+  body("newStartPoint.type").optional().isString(),
+  body("newStartPoint.id").optional().isInt({ min: 1 }),
+  body("newEndPoint").optional().isObject(),
+  body("newEndPoint.type").optional().isString(),
+  body("newEndPoint.id").optional().isInt({ min: 1 }),
   async (req, res) => {
     try {
       // Validation of body and/or parameters
       const errors = validationResult(req);
       if (!errors.isEmpty())
         return res.status(422).json({ error: errors.array()[0] });
-      
+
       const hikeId = req.params.hikeId;
       const newStartPoint = req.body.newStartPoint;
       const newEndPoint = req.body.newEndPoint;
@@ -295,10 +297,8 @@ router.put(
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-        await HikeHutManager.updatehutId(
-        hikeId,
-        req.body,
-      );
+
+      await HikeHutManager.updatehutId(hikeId, req.body);
 
       return res.status(201).end();
     } catch (exception) {

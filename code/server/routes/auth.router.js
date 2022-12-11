@@ -19,16 +19,18 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 		}
 		const verificationCode = randomWords({ exactly: 3, join: "-" });
 
-		const userId = await UserManager.defineUser(
-			req.body.role,
-			req.body.firstname,
-			req.body.lastname,
-			req.body.mobile,
-			req.body.email,
-			req.body.password,
-			verificationCode
-		);
-		await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
+		const userId = await UserManager.defineUser({
+			role: req.body.role,
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			mobile: req.body.mobile,
+			email: req.body.email,
+			password: req.body.password,
+			verificationCode: verificationCode
+		});
+
+		if (process.env.NODE_ENV !== "test")
+			await UserManager.sendVerificationCode(req.body.email, userId, verificationCode);
 
 		return res.status(201).json(userId);
 	} catch (exception) {
@@ -71,7 +73,7 @@ router.put('/verifyEmail', authValidation.verifyEmail, async (req, res) => {
 		if (!errors.isEmpty()) {
 			return res.status(422).json({ error: errors.array()[0] });
 		}
-		
+
 		await UserManager.verifyEmail(req.body.userId, req.body.token);
 
 		return res.status(201).end();

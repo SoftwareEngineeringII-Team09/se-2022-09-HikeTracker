@@ -16,7 +16,6 @@ import cities from '@data/locations/comuni'
 import api from '@services/api'
 
 const AddHut = () => {
-
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
     const navigate = useNavigate()

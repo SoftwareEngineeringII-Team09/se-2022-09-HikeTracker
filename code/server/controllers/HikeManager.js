@@ -180,18 +180,10 @@ class HikeManager {
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Define a new hike
   async defineHike(
-    writerId,
-    title,
-    expectedTime,
-    difficulty,
-    description,
-    city,
-    province,
-    region,
-    fileName
+    hikeData
   ) {
     // Parse the gpx to extract: length, ascent, maxElevation, startPoint, endPoint
-    let gpxString = fs.readFileSync(`gpx/${fileName}`).toString();
+    let gpxString = fs.readFileSync(`gpx/${hikeData.fileName}`).toString();
     gpx.parse(gpxString);
     const track = gpx.tracks[0];
     const ascent = track.elevation.max - track.elevation.min;
@@ -199,7 +191,7 @@ class HikeManager {
     const startPoint = track.points[0];
     const endPoint = track.points[track.points.length - 1];
     const maxElevation = track.elevation.max;
-    const trackPath = `gpx/${fileName}`;
+    const trackPath = `gpx/${hikeData.fileName}`;
 
     // Store the startPoint and retrieve the startPointId
     const startPointId = await PointManager.storePoint(
@@ -208,7 +200,7 @@ class HikeManager {
         "start point",
         0,
         0,
-        `Start point of ${title}`,
+        `Start point of ${hikeData.title}`,
         startPoint.lat,
         startPoint.lon
       )
@@ -221,7 +213,7 @@ class HikeManager {
         "end point",
         0,
         0,
-        `End point of ${title}`,
+        `End point of ${hikeData.title}`,
         endPoint.lat,
         endPoint.lon
       )
@@ -230,18 +222,18 @@ class HikeManager {
     return this.storeHike(
       new Hike(
         null,
-        title,
-        writerId,
+        hikeData.title,
+        hikeData.writerId,
         trackPath,
-        city,
-        province,
-        region,
+        hikeData.city,
+        hikeData.province,
+        hikeData.region,
         length,
-        expectedTime,
+        hikeData.expectedTime,
         ascent,
         maxElevation,
-        difficulty,
-        description,
+        hikeData.difficulty,
+        hikeData.description,
         startPointId,
         endPointId
       )
@@ -468,8 +460,8 @@ class HikeManager {
         let radlat2 = rad(h.latitude);  
        
         let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radlat1 ) * Math.cos(radlat2 ) * Math.sin(dLon/2) * Math.sin(dLon/2);
-	      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	      var d = R * c;    
+	      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	      let d = R * c;    
         if(!HutPointInfo.has(h) && d < maxDiameter){          
           HutPointInfo.add(h);
         }
@@ -492,9 +484,6 @@ class HikeManager {
     return potentialHuts;
     
   }
-
-
-
 
   // Return the list of potential start and end points for a given hike
   async getPotentialStartEndPoints(hikeId) {
@@ -580,7 +569,7 @@ class HikeManager {
     // Filtering end point huts by distance from end point
     potentialEndPointHuts = potentialEndPointHuts.filter(peph => {
       const distanceFromEndPoint = geodist({ lat: peph.coords[0], lon: peph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
-      return !(distanceFromEndPoint > maxDistance);
+      return distanceFromEndPoint <= maxDistance;
     });
 
     // Filtering start point parking lots by distance from start point and selecting between parking lots that are close to both the start point and the end point
@@ -605,7 +594,7 @@ class HikeManager {
     // Filtering end point parking lots by distance from end point
     potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => {
       const distanceFromEndPoint = geodist({ lat: peppl.coords[0], lon: peppl.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
-      return !(distanceFromEndPoint > maxDistance);
+      return distanceFromEndPoint <= maxDistance;
     });
 
     let potentialStartEndPoints = {
@@ -649,7 +638,7 @@ class HikeManager {
     // Update GPX start point
     const oldGpx = fs.readFileSync(hike.trackPath).toString();
     const regex = new RegExp(/<trkpt.*>/);
-    const newTrkpt = `<trkpt let="${newStartPointData.latitude}" lon="${newStartPointData.longitude}">`;
+    const newTrkpt = `<trkpt lat="${newStartPointData.latitude}" lon="${newStartPointData.longitude}">`;
     const newGpx = oldGpx.replace(regex, newTrkpt);
     fs.writeFileSync(hike.trackPath, newGpx);
 
@@ -692,7 +681,7 @@ class HikeManager {
     const trkptMatches = oldGpx.match(regex);
     const oldTrkptLength = trkptMatches[trkptMatches.length - 1].length;
     const lastIndex = lastIndexOfRegex(oldGpx, regex);
-    const newTrkpt = `<trkpt let="${newEndPointData.latitude}" lon="${newEndPointData.longitude}">`;
+    const newTrkpt = `<trkpt lat="${newEndPointData.latitude}" lon="${newEndPointData.longitude}">`;
     const newGpx = oldGpx.substring(0, lastIndex) + newTrkpt + oldGpx.substring(lastIndex + oldTrkptLength);
     fs.writeFileSync(hike.trackPath, newGpx);
 

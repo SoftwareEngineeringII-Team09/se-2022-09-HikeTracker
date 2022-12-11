@@ -1,13 +1,10 @@
-const { SERVER_URL } = require("../../fixtures/constants");
-
 describe('Signup', () => {
-
   before(() => cy.clearAll())
   beforeEach(() => cy.visit('/signup'))
   after(() => cy.clearAll())
 
+  it('Correctly register a new user', () => {
 
-  it('Shows error to non existing user', () => {
     const email = "email@example.com";
     const password = "Secure!p4ssw0rd";
     const mobile = "+39 3921234567";

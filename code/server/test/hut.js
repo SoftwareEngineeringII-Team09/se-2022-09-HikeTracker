@@ -56,9 +56,9 @@ describe("POST /api/huts/", function () {
     testHutPoint1.latitude,
     testHutPoint1.longitude,
     testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
-	testHut1.website,
+    testHut1.phone,
+    testHut1.email,
+    testHut1.website,
 
   );
   Utils.postHut(
@@ -74,30 +74,12 @@ describe("POST /api/huts/", function () {
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-		 testHut1.altitude,
-		 testHut1.phone,
-		 testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
-//   Utils.postHut(
-//     agent,
-//     "return 422 because of wrong :writerId format",
-//     422,
-//     "wrongWriterIdFormat",
-//     testHut1.hutName,
-//     testHut1.city,
-//     testHut1.province,
-//     testHut1.region,
-//     testHut1.numOfBeds,
-//     testHut1.cost,
-//     testHutPoint1.latitude,
-//     testHutPoint1.longitude,
-// 	testHut1.altitude,
-// 	testHut1.phone,
-// 	testHut1.email,
-//     testHut1.website
-//   );
-Utils.postHut(
+  Utils.postHut(
     agent,
     "return 422 because of wrong hutName format",
     422,
@@ -111,12 +93,10 @@ Utils.postHut(
     testHutPoint1.latitude,
     testHutPoint1.longitude,
     testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
-	testHut1.website,
-
+    testHut1.phone,
+    testHut1.email,
+    testHut1.website
   );
-
   Utils.postHut(
     agent,
     "return 422 because of wrong city format",
@@ -130,9 +110,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -148,9 +128,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-		 testHut1.altitude,
-		 testHut1.phone,
-		 testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -166,9 +146,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -184,9 +164,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-		 testHut1.altitude,
-		 testHut1.phone,
-		 testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -202,9 +182,9 @@ Utils.postHut(
     "wrongCostFormat",
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -220,9 +200,9 @@ Utils.postHut(
     testHut1.cost,
     "wrongLatitudeFormat",
     testHutPoint1.longitude,
-	testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -238,9 +218,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     "wrongLongitudeFormat",
-	testHut1.altitude,
-	testHut1.phone,
-	testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -256,9 +236,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	"wrongAltitudeFormat",
-	testHut1.phone,
-	testHut1.email,
+    "wrongAltitudeFormat",
+    testHut1.phone,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -274,9 +254,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	  testHut1.altitude,
-	  11111,
-	  testHut1.email,
+    testHut1.altitude,
+    11111,
+    testHut1.email,
     testHut1.website
   );
   Utils.postHut(
@@ -292,9 +272,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	testHut1.altitude,
-	testHut1.phone,
-	1,
+    testHut1.altitude,
+    testHut1.phone,
+    1,
     testHut1.website
   );
   Utils.postHut(
@@ -310,9 +290,9 @@ Utils.postHut(
     testHut1.cost,
     testHutPoint1.latitude,
     testHutPoint1.longitude,
-	  testHut1.altitude,
-	  testHut1.phone,
-	  testHut1.email,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
     1
   );
 });
@@ -346,12 +326,12 @@ describe("GET /api/huts/:hutId", function () {
     await Utils.clearAll();
   });
 
-  Utils.getOneHut(agent, "return the hut", 200, testHut1.hutId,credentialsHiker);
+  Utils.getOneHut(agent, "return the hut", 200, testHut1.hutId, credentialsHiker);
   Utils.getOneHut(
     agent,
     "return 401 because of not authenticated user",
     401,
-	testHut1.hutId,
+    testHut1.hutId,
     wrongCredentials
   );
 
@@ -359,38 +339,37 @@ describe("GET /api/huts/:hutId", function () {
 });
 
 
-
 /*****************************************************************************************************
 *              GET /api/huts
 *****************************************************************************************************/
 describe("GET /api/huts", function () {
-	/* Test Setup */
-	this.beforeAll(async () => {
-		await Utils.clearAll();
-		await Promise.all([
-			PersistentManager.store(User.tableName, testUserLocalGuide),
-			PersistentManager.store(User.tableName, testUserHiker)
-		]);
-		await Promise.all([
-			PersistentManager.store(Point.tableName, testHutPoint1),
-			PersistentManager.store(Point.tableName, testHutPoint2),
-			PersistentManager.store(Point.tableName, testHutPoint3)
-		]);
-		await Promise.all([
-			PersistentManager.store(Hut.tableName, testHut1),
-			PersistentManager.store(Hut.tableName, testHut2),
-			PersistentManager.store(Hut.tableName, testHut3)
-		]);
-	});
+  /* Test Setup */
+  this.beforeAll(async () => {
+    await Utils.clearAll();
+    await Promise.all([
+      PersistentManager.store(User.tableName, testUserLocalGuide),
+      PersistentManager.store(User.tableName, testUserHiker)
+    ]);
+    await Promise.all([
+      PersistentManager.store(Point.tableName, testHutPoint1),
+      PersistentManager.store(Point.tableName, testHutPoint2),
+      PersistentManager.store(Point.tableName, testHutPoint3)
+    ]);
+    await Promise.all([
+      PersistentManager.store(Hut.tableName, testHut1),
+      PersistentManager.store(Hut.tableName, testHut2),
+      PersistentManager.store(Hut.tableName, testHut3)
+    ]);
+  });
 
-	/* Test Teardown */
-	this.afterAll(async () => {
-		await Utils.clearAll();
-	});
+  /* Test Teardown */
+  this.afterAll(async () => {
+    await Utils.clearAll();
+  });
 
-	Utils.getAllHuts(agent, "return the list of huts", 200, credentialsHiker, testHuts.length);
-	Utils.getAllHuts(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHuts.length);
-	
+  Utils.getAllHuts(agent, "return the list of huts", 200, credentialsHiker, testHuts.length);
+  Utils.getAllHuts(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHuts.length);
+
 });
 
 
