@@ -23,14 +23,14 @@ router.post("/",
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
 
-      await ParkingLotManager.defineParkingLot(
-        writerId,
-        req.body.parkingLotName,
-        req.body.latitude,
-        req.body.longitude,
-        req.body.altitude ?? null,
-        req.body.capacity
-      );
+      await ParkingLotManager.defineParkingLot({
+        writerId: writerId,
+        parkingLotName: req.body.parkingLotName,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        altitude: req.body.altitude ?? null,
+        capacity: req.body.capacity
+      });
 
       return res.status(201).end();
     } catch (exception) {

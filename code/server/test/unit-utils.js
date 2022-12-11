@@ -4,8 +4,8 @@ const Point = require("../dao/model/Point");
 const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
-const HikeParkingLot = require("../dao/model/HikeParkingLot");
-const HikeRefPoint = require("../dao/model/HikeRefPoint");  
+// const HikeParkingLot = require("../dao/model/HikeParkingLot");
+const HikeRefPoint = require("../dao/model/HikeRefPoint");
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
 const HikeManager = require("../controllers/HikeManager");
@@ -22,7 +22,7 @@ const HikeHutManager = require("../controllers/HikeHutManager");
 /* Reset DB content */
 exports.clearAll = async function () {
   await PersistentManager.deleteAll(HikeHut.tableName);
-  await PersistentManager.deleteAll(HikeParkingLot.tableName);
+  // await PersistentManager.deleteAll(HikeParkingLot.tableName);
   await PersistentManager.deleteAll(HikeRefPoint.tableName);
   await PersistentManager.deleteAll(HutDailySchedule.tableName);
   await PersistentManager.deleteAll(Hut.tableName);
@@ -197,21 +197,13 @@ exports.testGetAllHikes = function (
 exports.testGetHikeByHikeId = function (
   itShould,
   hikeId,
-  expectedGetHikeByIdProperties = null,
-  expectedRejectionCode = null
+  expectedGetHikeByIdProperties
 ) {
   test(`Should ${itShould}`, async () => {
-    if (!expectedRejectionCode) {
-      const res = await HikeManager.getHikeById(hikeId);
+    const res = await HikeManager.getHikeById(hikeId);
 
-      for (const p of expectedGetHikeByIdProperties) {
-        expect(res).toHaveProperty(p);
-      }
-    } else {
-      await expect(HikeManager.getHikeById(hikeId)).rejects.toHaveProperty(
-        "code",
-        expectedRejectionCode
-      );
+    for (const p of expectedGetHikeByIdProperties) {
+      expect(res).toHaveProperty(p);
     }
   });
 };
@@ -250,17 +242,10 @@ exports.testDefineHike = function (
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
+    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, fileName: fileName };
     if (!expectedRejectionCode) {
       await HikeManager.defineHike(
-        writerId,
-        title,
-        expectedTime,
-        difficulty,
-        description,
-        city,
-        province,
-        region,
-        fileName
+        hikeData
       );
       const definedHike = await PersistentManager.loadAll(Hike.tableName).then(
         (hikes) => hikes[0]
@@ -281,15 +266,7 @@ exports.testDefineHike = function (
     } else {
       await expect(
         HikeManager.defineHike(
-          writerId,
-          title,
-          expectedTime,
-          difficulty,
-          description,
-          city,
-          province,
-          region,
-          fileName
+          hikeData
         )
       ).rejects.toHaveProperty("code", expectedRejectionCode);
     }
@@ -310,19 +287,121 @@ exports.testGetPotentialHut = function (itShould, hikeId, expectNum) {
   test(`Should ${itShould}`, async () => {
     const res = await HikeManager.getPotentialHuts(hikeId);
     expect(res.potentialHuts).toHaveLength(expectNum);
-
-    
-    
-    
   });
 }
 
+exports.testUpdateStartPoint = function (
+  itShould,
+  hikeId,
+  newStartPoint
+) {
+  test(`Should ${itShould}`, async () => {
+    await HikeManager.updateStartPoint(hikeId, newStartPoint);
+
+    const hikeStartPoint = await PersistentManager.loadOneByAttribute(Hike.tableName, "hikeId", hikeId).then(
+      (hike) => hike.startPoint
+    );
+    const startPoint = await PersistentManager.loadOneByAttribute(Point.tableName, "pointId", hikeStartPoint);
+
+    if (newStartPoint.type === "hut") {
+      const hut = await PersistentManager.loadOneByAttribute(Hut.tableName, "pointId", startPoint.pointId);
+      expect(hut.hutId).toEqual(newStartPoint.id);
+    } else {
+      const parkingLot = await PersistentManager.loadOneByAttribute(ParkingLot.tableName, "pointId", startPoint.pointId);
+      expect(parkingLot.parkingLotId).toEqual(newStartPoint.id);
+    }
+  });
+};
+
+exports.testUpdateEndPoint = function (
+  itShould,
+  hikeId,
+  newEndPoint
+) {
+  test(`Should ${itShould}`, async () => {
+    await HikeManager.updateEndPoint(hikeId, newEndPoint);
+
+    const hikeEndPoint = await PersistentManager.loadOneByAttribute(Hike.tableName, "hikeId", hikeId).then(
+      (hike) => hike.endPoint
+    );
+    const endPoint = await PersistentManager.loadOneByAttribute(Point.tableName, "pointId", hikeEndPoint);
+
+    if (newEndPoint.type === "hut") {
+      const hut = await PersistentManager.loadOneByAttribute(Hut.tableName, "pointId", endPoint.pointId);
+      expect(hut.hutId).toEqual(newEndPoint.id);
+    } else {
+      const parkingLot = await PersistentManager.loadOneByAttribute(ParkingLot.tableName, "pointId", endPoint.pointId);
+      expect(parkingLot.parkingLotId).toEqual(newEndPoint.id);
+    }
+  });
+};
 
 
 /*****************************************************************************************************
  *              HikeHut
  *****************************************************************************************************/
- exports.testUpdateHutId = function (
+exports.testStoreHikeHut = function (
+  itShould,
+  newHikeHut,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      await HikeHutManager.storeHikeHut(newHikeHut);
+      const storedHikeHut = await PersistentManager.loadAll(HikeHut.tableName).then(
+        (hikeHuts) => hikeHuts[0]
+      );
+
+      expect(storedHikeHut).toEqual(newHikeHut);
+    } else {
+      await expect(HikeHutManager.storeHikeHut(newHikeHut)).rejects.toHaveProperty(
+        "code",
+        expectedRejectionCode
+      );
+    }
+  });
+};
+
+exports.testDeleteHikeHut = function (itShould, attributeName, value) {
+  test(`Should ${itShould}`, async () => {
+    await HikeHutManager.deleteHikeHut(attributeName, value);
+    const numOfRemainingHikeHuts = await PersistentManager.loadAllByAttribute(
+      HikeHut.tableName,
+      attributeName,
+      value
+    ).then((hikeHuts) => hikeHuts.length);
+
+    expect(numOfRemainingHikeHuts).toEqual(0);
+  });
+};
+
+exports.testExistsHikeHut = function (
+  itShould,
+  attributeName,
+  value,
+  expectedResult
+) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeHutManager.existsHikeHut(attributeName, value);
+
+    expect(res).toEqual(expectedResult);
+  });
+};
+
+exports.testLoadAllByAttributeHikeHut = function (itShould, attributeName, value) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeHutManager.loadAllByAttributeHikeHut(
+      attributeName,
+      value
+    ).then((hikeHuts) => hikeHuts.length);
+
+    for (const r in res) {
+      expect(r[attributeName]).toEqual(value);
+    }
+  });
+};
+
+exports.testUpdateHutId = function (
   itShould,
   hikeId,
   newHutIdList,
@@ -386,6 +465,28 @@ exports.testExistsHut = function (
   });
 };
 
+exports.testLoadOneByAttributeHut = function (
+  itShould,
+  attributeName,
+  value,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await HutManager.loadOneByAttributeHut(
+        attributeName,
+        value
+      );
+
+      expect(res[attributeName]).toEqual(value);
+    } else {
+      await expect(
+        HutManager.loadOneByAttributeHut(attributeName, value)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
 exports.testGetAllHuts = function (
   itShould,
   expectedLength,
@@ -421,22 +522,9 @@ exports.testDefineHut = function (
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
+    const hutData = { hutName: hutName, writerId: writerId, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude, phone: phone, email: email, website: website };
     if (!expectedRejectionCode) {
-      await HutManager.defineHut(
-        hutName,
-        writerId,
-        city,
-        province,
-        region,
-        numOfBeds,
-        cost,
-        latitude,
-        longitude,
-        altitude,
-        phone,
-        email,
-        website,
-      );
+      await HutManager.defineHut(hutData);
       const definedHut = await PersistentManager.loadAll(Hut.tableName).then(
         (Huts) => Huts[0]
       );
@@ -458,27 +546,36 @@ exports.testDefineHut = function (
       expect(definedHutPoint.latitude).toEqual(latitude);
       expect(definedHutPoint.longitude).toEqual(longitude);
     } else {
-      await expect(
-        HutManager.defineHut(
-          hutName,
-          writerId,
-          city,
-          province,
-          region,
-          numOfBeds,
-          cost,
-          latitude,
-          longitude,
-          altitude,
-          phone,
-          email,
-          website
-        )
-      ).rejects.toHaveProperty("code", expectedRejectionCode);
+      await expect(HutManager.defineHut(hutData)).rejects.toHaveProperty("code", expectedRejectionCode);
     }
   });
 };
 
+exports.testGetHutById = function (
+  itShould,
+  hutId
+) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HutManager.getHutById(
+      hutId
+    );
+
+    expect(res.hutId).toEqual(hutId);
+  });
+};
+
+exports.testGetHutByPointId = function (
+  itShould,
+  pointId
+) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HutManager.getHutByPointId(
+      pointId
+    );
+
+    expect(res.pointId).toEqual(pointId);
+  });
+};
 
 
 /*****************************************************************************************************
@@ -552,15 +649,9 @@ exports.testDefineParkingLot = function (
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
+    const parkingLotData = { writerId: writerId, parkingLotName, parkingLotName, latitude: latitude, longitude: longitude, altitude: altitude, capacity: capacity };
     if (!expectedRejectionCode) {
-      await ParkingLotManager.defineParkingLot(
-        writerId,
-        parkingLotName,
-        latitude,
-        longitude,
-        altitude,
-        capacity
-      );
+      await ParkingLotManager.defineParkingLot(parkingLotData);
       const definedParkingLot = await PersistentManager.loadAll(
         ParkingLot.tableName
       ).then((parkingLots) => parkingLots[0]);
@@ -575,16 +666,7 @@ exports.testDefineParkingLot = function (
       expect(definedParkingLot.altitude).toEqual(altitude);
       expect(definedParkingLot.capacity).toEqual(capacity);
     } else {
-      await expect(
-        ParkingLotManager.defineParkingLot(
-          writerId,
-          parkingLotName,
-          latitude,
-          longitude,
-          altitude,
-          capacity
-        )
-      ).rejects.toHaveProperty("code", expectedRejectionCode);
+      await expect(ParkingLotManager.defineParkingLot(parkingLotData)).rejects.toHaveProperty("code", expectedRejectionCode);
     }
   });
 };
@@ -611,6 +693,41 @@ exports.testStorePoint = function (
         "code",
         expectedRejectionCode
       );
+    }
+  });
+};
+
+exports.testUpdatePoint = function (
+  itShould,
+  newPoint,
+  attributeName,
+  value,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      let attributesName = [];
+      for (const attribute in newPoint) {
+        if (Object.prototype.hasOwnProperty.call(newPoint, attribute)) {
+          attributesName.push(attribute);
+        }
+      }
+      await PointManager.updatePoint(newPoint, attributeName, value);
+      let updatedPoints = await PersistentManager.loadAllByAttribute(
+        Point.tableName,
+        attributeName,
+        value
+      );
+
+      for (const updatedPoint of updatedPoints) {
+        for (const attribute in attributesName) {
+          expect(updatedPoint[attribute]).toEqual(newPoint[attribute]);
+        }
+      }
+    } else {
+      await expect(
+        PointManager.updatePoint(newPoint, attributeName, value)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
     }
   });
 };
@@ -674,6 +791,54 @@ exports.testStoreHikeRefPoint = function (
   });
 };
 
+exports.testUpdateHikeRefPoint = function (
+  itShould,
+  newHikeRefPoint,
+  attributeName,
+  value,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      let attributesName = [];
+      for (const attribute in newHikeRefPoint) {
+        if (Object.prototype.hasOwnProperty.call(newHikeRefPoint, attribute)) {
+          attributesName.push(attribute);
+        }
+      }
+      await HikeRefPointManager.updateHikeRefPoint(newHikeRefPoint, attributeName, value);
+      let updatedHikeRefPoints = await PersistentManager.loadAllByAttribute(
+        HikeRefPoint.tableName,
+        attributeName,
+        value
+      );
+
+      for (const updatedHikeRefPoint of updatedHikeRefPoints) {
+        for (const attribute in attributesName) {
+          expect(updatedHikeRefPoint[attribute]).toEqual(newHikeRefPoint[attribute]);
+        }
+      }
+    } else {
+      await expect(
+        HikeRefPointManager.updateHikeRefPoint(newHikeRefPoint, attributeName, value)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testDeleteHikeRefPoint = function (itShould, attributeName, value) {
+  test(`Should ${itShould}`, async () => {
+    await HikeRefPointManager.deleteHikeRefPoint(attributeName, value);
+    const numOfRemainingHikeRefPoints = await PersistentManager.loadAllByAttribute(
+      HikeRefPoint.tableName,
+      attributeName,
+      value
+    ).then((hikeRefPoints) => hikeRefPoints.length);
+
+    expect(numOfRemainingHikeRefPoints).toEqual(0);
+  });
+};
+
 exports.testExistsHikeRefPoint = function (
   itShould,
   attributeName,
@@ -703,6 +868,30 @@ exports.testLoadAllByAttributeHikeRefPoint = function (
 
     for (const r in res) {
       expect(r[attributeName]).toEqual(value);
+    }
+  });
+};
+
+exports.testUpdateRefPoint = function (
+  itShould,
+  hikeId,
+  newRefPoints
+) {
+  test(`Should ${itShould}`, async () => {
+    await HikeRefPointManager.updateRefPoint(hikeId, newRefPoints);
+    const hikeRefPoints = await PersistentManager.loadAllByAttribute(HikeRefPoint.tableName, "hikeId", hikeId);
+    const refPoints = await Promise.all(hikeRefPoints.map(async (hrp) => {
+      const refPoint = await PersistentManager.loadOneByAttribute(Point.tableName, "pointId", hrp.pointId);
+      return {
+        name: refPoint.nameOfLocation,
+        coords: [refPoint.latitude, refPoint.longitude]
+      };
+    }));
+
+    for (const nrp of newRefPoints) {
+      expect(refPoints.some(rp => rp.name === nrp.name)).toEqual(true);
+      expect(refPoints.some(rp => rp.coords[0] === nrp.coords[0])).toEqual(true);
+      expect(refPoints.some(rp => rp.coords[1] === nrp.coords[1])).toEqual(true);
     }
   });
 };
@@ -784,7 +973,8 @@ exports.testLoadOneByAttributeUser = function (itShould, attributeName, value, e
 
 exports.testDefineUser = function (itShould, role, firstname, lastname, mobile, email, password, verificationCode) {
   test(`Should ${itShould}`, async () => {
-    await UserManager.defineUser(role, firstname, lastname, mobile, email, password, verificationCode);
+    const userData = { role: role, firstname: firstname, lastname: lastname, mobile: mobile, email: email, password: password, verificationCode: verificationCode }
+    await UserManager.defineUser(userData);
     const definedUser = await PersistentManager.loadAll(User.tableName).then((users) => users[0]);
 
     expect(definedUser.role).toEqual(role);
