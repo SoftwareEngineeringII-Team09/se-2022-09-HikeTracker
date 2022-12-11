@@ -10,12 +10,12 @@ const HutCard = ({ hut }) => {
                     <h3 className='fw-bold'>{hut.hutName}</h3>
                 </div>
 
-                {hut.city && <dl className='d-flex mt-4 justify-content-between'>
+                {hut.city && <dl className='d-flex flex-column mt-4 justify-content-between'>
                     <div className='d-flex flex-column'>
-                        <dt>City, province, region</dt>
+                        <dt>Location</dt>
                         <dd className='m-0'>{getLocationFullName(hut.province, hut.city) + ', ' + getLocationRegion(hut.region)}</dd>
                     </div>
-                    <div className='d-flex flex-column'>
+                    <div className='d-flex flex-column my-3'>
                         <dt>Altitude</dt>
                         <dd className='m-0'>{hut.altitude.toFixed(2)} m</dd>
                     </div>
@@ -23,7 +23,7 @@ const HutCard = ({ hut }) => {
                         <dt>Cost per night</dt>
                         <dd className='m-0'>{hut.cost} €</dd>
                     </div>
-                    <div className='d-flex flex-column'>
+                    <div className='d-flex flex-column mt-3'>
                         <dt>Number of beds</dt>
                         <dd className='m-0'>{hut.numOfBeds}</dd>
                     </div>

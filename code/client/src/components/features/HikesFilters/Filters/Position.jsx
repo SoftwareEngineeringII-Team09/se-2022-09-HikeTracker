@@ -10,8 +10,6 @@ import { RadiusOnPoint } from "@components/features/Map"
 const Position = ({ isOpen, close }) => {
     const { values, touched, setFieldValue } = useFormikContext()
 
-    console.log(values)
-    console.log(touched)
     const { radius } = values.geoArea.position
     const { lat, lng } = values.geoArea.position.point
 
@@ -23,7 +21,7 @@ const Position = ({ isOpen, close }) => {
         else return [point.lat, point.lng]
     }
 
-    const handleConfirm = () => {
+    const handleConfirm = function() {
         if (touched.geoArea && touched.geoArea.position)
             setPoint({ lat, lng })
         else setFieldValue('geoArea.position.point', point)
@@ -46,7 +44,7 @@ const Position = ({ isOpen, close }) => {
                             { coord: "lat", label: "Latitude" },
                             { coord: "lng", label: "Longitude" }
                         ].map((item, idx) => (
-                            <Col key={idx} xs={6} >
+                            <Col key={`coord-${idx}`} xs={6} >
                                 <Input id={`point-${item.coord}`} name={`geoArea.position.point.${item.coord}`} type="text" label={item.label} />
                             </Col>
                         ))}
