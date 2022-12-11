@@ -553,8 +553,7 @@ class HikeManager {
       const distanceFromEndPoint = potentialEndPointHuts.some(peph => peph.id === psph.id) && geodist({ lat: psph.coords[0], lon: psph.coords[1] }, { lat: endPoint.latitude, lon: endPoint.longitude }, { exact: true, unit: 'km' });
       if (distanceFromStartPoint > maxDistance) {
         return false;
-      }
-      else if (distanceFromEndPoint) {
+      } else if (distanceFromEndPoint !== false) {
         if (distanceFromStartPoint <= distanceFromEndPoint) {
           potentialEndPointHuts = potentialEndPointHuts.filter(peph => peph.id !== psph.id);
           return true;
@@ -579,7 +578,7 @@ class HikeManager {
       if (distanceFromStartPoint > maxDistance) {
         return false;
       }
-      else if (distanceFromEndPoint) {
+      else if (distanceFromEndPoint !== false) {
         if (distanceFromStartPoint <= distanceFromEndPoint) {
           potentialEndPointParkingLots = potentialEndPointParkingLots.filter(peppl => peppl.id !== psppl.id);
           return true;
@@ -609,19 +608,16 @@ class HikeManager {
   async updateStartPoint(hikeId, newStartPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldStartPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
-    let newStartPointData;
 
     // Check if the start point is a hut or a parking lot and update the hike
     if (newStartPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newStartPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      newStartPointData = hutPoint;
       await PointManager.updatePoint({ ...hutPoint, type: "start point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, startPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newStartPoint.type === "parking lot") {
       const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newStartPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      newStartPointData = parkingLotPoint;
       await PointManager.updatePoint({ ...parkingLotPoint, type: "start point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
     }
@@ -635,13 +631,6 @@ class HikeManager {
       await PointManager.updatePoint({ ...oldStartPoint, type: "hut" }, "pointId", oldStartPoint.pointId);
     }
 
-    // Update GPX start point
-    const oldGpx = fs.readFileSync(hike.trackPath).toString();
-    const regex = new RegExp(/<trkpt.*>/);
-    const newTrkpt = `<trkpt lat="${newStartPointData.latitude}" lon="${newStartPointData.longitude}">`;
-    const newGpx = oldGpx.replace(regex, newTrkpt);
-    fs.writeFileSync(hike.trackPath, newGpx);
-
     return Promise.resolve();
   }
 
@@ -649,19 +638,16 @@ class HikeManager {
   async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
-    let newEndPointData;
-
+    
     // Check if the end point is a hut or a parking lot and update the hike
     if (newEndPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newEndPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      newEndPointData = hutPoint;
       await PointManager.updatePoint({ ...hutPoint, type: "end point" }, "pointId", hutPoint.pointId);
       await this.updateHike({ ...hike, endPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
     } else if (newEndPoint.type === "parking lot") {
       const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newEndPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      newEndPointData = parkingLotPoint;
       await PointManager.updatePoint({ ...parkingLotPoint, type: "end point" }, "pointId", parkingLotPoint.pointId);
       await this.updateHike({ ...hike, endPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
     }
@@ -674,16 +660,6 @@ class HikeManager {
     } else if (oldEndPoint.hut) {
       await PointManager.updatePoint({ ...oldEndPoint, type: "hut" }, "pointId", oldEndPoint.pointId);
     }
-
-    // Update GPX end point
-    const oldGpx = fs.readFileSync(hike.trackPath).toString();
-    const regex = new RegExp(/<trkpt.*>/g);
-    const trkptMatches = oldGpx.match(regex);
-    const oldTrkptLength = trkptMatches[trkptMatches.length - 1].length;
-    const lastIndex = lastIndexOfRegex(oldGpx, regex);
-    const newTrkpt = `<trkpt lat="${newEndPointData.latitude}" lon="${newEndPointData.longitude}">`;
-    const newGpx = oldGpx.substring(0, lastIndex) + newTrkpt + oldGpx.substring(lastIndex + oldTrkptLength);
-    fs.writeFileSync(hike.trackPath, newGpx);
 
     return Promise.resolve();
   }
