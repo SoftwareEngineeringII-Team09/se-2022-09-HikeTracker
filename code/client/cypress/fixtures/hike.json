@@ -1,0 +1,10 @@
+{
+    "title": "Trail for Mont Ferra",
+    "expectedTime": "05:30",
+    "difficulty": "Hiker",
+    "description": "This is the description",
+    "city": 1001,
+    "province": 1,
+    "region": 1,
+    "filename": "monte_ferra.gpx"
+}

@@ -1,0 +1,14 @@
+{
+    "hutName": "Rifugio Santa Claus",
+    "city": 5036,
+    "province": 5,
+    "region": 1,
+    "numOfBeds": 10,
+    "cost": 60.00,
+    "latitude": 44.57425086759031,
+    "longitude": 6.982689192518592,
+    "altitude": 1000,
+    "phone": "1234567890",
+    "email": "hut@email.com",
+    "website": "http://www.google.com"
+}

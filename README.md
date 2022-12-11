@@ -25,7 +25,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [Development](#development)
     - [Tests](#tests)
     - [Production](#production)
-	  - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
+	 - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
     - [Pull from Docker Hub](#Pull-from-Docker-Hub)
 2. [Technical Dept Strategy](#technical-dept-strategy)
 3. [Technologies](#technologies)
@@ -172,6 +172,7 @@ Here the list of dependencies installed:
 },
 "devDependencies": {
     "@craco/craco": "^7.0.0",
+    "@cypress/code-coverage": "^3.10.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/react-toastify": "^4.1.0",

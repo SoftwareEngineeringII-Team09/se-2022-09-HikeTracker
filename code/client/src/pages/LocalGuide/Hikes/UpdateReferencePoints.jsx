@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button, Spinner } from 'react-bootstrap'
 import { toast } from "react-toastify"
 
 import { isPointWithinRadius } from 'geolib'
@@ -60,7 +60,7 @@ const UpdateReferencePoints = () => {
             .catch(err => toast.error(err, { theme: 'colored' }))
     }
 
-    if (!loading)
+    if (!loading && hike)
         return (
             <div className="my-5">
                 <div>
@@ -109,7 +109,7 @@ const UpdateReferencePoints = () => {
                                             </Button>
                                         </Col>
                                     </Row>
-                                    <MapContainer center={hike.startPoint.coords} zoom={12} scrollWheelZoom style={{ height: 480 }} className="mt-5">
+                                    <MapContainer data-testid="map" center={hike.startPoint.coords} zoom={12} scrollWheelZoom style={{ height: 480 }} className="mt-5">
                                         <MarkerOnPoint point={values.point} setPoint={handleClick} />
                                         {points.map((point, idx) => (
                                             <Marker key={idx} position={point.coords}>
@@ -134,6 +134,17 @@ const UpdateReferencePoints = () => {
                 </div>
             </div>
         )
+    else if (!loading && !hike)
+        return (
+            <div className="my-5 d-flex justify-content-center">
+                <h3 className="fw-bold text-danger">Ops... something went wrong</h3>
+            </div>
+        )
+    else return (
+        <div role="status" className='h-100vh position-absolute top-50 start-50'>
+            <Spinner animation="border" variant="primary-dark" />
+        </div>
+    )
 }
 
 export default UpdateReferencePoints

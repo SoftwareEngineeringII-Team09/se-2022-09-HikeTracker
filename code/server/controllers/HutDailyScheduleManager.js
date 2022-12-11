@@ -82,13 +82,13 @@ class HutDailyScheduleManager {
    * @param {any} value
    * @returns a resolved Promise with true value in case the hut daily schedule exists, a resolved Promise with false value otherwise
    */
-  async existsHutDailySchedule(attributeName, value) {
+  /* async existsHutDailySchedule(attributeName, value) {
     return PersistentManager.exists(
       HutDailySchedule.tableName,
       attributeName,
       value
     );
-  }
+  } */
 
   /**
    * Load one hut daily schedule by attribute

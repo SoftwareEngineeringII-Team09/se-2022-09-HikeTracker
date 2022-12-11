@@ -1,7 +1,7 @@
 "use strict";
 
 const HutManager = require("../controllers/HutManager");
-const { body, param, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
@@ -30,21 +30,21 @@ router.post(
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
 
-      await HutManager.defineHut(
-        req.body.hutName,
-        writerId,
-        req.body.city,
-        req.body.province,
-        req.body.region,
-        req.body.numOfBeds,
-        req.body.cost,
-        req.body.latitude,
-        req.body.longitude,
-        req.body.altitude,
-        req.body.phone,
-        req.body.email,
-        req.body.website ?? null
-      );
+      await HutManager.defineHut({
+        hutName: req.body.hutName,
+        writerId: writerId,
+        city: req.body.city,
+        province: req.body.province,
+        region: req.body.region,
+        numOfBeds: req.body.numOfBeds,
+        cost: req.body.cost,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        altitude: req.body.altitude,
+        phone: req.body.phone,
+        email: req.body.email,
+        website: req.body.website ?? null
+      });
       return res.status(201).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;
@@ -57,9 +57,9 @@ router.post(
 
 // GET the list of all huts
 router.get(
-  "/", 
+  "/",
   auth.withAuth,
-  auth.withRole(["Hiker","Local Guide"]), 
+  auth.withRole(["Hiker", "Local Guide"]),
   async (req, res) => {
     try {
       const hikes = await HutManager.getAllHuts();
@@ -75,7 +75,7 @@ router.get(
 router.get(
   "/:hutId",
   auth.withAuth,
-  auth.withRole(["Hiker","Local Guide"]), 
+  auth.withRole(["Hiker", "Local Guide"]),
   async (req, res) => {
     try {
       const hutId = req.params.hutId;

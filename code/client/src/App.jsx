@@ -12,7 +12,7 @@ const App = () => {
         <Route index path='/' element={<Pages.Home />} />
         <Route path='/hikes' element={<Pages.BrowseHikes />} />
         <Route path='/hikes/:hikeId' element={<Pages.Hike />} />
-        <Route element={<ProtectedRoute requiredRole="Hiker" redirectPath='/login' />}>
+        <Route element={<ProtectedRoute requiresLogin redirectPath='/login' />}>
           <Route path='/huts' element={<Pages.SearchHuts />} />
           <Route path='/huts/:hutId' element={<Pages.Hut />} />
         </Route>

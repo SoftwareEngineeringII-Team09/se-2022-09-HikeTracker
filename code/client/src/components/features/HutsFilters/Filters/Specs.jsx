@@ -12,7 +12,7 @@ const Specs = () => (
             <div key={idx} className="mb-5">
                 <h4 className="fw-bold mb-3">
                     {item.label}
-                    <span className="h6">{" "}{item.unit != '' && 'in ' + item.unit}</span>
+                    <span className="h6">{" "}{item.unit !== '' && 'in ' + item.unit}</span>
                 </h4>
                 <Row className="row">
                     <Col xs={6} >

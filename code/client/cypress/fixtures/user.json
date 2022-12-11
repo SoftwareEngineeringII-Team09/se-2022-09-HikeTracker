@@ -1,0 +1,13 @@
+{
+    "base": {
+        "email": "steve.rogers@hiker.test",
+        "password": "Password1234."
+    },
+    "withDetails": {
+        "email": "tony.stark@avengers.test",
+        "password": "Password1234.",
+        "firstname": "Tony",
+        "lastname": "Stark",
+        "mobile": "3931234567"
+    }
+}
