@@ -172,6 +172,7 @@ Here the list of dependencies installed:
 },
 "devDependencies": {
     "@craco/craco": "^7.0.0",
+    "@cypress/code-coverage": "^3.10.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/react-toastify": "^4.1.0",
