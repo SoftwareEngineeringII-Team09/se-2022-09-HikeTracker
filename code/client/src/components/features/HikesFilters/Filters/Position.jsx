@@ -10,6 +10,8 @@ import { RadiusOnPoint } from "@components/features/Map"
 const Position = ({ isOpen, close }) => {
     const { values, touched, setFieldValue } = useFormikContext()
 
+    console.log(values)
+    console.log(touched)
     const { radius } = values.geoArea.position
     const { lat, lng } = values.geoArea.position.point
 
