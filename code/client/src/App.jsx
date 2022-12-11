@@ -3,14 +3,14 @@ import ProtectedRoute from './components/features/ProtectedRoute/ProtectedRoute'
 
 import { Layout } from '@layouts';
 import * as Pages from '@pages';
-import TestFeature from './components/features/Coverage/CoverageFeature';
+import CoverageFeature from './components/features/Coverage/CoverageFeature';
 
 const App = () => {
   const location = useLocation();
   return (
     <Routes location={location} key={location.pathname}>
       <Route element={<Layout />}>
-        <Route path='/coverage' element={<TestFeature/>} />
+        <Route path='/coverage' element={<CoverageFeature/>} />
         <Route index path='/' element={<Pages.Home />} />
         <Route path='/hikes' element={<Pages.BrowseHikes />} />
         <Route path='/hikes/:hikeId' element={<Pages.Hike />} />
