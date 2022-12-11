@@ -3,7 +3,8 @@
 class CoverageClass {
     testFunction() {
         const x = 2;
-        console.log(x);
+        const y = x + 2;
+        console.log(y);
     }
 }
 
