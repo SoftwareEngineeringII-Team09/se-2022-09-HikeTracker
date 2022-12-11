@@ -220,9 +220,9 @@ VALUES (45, "start point", 0, 0, "Start point of Lago Panelatte", 46.172037,8.45
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
 VALUES (46, "end point", 0,	0, "End point of Lago Panelatte",	46.20274, 8.450575, 2149.2);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
-VALUES (47, "start point", 0, 0, "Start Point of Hike_Zicher", 46.147128, 8.534505,1265.850139);
+VALUES (47, "start point", 0, 0, "Start Point Monte Calvo", 45.45021, 7.695509, 1109.16089);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
-VALUES (48, "end point", 0,	0, "End point of Hike_Zicher",	46.163437, 8.534103, 1978.786291);
+VALUES (48, "end point", 0,	0, "End point Monte Calvo",	45.449289, 7.695242, 1092.91565);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude") 
 VALUES (49, "start point", 0, 0, "Start point of Laghi Paione", 46.151141, 8.196038, 1621.6);
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude", "altitude")  
@@ -390,7 +390,7 @@ VALUES (18, "Trail to Borgata Rua-Cima di Crosa ", 2, "gpx/Borgata_Rua-Cima_di_C
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
 VALUES (19, "Trail to Lago Panelatte ", 2, "gpx/Lago_Panelatte.gpx", 1038, 1, 1, 10.4, "01:32", 600.0, 902.88, "Professional hiker", "in Arvogno, follow the paved road slightly downhill as far as the bridge over the Melezzo, beyond which you continue on either side of the road, which is closed to private traffic in this section.", 45, 46);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
-VALUES (20, "Trail to Hike_Zicher ", 2, "gpx/Hike_Zicher.gpx", 1045, 1, 1, 8.5, "02:10", 1000.0, 2502.88, "Hiker", "Hohbalm. Distance: 7.6 - 12.3 miles (Loop) Our favorite hike in Zermatt features magical views of the majestic Matterhorn and stunning panoramas of the 4,000-meter peaks towering above the Zermatt area. Gruben to Jungen via Augstbord Pass", 47,48);
+VALUES (20, "Trail to Monte Calvo", 2, "gpx/Anello_Monte_Calvo.gpx", 1272, 1, 1, 6.2, "03:30", 320, 1357, "Hiker", "The climb becomes steep immediately and the track is intuitive but not very evident. It develops between beech and birch trees and the path is covered with leaves and dirt.", 47,48);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
 VALUES (21, "Trail to Laghi Paione", 2, "gpx/Laghi_Paione.gpx", 1023, 1, 1, 9.2, "03:00", 1700.0, 2802.88, "Professional hiker", "The three Paione lakes are located at different levels and the waters of the upper lake feed the middle lake and so on, up to the lower one.", 49,50);
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint")
