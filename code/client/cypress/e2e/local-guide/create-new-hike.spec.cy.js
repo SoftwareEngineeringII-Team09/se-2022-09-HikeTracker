@@ -1,28 +1,16 @@
-
-import { SERVER_URL } from "../../src/services/config";
+const { CLIENT_URL, TOAST_SUCCESS_NOTIFICATION } = require("../../fixtures/constants");
 
 describe('Create new hike', () => {
 
   before(() => {
-    // Reset the database prior to every test
     cy.clearAll()
-    // Create Local Guide user
-    cy.addLocalGuide()
+    cy.createUserWithDetails({ role: "Local Guide" })
+    cy.loginAsLocalGuide()
+
+    cy.viewport(1200, 1200)
   })
 
-  beforeEach(() => {
-    // Intercept the request to the server
-    cy.server()
-  });
-
   it('Creates a new hike', () => {
-
-    cy.loginLocalGuide();
-
-    cy.route({
-      method: 'POST',
-      url: `**/hikes`,
-    }).as('hike-creation-request')
 
     cy.visit('/account/hikes/add', { headers: { "Accept-Encoding": "gzip, deflate" } });
 
@@ -47,11 +35,8 @@ describe('Create new hike', () => {
     cy.get('input[id="gpxFile"]').attachFile(gpxTestTrack);
     cy.get('button[type="submit"]').click();
 
-    cy.wait('@hike-creation-request').then((request) => {
-      expect(request.status).to.equal(201)
-    });
-
-    cy.url().should('include', '/reference-points/');
+    cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', `Hike created successfully`);
+    cy.url().should('eq', `${CLIENT_URL}account/hikes/1/update/reference-points`);
 
   });
 

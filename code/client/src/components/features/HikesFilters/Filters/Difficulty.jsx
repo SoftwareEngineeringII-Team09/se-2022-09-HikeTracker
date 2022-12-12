@@ -8,7 +8,7 @@ const Difficulty = () => (
             { label: "Hiker", ref: "hiker" },
             { label: "Professional Hiker", ref: "professional" },
         ].map((item, idx) => (
-            <Check key={idx} id={`${item.ref}-difficulty`} name={`difficulty.${item.ref}`} label={item.label} />
+            <Check key={`difficulty-${idx}`} id={`${item.ref}-difficulty`} name={`difficulty.${item.ref}`} label={item.label} />
         ))}
     </div>
 )

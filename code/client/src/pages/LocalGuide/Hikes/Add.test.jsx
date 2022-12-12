@@ -93,7 +93,7 @@ describe("Page for adding new hike", () => {
             expect(toast.success).toHaveBeenCalledWith("Hike created successfully", { theme: "colored" })
         })
         await waitFor(() => {
-            expect(mockedUsedNavigate).toHaveBeenCalledWith("/reference-points/1")
+            expect(mockedUsedNavigate).toHaveBeenCalledWith("/account/hikes/1/update/reference-points")
         })
     })
 

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { Button } from "react-bootstrap"
 import { Formik, Form } from 'formik'
 import { MapContainer, TileLayer } from "react-leaflet"
@@ -11,6 +12,8 @@ import { Input } from '@components/form'
 import { MarkerOnPoint } from "@components/features/Map"
 
 const AddParkingLot = () => {
+    const navigate = useNavigate()
+
     const initialValues = {
         parkingLotName: "",
         capacity: null,
@@ -22,12 +25,12 @@ const AddParkingLot = () => {
     }
 
     const handleSubmit = (values) => {
-        const parkingLotData = Number.isNaN(parseFloat(values.altitude)) ? { 
+        const parkingLotData = Number.isNaN(parseFloat(values.altitude)) ? {
             parkingLotName: values.parkingLotName,
             capacity: parseInt(values.capacity),
             latitude: values.point.latitude,
             longitude: values.point.longitude
-        } : { 
+        } : {
             parkingLotName: values.parkingLotName,
             capacity: parseInt(values.capacity),
             altitude: parseFloat(values.altitude),
@@ -35,9 +38,11 @@ const AddParkingLot = () => {
             longitude: values.point.longitude,
         };
         api.parkingLots.addParkingLot(parkingLotData)
-            .then(() =>
+            .then(() => {
                 toast.success(`Parking Lot ${values.parkingLotName} has been correctly added`,
-                    { theme: 'colored' }))
+                    { theme: 'colored' })
+                navigate('/')
+            })
             .catch(err => toast.error(err, { theme: "colored" }))
     }
 

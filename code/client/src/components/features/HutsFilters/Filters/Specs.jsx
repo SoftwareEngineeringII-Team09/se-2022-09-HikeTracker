@@ -9,10 +9,10 @@ const Specs = () => (
             { label: "Cost per night", ref: "cost", unit: "euros" },
             { label: "Number of beds", ref: "beds", unit: "" }
         ].map((item, idx) => (
-            <div key={idx} className="mb-5">
+            <div key={`spec-${idx}`} className="mb-5">
                 <h4 className="fw-bold mb-3">
                     {item.label}
-                    <span className="h6">{" "}{item.unit != '' && 'in ' + item.unit}</span>
+                    <span className="h6">{" "}{item.unit !== '' && 'in ' + item.unit}</span>
                 </h4>
                 <Row className="row">
                     <Col xs={6} >

@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import AddParkingLot from './Add'
 
 jest.mock('react-bootstrap', () => ({
@@ -23,7 +24,7 @@ jest.mock('@services/api')
 
 const inputs = ['parkingLotName', 'capacity', 'altitude']
 
-const setup = () => render(<AddParkingLot />)
+const setup = () => render(<AddParkingLot />, {wrapper: MemoryRouter})
 
 beforeEach(() => setup())
 
