@@ -12,14 +12,14 @@ sections:
 ### Macro statistics
 
 - Number of stories committed vs. done
-  - Number of stories committed: 6
+  - Number of stories committed: 4
   - Number of stories done: 4 
 - Total points committed vs. done
-  - Total of stories committed: 12
-  - Total of stories done: 8
+  - Total of stories committed: 9
+  - Total of stories done: 9
 - Nr of hours planned vs. spent (as a team)
-  - Nr of hours planned: 74 hours 40 minutes 
-  - Nr of hours spent: 78 hours 39 minutes
+  - Nr of hours planned: 79 hours 00 minutes 
+  - Nr of hours spent: 75 hours 16 minutes
 
 **Remember**a story is done ONLY if it fits the Definition of Done:
 
@@ -35,80 +35,80 @@ sections:
 
 | Story | # Tasks | Points | Hours est.          | Hours actual        |
 | ----- | ------- | ------ | ------------------- | ------------------- |
-| _#0_  | 11      |        | 21 hours 35 minutes | 26 hours 05 minutes |
-| 1[^1]    | 6       | 1      | 4 hours 10 minutes  | 4 hours 35 minutes  |
-| 2     | 4       | 2      | 5 hours 15 minutes  | 4 hours 50 minutes  |
-| 3     | 9       | 2      | 12 hours 15 minutes | 18 hours 50 minutes |
-| 4[^1]    | 1       | 3      | 30 minutes          | 10 minutes          |
-| 5     | 4       | 2      | 3 hours 15 minutes  | 1 hour 40 minutes   |
-| 6     | 8       | 2      | 8 hours 40 minutes  | 5 hours 04 minutes  |
-| 7     | 8       | 2      | 9 hours 30 minutes  | 11 hours 45 minutes |
-| 8     | 8       | 2      | 9 hours 30 minutes  | 5 hours 40 minutes  |
+| _#0_  | 26      |        | 51 hours 45 minutes | 47 hours 41 minutes |
+| 7    | 5       | 2      | 6 hours 30 minutes  | 7 hours   |
+| 8     | 4       | 2      | 6 hours 30 minutes | 7 hours  |
+| 9     | 8       | 2      | 12 hours 45 minutes | 11 hours 35 minutes |
+| 33   | 2       | 3      | 1 hours 30 minutes          | 2 hours           |
 
-[^1]: We reopened these stories to fix the issues and to adapt them to the most recent requirements   
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
 - Hours per task average, standard deviation (estimate and actual)
   - _Estimate:_
-    - Average Hours per task: 74.66 / 48 = 1.55 hours
-    - Standard deviation per task: 0.74
+    - Average Hours per task: 79 / 45= 1.76 hours
+    - Standard deviation per task: 0.32
   - _Actual:_
-    - Average Hours per task: 78.65 / 48 = 1.64 hours
-    - Standard deviation per task: 0.84
+    - Average Hours per task: 75.27 / 45 = 1.67 hours
+    - Standard deviation per task: 0.25
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent - 1
-  - Total task estimation error ratio: 74.66 / 78.65 - 1 = - 0.05
+  - Total task estimation error ratio: 79 /  75.27 - 1 = 0.05
 
 ## QUALITY MEASURES
 
 - Unit Testing:
 
-  - Total hours estimated: 9 hours 40 minutes
-  - Total hours spent: 9 hours 55 minutes
-  - Nr of automated unit test cases: 240
+  - Total hours estimated: 9 hours
+  - Total hours spent: 8 hours 
+  - Nr of automated unit test cases: 352
 
 - Coverage:
 
   - BackEnd Unit Test Result
 
-    ![Backend test](./images/backendUnitTests.jpg)
+    ![Backend test](./image/backEnd.png)
 
   - BackEnd Integration Test Result
 
-    ![Backend test](./images/backendIntegrationTests.jpg)
+    ![Backend test](./image/backEndIntegration.png)
 
   - FrontEnd Test Result
 
-    ![Frontend test](./images/frontendTests.jpg)
+    ![Frontend test](./image/frontEnd.png)
 
 - E2E testing:
-  - Total hours estimated: 6 hours 30 minutes
-  - Total hours spent: 4 hours 50 minutes
+  - Total hours estimated: 13 hours 30 minutes
+  - Total hours spent: 13 hours 20 minutess
 - Code review
-  - Total hours estimated: 5 hours 40 minutes
-  - Total hours spent: 5 hours 2 minutes
+  - Total hours estimated: 6 hours 
+  - Total hours spent: 5 hours 50 minutes
+
+- Technical Debt
+  - Total hours estimated: 15 hours 10 minutes
+  - Total hours spent: 12 hours 35 minutes
+   
+  Firstly, we focused on solving security hotspot, then we tried to fix code smells by severity level ,and in general we improved coverage.
 
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
 
-  - We underestimated the Registration (HT-3) story and it slowed down all the tasks depending on this one.  
+  - We underestimated the SonarCloud coverage setup(HT-222). 
 
 - What lessons did you learn (both positive and negative) in this sprint?
 
-  - We should do a general review of the committed stories at least one day before the demo day to better prepare it. 
+  - We found out the good amount of stories committed for a sprint.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
 
-  - We created tasks for the code review so we better track it.
-  - We considered the time spent for merging and bug fixing.
-  - We better estimated tasks about testing.
+  - We evaluated correctly the number of stories to commit.
+  - We improved quality of scrum meetings. 
+  - We improved general organization to be able to deliver a better quality demo.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
-  - Improve quality of scrum meetings to detect problems earlier.
-  - Improve general organization to be able to deliver a better quality demo.
+  - Improve even more the technical debt reach over 80% coverage test.
 
 - One thing you are proud of as a Team!!
 
-  - We improved testing and especially e2e testing with respect to previous sprints.
+  - We managed to complete all committed stories , realized better organization .
