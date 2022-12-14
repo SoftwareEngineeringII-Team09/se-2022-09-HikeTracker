@@ -86,6 +86,14 @@ sections:
 - Technical Debt
   - Total hours estimated: 15 hours 10 minutes
   - Total hours spent: 12 hours 35 minutes
+  - Hours estimated for remediation by SonarQube： 8 hours
+  - Hours estimated for remediation by SonarQube only for the selected and planned issues : 
+  - Hours spent on remediation :9 hours 10 min
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability") : 0.2 %
+  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability )
+     - Reliability: A
+     - Security: E  
+     - Maintainability: A
    
   Firstly, we focused on solving security hotspot, then we tried to fix code smells by severity level ,and in general we improved coverage.
 
@@ -108,6 +116,7 @@ sections:
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
   - Improve even more the technical debt reach over 80% coverage test.
+  - Evaluate the time for specific issues on Technical debt
 
 - One thing you are proud of as a Team!!
 
