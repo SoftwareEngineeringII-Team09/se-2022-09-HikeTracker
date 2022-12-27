@@ -9,7 +9,7 @@ const Specs = () => (
             { label: "Total Ascent", ref: "totalAscent", unit: "meters" },
             { label: "Expected Time", ref: "expectedTime", unit: "hours" }
         ].map((item, idx) => (
-            <div key={idx} className="mb-5">
+            <div key={`spec-${idx}`} className="mb-5">
                 <h4 className="fw-bold mb-3">
                     {item.label}
                     <span className="h6">{" "}in {item.unit}</span>

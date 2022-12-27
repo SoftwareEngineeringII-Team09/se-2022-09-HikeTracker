@@ -9,6 +9,7 @@ jest.mock('react-bootstrap', () => ({
     Row: ({ children }) => <div>{children}</div>,
     Col: ({ children }) => <div>{children}</div>,
     Button: ({ children, ...props }) => <button {...props}>{children}</button>,
+    Spinner: jest.fn(),
 }))
 
 jest.mock('react-toastify', () => ({

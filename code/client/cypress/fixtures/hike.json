@@ -1,0 +1,10 @@
+{
+    "title": "Best trail in town",
+    "expectedTime": "05:30",
+    "difficulty": "Hiker",
+    "description": "This is the description",
+    "city": 1001,
+    "province": 1,
+    "region": 1,
+    "fileName": "test_editable.gpx"
+}

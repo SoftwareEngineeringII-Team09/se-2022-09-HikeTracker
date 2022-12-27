@@ -1,0 +1,13 @@
+{
+    "response": {
+        "InternalServerError": {
+            "statusCode": 500,
+            "body": {
+                "error": "Generic error"
+            }
+        },
+        "Success": {
+            "statusCode": 201
+        }
+    }
+}
