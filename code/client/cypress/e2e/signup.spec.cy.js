@@ -1,10 +1,11 @@
-describe('Login', () => {
+describe('Registration', () => {
 
   beforeEach(() => {
-    // Reset and seed the database prior to every test
+    // Reset the database prior to every test
+    cy.clearAll();
   });
 
-  it('Shows error to non existing user', () => {
+  it('Correctly register a new user', () => {
     cy.visit('/signup');
 
     const email = "email@example.com";

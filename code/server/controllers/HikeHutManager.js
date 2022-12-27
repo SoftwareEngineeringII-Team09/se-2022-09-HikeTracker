@@ -31,7 +31,7 @@ class HikeHutManager {
     }
 
     return PersistentManager.store(HikeHut.tableName, newHikeHut);
-  } 
+  }
 
   /**
    * Update a hikeHut
@@ -76,7 +76,7 @@ class HikeHutManager {
    */
   async deleteHikeHut(attributeName, value) {
     return PersistentManager.delete(HikeHut.tableName, attributeName, value);
-  } 
+  }
 
   /**
    * Delete all hikeHuts
@@ -136,25 +136,25 @@ class HikeHutManager {
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
 
-  
+
   // Update the start point of a hike by hikeId
-  async updatehutId(hikeId, newhutIds) { 
-    //search pointIds in hikerefpoint table
-    const hutIds= await this.loadAllByAttributeHikeHut("hikeId", hikeId);
-   //delete old hutId in huthike tablew
-   if (hutIds){
+  async updatehutId(hikeId, newhutIds) {
+    // Search pointIds in HikeHut table
+    const hutIds = await this.loadAllByAttributeHikeHut("hikeId", hikeId);
+    // Delete old hutId in HikeHut table
+    if (hutIds) {
       await Promise.all(
-        hutIds.map(async(p) =>{
-          await this.deleteHikeHut("hutId",p.hutId);
+        hutIds.map(async (p) => {
+          await this.deleteHikeHut("hutId", p.hutId);
         })
-      );    
-   }
-  //add new hutId 
-  await Promise.all(
-    newhutIds.map(async(p) =>{
-      await this.storeHikeHut(new HikeHut(hikeId, p));
-    })
-  )
+      );
+    }
+    // Add new hutId 
+    await Promise.all(
+      newhutIds.map(async (p) => {
+        await this.storeHikeHut(new HikeHut(hikeId, p));
+      })
+    )
     return hikeId;
   }
 }

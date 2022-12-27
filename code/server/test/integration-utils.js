@@ -5,7 +5,7 @@ const Point = require("../dao/model/Point");
 const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
-const HikeParkingLot = require("../dao/model/HikeParkingLot");
+// HikeParkingLot
 const HikeRefPoint = require("../dao/model/HikeRefPoint");
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
@@ -13,7 +13,7 @@ const User = require("../dao/model/User");
 /* Reset DB content */
 exports.clearAll = async function () {
   await PersistentManager.deleteAll(HikeHut.tableName);
-  await PersistentManager.deleteAll(HikeParkingLot.tableName);
+  // delete HikeParkingLot
   await PersistentManager.deleteAll(HikeRefPoint.tableName);
   await PersistentManager.deleteAll(HutDailySchedule.tableName);
   await PersistentManager.deleteAll(Hut.tableName);
@@ -131,24 +131,6 @@ exports.putHikeStartEndPoints = function (agent, itShould, expectedHTTPStatus, c
 		}).catch(loginError => console.log(loginError));
 	})
 }
-
-exports.getHikeGpxById = function (
-  agent,
-  itShould,
-  expectedHTTPStatus,
-  hikeId
-) {
-  it(`Should ${itShould}`, function (done) {
-    agent
-      .get(`/api/hikes/${hikeId}`)
-      .then(function (res) {
-        res.should.have.status(expectedHTTPStatus);
-        done();
-      })
-      .catch((e) => console.log(e));
-  });
-};
-
 
 exports.putRefPoint = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, newRefpointList) {
 	const newRefPoints =  {referencePoints: newRefpointList};
