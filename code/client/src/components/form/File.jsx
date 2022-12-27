@@ -1,9 +1,9 @@
 import { Form } from "react-bootstrap";
 import classNames from "classnames";
 
-import { Field, ErrorMessage, useField } from "formik";
+import { ErrorMessage, useField } from "formik";
 
-const Input = ({ id, name, type, as, placeholder, disabled, className, label, min = null, max = null, step = null }) => {
+const File = ({ id, name, disabled, className, label, accept, onChange }) => {
     const [field, meta] = useField(name);
 
     const classes = classNames({
@@ -17,8 +17,8 @@ const Input = ({ id, name, type, as, placeholder, disabled, className, label, mi
     return (
         <Form.Group className={className}>
             <Form.Label htmlFor={id} className="fw-semibold text-primary-dark" >{label}</Form.Label>
-            <Field id={id} name={field.name} type={type} as={as} placeholder={placeholder} className={classes} disabled={disabled}
-                min={min} max={max} step={step} />
+            <input id={id} name={field.name} type="file" accept={accept} className={classes} disabled={disabled}
+                onChange={onChange} />
             {(meta.touched && meta.error) &&
                 <Form.Text data-testid="error-message" className='text-danger'>
                     <ErrorMessage name={field.name} />
@@ -27,4 +27,4 @@ const Input = ({ id, name, type, as, placeholder, disabled, className, label, mi
     );
 }
 
-export default Input;
+export default File;

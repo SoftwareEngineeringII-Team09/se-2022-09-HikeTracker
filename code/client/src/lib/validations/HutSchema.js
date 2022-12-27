@@ -1,17 +1,29 @@
 import * as Yup from 'yup';
 
+import { __REGIONS, getProvincesForRegion, getCitiesForProvince } from '@lib/helpers/location'
+
 const mobileRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/;
 
-const HutSchema = Yup.object({
+const HutSchema = Yup.object().shape({
     hutName: Yup.string()
         .max(40, 'Hut name must be 40 characters or less')
         .required("Please provide a name for the hut"),
-    city: Yup.number()
-        .required("Please select a city").positive("Please select a city").integer(),
-    province: Yup.number()
-        .required("Please select a province").positive("Please select a province").integer(),
-    region: Yup.number()
-        .required("Please select a region").positive("Please select a region").integer(),
+        region: Yup.number().oneOf(
+            [...Object.values(__REGIONS)
+                .map(reg => reg.regione)],
+            "Value must match with one of selectable ones").integer(),
+        province: Yup.number().test('Province is within the selected region', 'Value must match with one of selectable ones',
+            (value, ctx) => (
+                getProvincesForRegion(ctx.parent.region)
+                    .map(p => p.provincia)
+                    .includes(value))
+        ).integer(),
+        city: Yup.number().test('City is within the selected province', 'Value must match with one of selectable ones',
+            (value, ctx) => (
+                getCitiesForProvince(ctx.parent.province)
+                    .map(c => c.comune)
+                    .includes(value))
+        ).integer(),
     numOfBeds: Yup.number()
         .required("Please provide the number of beds for the hut")
         .min(0, "The number of beds must be 0 or higher").integer(),
@@ -33,6 +45,7 @@ const HutSchema = Yup.object({
     email: Yup.string()
         .email('This is not a valid email address')
         .required('Insert your email address'),
+    image: Yup.mixed().required(),
 });
 
 export default HutSchema;

@@ -48,7 +48,7 @@ const AddParkingLot = () => {
 
     return (
         <div className='my-5'>
-            <div>
+            <div className='mb-4'>
                 <h1 className="fw-bold">Add a new parking lot</h1>
             </div>
             <Formik initialValues={initialValues} validationSchema={ParkingLotSchema} onSubmit={(values) => handleSubmit(values)} >

@@ -1,37 +1,33 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import api from '@services/api';
 import { useNavigate } from "react-router-dom";
+import { Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { Formik, Form } from 'formik'
+
+import { Select, Input, File } from '@components/form'
+import { HikeSchema } from "@lib/validations"
 
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
+import api from '@services/api';
+
 const AddHike = () => {
-    const [title, setTitle] = useState('');
-    const [province, setProvince] = useState(0);
-    const [city, setCity] = useState(0);
-    const [region, setRegion] = useState(0);
-    const [expectedTime, setExpectedTime] = useState(0);
-    const [difficulty, setDifficulty] = useState('Tourist');
-    const [description, setDescription] = useState('');
-    const [gpxFile, setGpxFile] = useState(null);
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
+    const handleSubmit = (values) => {
+        // TODO: Adding image to the API
         const data = new FormData();
-        data.append('gpx', gpxFile);
-        data.append('title', title);
-        data.append('province', province);
-        data.append('region', region);
-        data.append('expectedTime', expectedTime);
-        data.append('city', city);
-        data.append('difficulty', difficulty);
-        data.append('description', description);
+        data.append('gpx', values.gpx);
+        data.append('title', values.title);
+        data.append('region', values.region);
+        data.append('province', values.province);
+        data.append('city', values.city);
+        data.append('expectedTime', values.expectedTime);
+        data.append('difficulty', values.difficulty);
+        data.append('description', values.description);
 
         api.hikes.createHike(data)
             .then((res) => {
@@ -49,77 +45,71 @@ const AddHike = () => {
             });
     };
 
-    const handleFileChange = (event) => {
-        if (event.target.files && event.target.files[0])
-            setGpxFile(event.target.files[0]);
+    const initialValues = {
+        title: "",
+        region: 0,
+        province: 0,
+        city: 0,
+        expectedTime: "",
+        difficulty: "",
+        description: "",
+        gpx: "",
+        image: ""
     };
 
     return (
-        <>
-            <div style={{ zIndex: 99 }} className="px-4">
-                <div className='mb-5'>
-                    <h1 className='fw-black m-0 display-1'>Insert hike data</h1>
-                </div>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='title'>Title:</Form.Label>
-                        <Form.Control id='title' type='text' required placeholder='Hike title' onChange={event => setTitle(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor="region">Region:</Form.Label>
-                        <Form.Select id='region' required onChange={(e) => setRegion(parseInt(e.target.value))}>
-                            <option value={0}>Select a region</option>
+
+        <div className='my-5'>
+            <div className='mb-4'>
+                <h1 className="fw-bold">Add a new hike</h1>
+                <p>Add a new hike so that hiker can see its info and start it when he want.</p>
+            </div>
+            <Formik className="my-2" initialValues={initialValues} validationSchema={HikeSchema} onSubmit={(values) => handleSubmit(values)}>
+                {({ values, setFieldValue }) => {
+                    return (<Form data-testid="hike-form">
+                        <Input id="title" name="title" type="text" label="Title" placeholder="Hike title" className="mb-3" />
+                        <Select id="region" name="region" defaultLabel="Select a region" label="Region" className="mb-3">
                             {regions.map(region => (
                                 <option key={region.regione} value={region.regione}>{region.nome}</option>
                             ))}
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='province'>Province:</Form.Label>
-                        <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
-                            <option value={0}>Select a provice</option>
-                            {provinces
-                                .filter(province => province.regione === region)
-                                .map(province => (
-                                    <option key={province.provincia} value={province.provincia}>{province.nome}</option>
-                                ))}
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='city'>City:</Form.Label>
-                        <Form.Select id='city' required onChange={(e) => setCity(parseInt(e.target.value))}>
-                            <option value={0}>I want to leave this field empty</option>
-                            {cities.filter(city => city.provincia === province).map(city => (
+                        </Select>
+                        <Select id="province" name="province" defaultLabel="Select a province" label="Province" className="mb-3">
+                            {provinces.filter(province => province.regione === Number(values.region)).map(province => (
+                                <option key={province.provincia} value={province.provincia}>{province.nome}</option>
+                            ))}
+                        </Select>
+                        <Select id="city" name="city" defaultLabel="Select a city" label="City" className="mb-3">
+                            {cities.filter(city => city.provincia === Number(values.province)).map(city => (
                                 <option key={city.comune} value={city.comune}>{city.nome}</option>
                             ))}
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label>Expected time:</Form.Label>
-                        <Form.Control id='expTime' required type='time' onChange={event => setExpectedTime(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group className='mb-2'>
-                        <Form.Label htmlFor='difficulty'>Difficulty:</Form.Label>
-                        <Form.Select id='difficulty' required onChange={event => setDifficulty(event.target.value)} >
-                            <option>Tourist</option>
-                            <option>Hiker</option>
-                            <option>Professional hiker</option>
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group required className='mb-2'>
-                        <Form.Label htmlFor='description'>Description:</Form.Label>
-                        <Form.Control id="description" required type='text-area' onChange={event => setDescription(event.target.value)} />
-                    </Form.Group>
-                    <Form.Group required className='mb-2'>
-                        <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>
-                        <Form.Control id="gpxFile" type='file' required onChange={handleFileChange} />
-                    </Form.Group>
-                    <Button variant='primary-light fw-bold my-3 mx-auto d-block' size='lg' type='submit' className='mb-3'>
-                        Create new hike
-                    </Button>
-                </Form>
-            </div>
-        </>
+                        </Select>
+
+                        <Input id="expectedTime" name="expectedTime" type="time" label="Expected time" placeholder="12:30" className="mb-3" />
+
+                        <Select id="difficulty" name="difficulty" defaultLabel="Select a difficulty" label="Difficulty" className="mb-3">
+                            {["Tourist", "Hiker", "Professional hiker"].map((difficulty, idx) => (
+                                <option key={`difficulty-${idx}`} value={difficulty}>{difficulty}</option>
+                            ))}
+                        </Select>
+
+                        <Input id="description" name="description" as="textarea" label="Description" placeholder="An amazing hike..." className="mb-3" />
+
+                        <File id="gpx" name="gpx" type="file" accept=".gpx" label="Select your gpx file" className="mb-3" onChange={(e) => {
+                            setFieldValue('gpx', e.currentTarget.files[0])
+                        }} />
+                        <File id="image" name="image" type="file" accept="image/*" label="Cover image" className="mb-3" onChange={(e) => {
+                            setFieldValue('image', e.currentTarget.files[0])
+                        }} />
+
+                        <Button variant="primary-dark fw-bold" type="submit" size='lg' className="w-100 py-3 fw-bold my-3">
+                            Create new hike
+                        </Button>
+                    </Form>
+                    )
+                }}
+            </Formik>
+        </div>
+
     );
 }
 
