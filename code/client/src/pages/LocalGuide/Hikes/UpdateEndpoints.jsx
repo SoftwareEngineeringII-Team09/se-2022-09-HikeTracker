@@ -1,12 +1,11 @@
 import { Spinner, Alert, Container, Row, Col, Button } from 'react-bootstrap';
 import HikeEndpoint from '@components/features/HikeDetails/HikeEndpoint';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import TrackMap from '@components/features/HikeDetails/TrackMap';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@contexts/authContext'
 import api from '@services/api';
-import { useCallback } from 'react';
 
 const UpdateEndpoints = () => {
     const [user] = useContext(AuthContext)

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button, Row, Col, Alert } from 'react-bootstrap';
 import { toast } from "react-toastify";
 import api from '@services/api';
@@ -6,7 +6,6 @@ import { Formik, Form } from 'formik';
 
 import { SignupSchema } from '@lib/validations';
 import { Select, Input, LoadingButton } from '@components/form';
-import { useCallback } from 'react';
 
 const Signup = () => {
 

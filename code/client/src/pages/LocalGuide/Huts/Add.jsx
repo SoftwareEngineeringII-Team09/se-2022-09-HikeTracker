@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Formik, Form } from 'formik'
@@ -13,7 +13,6 @@ import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
 import api from '@services/api'
-import { useCallback } from 'react'
 
 const AddHut = () => {
     const [latitude, setLatitude] = useState(0);
