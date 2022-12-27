@@ -6,6 +6,7 @@ import { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@contexts/authContext'
 import api from '@services/api';
+import { useCallback } from 'react';
 
 const UpdateEndpoints = () => {
     const [user] = useContext(AuthContext)
@@ -124,9 +125,12 @@ const UpdateEndpoints = () => {
             });
     };
 
-    function navigateBack() {
-        navigate(-1);
-    }
+    const navigateBack = useCallback(
+        () => {
+            navigate(-1);
+        },
+        []
+    );
 
     if (loading)
         return <Spinner />;

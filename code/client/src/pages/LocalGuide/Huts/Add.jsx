@@ -13,6 +13,7 @@ import provinces from '@data/locations/province'
 import cities from '@data/locations/comuni'
 
 import api from '@services/api'
+import { useCallback } from 'react'
 
 const AddHut = () => {
     const [latitude, setLatitude] = useState(0);
@@ -21,31 +22,33 @@ const AddHut = () => {
 
     const navigate = useNavigate()
 
-    function handleSubmit(values) {
-        setLoading(true);
-        api.huts.createHut({
-            hutName: values.hutName,
-            city: values.city,
-            province: values.province,
-            region: values.region,
-            numOfBeds: values.numOfBeds,
-            cost: values.cost,
-            latitude,
-            longitude,
-            altitude: values.altitude,
-            phone: values.phone,
-            email: values.email,
-            website: values.website
-        })
-            .then(() => {
-                toast.success("The new hut has been correctly added", { theme: 'colored' })
-                navigate('/', { replace: true })
+    const handleSubmit = useCallback(
+        (values) => {
+            setLoading(true);
+            api.huts.createHut({
+                hutName: values.hutName,
+                city: values.city,
+                province: values.province,
+                region: values.region,
+                numOfBeds: values.numOfBeds,
+                cost: values.cost,
+                latitude,
+                longitude,
+                altitude: values.altitude,
+                phone: values.phone,
+                email: values.email,
+                website: values.website
             })
-            .catch(err => toast.error(err, { theme: 'colored' }))
-            .finally(() => {
-                setLoading(false);
-            });
-    }
+                .then(() => {
+                    toast.success("The new hut has been correctly added", { theme: 'colored' })
+                    navigate('/', { replace: true })
+                })
+                .catch(err => toast.error(err, { theme: 'colored' }))
+                .finally(() => {
+                    setLoading(false);
+                })
+        }
+    );
 
     const handleClickOnMap = (point) => {
         setLatitude(point.latitude)

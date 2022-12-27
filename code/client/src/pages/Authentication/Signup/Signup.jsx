@@ -6,6 +6,7 @@ import { Formik, Form } from 'formik';
 
 import { SignupSchema } from '@lib/validations';
 import { Select, Input, LoadingButton } from '@components/form';
+import { useCallback } from 'react';
 
 const Signup = () => {
 
@@ -48,28 +49,30 @@ const Signup = () => {
     };
 
     /* Signup submission */
-    const submitSignup = async (values, actions) => {
-        try {
-            setLoading(true);
-            const userId = await api.users.signup(values);
-            setUserId(userId);
-            setSuccessfulSignup(true);
-            // Reset form values
-            actions.resetForm({
-                values: {
-                    ...initialValues,
-                    role: values.role,
-                },
-            });
-        } catch (error) {
-            toast.error(error, {
-                theme: "colored"
-            });
-        } finally {
-            actions.setSubmitting(false);
-            setLoading(false);
+    const submitSignup = useCallback(
+        async (values, actions) => {
+            try {
+                setLoading(true);
+                const userId = await api.users.signup(values);
+                setUserId(userId);
+                setSuccessfulSignup(true);
+                // Reset form values
+                actions.resetForm({
+                    values: {
+                        ...initialValues,
+                        role: values.role,
+                    },
+                });
+            } catch (error) {
+                toast.error(error, {
+                    theme: "colored"
+                });
+            } finally {
+                actions.setSubmitting(false);
+                setLoading(false);
+            }
         }
-    };
+    );
 
     return (
         <div className='my-5'>
@@ -86,7 +89,7 @@ const Signup = () => {
                     <Button className="mb-0" variant="base-light" onClick={requestNewToken}>Receive a new activation link</Button>
                 </Alert>
             }
-            <Formik className="my-2" initialValues={initialValues} validationSchema={SignupSchema} onSubmit={(values, actions) => submitSignup(values, actions)}>
+            <Formik className="my-2" initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitSignup}>
                 {({ values }) => {
                     return (<Form data-testid="signup">
                         <Row>
