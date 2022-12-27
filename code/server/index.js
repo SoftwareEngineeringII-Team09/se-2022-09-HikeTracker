@@ -39,6 +39,7 @@ auth.deserializeUser();
 
 // server modules
 const app = express();
+app.disable("x-powered-by");
 app.use(logger("dev"));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
