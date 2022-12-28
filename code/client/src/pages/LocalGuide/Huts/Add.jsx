@@ -40,7 +40,7 @@ const AddHut = () => {
                 toast.success("The new hut has been correctly added", { theme: 'colored' })
                 navigate('/', { replace: true })
             })
-            .catch(err => console.log(err))
+            .catch(err => toast.error(err, { theme: 'colored' }))
     }
 
     const handleClickOnMap = (point) => {
@@ -105,8 +105,8 @@ const AddHut = () => {
                         <Input id="website" name="website" type="text" label="Website (optional)" placeholder="Website" className="mb-3" />
 
                         <File id="image" name="image" type="file" accept="image/*" label="Cover image" className="mb-3" onChange={(e) => {
-                                setFieldValue('image', e.currentTarget.files[0])
-                            }}/>
+                            setFieldValue('image', e.currentTarget.files[0])
+                        }} />
 
                         <Button variant="primary-dark fw-bold" type="submit" size='lg' className="w-100 py-3 fw-bold my-3">
                             Create new hut

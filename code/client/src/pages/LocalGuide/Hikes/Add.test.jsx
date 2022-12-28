@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import api from '@services/api';
 
 const gpxTestTrack = require("@data/test/gpxTestTrack.gpx");
+const monteFerraImage = require("@data/test/monteFerra.jpeg");
 
 /* Mocking the login api and libraries */
 jest.mock('@services/api');
@@ -74,8 +75,7 @@ describe("Page for adding new hike", () => {
         await userEvent.selectOptions(screen.getByLabelText("Difficulty"), 'Tourist')
         await userEvent.type(screen.getByLabelText("Description"), 'Test description')
         await userEvent.upload(screen.getByLabelText("Select your gpx file"), gpxTestTrack, { applyAccept: false })
-        // TODO: update cover image test with a different test file
-        await userEvent.upload(screen.getByLabelText("Cover image"), gpxTestTrack, { applyAccept: false })
+        await userEvent.upload(screen.getByLabelText("Cover image"), monteFerraImage, { applyAccept: false })
         await userEvent.click(screen.getByRole("button"))
 
         const expectedFormData = new FormData();

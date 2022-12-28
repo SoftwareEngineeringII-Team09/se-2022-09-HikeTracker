@@ -36,6 +36,13 @@ describe("Hut form page", () => {
         await userEvent.type(screen.getByLabelText("Name"), 'Rifugio1')
         expect(screen.getByDisplayValue("Rifugio1")).toBeInTheDocument()
 
+        await userEvent.selectOptions(screen.getByLabelText("Region"), "Piemonte")
+        expect(screen.getByDisplayValue("Piemonte")).toBeInTheDocument()
+        await userEvent.selectOptions(screen.getByLabelText("Province"), "Torino")
+        expect(screen.getByDisplayValue("Torino")).toBeInTheDocument()
+        await userEvent.selectOptions(screen.getByLabelText("City"), 'Alpette')
+        expect(screen.getByDisplayValue("Alpette")).toBeInTheDocument()
+
         await userEvent.type(screen.getByLabelText("Altitude (m)"), '4321')
         expect(screen.getByDisplayValue("4321")).toBeInTheDocument()
 
