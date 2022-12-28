@@ -1,8 +1,10 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Row } from 'react-bootstrap'
-import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa'
+import { Row, Button } from 'react-bootstrap'
+import { toast } from 'react-toastify'
+import { FaMapMarkerAlt, FaCrosshairs, FaPlay } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
+import DateTimePicker from 'react-datetime-picker';
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
@@ -11,10 +13,30 @@ import { HutCard } from '@components/features'
 
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
+    const [value, onChange] = useState(new Date());
+
+    // TODO: Adding API call
+    function handleStartHike() {
+        if (value > new Date())
+            toast.error("Start time cannot be in the future!", { theme: 'colored' })
+    }
 
     return (
         <div className=''>
             <div className='mb-5'>
+                {user.role === "Hiker" && (
+                    <div className='d-flex flex-column align-items-start mb-3'>
+                        <div className='d-flex flex-column mb-3'>
+                            <span className='fw-bold'>Select start time</span>
+                            <DateTimePicker onChange={onChange} value={value} />
+                        </div>
+                        <Button variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleStartHike}>
+                            <FaPlay size={14} className="me-2" />
+                            Start this hike
+                        </Button>
+                    </div>
+
+                )}
                 <h1 className='fw-black'>
                     {hike.title}
                     {(user.role === "Local Guide" && hike.writer.writerId === user.userId) &&
@@ -53,8 +75,8 @@ const Details = ({ hike }) => {
                 {[
                     { label: "Start", ...hike.startPoint },
                     { label: "End", ...hike.endPoint }
-                ].map((point, idx) => (
-                    <div key={`point-${idx}`} className="mb-5 w-100 w-lg-50 px-lg-3">
+                ].map((point) => (
+                    <div key={`point-${point.label}`} className="mb-5 w-100 w-lg-50 px-lg-3">
                         <h4 className='me-2 m-0'>{point.label} point</h4>
                         <p className='m-0'>{point.name}</p>
                     </div>
@@ -64,8 +86,8 @@ const Details = ({ hike }) => {
                 <div className='w-100 w-lg-50 mb-5 px-lg-3'>
                     <h4>Reference points</h4>
                     <div className='d-flex flex-column'>
-                        {hike.referencePoints.map((point, idx) => (
-                            <span key={`reference-point-${idx}`} className='m-0'>{point.name}</span>
+                        {hike.referencePoints.map((point) => (
+                            <span key={`reference-point-${point.name}`} className='m-0'>{point.name}</span>
                         ))}
                     </div>
                 </div>
@@ -77,8 +99,8 @@ const Details = ({ hike }) => {
                             { label: "Length", value: `${hike.length} km` },
                             { label: "Ascent", value: `${hike.ascent} m` },
                             { label: "Expected RT time", value: `${hike.expectedTime.hours}h : ${hike.expectedTime.minutes}m` },
-                        ].map((info, idx) => (
-                            <div key={`info-${idx}`} className='d-flex mb-2'>
+                        ].map((info) => (
+                            <div key={`info-${info.label}`} className='d-flex mb-2'>
                                 <dt className='me-2'>{info.label} |</dt>
                                 <dd className='m-0'>{info.value}</dd>
                             </div>

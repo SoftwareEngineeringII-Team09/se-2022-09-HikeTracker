@@ -8,6 +8,18 @@ import { MapContainer, Marker, TileLayer, Popup, Polyline } from "react-leaflet"
 import { AuthContext } from '@contexts/authContext'
 import api from '@services/api'
 
+const HandleLinkButton = ({ hut, onClick, children }) => {
+    function handleClick() {
+        onClick(hut)
+    }
+
+    return (
+        <Button variant="link" size="sm" className="p-0 mt-2" onClick={handleClick}>
+            {children}
+        </Button>
+    )
+}
+
 const UpdateLinkedHuts = () => {
     const [user] = useContext(AuthContext)
     const { hikeId } = useParams()
@@ -45,17 +57,17 @@ const UpdateLinkedHuts = () => {
                 })
     }, [loading]) // eslint-disable-line
 
-    const handleAddLink = (hut) => {
+    function handleAddLink(hut) {
         setHuts((old) => [...old, hut])
         setLinkableHuts((old) => old.filter(h => h.hutId !== hut.hutId))
     }
 
-    const handleRemoveLink = (hut) => {
+    function handleRemoveLink(hut) {
         setLinkableHuts((old) => [...old, hut])
         setHuts((old) => old.filter(h => h.hutId !== hut.hutId))
     }
 
-    const handleSubmit = () => {
+    function handleSubmit() {
         api.hikes.updateLinkedHuts(hikeId, huts.map(hut => hut.hutId))
             .then(() => {
                 toast.success("Linked huts have been correctly updated!", { theme: 'colored' })
@@ -81,9 +93,9 @@ const UpdateLinkedHuts = () => {
                             <Marker key={hut.hutId} position={hut.coords}>
                                 <Popup>
                                     <p className='m-0'>{hut.hutName}</p>
-                                    <Button variant="link" size="sm" className="p-0 mt-2" onClick={() => handleRemoveLink(hut)}>
+                                    <HandleLinkButton hut={hut} onClick={handleRemoveLink}>
                                         Remove this hut from linked ones
-                                    </Button>
+                                    </HandleLinkButton>
                                 </Popup>
                             </Marker>
                         ))}
@@ -91,9 +103,9 @@ const UpdateLinkedHuts = () => {
                             <Marker key={hut.hutId} position={hut.coords}>
                                 <Popup>
                                     <p className='m-0'>{hut.hutName}</p>
-                                    <Button variant="link" size="sm" className="p-0 mt-2" onClick={() => handleAddLink(hut)}>
+                                    <HandleLinkButton hut={hut} onClick={handleAddLink}>
                                         Link this hut to the hike
-                                    </Button>
+                                    </HandleLinkButton>
                                 </Popup>
                             </Marker>
                         ))}

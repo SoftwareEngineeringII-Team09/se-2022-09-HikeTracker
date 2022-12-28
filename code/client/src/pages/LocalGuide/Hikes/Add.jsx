@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -15,7 +14,6 @@ import api from '@services/api';
 
 const AddHike = () => {
     const navigate = useNavigate();
-
 
     const handleSubmit = (values) => {
         // TODO: Adding image to the API

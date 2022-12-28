@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Offcanvas, Alert, Button} from "react-bootstrap";
+import { Offcanvas, Alert, Button } from "react-bootstrap";
 import { RiCloseLine } from 'react-icons/ri'
 import { toast } from "react-toastify";
 
@@ -15,7 +15,7 @@ const MobileSidebar = ({ isOpen, close }) => {
     const [user, updateUser] = useContext(AuthContext)
     const navigate = useNavigate()
 
-    const handleLogout = () => {
+    function handleLogout() {
         api.users.logout()
             .then(() => {
                 close()
@@ -44,8 +44,8 @@ const MobileSidebar = ({ isOpen, close }) => {
                             Create an account now
                         </Link>}
                     </Alert>}
-                    {navigation(user.loggedIn ? user.role.replace(" ", "") : "Visitor").map((link, idx) => (
-                        <NavLink key={idx} url={link.url} className="fs-5 text-primary-dark pt-3 fw-bold">
+                    {navigation(user.loggedIn ? user.role.replace(" ", "") : "Visitor").map((link) => (
+                        <NavLink key={`link-${link.label}`} url={link.url} className="fs-5 text-primary-dark pt-3 fw-bold">
                             {link.label}
                         </NavLink>
                     ))}

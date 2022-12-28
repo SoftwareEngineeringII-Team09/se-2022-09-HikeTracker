@@ -3,13 +3,25 @@ import { AuthContext } from '@contexts/authContext';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
+const PotentialPointButton = ({ potential, onClick }) => {
+    function handleClick() {
+        onClick(potential)
+    }
+
+    return (
+        <Button className='d-block mt-2' onClick={handleClick}>
+            Set as {potential.pointType} point
+        </Button>
+    )
+}
+
 const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], potentials = [], linkedHuts = [] }) => {
 
     const closePopup = () => {
         document.querySelector(".leaflet-popup-close-button")?.click();
     };
 
-    const handleSetAsStartEndPoint = function (potential) {
+    function handleSetAsStartEndPoint (potential) {
         closePopup()
         potential.updatePoint(potential)
     }
@@ -24,20 +36,18 @@ const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], p
                         </Popup>
                     </Marker>
                 ))}
-                {references.map((ref, idx) => (
-                    <Marker key={`reference-point-${idx}`} position={ref.coords}>
+                {references.map((ref) => (
+                    <Marker key={`reference-point-${ref.name}`} position={ref.coords}>
                         <Popup>
                             <span className='fw-bold'>{ref.name}</span>
                         </Popup>
                     </Marker>
                 ))}
-                {potentials.map((potential, idx) => (
-                    <Marker key={`potential-${idx}`} position={potential.coords}>
+                {potentials.map((potential) => (
+                    <Marker key={`potential-${potential.name}`} position={potential.coords}>
                         <Popup className='text-center'>
                             <span className='fw-bold'>{potential.name}</span>
-                            <Button className='d-block mt-2' onClick={() => handleSetAsStartEndPoint(potential)}>
-                                Set as {potential.pointType} point
-                            </Button>
+                            <PotentialPointButton potential={potential} onClick={handleSetAsStartEndPoint} />
                         </Popup>
                     </Marker>
                 ))}
