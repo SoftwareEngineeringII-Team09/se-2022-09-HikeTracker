@@ -192,6 +192,7 @@ class HikeManager {
     const endPoint = track.points[track.points.length - 1];
     const maxElevation = track.elevation.max;
     const trackPath = `gpx/${hikeData.fileName}`;
+    const imagePath = `hikeImage/${hikeData.fileName}`;
 
     // Store the startPoint and retrieve the startPointId
     const startPointId = await PointManager.storePoint(
@@ -235,7 +236,8 @@ class HikeManager {
         hikeData.difficulty,
         hikeData.description,
         startPointId,
-        endPointId
+        endPointId,
+        imagePath
       )
     );
   }
@@ -279,7 +281,8 @@ class HikeManager {
           description: h.description,
           startPoint: {
             coords: [startPoint.latitude, startPoint.longitude]
-          }
+          },
+          hikeImage: h.hikeImage,
         };
 
         return hike;
@@ -409,6 +412,7 @@ class HikeManager {
         name: endPoint.nameOfLocation,
         coords: [endPoint.latitude, endPoint.longitude]
       },
+      hikeImage:hike.hikeImage,
       huts: huts,
       referencePoints: referencePoints,
       track: track

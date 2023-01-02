@@ -13,15 +13,18 @@ async function main() {
       throw err;
     }
   });
-
+  
   db.exec(SQL, function (err) {
-    if (err) console.log(err);
+    if (err) {
+      console.log(err);
+      
+    }
     else
       console.log(
         "Main database correctly cleaned and filled with default data"
       );
   });
-
+  
   SQL = fs.readFileSync("dbschemaTest.sql", "ascii");
 
   let dbTest = new sqlite.Database("DB.test.db", (err) => {

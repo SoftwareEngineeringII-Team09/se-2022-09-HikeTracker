@@ -22,12 +22,26 @@ const upload = multer({
   }
 });
 
+const storageImage = multer.diskStorage({
+  destination: "./hikeImage",
+  filename: function (req, file, callback) {
+    callback(null, file.originalname);
+  },
+});
+const uploadImage = multer({
+  storage: storageImage,
+  // limits: {
+  //   fileSize: 8000000
+  // }
+});
+
 // POST a hike
 router.post(
   "/",
   auth.withAuth,
   auth.withRole(["Local Guide"]),
   upload.single("gpx"),
+  uploadImage.single("image"),
   async (req, res) => {
     const writerId = req.user.userId;
     const fileName = req.file.originalname;

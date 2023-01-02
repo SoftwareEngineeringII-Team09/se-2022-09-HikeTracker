@@ -5,12 +5,24 @@ const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const storageImage = multer.diskStorage({
+  destination: "./hikeImage",
+  filename: function (req, file, callback) {
+    callback(null, file.originalname);
+  },
+});
+const uploadImage = multer({
+  storage: storageImage,
+});
+
+
 
 // POST a hut
 router.post(
   "/",
   auth.withAuth,
   auth.withRole(["Local Guide"]),
+  uploadImage.single("image"),
   body("hutName").isString(),
   body("city").isInt({ min: 0 }),
   body("province").isInt({ min: 0 }),
@@ -43,7 +55,8 @@ router.post(
         altitude: req.body.altitude,
         phone: req.body.phone,
         email: req.body.email,
-        website: req.body.website ?? null
+        website: req.body.website ?? null,
+        fileName: fileName
       });
       return res.status(201).end();
     } catch (exception) {

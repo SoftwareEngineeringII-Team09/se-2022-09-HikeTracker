@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS "Hut" (
     "phone" TEXT NOT NULL CHECK(typeof(phone) == "text"),
     "email" TEXT NOT NULL CHECK(typeof(email) == "text"),
     "website" TEXT CHECK(typeof(website) == "text" OR typeof(website) == NULL),
+    "hutImage" TEXT CHECK(typeof(hutImage) == "text" OR typeof(hutImage) == NULL),
     PRIMARY KEY("hutId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")
@@ -86,6 +87,7 @@ CREATE TABLE IF NOT EXISTS "Hike" (
     "description" TEXT NOT NULL CHECK(typeof(description) == "text"),
     "startPoint" INTEGER NOT NULL CHECK(typeof(startPoint) == "integer"),
     "endPoint" INTEGER NOT NULL CHECK(typeof(endPoint) == "integer"),
+    "hikeImage" TEXT CHECK(typeof(hikeImage) == "text" OR typeof(hikeImage) == NULL),
     PRIMARY KEY("hikeId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId"),
     FOREIGN KEY("startPoint") REFERENCES "Point"("pointId"),
@@ -119,7 +121,17 @@ CREATE TABLE IF NOT EXISTS "HikeRefPoint" (
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId")
 );
 
-		
+DROP TABLE IF EXISTS "HikeStatus";
+CREATE TABLE IF NOT EXISTS "HikeStatus" (
+    "statusId" INTEGER NOT NULL UNIQUE CHECK(typeof(statusId) == "integer"),
+    "hikeId" TEXT NOT NULL CHECK(typeof(hikeId) == "integer"),
+    "status" INTEGER NOT NULL CHECK(typeof(status) == "text"),
+    "startTime" INTEGER NOT NULL CHECK(typeof(startTime) == "text"),
+    "endTime" INTEGER NOT NULL CHECK(typeof(endTime) == "text"),
+    PRIMARY KEY("statusId"),
+    FOREIGN KEY("hikeId") REFERENCES "Hike"("hikeId")
+   
+);		
 		
 		
 		

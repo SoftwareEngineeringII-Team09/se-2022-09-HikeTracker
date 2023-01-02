@@ -17,6 +17,8 @@ const agent = chai.request.agent(app);
 
 /* Some useful data to use for tests */
 const testGpx = "test.gpx";
+const testHikeImage = "hike1.jpg";
+const testHutImage = "hut1.jpg";
 const testEditableGpx = "test_editable.gpx";
 const testUser = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
 const notAuthorizedUser = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
@@ -29,16 +31,16 @@ const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHi
 const testEndPoint2 = new Point(4, "end point", 0, 0, "End point of testHike2", 40.0, 40.0);
 const testStartPoint3 = new Point(5, "start point", 0, 0, "Start point of testHike3", 50.0, 50.0);
 const testEndPoint3 = new Point(6, "end point", 0, 0, "End point of testHike3", 60.0, 60.0);
-const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId);
-const testHike2 = new Hike(2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 2, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId);
-const testHike3 = new Hike(3, "testTitle3", testUser.userId, `gpx/${testGpx}`, 3, 3, 3, 30.0, "03:03", 30.0, 30.0, "testDifficulty3", "testDescription3", testStartPoint3.pointId, testEndPoint3.pointId);
+const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId,`hikeImage/${testHikeImage}`);
+const testHike2 = new Hike(2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 2, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId,`hikeImage/${testHikeImage}`);
+const testHike3 = new Hike(3, "testTitle3", testUser.userId, `gpx/${testGpx}`, 3, 3, 3, 30.0, "03:03", 30.0, 30.0, "testDifficulty3", "testDescription3", testStartPoint3.pointId, testEndPoint3.pointId,`hikeImage/${testHikeImage}`);
 const testHikes = [testHike1, testHike2, testHike3];
 const testHutPoint1 = new Point(7, "hut", 0, 1, null, 10.0, 10.0);
 const testHutPoint2 = new Point(8, "hut", 0, 1, null, 10.0, 10.0);
 const testPotHutPoint1 = new Point(11, "hut", 0, 1, null, 45.0, 7.0);
-const testHut1 = new Hut(1, "testName1", testHutPoint1.pointId, testUser.userId, 1, 1, 1, 1, 10.0, 1000.0, "390123456789", "testHutEmail1@email.com", "www.testHutWebSite1.com");
-const testHut2 = new Hut(2, "testName2", testHutPoint2.pointId, testUser.userId, 1, 1, 1, 1, 10.0, 1000.0, "390123456789", "testHutEmail2@email.com", "www.testHutWebSite2.com");
-const testHut3 = new Hut(3, "testName3", testPotHutPoint1.pointId, testUser.userId, 1, 1, 1, 1, 10.0, 1000.0, "390123456789", "testHutEmail3@email.com", "www.testHutWebSite3.com");
+const testHut1 = new Hut(1, "testName1", testHutPoint1.pointId, testUser.userId, 1, 1, 1, 1, 10.0, 1000.0, "390123456789", "testHutEmail1@email.com", "www.testHutWebSite1.com",`hutImage/${testHutImage}`);
+const testHut2 = new Hut(2, "testName2", testHutPoint2.pointId, testUser.userId, 1, 1, 1, 1, 10.0, 1000.0, "390123456789", "testHutEmail2@email.com", "www.testHutWebSite2.com",`hutImage/${testHutImage}`);
+const testHut3 = new Hut(3, "testName3", testPotHutPoint1.pointId, testUser.userId, 1, 1, 1, 1, 10.0, 1000.0, "390123456789", "testHutEmail3@email.com", "www.testHutWebSite3.com",`hutImage/${testHutImage}`);
 const testParkingLotPoint = new Point(9, "parking lot", 1, 0, null, 10.0, 10.0);
 const testParkingLot = new ParkingLot(1, "testName", testParkingLotPoint.pointId, testUser.userId,  1000.0, 100);
 const notExistingUser = testUser.userId + 1;
@@ -67,7 +69,7 @@ describe("POST /api/hikes", function () {
 		await Utils.clearAll();
 	});
 
-	Utils.postHike(agent, "post a hike", 201, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
+	Utils.postHike(agent, "post a hike", 201, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx,testHikeImage);
 	Utils.postHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
 	Utils.postHike(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
 	/* Add these tests with wrong body data format after solving body validation issue */
