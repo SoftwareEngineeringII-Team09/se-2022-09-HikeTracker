@@ -30,6 +30,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "geodist": "^0.2.1",
+    "gpx-parse": "^0.10.4",
     "gpxparser": "^3.0.0",
     "index-of-regex": "^1.0.0",
     "memorystore": "^1.6.7",
@@ -44,11 +45,10 @@
     "random-words": "^1.2.0",
     "sqlite3": "^5.1.2",
     "supertest": "^6.3.1"
-    
   },
-  "jest":{
+  "jest": {
     "testEnvironment": "jsdom"
-},
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "chai": "^4.3.6",

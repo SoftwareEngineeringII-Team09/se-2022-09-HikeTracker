@@ -5,8 +5,9 @@ const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const multer = require("multer");
 const storageImage = multer.diskStorage({
-  destination: "./hikeImage",
+  destination: "./hutImage",
   filename: function (req, file, callback) {
     callback(null, file.originalname);
   },
@@ -35,13 +36,18 @@ router.post(
   body("phone").isString(),
   body("email").isEmail(),
   body("website").optional().isString(),
+  
   async (req, res) => {
-    const writerId = req.user.userId;
+    
+   // const writerId = req.user.userId;
+   const fileName = req.file.originalname;
+   const writerId = req.user.userId;
     try {
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-
+        
+      
       await HutManager.defineHut({
         hutName: req.body.hutName,
         writerId: writerId,
@@ -58,6 +64,7 @@ router.post(
         website: req.body.website ?? null,
         fileName: fileName
       });
+      
       return res.status(201).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;

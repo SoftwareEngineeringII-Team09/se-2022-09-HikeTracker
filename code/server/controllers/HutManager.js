@@ -8,6 +8,7 @@ const UserManager = require("./UserManager");
 const PersistentManager = require("../dao/PersistentManager");
 const HutDailyScheduleManager = require("./HutDailyScheduleManager");
 
+
 class HutManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
@@ -144,7 +145,9 @@ class HutManager {
   // Define a new hut
   async defineHut(hutData) {
     // Defining hut point
+   
     const hutImage = `hutImage/${hutData.fileName}`;
+    console.log(hutImage);
     const newPoint = new Point(
       null,
       "hut",
@@ -171,9 +174,9 @@ class HutManager {
       hutData.phone,
       hutData.email,
       hutData.website,
-      hutData.hutImage
+      hutImage
     );
-
+   
     return this.storeHut(newHut);
   }
 
