@@ -10,11 +10,18 @@ const auth = require("../middlewares/auth");
 const HikeHutManager = require("../controllers/HikeHutManager");
 
 const storage = multer.diskStorage({
-  destination: "./gpx",
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
+  
+  destination: function (req, file, callback) {
+    const dir = "./"+ file.fieldname;    
+      callback(null, dir);    
   },
-});
+    filename: function (req, file, callback) {
+    callback(null, file.originalname);
+   },
+  })
+
+
+
 const upload = multer({
   storage: storage,
   limits: {
@@ -22,29 +29,20 @@ const upload = multer({
   }
 });
 
-// const storageImage = multer.diskStorage({
-//   destination: "./hikeImage",
-//   filename: function (req, file, callback) {
-//     callback(null, file.originalname);
-//   },
-// });
-// const uploadImage = multer({
-//   storage: storageImage,
-//   // limits: {
-//   //   fileSize: 8000000
-//   // }
-// });
 
 // POST a hike
 router.post(
   "/",
-  //auth.withAuth,
-  //auth.withRole(["Local Guide"]),
-  upload.single("gpx"),
-  //uploadImage.single("image"),
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
+  upload.fields([{name: "gpx", maxCount : 1},
+                 {name: "hikeImage", maxCount : 1}]),
+
   async (req, res) => {
-   // const writerId = req.user.userId;
-    const fileName = req.file.originalname;
+    const writerId = req.user.userId;
+   
+    const gpxName = req.files.gpx[0].originalname;
+    const hikeImageName = req.files.hikeImage[0].originalname;
     try {
       // Validation of body and/or parameters
       
@@ -53,7 +51,7 @@ router.post(
         return res.status(422).json({ error: error.array()[0] });
         
       const hikeId = await HikeManager.defineHike({
-        writerId: 1,
+        writerId: writerId,
         title: req.body.title,
         expectedTime: req.body.expectedTime,
         difficulty: req.body.difficulty,
@@ -61,7 +59,10 @@ router.post(
         city: req.body.city,
         province: req.body.province,
         region: req.body.region,
-        fileName: fileName
+        gpxName: gpxName,
+        hikeImageName: hikeImageName,
+
+
       });
 
       return res.status(201).send({ hikeId });

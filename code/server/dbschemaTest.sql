@@ -121,18 +121,19 @@ CREATE TABLE IF NOT EXISTS "HikeRefPoint" (
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId")
 );
 
-DROP TABLE IF EXISTS "HikeStatus";
-CREATE TABLE IF NOT EXISTS "HikeStatus" (
-    "statusId" INTEGER NOT NULL UNIQUE CHECK(typeof(statusId) == "integer"),
+
+DROP TABLE IF EXISTS "SelectedHike";
+CREATE TABLE IF NOT EXISTS "SelectedHike" (
+    "selectedHikeId" INTEGER NOT NULL UNIQUE CHECK(typeof(selectedHikeId) == "integer"),
     "hikeId" TEXT NOT NULL CHECK(typeof(hikeId) == "integer"),
+    "hikerId" TEXT NOT NULL CHECK(typeof(hikerId) == "integer"),
     "status" INTEGER NOT NULL CHECK(typeof(status) == "text"),
     "startTime" INTEGER NOT NULL CHECK(typeof(startTime) == "text"),
     "endTime" INTEGER NOT NULL CHECK(typeof(endTime) == "text"),
-    PRIMARY KEY("statusId"),
+    PRIMARY KEY("selectedHikeId"),
     FOREIGN KEY("hikeId") REFERENCES "Hike"("hikeId")
    
-);		
-		
+);
 		
 		
 		

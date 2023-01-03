@@ -391,7 +391,8 @@ describe("Test defineHike", () => {
     testHike1.city,
     testHike1.province,
     testHike1.region,
-    testGpx
+    testGpx,
+    testHikeImage,
   );
 
   Utils.testDefineHike(
@@ -405,6 +406,7 @@ describe("Test defineHike", () => {
     testHike1.province,
     testHike1.region,
     testGpx,
+    testHikeImage,
     404
   );
 });
