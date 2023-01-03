@@ -80,6 +80,14 @@ const hikes = {
         .then(() => resolve())
         .catch(err => reject(err.response.data.error));
     })
+  },
+
+  terminateHike: (hikeId, time) => {
+    return new Promise((resolve, reject) => {
+      axios.put(`${SERVER_URL}/hikes/${hikeId}/terminate`, { time }, { withCredentials: true })
+        .then(() => resolve())
+        .catch(err => reject(err.response.data.error));
+    })
   }
 }
 

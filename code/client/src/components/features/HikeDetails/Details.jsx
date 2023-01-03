@@ -1,20 +1,53 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Row } from 'react-bootstrap'
-import { FaMapMarkerAlt, FaCrosshairs } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaStop, FaCrosshairs } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
 import { HutCard } from '@components/features'
+import { Row, Button } from 'react-bootstrap'
+import { toast } from 'react-toastify'
+import api from '@services/api'
+import DateTimePicker from 'react-datetime-picker';
 
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
+    const [hikeId, setHikeId] = useState(null); // TODO: Set with startHike
+    const [loading, setLoading] = useState(false);
+    const [hikeStarted, setHikeStarted] = useState(true); // TODO: Set to true in handleStartHike
+    const [terminateTime, setTerminateTime] = useState(new Date());
+
+    function handleTerminateHike() {
+        setLoading(true);
+        api.hikes.terminateHike(hikeId, terminateTime.toLocaleString())
+            .then(() => {
+                toast.success("Hike terminated", { theme: 'colored' });
+            })
+            .catch(err => {
+                toast.error(err.message, { theme: 'colored' });
+            })
+            .finally(() => setLoading(false));
+    }
 
     return (
         <div className=''>
             <div className='mb-5'>
+
+                { 
+                    hikeStarted && 
+                    <div className='d-flex flex-column align-items-start mb-3'>
+                        <div className='d-flex flex-column mb-3'>
+                            <span className='fw-bold'>Select end time</span>
+                            <DateTimePicker onChange={setTerminateTime} value={terminateTime} />
+                        </div>
+                        <Button variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
+                            <FaStop size={14} className="me-2" />
+                            Terminate hike
+                        </Button>
+                    </div>
+                }
                 <h1 className='fw-black'>
                     {hike.title}
                     {(user.role === "Local Guide" && hike.writer.writerId === user.userId) &&
