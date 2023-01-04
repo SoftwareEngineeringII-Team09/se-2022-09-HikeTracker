@@ -5,19 +5,19 @@ const Point = require("../dao/model/Point");
 const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
-// HikeParkingLot
 const HikeRefPoint = require("../dao/model/HikeRefPoint");
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
+const SelectedHike = require("../dao/model/SelectedHike");
 
 /* Reset DB content */
 exports.clearAll = async function () {
   await PersistentManager.deleteAll(HikeHut.tableName);
-  // delete HikeParkingLot
   await PersistentManager.deleteAll(HikeRefPoint.tableName);
   await PersistentManager.deleteAll(HutDailySchedule.tableName);
   await PersistentManager.deleteAll(Hut.tableName);
   await PersistentManager.deleteAll(ParkingLot.tableName);
+	await PersistentManager.deleteAll(SelectedHike.tableName);
   await PersistentManager.deleteAll(Hike.tableName);
   await PersistentManager.deleteAll(Point.tableName);
   await PersistentManager.deleteAll(User.tableName);
@@ -260,6 +260,26 @@ exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credenti
 				}).catch(e => console.log(e));
 		}).catch(loginError => console.log(loginError));
 	});
+}
+
+
+/*****************************************************************************************************
+*              SelectedHike
+*****************************************************************************************************/
+exports.putTerminateSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, selectedHikeId, time) {
+	const testNewEndTime = { time: time }
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.put(`/api/selectedHikes/${selectedHikeId}/terminate`)
+				.send(testNewEndTime)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
 }
 
 

@@ -119,6 +119,21 @@ CREATE TABLE IF NOT EXISTS "HikeRefPoint" (
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId")
 );
 
+DROP TABLE IF EXISTS "SelectedHike";
+CREATE TABLE IF NOT EXISTS "SelectedHike" (
+    "selectedHikeId" INTEGER NOT NULL UNIQUE CHECK(typeof(selectedHikeId) == "integer"),
+    "hikeId" INTEGER NOT NULL CHECK(typeof(hikeId) == "integer"),
+    "hikerId" INTEGER NOT NULL CHECK(typeof(hikerId) == "integer"),
+    "status" INTEGER NOT NULL CHECK(typeof(status) == "text"),
+    "startTime" INTEGER NOT NULL CHECK(typeof(startTime) == "text"),
+    "endTime" TEXT CHECK(typeof(endTime) == "text" OR typeof(endTime) == NULL),
+    PRIMARY KEY("selectedHikeId"),
+    FOREIGN KEY("hikerId") REFERENCES "User"("userId"),
+    FOREIGN KEY("hikeId") REFERENCES "Hike"("hikeId")
+   
+);
+
+
 /* Default data */
 /* User table data */
 INSERT INTO "User"("userId", "email", "salt", "password", "verificationCode", "firstname", "lastname", "mobile", "role", "active")
