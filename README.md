@@ -41,6 +41,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [Route `/account/hikes`](#accounthikes)
     - [Route `/account/hikes/add`](#accounthikesadd)
     - [Route `/account/reference-points/update`](#accountreference-pointsupdate)
+    - [Route `/account/hikes/:hikeId/update/endpoints`](#accounthikeshikeidupdateendpoints)
     - [Route `/account/huts/add`](#accounthutsadd)
     - [Route `/account/parking-lots/add`](#accountparking-lotsadd)
     - [Route `/*`](#page-not-found-route)
@@ -152,9 +153,11 @@ Note:
 - the images se09-client depends on the se09-server one, so this must be run first
 - in case of name conflicts, remove the containers with ```docker rm <name>``` and run again the commands above
 
-## Technical Dept Strategy
+## Technical Debt Strategy
 
 We made repo analysis with Sonarcloud, that allows us to track security issues, code smells and some other useful info you may see above.
+
+Code smells are solved by Severity level: Blocker, Critical, Major, Minor.
 
 ## Technologies
 
@@ -174,16 +177,20 @@ Here the list of dependencies installed:
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "babel-plugin-transform-class-properties": "^6.24.1"
 },
 "devDependencies": {
     "@craco/craco": "^7.0.0",
     "@cypress/code-coverage": "^3.10.0",
+    "@cypress/instrument-cra": "^1.4.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/react-toastify": "^4.1.0",
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.3",
+    "babel-plugin-istanbul": "^6.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "bootstrap": "^5.2.2",
     "classnames": "^2.3.2",
     "cypress": "^11.1.0",
@@ -193,6 +200,7 @@ Here the list of dependencies installed:
     "history": "^5.3.0",
     "leaflet": "^1.9.2",
     "leaflet-topography": "^0.2.1",
+    "nyc": "^15.1.0",
     "postcss-preset-env": "^7.8.2",
     "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.5.0",
@@ -228,6 +236,7 @@ Here the list of dependencies installed:
     "nodemailer": "^6.8.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.20",
+    "nyc": "^15.1.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "random-words": "^1.2.0",
@@ -318,6 +327,12 @@ _This route is protected and the user must be logged in as a local guide to navi
 ### `/account/reference-points/update`
 
 The page allows a local guide to update the reference points for an hike.
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### `/account/hikes/:hikeId/update/endpoints`
+
+The page show a map with the current start and end point of a hike, as well as all possibile Huts and Parking lots that can be set as the new start or end point of the hike. This page allows the local guide to set new endpoints for the hike.
 
 _This route is protected and the user must be logged in as a local guide to navigate here._
 
