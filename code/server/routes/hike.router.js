@@ -9,21 +9,13 @@ const multer = require("multer");
 const auth = require("../middlewares/auth");
 const HikeHutManager = require("../controllers/HikeHutManager");
 
-const storage = multer.diskStorage({
-  
-  destination: function (req, file, callback) {
-    const dir = "./"+ file.fieldname;    
-      callback(null, dir);    
-  },
-    filename: function (req, file, callback) {
-    callback(null, file.originalname);
-   },
-  })
-
-
-
 const upload = multer({
-  storage: storage,
+  storage: multer.diskStorage({
+    destination: "./gpx",
+    filename: function (req, file, callback) {
+      callback(null, file.originalname);
+    }
+  }),
   limits: {
     fileSize: 8000000
   }
@@ -33,14 +25,14 @@ const upload = multer({
 // POST a hike
 router.post(
   "/",
-  auth.withAuth,
-  auth.withRole(["Local Guide"]),
+  //auth.withAuth,
+  //auth.withRole(["Local Guide"]),
   upload.fields([{name: "gpx", maxCount : 1},
                  {name: "hikeImage", maxCount : 1}]),
 
   async (req, res) => {
-    const writerId = req.user.userId;
-   
+   // const writerId = req.user.userId;
+   const writerId = 1;
     const gpxName = req.files.gpx[0].originalname;
     const hikeImageName = req.files.hikeImage[0].originalname;
     try {

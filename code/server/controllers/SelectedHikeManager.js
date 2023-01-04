@@ -3,6 +3,10 @@
 const SelectedHike = require("../dao/model/SelectedHike");
 const PersistentManager = require("../dao/PersistentManager");
 const Hike = require("../dao/model/Hike");
+const User = require("../dao/model/User");
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
 
 
 class SelectedHikeManager {
@@ -21,6 +25,14 @@ class SelectedHikeManager {
         result: `No available hike with hikeId = ${newSelectedHike.hikeId}`
       });
     }
+    // Check if foreign key hikerId exists
+    const hikerExists = await PersistentManager.exists(User.tableName, "userId", newSelectedHike.hikerId);
+    if (!hikerExists) {
+      return Promise.reject({
+        code: 404,
+        result: `No available hiker with userId = ${newSelectedHike.hikerId}`
+      });
+    }
 
     return PersistentManager.store(SelectedHike.tableName, newSelectedHike);
   } 
@@ -32,7 +44,7 @@ class SelectedHikeManager {
    * @param {any} value 
    * @returns a Promise without any value if the SelectedHike exists, a rejected Promise with an object containing code and result otherwise
    */
-  /* async updateSelectedHike(newSelectedHike, attributeName, value) {
+  async updateSelectedHike(newSelectedHike, attributeName, value) {
     const exists = await this.existsSelectedHike(attributeName, value);
     if (!exists) {
       return Promise.reject({
@@ -48,17 +60,16 @@ class SelectedHikeManager {
         result: `No available hike with hikeId = ${newSelectedHike.hikeId}`
       });
     }
-    // Check if foreign key parkingId exists
-    const parkingLotExists = await PersistentManager.exists(ParkingLot.tableName, "parkingId", newSelectedHike.parkingId);
-    if (!parkingLotExists) {
+    // Check if foreign key hikerId exists
+    const hikerExists = await PersistentManager.exists(User.tableName, "userId", newSelectedHike.hikerId);
+    if (!hikerExists) {
       return Promise.reject({
         code: 404,
-        result: `No available parkingLot with parkingId = ${newSelectedHike.parkingId}`
+        result: `No available hiker with userId = ${newSelectedHike.hikerId}`
       });
     }
-
     return PersistentManager.update(SelectedHike.tableName, newSelectedHike, attributeName, value);
-  } */
+  }
 
   /**
    * Delete a SelectedHike
@@ -102,7 +113,7 @@ class SelectedHikeManager {
    * @param {any} value 
    * @returns a resolved Promise with the SelectedHike in case there is one, a rejected Promise with an object containing code and result otherwise  
    */
-  /* async loadOneByAttributeSelectedHike(attributeName, value) {
+  async loadOneByAttributeSelectedHike(attributeName, value) {
     const exists = await this.existsSelectedHike(attributeName, value);
     if (!exists) {
       return Promise.reject({
@@ -110,9 +121,8 @@ class SelectedHikeManager {
         result: `No available SelectedHike with ${attributeName} = ${value}`
       });
     }
-
     return PersistentManager.loadOneByAttribute(SelectedHike.tableName, attributeName, value);
-  } */
+  }
 
   /**
    * Load all SelectedHikes by attribute
@@ -127,7 +137,19 @@ class SelectedHikeManager {
 
 
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
-  // Insert other functions you need here
+  async terminateHike(selectedHikeId, endTime) {
+    const selectedHike = await this.loadOneByAttributeSelectedHike("selectedHikeId", selectedHikeId);
+    const startTimeObject = dayjs(selectedHike.startTime, 'DD/MM/YYYY, HH:mm:ss');
+    const endTimeObject =  dayjs(endTime, 'DD/MM/YYYY, HH:mm:ss');
+    if (startTimeObject.isAfter(endTimeObject)) {
+      return Promise.reject({
+        code: 422,
+        result: `startTime = ${selectedHike.startTime} is after endTime = ${endTime}`
+      });
+    }
+
+    return this.updateSelectedHike({ ...selectedHike, endTime: endTime, status: "finished"}, "selectedHikeId", selectedHikeId);
+  }
 }
 
 module.exports = new SelectedHikeManager();

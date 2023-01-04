@@ -4,7 +4,6 @@ const Point = require("../dao/model/Point");
 const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
 const HikeHut = require("../dao/model/HikeHut");
-// HikeParkingLot
 const HikeRefPoint = require("../dao/model/HikeRefPoint");
 const HutDailySchedule = require("../dao/model/HutDailySchedule");
 const User = require("../dao/model/User");
@@ -15,22 +14,21 @@ const HikeRefPointManager = require("../controllers/HikeRefPointManager");
 const HutManager = require("../controllers/HutManager");
 const UserManager = require("../controllers/UserManager");
 const HikeHutManager = require("../controllers/HikeHutManager");
-
-
+const SelectedHike = require("../dao/model/SelectedHike");
+const SelectedHikeManager = require("../controllers/SelectedHikeManager");
 
 
 /* Reset DB content */
 exports.clearAll = async function () {
   await PersistentManager.deleteAll(HikeHut.tableName);
-  // delete HikeParkingLot
   await PersistentManager.deleteAll(HikeRefPoint.tableName);
   await PersistentManager.deleteAll(HutDailySchedule.tableName);
   await PersistentManager.deleteAll(Hut.tableName);
   await PersistentManager.deleteAll(ParkingLot.tableName);
+  await PersistentManager.deleteAll(SelectedHike.tableName);
   await PersistentManager.deleteAll(Hike.tableName);
   await PersistentManager.deleteAll(Point.tableName);
   await PersistentManager.deleteAll(User.tableName);
-
   return Promise.resolve();
 };
 
@@ -1010,6 +1008,135 @@ exports.testVerifyEmail = function (itShould, userId, verificationCode, expected
 
       const notVerifiedUser = await UserManager.loadOneByAttributeUser("userId", userId);
       expect(notVerifiedUser.active).toEqual(0);
+    }
+  });
+};
+
+
+/*****************************************************************************************************
+ *              SelectedHike
+ *****************************************************************************************************/
+exports.testStoreSelectedHike = function (
+  itShould,
+  newSelectedHike,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await SelectedHikeManager.storeSelectedHike(newSelectedHike);
+      const storedSelectedHike = await PersistentManager.loadAll(SelectedHike.tableName).then(
+        (selectedHikes) => selectedHikes[0]
+      );
+      
+      expect(res).toEqual(newSelectedHike.selectedHikeId);
+      expect(storedSelectedHike).toEqual(newSelectedHike);
+    } else {
+      await expect(SelectedHikeManager.storeSelectedHike(newSelectedHike)).rejects.toHaveProperty(
+        "code",
+        expectedRejectionCode
+      );
+    }
+  });
+};
+
+exports.testUpdateSelectedHike = function (
+  itShould,
+  newSelectedHike,
+  attributeName,
+  value,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      let attributesName = [];
+      for (const attribute in newSelectedHike) {
+        if (Object.prototype.hasOwnProperty.call(newSelectedHike, attribute)) {
+          attributesName.push(attribute);
+        }
+      }
+      await SelectedHikeManager.updateSelectedHike(newSelectedHike, attributeName, value);
+      let updatedSelectedHikes = await PersistentManager.loadAllByAttribute(
+        SelectedHike.tableName,
+        attributeName,
+        value
+      );
+
+      for (const updatedSelectedHike of updatedSelectedHikes) {
+        for (const attribute in attributesName) {
+          expect(updatedSelectedHike[attribute]).toEqual(newSelectedHike[attribute]);
+        }
+      }
+    } else {
+      await expect(
+        SelectedHikeManager.updateSelectedHike(newSelectedHike, attributeName, value)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testExistsSelectedHike = function (
+  itShould,
+  attributeName,
+  value,
+  expectedResult
+) {
+  test(`Should ${itShould}`, async () => {
+    const res = await SelectedHikeManager.existsSelectedHike(attributeName, value);
+
+    expect(res).toEqual(expectedResult);
+  });
+};
+
+exports.testLoadOneByAttributeSelectedHike = function (
+  itShould,
+  attributeName,
+  value,
+  expectedRejectionCode = null
+) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await SelectedHikeManager.loadOneByAttributeSelectedHike(
+        attributeName,
+        value
+      );
+
+      expect(res[attributeName]).toEqual(value);
+    } else {
+      await expect(
+        SelectedHikeManager.loadOneByAttributeSelectedHike(attributeName, value)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testLoadAllByAttributeSelectedHike = function (itShould, attributeName, value) {
+  test(`Should ${itShould}`, async () => {
+    const res = await SelectedHikeManager.loadAllByAttributeSelectedHike(
+      attributeName,
+      value
+    ).then((selectedHikes) => selectedHikes.length);
+
+    for (const r in res) {
+      expect(r[attributeName]).toEqual(value);
+    }
+  });
+};
+
+exports.testTerminateHike = function (itShould, selectedHikeId, endTime, expectedRejectionCode = null) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await SelectedHikeManager.terminateHike(
+        selectedHikeId,
+        endTime
+      );
+
+      const updatedSelectedHike = await PersistentManager.loadOneByAttribute(SelectedHike.tableName, "selectedHikeId", selectedHikeId);
+      expect(updatedSelectedHike.status).toEqual("finished");
+      expect(updatedSelectedHike.endTime).toEqual(endTime);
+    } else {
+      await expect(
+        SelectedHikeManager.terminateHike(selectedHikeId, endTime)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
     }
   });
 };

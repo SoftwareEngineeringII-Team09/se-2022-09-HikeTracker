@@ -1,8 +1,8 @@
 import { Spinner, Alert, Container, Row, Col, Button } from 'react-bootstrap';
 import HikeEndpoint from '@components/features/HikeDetails/HikeEndpoint';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import TrackMap from '@components/features/HikeDetails/TrackMap';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@contexts/authContext'
 import api from '@services/api';
@@ -89,7 +89,7 @@ const UpdateEndpoints = () => {
         }
     }, [hikeId, trackUpdated]); // eslint-disable-line
 
-    const savePoints = () => {
+    function savePoints() {
 
         const pointsUpdated = !startPoint.hasOwnProperty('original') || !endPoint.hasOwnProperty('original');
 
@@ -124,13 +124,20 @@ const UpdateEndpoints = () => {
             });
     };
 
+    const navigateBack = useCallback(
+        () => {
+            navigate(-1);
+        },
+        []
+    );
+
     if (loading)
         return <Spinner />;
 
     if (error)
         return <Alert variant='danger'>
             There has been a problem loading the hike: {error}
-            <Button className='d-block mt-3' variant="light" onClick={() => navigate(-1)}>Go back</Button>
+            <Button className='d-block mt-3' variant="light" onClick={navigateBack}>Go back</Button>
         </Alert>;
 
 
