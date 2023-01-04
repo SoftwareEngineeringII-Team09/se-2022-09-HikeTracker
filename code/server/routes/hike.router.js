@@ -32,14 +32,14 @@ const upload = multer({
 // POST a hike
 router.post(
   "/",
-  //auth.withAuth,
-  //auth.withRole(["Local Guide"]),
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
   upload.fields([{name: "gpx", maxCount : 1},
                  {name: "hikeImage", maxCount : 1}]),
 
   async (req, res) => {
-   // const writerId = req.user.userId;
-   const writerId = 1;
+  const writerId = req.user.userId;
+
     const gpxName = req.files.gpx[0].originalname;
     const hikeImageName = req.files.hikeImage[0].originalname;
     try {

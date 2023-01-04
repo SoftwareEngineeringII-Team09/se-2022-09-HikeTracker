@@ -241,7 +241,7 @@ exports.testDefineHike = function (
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
-    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, fileName: fileName, imageName: imageName };
+    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, gpxName: fileName, hikeImageName: imageName };
     if (!expectedRejectionCode) {
       await HikeManager.defineHike(
         hikeData

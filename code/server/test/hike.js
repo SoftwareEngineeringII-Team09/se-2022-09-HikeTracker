@@ -70,8 +70,8 @@ describe("POST /api/hikes", function () {
 	});
 
 	Utils.postHike(agent, "post a hike", 201, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx,testHikeImage);
-	Utils.postHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
-	Utils.postHike(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
+	Utils.postHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx,testHikeImage);
+	Utils.postHike(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx,testHikeImage);
 	/* Add these tests with wrong body data format after solving body validation issue */
 	// Utils.postHike(agent, "should return 422 because of wrong title format", 422, credentials, 1, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region), testGpx;
 	// Utils.postHike(agent, "should return 422 because of wrong expectedTime format", 422, credentials, testHike1.title, 1, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);

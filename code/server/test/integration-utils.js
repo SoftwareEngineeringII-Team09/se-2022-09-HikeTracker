@@ -29,13 +29,14 @@ exports.clearAll = async function () {
 *              Hike
 *****************************************************************************************************/
 
-exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx) {
+exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx,testImage) {
 	const testHikeData = { title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/hikes")
 				.field(testHikeData)
 				.attach("gpx", fs.readFileSync(`gpx/${testGpx}`), testGpx)
+				.attach("hikeImage", fs.readFileSync(`hikeImage/${testImage}`), testImage)
 				.then(function (res) {
 					res.should.have.status(expectedHTTPStatus);
 					agent.delete("/api/auth/logout").then(function () {
@@ -179,12 +180,13 @@ exports.getPotentialHut = function (agent, itShould, expectedHTTPStatus, credent
 /*****************************************************************************************************
 *              Hut
 *****************************************************************************************************/
-exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude, phone, email, website) {
+exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude, phone, email, website,hutImage) {
 	const testHutData = { hutName: hutName, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude, phone: phone, email: email, website: website };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/huts")
-				.send(testHutData)
+				.field(testHutData)
+				//.attach("hutImage", fs.readFileSync(hutImage), hutImage)
 				.then(function (res) {
 					res.should.have.status(expectedHTTPStatus);
 					agent.delete("/api/auth/logout").then(function () {

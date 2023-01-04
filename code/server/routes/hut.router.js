@@ -21,9 +21,9 @@ const uploadImage = multer({
 // POST a hut
 router.post(
   "/",
-  //auth.withAuth,
-  //auth.withRole(["Local Guide"]),
-  uploadImage.single("image"),
+  auth.withAuth,
+  auth.withRole(["Local Guide"]),
+  uploadImage.single("hutImage"),
   body("hutName").isString(),
   body("city").isInt({ min: 0 }),
   body("province").isInt({ min: 0 }),
@@ -38,11 +38,9 @@ router.post(
   body("website").optional().isString(),
   
   async (req, res) => {
-    
-   // const writerId = req.user.userId;
    const fileName = req.file.originalname;
-   //const writerId = req.user.userId;
-   const writerId = 1;
+   const writerId = req.user.userId;
+   
     try {
       const error = validationResult(req);
       if (!error.isEmpty())
