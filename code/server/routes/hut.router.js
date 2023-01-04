@@ -21,8 +21,8 @@ const uploadImage = multer({
 // POST a hut
 router.post(
   "/",
-  auth.withAuth,
-  auth.withRole(["Local Guide"]),
+  //auth.withAuth,
+  //auth.withRole(["Local Guide"]),
   uploadImage.single("image"),
   body("hutName").isString(),
   body("city").isInt({ min: 0 }),
@@ -41,7 +41,8 @@ router.post(
     
    // const writerId = req.user.userId;
    const fileName = req.file.originalname;
-   const writerId = req.user.userId;
+   //const writerId = req.user.userId;
+   const writerId = 1;
     try {
       const error = validationResult(req);
       if (!error.isEmpty())
