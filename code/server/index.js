@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === "test") {
 
 const authRouter = require("./routes/auth.router");
 const hikeRouter = require("./routes/hike.router");
+const selectedHikeRouter = require("./routes/selectedHike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
 const userRouter = require("./routes/user.router");
@@ -71,6 +72,7 @@ if (process.env.NODE_ENV === "test")
   app.use(`${API_PREFIX}/tests`, testRouter)
 
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
+app.use(`${API_PREFIX}/selectedHikes`, selectedHikeRouter);
 app.use(`${API_PREFIX}/users`, userRouter);
 app.use(`${API_PREFIX}/huts`, hutRouter);
 app.use(`${API_PREFIX}/parkingLots`, parkingLotRouter);
