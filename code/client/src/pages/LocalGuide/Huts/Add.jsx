@@ -22,25 +22,28 @@ const AddHut = () => {
 
     const handleSubmit = (values) => {
         // TODO: Adding image to the API
-        api.huts.createHut({
-            hutName: values.hutName,
-            city: values.city,
-            province: values.province,
-            region: values.region,
-            numOfBeds: values.numOfBeds,
-            cost: values.cost,
-            latitude,
-            longitude,
-            altitude: values.altitude,
-            phone: values.phone,
-            email: values.email,
-            website: values.website
-        })
-            .then(() => {
-                toast.success("The new hut has been correctly added", { theme: 'colored' })
-                navigate('/', { replace: true })
+        api.geolocalization.checkPointCity({ longitude, latitude }, values.city)
+            .then(() => api.huts.createHut({
+                hutName: values.hutName,
+                city: values.city,
+                province: values.province,
+                region: values.region,
+                numOfBeds: values.numOfBeds,
+                cost: values.cost,
+                latitude,
+                longitude,
+                altitude: values.altitude,
+                phone: values.phone,
+                email: values.email,
+                website: values.website
             })
+                .then(() => {
+                    toast.success("The new hut has been correctly added", { theme: 'colored' })
+                    navigate('/', { replace: true })
+                })
+                .catch(err => toast.error(err, { theme: 'colored' })))
             .catch(err => toast.error(err, { theme: 'colored' }))
+
     }
 
     const handleClickOnMap = (point) => {

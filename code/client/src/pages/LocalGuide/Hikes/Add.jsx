@@ -37,7 +37,7 @@ const AddHike = () => {
                 navigate(`/account/hikes/${res.hikeId}/update/reference-points`);
             })
             .catch((error) => {
-                toast.error(error.message, {
+                toast.error(error, {
                     theme: "colored",
                 });
             });

@@ -1,11 +1,13 @@
 "use strict";
 
+const location = require("../lib/helpers/locations");
 const fs = require("fs");
+const fetch = require('node-fetch');
 const gpxParser = require("gpxparser");
 const geodist = require('geodist')
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
-const {lastIndexOfRegex } = require('index-of-regex');
+const { lastIndexOfRegex } = require('index-of-regex');
 const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
@@ -193,6 +195,16 @@ class HikeManager {
     const maxElevation = track.elevation.max;
     const trackPath = `gpx/${hikeData.fileName}`;
 
+    const URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
+
+    const apires = await (await fetch(URL + `${startPoint.lon},${startPoint.lat}`)).json();
+    if (apires.address.City.toUpperCase() !== location.getCityName(parseInt(hikeData.city))) {
+      return Promise.reject({
+        code: 422,
+        result: `Location must be consistent!`,
+      });
+    }
+
     // Store the startPoint and retrieve the startPointId
     const startPointId = await PointManager.storePoint(
       new Point(
@@ -263,7 +275,7 @@ class HikeManager {
           title: h.title,
           writer: {
             writerId: writer.userId,
-            writerName: `${writer.firstname} ${writer.lastname}`, 
+            writerName: `${writer.firstname} ${writer.lastname}`,
           },
           city: h.city,
           province: h.province,
@@ -292,7 +304,7 @@ class HikeManager {
   // Load a hike by hikeId
   async getHikeById(hikeId) {
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
-   
+
     const writer = await UserManager.loadOneByAttributeUser(
       "userId",
       hike.writerId
@@ -305,7 +317,7 @@ class HikeManager {
       "pointId",
       hike.endPoint
     );
-    
+
     if (startPoint.hut) {
       const hutName = await HutManager.loadOneByAttributeHut(
         "pointId",
@@ -364,10 +376,10 @@ class HikeManager {
         return {
           hutId: hut.hutId,
           hutName: hut.hutName,
-          coords: [hutPoint.latitude, hutPoint.longitude] 
+          coords: [hutPoint.latitude, hutPoint.longitude]
         };
       })
-    ); 
+    );
 
     // Retrieving expected time
     const expectedTime = hike.expectedTime.split(":");
@@ -387,7 +399,7 @@ class HikeManager {
       title: hike.title,
       writer: {
         writerId: writer.userId,
-        writerName: `${writer.firstname} ${writer.lastname}`, 
+        writerName: `${writer.firstname} ${writer.lastname}`,
       },
       city: hike.city,
       province: hike.province,
@@ -427,7 +439,7 @@ class HikeManager {
   }
 
   //Return the list of potential huts info for a given hike
-  async getPotentialHuts(hikeId){
+  async getPotentialHuts(hikeId) {
     const maxDiameter = 5;
     // get all coor in file
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
@@ -435,55 +447,55 @@ class HikeManager {
     const gpxString = fs.readFileSync(hike.trackPath).toString();
     gpx.parse(gpxString);
     let tracks = gpx.tracks[0].points.map((p) => [p.lat, p.lon]);
-   
+
     //get all huts coordinate
-    let hutsInfo = await PointManager.loadAllByAttributePoint("hut",1);
-  
+    let hutsInfo = await PointManager.loadAllByAttributePoint("hut", 1);
+
 
     //calculate and add all possible huts in list
     let HutPointInfo = new Set();
-    let res =[] ;
-  
-    function rad(d){
+    let res = [];
+
+    function rad(d) {
       return d * Math.PI / 180.0;
     }
 
     tracks.map((tr) => {
       let lon1 = tr[1];
       let lat1 = tr[0];
-     
-      hutsInfo.map(async (h) =>{
+
+      hutsInfo.map(async (h) => {
         let R = 6371;
         let dLat = rad(h.latitude - lat1);
         let dLon = rad(h.longitude - lon1);
 
         let radlat1 = rad(lat1);
-        let radlat2 = rad(h.latitude);  
-       
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radlat1 ) * Math.cos(radlat2 ) * Math.sin(dLon/2) * Math.sin(dLon/2);
-	      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	      let d = R * c;    
-        if(!HutPointInfo.has(h) && d < maxDiameter){          
+        let radlat2 = rad(h.latitude);
+
+        let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        let d = R * c;
+        if (!HutPointInfo.has(h) && d < maxDiameter) {
           HutPointInfo.add(h);
         }
-      }) 
-            
-    }) 
+      })
 
-  
-  
-   let candiArray = Array.from(HutPointInfo);
-    await Promise.all(candiArray.map(async(h) =>{
-      let hutAllInfo = await HutManager.getHutByPointId(h.pointId);   
+    })
+
+
+
+    let candiArray = Array.from(HutPointInfo);
+    await Promise.all(candiArray.map(async (h) => {
+      let hutAllInfo = await HutManager.getHutByPointId(h.pointId);
       res.push(hutAllInfo);
-      
-    }) )
+
+    }))
     let potentialHuts = {
       potentialHuts: res
-      
-    };   
+
+    };
     return potentialHuts;
-    
+
   }
 
   // Return the list of potential start and end points for a given hike
@@ -639,7 +651,7 @@ class HikeManager {
   async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
-    
+
     // Check if the end point is a hut or a parking lot and update the hike
     if (newEndPoint.type === "hut") {
       const hut = await HutManager.loadOneByAttributeHut("hutId", newEndPoint.id);

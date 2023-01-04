@@ -38,7 +38,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.post(`${SERVER_URL}/hikes`, data, { withCredentials: true })
         .then(res => resolve(res.data))
-        .catch(err => reject(err));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   },
 
