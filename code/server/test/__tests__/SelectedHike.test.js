@@ -40,7 +40,7 @@ describe("Test storeSelectedHike", () => {
       PersistentManager.store(Point.tableName, testStartPoint1),
       PersistentManager.store(Point.tableName, testEndPoint1),
     ]);
-    PersistentManager.store(Hike.tableName, testHike1);
+    await PersistentManager.store(Hike.tableName, testHike1);
   });
 
   /* Test Teardown */
