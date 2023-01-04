@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 
+import { AuthContext } from '@contexts/authContext'
+
 import Details from './Details'
 
 jest.mock("@lib/helpers/location", () => ({
@@ -10,6 +12,8 @@ jest.mock("@lib/helpers/location", () => ({
 jest.mock("@components/features", () => ({
     HutCard: jest.fn()
 }))
+
+jest.mock('react-datetime-picker', () => () => <div data-testid="datetime-picker" />)
 
 const testHike = {
     title: "title",
@@ -75,4 +79,64 @@ describe("HikeDetails.Details component", () => {
             render(<Details hike={testHike} />, { wrapper: MemoryRouter })
             expect(screen.getByText(point.name)).toBeInTheDocument()
         })
+
+    it('Start hike button is not showed if a user is not logged in as an hiker', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Local Guide" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(screen.queryByRole('button', { name: /start this hike/i })).not.toBeInTheDocument()
+    })
+
+    it('Start hike button is not showed if a user is not logged in', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: false }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(screen.queryByRole('button', { name: /start this hike/i })).not.toBeInTheDocument()
+    })
+
+    it('Start hike button is correctly rendered if a user is logged in as an hiker', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(screen.getByRole('button', { name: /start this hike/i })).toBeInTheDocument()
+    })
+
+    it('Datetime picker for start time is not showed if a user is not logged in as an hiker', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Local Guide" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
+    })
+
+    it('Datetime picker for start time is not showed if a user is not logged in', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: false }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+            expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
+    })
+
+    it('Datetime picker for start time is correctly rendered if a user is logged in as an hiker', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+            expect(screen.queryByTestId(/datetime-picker/i)).toBeInTheDocument()
+    })
 })
