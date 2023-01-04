@@ -7,7 +7,7 @@ import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
 import { HutCard } from '@components/features'
-import { Row, Button } from 'react-bootstrap'
+import { Row, Button, Spinner } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import api from '@services/api'
 import DateTimePicker from 'react-datetime-picker';
@@ -20,9 +20,15 @@ const Details = ({ hike }) => {
     const [terminateTime, setTerminateTime] = useState(new Date());
 
     function handleTerminateHike() {
+
+        const startTime = terminateTime; // TODO: Remove this line once startTime is set
+        if (terminateTime > startTime)
+            return toast.error("End time must be after start time", { theme: 'colored' });
+
         setLoading(true);
-        api.hikes.terminateHike(hikeId, terminateTime.toLocaleString())
+        api.selectedHikes.terminateHike(hikeId, terminateTime.toLocaleString())
             .then(() => {
+                setHikeStarted(false);
                 toast.success("Hike terminated", { theme: 'colored' });
             })
             .catch(err => {
@@ -35,16 +41,15 @@ const Details = ({ hike }) => {
         <div className=''>
             <div className='mb-5'>
 
-                { 
-                    hikeStarted && 
+                {
+                    hikeStarted &&
                     <div className='d-flex flex-column align-items-start mb-3'>
                         <div className='d-flex flex-column mb-3'>
-                            <span className='fw-bold'>Select end time</span>
-                            <DateTimePicker onChange={setTerminateTime} value={terminateTime} />
+                            <label htmlFor='terminateTime' className='fw-bold'>Select end time</label>
+                            <DateTimePicker id='terminateTime' onChange={setTerminateTime} value={terminateTime} />
                         </div>
-                        <Button variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
-                            <FaStop size={14} className="me-2" />
-                            Terminate hike
+                        <Button disabled={loading} variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
+                            {loading ? <Spinner /> : <><FaStop size={14} className="me-2" /> Terminate hike</>}
                         </Button>
                     </div>
                 }
