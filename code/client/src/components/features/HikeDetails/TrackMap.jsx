@@ -21,7 +21,7 @@ const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], p
         document.querySelector(".leaflet-popup-close-button")?.click();
     };
 
-    function handleSetAsStartEndPoint (potential) {
+    function handleSetAsStartEndPoint(potential) {
         closePopup()
         potential.updatePoint(potential)
     }
@@ -44,7 +44,7 @@ const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], p
                     </Marker>
                 ))}
                 {potentials.map((potential) => (
-                    <Marker key={`potential-${potential.name}`} position={potential.coords}>
+                    <Marker key={potential.id + potential.pointType + (potential.potential || "")} position={potential.coords}>
                         <Popup className='text-center'>
                             <span className='fw-bold'>{potential.name}</span>
                             <PotentialPointButton potential={potential} onClick={handleSetAsStartEndPoint} />

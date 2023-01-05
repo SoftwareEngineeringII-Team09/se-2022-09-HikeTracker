@@ -34,18 +34,19 @@ This project has been developed by Team-09 for the course of "Software Engineeri
    - [Backend](#backend)
    - [Database](#database)
 4. [React Client Application Routes](#react-client-application-routes)
-   - [Route `/`](#index-route)
-   - [Route `/hikes`](#index-route)
-   - [Route `/hikes/:hikeId`](#hikeshikeid)
-   - [Route `/signup`](#signup)
-   - [Route `/login`](#login)
-   - [Route `/activate`](#activate)
-   - [Route `/account/hikes`](#accounthikes)
-   - [Route `/account/hikes/add`](#accounthikesadd)
-   - [Route `/account/reference-points/update`](#accountreference-pointsupdate)
-   - [Route `/account/huts/add`](#accounthutsadd)
-   - [Route `/account/parking-lots/add`](#accountparking-lotsadd)
-   - [Route `/*`](#page-not-found-route)
+    - [Route `/`](#index-route)
+    - [Route `/hikes`](#index-route)
+    - [Route `/hikes/:hikeId`](#hikeshikeid)
+    - [Route `/signup`](#signup)
+    - [Route `/login`](#login)
+    - [Route `/activate`](#activate)
+    - [Route `/account/hikes`](#accounthikes)
+    - [Route `/account/hikes/add`](#accounthikesadd)
+    - [Route `/account/hikes/:hikeId/update/reference-points`](#accounthikeshikeidupdatereference-points)
+    - [Route `/account/hikes/:hikeId/update/endpoints`](#accounthikeshikeidupdateendpoints)
+    - [Route `/account/huts/add`](#accounthutsadd)
+    - [Route `/account/parking-lots/add`](#accountparking-lotsadd)
+    - [Route `/*`](#page-not-found-route)
 5. [API Server](#api-server)
    - [Session Routes](#session-routes)
      - [`POST /api/auth/signup`](#post-apiauthsignup)
@@ -155,9 +156,11 @@ Note:
 - the images se09-client depends on the se09-server one, so this must be run first
 - in case of name conflicts, remove the containers with `docker rm <name>` and run again the commands above
 
-## Technical Dept Strategy
+## Technical Debt Strategy
 
 We made repo analysis with Sonarcloud, that allows us to track security issues, code smells and some other useful info you may see above.
+
+Code smells are solved by Severity level: Blocker, Critical, Major, Minor.
 
 ## Technologies
 
@@ -178,7 +181,8 @@ Here the list of dependencies installed:
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "babel-plugin-transform-class-properties": "^6.24.1"
 },
 "devDependencies": {
     "@craco/craco": "^7.0.0",
@@ -335,6 +339,12 @@ _This route is protected and the user must be logged in as a local guide to navi
 ### `/account/hikes/:hikeId/update/reference-points`
 
 The page allows a local guide to update the reference points for an hike.
+
+_This route is protected and the user must be logged in as a local guide to navigate here._
+
+### `/account/hikes/:hikeId/update/endpoints`
+
+The page show a map with the current start and end point of a hike, as well as all possibile Huts and Parking lots that can be set as the new start or end point of the hike. This page allows the local guide to set new endpoints for the hike.
 
 _This route is protected and the user must be logged in as a local guide to navigate here._
 

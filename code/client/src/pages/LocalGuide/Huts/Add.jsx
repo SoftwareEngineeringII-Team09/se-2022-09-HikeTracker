@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import { Formik, Form } from 'formik'
 
 import { MarkerOnPoint } from '@components/features/Map'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import { Select, Input, File } from '@components/form'
+
+import { Select, Input, File, LoadingButton } from '@components/form'
+
 import { HutSchema } from '@lib/validations'
 
 import regions from '@data/locations/regioni'
@@ -18,10 +19,13 @@ import api from '@services/api'
 const AddHut = () => {
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
+    const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate()
 
     const handleSubmit = (values) => {
         // TODO: Adding image to the API
+        setLoading(true)
         api.geolocalization.checkPointCity({ longitude, latitude }, values.city)
             .then(() => api.huts.createHut({
                 hutName: values.hutName,
@@ -41,8 +45,11 @@ const AddHut = () => {
                     toast.success("The new hut has been correctly added", { theme: 'colored' })
                     navigate('/', { replace: true })
                 })
-                .catch(err => toast.error(err, { theme: 'colored' })))
+                .catch(err => toast.error(err, { theme: 'colored' }))
+                .finally(() => setLoading(false)))
+
             .catch(err => toast.error(err, { theme: 'colored' }))
+            .finally(() => setLoading(false))
 
     }
 
@@ -111,9 +118,7 @@ const AddHut = () => {
                             setFieldValue('image', e.currentTarget.files[0])
                         }} />
 
-                        <Button variant="primary-dark fw-bold" type="submit" size='lg' className="w-100 py-3 fw-bold my-3">
-                            Create new hut
-                        </Button>
+                        <LoadingButton type="submit" text="Create new hut" loading={loading} />
                     </Form>
                     )
                 }}

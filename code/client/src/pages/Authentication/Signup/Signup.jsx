@@ -1,22 +1,36 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button, Row, Col, Alert } from 'react-bootstrap';
 import { toast } from "react-toastify";
-import api from '../../../services/api';
+import api from '@services/api';
 import { Formik, Form } from 'formik';
 
 import { SignupSchema } from '@lib/validations';
-import { Select, Input } from '@components/form'
+import { Select, Input, LoadingButton } from '@components/form';
 
 const Signup = () => {
-    /* User Roles */
+
     const [successfulSignup, setSuccessfulSignup] = useState(false);
     const [userId, setUserId] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    /* User Roles */
     const roles = [
         { name: "Hiker", requiresAdditionalInfo: false },
         { name: "Local Guide", requiresAdditionalInfo: true },
         { name: "Hut Worker", requiresAdditionalInfo: true },
         { name: "Emergency Operator", requiresAdditionalInfo: true },
     ];
+
+    const initialValues = {
+        role: 'Hiker',
+        firstname: '',
+        lastname: '',
+        mobile: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    };
+
     const rolesRequiringAdditionalInfo = roles.filter((r) => r.requiresAdditionalInfo).map((r) => r.name);
 
     /* Request new token */
@@ -34,27 +48,30 @@ const Signup = () => {
     };
 
     /* Signup submission */
-    const submitSignup = async (values) => {
-        try {
-            const userId = await api.users.signup(values);
-            setUserId(userId);
-            setSuccessfulSignup(true);
-        } catch (error) {
-            toast.error(error, {
-                theme: "colored"
-            });
+    const submitSignup = useCallback(
+        async (values, actions) => {
+            try {
+                setLoading(true);
+                const userId = await api.users.signup(values);
+                setUserId(userId);
+                setSuccessfulSignup(true);
+                // Reset form values
+                actions.resetForm({
+                    values: {
+                        ...initialValues,
+                        role: values.role,
+                    },
+                });
+            } catch (error) {
+                toast.error(error, {
+                    theme: "colored"
+                });
+            } finally {
+                actions.setSubmitting(false);
+                setLoading(false);
+            }
         }
-    }
-
-    const initialValues = {
-        role: 'Hiker',
-        firstname: '',
-        lastname: '',
-        mobile: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-    };
+    );
 
     return (
         <div className='my-5'>
@@ -71,7 +88,7 @@ const Signup = () => {
                     <Button className="mb-0" variant="base-light" onClick={requestNewToken}>Receive a new activation link</Button>
                 </Alert>
             }
-            <Formik className="my-2" initialValues={initialValues} validationSchema={SignupSchema} onSubmit={(values) => submitSignup(values)}>
+            <Formik className="my-2" initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitSignup}>
                 {({ values }) => {
                     return (<Form data-testid="signup">
                         <Row>
@@ -103,9 +120,7 @@ const Signup = () => {
                                 </>
                             }
                         </Row>
-                        <Button variant="primary-dark" type="submit" size='lg' className="w-100 py-3 fw-bold mt-5">
-                            Register
-                        </Button>
+                        <LoadingButton text="Register" type="submit" loading={loading} />
                     </Form>
                     )
                 }}

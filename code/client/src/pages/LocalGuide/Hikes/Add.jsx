@@ -40,6 +40,9 @@ const AddHike = () => {
                 toast.error(error, {
                     theme: "colored",
                 });
+            })
+            .finally(() => {
+                setLoading(true);
             });
     };
 
@@ -107,7 +110,6 @@ const AddHike = () => {
                 }}
             </Formik>
         </div>
-
     );
 }
 

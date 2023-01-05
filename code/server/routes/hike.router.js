@@ -9,14 +9,13 @@ const multer = require("multer");
 const auth = require("../middlewares/auth");
 const HikeHutManager = require("../controllers/HikeHutManager");
 
-const storage = multer.diskStorage({
-  destination: "./gpx",
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
-  },
-});
 const upload = multer({
-  storage: storage,
+  storage: multer.diskStorage({
+    destination: "./gpx",
+    filename: function (req, file, callback) {
+      callback(null, file.originalname);
+    }
+  }),
   limits: {
     fileSize: 8000000
   }
