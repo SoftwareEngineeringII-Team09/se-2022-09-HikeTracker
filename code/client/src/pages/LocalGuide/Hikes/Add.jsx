@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { Formik, Form } from 'formik'
 
-import { Select, Input, File } from '@components/form'
+import { Select, Input, File, LoadingButton } from '@components/form'
 import { HikeSchema } from "@lib/validations"
 
 import regions from '@data/locations/regioni'
@@ -14,8 +14,10 @@ import api from '@services/api';
 
 const AddHike = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
 
     const handleSubmit = (values) => {
+        setLoading(true)
         // TODO: Adding image to the API
         const data = new FormData();
         data.append('gpx', values.gpx);
@@ -41,9 +43,8 @@ const AddHike = () => {
                     theme: "colored",
                 });
             })
-            .finally(() => {
-                setLoading(true);
-            });
+            .finally(() => setLoading(false))
+
     };
 
     const initialValues = {
@@ -102,9 +103,7 @@ const AddHike = () => {
                             setFieldValue('image', e.currentTarget.files[0])
                         }} />
 
-                        <Button variant="primary-dark fw-bold" type="submit" size='lg' className="w-100 py-3 fw-bold my-3">
-                            Create new hike
-                        </Button>
+                        <LoadingButton type="submit" text="Create new hike" loading={loading} />
                     </Form>
                     )
                 }}
