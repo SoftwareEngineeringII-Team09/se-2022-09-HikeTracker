@@ -5,26 +5,60 @@ import { toast } from 'react-toastify'
 import { FaMapMarkerAlt, FaCrosshairs, FaPlay } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
 import DateTimePicker from 'react-datetime-picker';
+import { useStopwatch } from 'react-timer-hook'
+import dayjs from 'dayjs'
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
 import { HutCard } from '@components/features'
 
+const Timewatch = ({ days, hours, minutes, seconds }) => (
+    <div className='fs-3 my-3'>
+        <h3 className='fw-bold fs-5 mb-3'>Timewatch</h3>
+        <span className='p-2 rounded-3 bg-primary-light me-1'>{days}</span>
+        :
+        <span className='p-2 rounded-3 bg-primary-light mx-1'>{hours}</span>
+        :
+        <span className='p-2 rounded-3 bg-primary-light mx-1'>{minutes}</span>
+        :
+        <span className='p-2 rounded-3 bg-primary-light ms-1'>{seconds}</span>
+    </div>
+)
+
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
     const [value, onChange] = useState(new Date());
     const [startedHike, setStartedHike] = useState(undefined)
-    const [loading, setLoading] = useState(undefined)
+    const {
+        seconds,
+        minutes,
+        hours,
+        days,
+        reset
+    } = useStopwatch({ autoStart: false, stopwatchOffset: new Date() });
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // TODO: Adding API call to get current hike status (started or not)
-        setLoading(false)
-        setStartedHike(false)
-    }, [])
+        if (loading) {
+            // TODO: Adding API call to get current hike status (started or not)
+            setLoading(false)
+            setStartedHike({
+                selectedHikeId: 1,
+                hikeId: 1,
+            })
+
+            const currentTime = dayjs().format('DD/MM/YYYY, HH:mm:ss');
+            const diff = dayjs(currentTime).diff(dayjs('5/1/2023, 11:00:00'), 's')
+            const stopwatchOffset = new Date();
+            stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + diff);
+            reset(stopwatchOffset, true);
+        }
+    }, []) // eslint-disable-line
 
     // TODO: Adding API call
     function handleStartHike() {
+        console.log(value.toLocaleString('it-IT'))
         if (value > new Date())
             toast.error("Start time cannot be in the future!", { theme: 'colored' })
 
@@ -35,19 +69,26 @@ const Details = ({ hike }) => {
             <div className=''>
                 <div className='mb-5'>
                     {(user.loggedIn && user.role === "Hiker") && (
-                        startedHike ? /* TODO: terminate hike here instead of null */ null :
-                            <div className='d-flex flex-column align-items-start mb-3'>
-                                <div className='d-flex flex-column mb-3'>
-                                    <span className='fw-bold'>Select start time</span>
-                                    <DateTimePicker onChange={onChange} value={value} />
+                        startedHike?.hikeId === hike.hikeId ?
+                            /* TODO: terminate hike here */
+                            <Timewatch days={days} hours={hours} minutes={minutes} seconds={seconds} />
+                            :
+                            (startedHike ?
+                                <div className='mb-3'>
+                                    <span className='text-warning'>You cannot start this hike because you have already started another hike... You have to terminate that hike before.</span>
                                 </div>
-                                <Button variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleStartHike}>
-                                    <FaPlay size={14} className="me-2" />
-                                    Start this hike
-                                </Button>
-                            </div>
-
-                    )}
+                                :
+                                <div className='d-flex flex-column align-items-start mb-3'>
+                                    <div className='d-flex flex-column mb-3'>
+                                        <span className='fw-bold'>Select start time</span>
+                                        <DateTimePicker onChange={onChange} value={value} />
+                                    </div>
+                                    <Button variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleStartHike}>
+                                        <FaPlay size={14} className="me-2" />
+                                        Start this hike
+                                    </Button>
+                                </div >
+                            ))}
                     <h1 className='fw-black'>
                         {hike.title}
                         {(user.role === "Local Guide" && hike.writer.writerId === user.userId) &&
@@ -80,7 +121,7 @@ const Details = ({ hike }) => {
                         for <span className='fw-bold bg-primary-light px-3 fs-6 py-1 rounded-pill'>{hike.difficulty}</span>
                     </h5>
                     <span>{getLocationFullName(hike.province, hike.city)}</span>
-                </div>
+                </div >
                 <p>{hike.description}</p>
                 <div className='mt-5 d-flex flex-column flex-lg-row justify-content-between'>
                     {[
@@ -119,17 +160,18 @@ const Details = ({ hike }) => {
                         </dl>
                     </div>
                 </div>
-                {hike.huts.length ?
-                    <div className='mt-5'>
-                        <h3 className='fw-bold'>Linked huts</h3>
-                        <Row className='g-4 mt-3'>
-                            {hike.huts.map(hut => (
-                                <HutCard key={hut.hutId} hut={hut} />
-                            ))}
-                        </Row>
-                    </div> : null
+                {
+                    hike.huts.length ?
+                        <div className='mt-5'>
+                            <h3 className='fw-bold'>Linked huts</h3>
+                            <Row className='g-4 mt-3'>
+                                {hike.huts.map(hut => (
+                                    <HutCard key={hut.hutId} hut={hut} />
+                                ))}
+                            </Row>
+                        </div> : null
                 }
-            </div>
+            </div >
         )
 }
 

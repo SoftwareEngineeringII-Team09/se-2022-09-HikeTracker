@@ -60,6 +60,7 @@
     "cypress": "^11.1.0",
     "cypress-dark": "^1.8.3",
     "cypress-file-upload": "^5.0.8",
+    "dayjs": "^1.11.7",
     "geolib": "^3.3.3",
     "history": "^5.3.0",
     "leaflet": "^1.9.2",
@@ -72,6 +73,7 @@
     "react-icons": "^4.6.0",
     "react-leaflet": "^4.1.0",
     "react-router-dom": "^6.4.3",
+    "react-timer-hook": "^3.0.5",
     "regenerator-runtime": "^0.13.11",
     "sass": "^1.55.0",
     "yup-password": "^0.2.2"

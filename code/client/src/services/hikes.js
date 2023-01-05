@@ -14,7 +14,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/writers/${writerId}`, { withCredentials: true })
         .then(res => resolve(res.data))
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   },
 
@@ -46,7 +46,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/${hikeId}/potentialStartEndPoints`, { withCredentials: true })
         .then(res => resolve(res.data))
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   },
 
@@ -54,7 +54,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.put(`${SERVER_URL}/hikes/${hikeId}/startEndPoints`, points, { withCredentials: true })
         .then(res => resolve(res.data))
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   },
 
@@ -62,7 +62,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.put(`${SERVER_URL}/hikes/${hikeId}/refPoints`, { referencePoints: data }, { withCredentials: true })
         .then(() => resolve())
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   },
 
@@ -70,7 +70,7 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/${hikeId}/linkable-huts`, { withCredentials: true })
         .then(res => resolve(res.data.potentialHuts))
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   },
 
@@ -78,7 +78,23 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.put(`${SERVER_URL}/hikes/${hikeId}/huts`, data, { withCredentials: true })
         .then(() => resolve())
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
+    })
+  },
+
+  getStartedHike: () => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/selectedHikes`, { withCredentials: true })
+        .then((res) => resolve(res.data))
+        .catch(err => reject(err.response ? err.response.data : err.message));
+    })
+  },
+
+  startHike: (hikeId, time) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${SERVER_URL}/selectedHikes`, { hikeId, time }, { withCredentials: true })
+        .then((res) => resolve(res.data))
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
   }
 }
