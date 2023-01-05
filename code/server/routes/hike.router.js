@@ -316,7 +316,6 @@ router.get("/all/completed",
   async (req, res) => {
   try {
     const hikerId = req.user.userId;
-    // const hikerId = 1;
     const hikes = await HikeManager.getAllCompletedHikes(hikerId);
     return res.status(200).json(hikes);
   } catch (exception) {
