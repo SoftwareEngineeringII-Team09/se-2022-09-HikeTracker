@@ -108,12 +108,12 @@ describe("Terminate Hike", () => {
         await waitFor(() => {
             expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
             expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, mockEndTime);
-
         });
+
         /* Check success message is shown */
         await waitFor(() => {
             expect(toast.success).toHaveBeenCalledTimes(1);
-            expect(toast.success).toHaveBeenCalledWith("Points have been successfully updated", { "theme": "colored" });
+            expect(toast.success).toHaveBeenCalledWith("", { "theme": "colored" });
         });
     })
 
@@ -138,7 +138,7 @@ describe("Terminate Hike", () => {
         /* Check error message is shown */
         await waitFor(() => {
             expect(toast.error).toHaveBeenCalledTimes(1);
-            expect(toast.error).toHaveBeenCalledWith("Points have been successfully updated", { "theme": "colored" });
+            expect(toast.error).toHaveBeenCalledWith("", { "theme": "colored" });
         });
     })
 })

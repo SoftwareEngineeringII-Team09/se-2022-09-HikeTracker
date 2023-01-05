@@ -139,8 +139,9 @@ class SelectedHikeManager {
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   async terminateHike(selectedHikeId, endTime) {
     const selectedHike = await this.loadOneByAttributeSelectedHike("selectedHikeId", selectedHikeId);
-    const startTimeObject = dayjs(selectedHike.startTime, 'DD/MM/YYYY, HH:mm:ss');
-    const endTimeObject =  dayjs(endTime, 'DD/MM/YYYY, HH:mm:ss');
+    const startTimeObject = dayjs(selectedHike.startTime, ["DD/MM/YYYY HH:mm:ss",  "D/M/YYYY HH:mm:ss"]);
+    const endTimeObject =  dayjs(endTime, ["DD/MM/YYYY HH:mm:ss",  "D/M/YYYY HH:mm:ss"]);
+
     if (startTimeObject.isAfter(endTimeObject)) {
       return Promise.reject({
         code: 422,
@@ -148,7 +149,7 @@ class SelectedHikeManager {
       });
     }
 
-    return this.updateSelectedHike({ ...selectedHike, endTime: endTime, status: "finished"}, "selectedHikeId", selectedHikeId);
+    return this.updateSelectedHike({ ...selectedHike, endTime: endTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString(), status: "finished"}, "selectedHikeId", selectedHikeId);
   }
 }
 

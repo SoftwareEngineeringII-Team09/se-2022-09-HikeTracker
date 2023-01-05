@@ -6,7 +6,7 @@ const selectedHikes = {
     return new Promise((resolve, reject) => {
       axios.put(`${SERVER_URL}/selectedHikes/${selectedHikeId}/terminate`, { time }, { withCredentials: true })
         .then(() => resolve())
-        .catch(err => reject(err.response.data.error));
+        .catch(err => reject(err.response ? err.response.data.error : err.message));
     });
   }
 };

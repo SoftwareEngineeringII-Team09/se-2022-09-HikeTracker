@@ -14,25 +14,27 @@ import DateTimePicker from 'react-datetime-picker';
 
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
-    const [hikeId, setHikeId] = useState(null); // TODO: Set with startHike
-    const [loading, setLoading] = useState(false);
-    const [hikeStarted, setHikeStarted] = useState(true); // TODO: Set to true in handleStartHike
+    const [startedHike, setStartedHike] = useState(undefined)
     const [terminateTime, setTerminateTime] = useState(new Date());
+    const [loading, setLoading] = useState(false);
 
     function handleTerminateHike() {
+
+        if (!startedHike) 
+            return toast.error("You need to start a hike first", { theme: 'colored' });
 
         const startTime = terminateTime; // TODO: Remove this line once startTime is set
         if (terminateTime > startTime)
             return toast.error("End time must be after start time", { theme: 'colored' });
 
         setLoading(true);
-        api.selectedHikes.terminateHike(hikeId, terminateTime.toLocaleString())
+        api.selectedHikes.terminateHike(selectedHikeId, terminateTime.toLocaleString("it-IT"))
             .then(() => {
                 setHikeStarted(false);
                 toast.success("Hike terminated", { theme: 'colored' });
             })
             .catch(err => {
-                toast.error(err.message, { theme: 'colored' });
+                toast.error(err, { theme: 'colored' });
             })
             .finally(() => setLoading(false));
     }
