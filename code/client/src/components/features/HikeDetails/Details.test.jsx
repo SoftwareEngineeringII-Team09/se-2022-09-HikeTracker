@@ -5,6 +5,10 @@ import { AuthContext } from '@contexts/authContext'
 
 import Details from './Details'
 
+import api from '@services/api'
+
+jest.mock('@services/api')
+jest.mock('axios')
 jest.mock("@lib/helpers/location", () => ({
     getLocationFullName: (province, city) => `c${city}, p${province}`
 }))
@@ -16,6 +20,7 @@ jest.mock("@components/features", () => ({
 jest.mock('react-datetime-picker', () => () => <div data-testid="datetime-picker" />)
 
 const testHike = {
+    hikeId: 1,
     title: "title",
     writer: { writerName: "writer", writerId: 0 },
     difficulty: "difficulty",
@@ -127,7 +132,7 @@ describe("HikeDetails.Details component", () => {
             </AuthContext.Provider>,
             { wrapper: MemoryRouter })
 
-            expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
+        expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
     })
 
     it('Datetime picker for start time is correctly rendered if a user is logged in as an hiker', () => {
@@ -137,6 +142,6 @@ describe("HikeDetails.Details component", () => {
             </AuthContext.Provider>,
             { wrapper: MemoryRouter })
 
-            expect(screen.queryByTestId(/datetime-picker/i)).toBeInTheDocument()
+        expect(screen.queryByTestId(/datetime-picker/i)).toBeInTheDocument()
     })
 })

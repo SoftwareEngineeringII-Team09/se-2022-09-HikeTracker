@@ -29,7 +29,7 @@ const Timewatch = ({ days, hours, minutes, seconds }) => (
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
     const [value, onChange] = useState(new Date());
-    const [startedHike, setStartedHike] = useState(undefined)
+    const [startedHike, setStartedHike] = useState(null)
     const {
         seconds,
         minutes,
@@ -43,10 +43,7 @@ const Details = ({ hike }) => {
         if (loading) {
             // TODO: Adding API call to get current hike status (started or not)
             setLoading(false)
-            setStartedHike({
-                selectedHikeId: 1,
-                hikeId: 1,
-            })
+            setStartedHike(null)
 
             const currentTime = dayjs().format('DD/MM/YYYY, HH:mm:ss');
             const diff = dayjs(currentTime).diff(dayjs('5/1/2023, 11:00:00'), 's')
