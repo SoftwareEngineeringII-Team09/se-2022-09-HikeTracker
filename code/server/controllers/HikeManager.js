@@ -184,7 +184,7 @@ class HikeManager {
   ) {
     // Parse the gpx to extract: length, ascent, maxElevation, startPoint, endPoint
     
-    let gpxString = fs.readFileSync(`gpx/${hikeData.gpxName}`).toString();
+    let gpxString = fs.readFileSync(`gpx/${hikeData.fileName}`).toString();
 
     gpx.parse(gpxString);
     const track = gpx.tracks[0];
@@ -194,7 +194,7 @@ class HikeManager {
     const startPoint = track.points[0];
     const endPoint = track.points[track.points.length - 1];
     const maxElevation = track.elevation.max;
-    const trackPath = `gpx/${hikeData.gpxName}`;
+    const trackPath = `gpx/${hikeData.fileName}`;
     const imagePath = `hikeImage/${hikeData.hikeImageName}`;
     
     // Store the startPoint and retrieve the startPointId

@@ -40,7 +40,7 @@ router.post(
   async (req, res) => {
   const writerId = req.user.userId;
 
-    const gpxName = req.files.gpx[0].originalname;
+    const fileName = req.files.gpx[0].originalname;
     const hikeImageName = req.files.hikeImage[0].originalname;
     try {
       // Validation of body and/or parameters
@@ -58,7 +58,7 @@ router.post(
         city: req.body.city,
         province: req.body.province,
         region: req.body.region,
-        gpxName: gpxName,
+        fileName: fileName,
         hikeImageName: hikeImageName,
 
 

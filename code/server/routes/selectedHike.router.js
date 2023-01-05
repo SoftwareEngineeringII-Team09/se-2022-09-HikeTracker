@@ -48,7 +48,8 @@ router.get(
       const error = validationResult(req);
       if (!error.isEmpty()) 
         return res.status(422).json({ error: error.array()[0] });
-      const hikerId = req.user.userId;
+        const hikerId = req.user.userId;
+
       let slecteHike = await SelectedHikeManager.loadStartedHike(hikerId);
       return res.status(201).send(slecteHike);
     } catch (exception) {
