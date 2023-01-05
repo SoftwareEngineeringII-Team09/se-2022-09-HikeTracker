@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
+import { LoadingButton } from '@components/form';
 
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
@@ -17,11 +18,13 @@ const AddHike = () => {
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
     const [gpxFile, setGpxFile] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         const data = new FormData();
         data.append('gpx', gpxFile);
@@ -46,17 +49,20 @@ const AddHike = () => {
                 toast.error(error.message, {
                     theme: "colored",
                 });
+            })
+            .finally(() => {
+                setLoading(true);
             });
-    });
+    }, [title, province, region, expectedTime, city, difficulty, description, gpxFile, navigate]);
 
     const updateDescription = useCallback((event) => {
         setDescription(event.target.value);
-    });
+    }, [setDescription]);
 
     const handleFileChange = useCallback((event) => {
         if (event.target.files && event.target.files[0])
             setGpxFile(event.target.files[0]);
-    });
+    }, [setGpxFile]);
 
     return (
         <>
@@ -118,9 +124,7 @@ const AddHike = () => {
                         <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>
                         <Form.Control id="gpxFile" type='file' required onChange={handleFileChange} />
                     </Form.Group>
-                    <Button variant='primary-light fw-bold my-3 mx-auto d-block' size='lg' type='submit' className='mb-3'>
-                        Create new hike
-                    </Button>
+                    <LoadingButton type="submit" text="Create new hike" loading={loading}/>
                 </Form>
             </div>
         </>

@@ -26,4 +26,21 @@ describe('Hike details', () => {
             cy.get(".track-map").should('be.visible')
         })
     })
+
+    it('should allow hikers to terminate a hike', () => {
+        
+        const endTime = "2021-05-01 12:00"
+        
+        cy.loginAsHiker()
+        cy.visit('/hikes/1')
+
+        // Select end time and terminate hike
+
+        cy.findByLabelText("Select end time").type(endTime)
+        cy.findByRole("button", /Terminate hike/i).click()
+
+        // Check that the hike has been terminated, terminateHike button has been hidden
+
+        cy.findByRole("button", /Terminate hike/i).should('not.exist')
+    })
 })

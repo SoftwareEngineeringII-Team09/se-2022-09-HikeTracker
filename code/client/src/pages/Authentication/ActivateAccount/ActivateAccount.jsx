@@ -21,7 +21,7 @@ const ActivateAccount = () => {
         } catch (error) {
             setStatus("error");
         }
-    });
+    }, [token, userId]);
 
     /* Request new token */
     const requestNewToken = useCallback(async () => {
@@ -35,7 +35,7 @@ const ActivateAccount = () => {
                 theme: "colored",
             });
         }
-    });
+    }, [userId]);
 
     useEffect(() => {
         /* Redirect to Home if activation token or userId are missing */

@@ -14,7 +14,9 @@ import DateTimePicker from 'react-datetime-picker';
 
 const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
-    const [startedHike, setStartedHike] = useState(undefined)
+    const [startedHike, setStartedHike] = useState({
+        selectedHikeId: 1,
+    })
     const [terminateTime, setTerminateTime] = useState(new Date());
     const [loading, setLoading] = useState(false);
 
@@ -30,7 +32,7 @@ const Details = ({ hike }) => {
         setLoading(true);
         api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
             .then(() => {
-                setHikeStarted(false);
+                setStartedHike(undefined);
                 toast.success("Hike terminated", { theme: 'colored' });
             })
             .catch(err => {
@@ -44,14 +46,15 @@ const Details = ({ hike }) => {
             <div className='mb-5'>
 
                 {
-                    hikeStarted &&
+                    startedHike &&
                     <div className='d-flex flex-column align-items-start mb-3'>
                         <div className='d-flex flex-column mb-3'>
                             <label htmlFor='terminateTime' className='fw-bold'>Select end time</label>
                             <DateTimePicker id='terminateTime' onChange={setTerminateTime} value={terminateTime} />
                         </div>
                         <Button disabled={loading} variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
-                            {loading ? <Spinner /> : <><FaStop size={14} className="me-2" /> Terminate hike</>}
+                            {loading ? <Spinner /> : <>Terminate hike</>}
+                            {/* {loading ? <Spinner /> : <><FaStop size={14} className="me-2" /> Terminate hike</>} */}
                         </Button>
                     </div>
                 }

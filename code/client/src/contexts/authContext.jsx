@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useMemo } from 'react';
+import React, { useState, useEffect, createContext, useMemo } from 'react';
 import { Spinner } from 'react-bootstrap';
 import api from '../services/api';
 
@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [dirty, setDirty] = useState(true);
-    const userInfo = useMemo([{ ...user, loggedIn }, setDirty]);
+    const userInfo = useMemo(() => [{ ...user, loggedIn }, setDirty], [user, loggedIn]);
 
     useEffect(() => {
         if (dirty) {

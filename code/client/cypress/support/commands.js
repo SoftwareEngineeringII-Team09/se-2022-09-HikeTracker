@@ -28,6 +28,10 @@ Cypress.Commands.add('loginAsLocalGuide', () => {
     cy.request('POST', `${SERVER_URL}/auth/login/password`, { username: user.withDetails.email, password: user.withDetails.password })
 })
 
+Cypress.Commands.add('loginAsHiker', () => {
+    cy.request('POST', `${SERVER_URL}/auth/login/password`, { username: user.hiker.email, password: user.hiker.password })
+})
+
 /* Create hikes */
 Cypress.Commands.add('createHike', ({ writer }) => {
     cy.request('POST', `${SERVER_URL}/tests/addHike`, { ...hike, writerId: writer })

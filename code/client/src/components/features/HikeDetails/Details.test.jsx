@@ -123,7 +123,7 @@ describe("Terminate Hike", () => {
 
         api.selectedHikes.terminateHike.mockRejectedValueOnce({});
 
-        const termintateButton = await screen.findByRole("button", { name: "Terminate hike" });
+        const termintateButton = await screen.findByText('Terminate hike', {exact: false});
         const terminateHikeTime = await screen.findByLabelText("Select end time");
 
         await userEvent.type(terminateHikeTime, mockEndTime);
