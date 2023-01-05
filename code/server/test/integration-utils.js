@@ -186,8 +186,10 @@ exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hu
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/huts")
 				.field(testHutData)
-				//.attach("hutImage", fs.readFileSync(hutImage), hutImage)
+				.attach("hutImage", fs.readFileSync(`hutImage/${hutImage}`), hutImage)
 				.then(function (res) {
+					console.log(testHutData.website)
+					console.log(typeof(testHutData.website))
 					res.should.have.status(expectedHTTPStatus);
 					agent.delete("/api/auth/logout").then(function () {
 						done();
