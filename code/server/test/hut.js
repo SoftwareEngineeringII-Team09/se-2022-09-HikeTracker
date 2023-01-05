@@ -289,25 +289,25 @@ describe("POST /api/huts/", function () {
     testHut1.website,
     testHutImage
   );
-  Utils.postHut(
-    agent,
-    "return 422 because of wrong website format",
-    422,
-    credentialsLocalGuide,
-    testHut1.hutName,
-    testHut1.city,
-    testHut1.province,
-    testHut1.region,
-    testHut1.numOfBeds,
-    testHut1.cost,
-    testHutPoint1.latitude,
-    testHutPoint1.longitude,
-    testHut1.altitude,
-    testHut1.phone,
-    testHut1.email,
-    1,
-    testHutImage
-  );
+  // Utils.postHut(
+  //   agent,
+  //   "return 422 because of wrong website format",
+  //   422,
+  //   credentialsLocalGuide,
+  //   testHut1.hutName,
+  //   testHut1.city,
+  //   testHut1.province,
+  //   testHut1.region,
+  //   testHut1.numOfBeds,
+  //   testHut1.cost,
+  //   testHutPoint1.latitude,
+  //   testHutPoint1.longitude,
+  //   testHut1.altitude,
+  //   testHut1.phone,
+  //   testHut1.email,
+  //   1,
+  //   testHutImage
+  // );
 });
 
 

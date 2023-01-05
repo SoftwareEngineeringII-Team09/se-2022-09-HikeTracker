@@ -188,8 +188,6 @@ exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hu
 				.field(testHutData)
 				.attach("hutImage", fs.readFileSync(`hutImage/${hutImage}`), hutImage)
 				.then(function (res) {
-					console.log(testHutData.website)
-					console.log(typeof(testHutData.website))
 					res.should.have.status(expectedHTTPStatus);
 					agent.delete("/api/auth/logout").then(function () {
 						done();
@@ -270,6 +268,41 @@ exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credenti
 /*****************************************************************************************************
 *              SelectedHike
 *****************************************************************************************************/
+
+exports.startSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, time) {
+	const newSelectedHike = { hikeId: hikeId, time: time }
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.post(`/api/selectedHikes/start`)
+				.send(newSelectedHike)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
+exports.getSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, time) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/selectedHikes/`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					if (expectedHTTPStatus !== 401){
+						res.body.hikeId.should.be.eql(hikeId);
+						res.body.startTime.should.be.eql(time);
+					}
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
 exports.putTerminateSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, selectedHikeId, time) {
 	const testNewEndTime = { time: time }
 	it(`Should ${itShould}`, function (done) {

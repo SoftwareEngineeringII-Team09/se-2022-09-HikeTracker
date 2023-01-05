@@ -33,8 +33,8 @@ class SelectedHikeManager {
         result: `No available hiker with userId = ${newSelectedHike.hikerId}`
       });
     }
-
-    return PersistentManager.store(SelectedHike.tableName, newSelectedHike);
+    let lastId = PersistentManager.store(SelectedHike.tableName, newSelectedHike);
+    return lastId
   } 
 
   /**
@@ -131,6 +131,13 @@ class SelectedHikeManager {
    * @returns a Promise with the list of SelectedHikes that satisfy the condition  
    */
   async loadAllByAttributeSelectedHike(attributeName, value) {
+    const exists = await this.existsSelectedHike(attributeName, value);
+    if (!exists) {
+      return Promise.reject({
+        code: 404,
+        result: `No available SelectedHike with ${attributeName} = ${value}`,
+      });
+    }
     return PersistentManager.loadAllByAttribute(SelectedHike.tableName, attributeName, value);
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
@@ -150,6 +157,31 @@ class SelectedHikeManager {
 
     return this.updateSelectedHike({ ...selectedHike, endTime: endTime, status: "finished"}, "selectedHikeId", selectedHikeId);
   }
+
+
+async startHike(hikeId, startTime,hikerId) {
+    const newSelectedHike =  new SelectedHike(
+      null,
+      hikeId,
+      hikerId,
+      "ongoing",
+      startTime,
+      null
+    )
+
+    return this.storeSelectedHike(newSelectedHike);
+  }
+
+
+
+
+async loadStartedHike(hikerId) {
+  let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
+      return {
+        hikeId : startHike.hikeId,
+        startTime: startHike.startTime
+      } 
+}
 }
 
 module.exports = new SelectedHikeManager();

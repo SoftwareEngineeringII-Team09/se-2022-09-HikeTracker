@@ -7,6 +7,61 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 
 
+
+// POST add startTime for a given selectedHIke
+router.post(
+  "/start",
+  auth.withAuth,
+  auth.withRole(["Hiker"]),
+  body("time").isString(),
+  async (req, res) => {
+
+    try {
+      // Validation of body and/or parameters
+      const error = validationResult(req);
+      if (!error.isEmpty()) 
+        return res.status(422).json({ error: error.array()[0] });
+      const hikerId = req.user.userId;
+      let selectedHikeId = await SelectedHikeManager.startHike(req.body.hikeId, req.body.time, hikerId);
+
+      return res.status(201).send({ selectedHikeId });;
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
+
+
+// GET get startTime for selectedHIke
+router.get(
+  "/",
+  auth.withAuth,
+  auth.withRole(["Hiker"]),
+  async (req, res) => {
+ 
+    try {
+      // Validation of body and/or parameters
+      const error = validationResult(req);
+      if (!error.isEmpty()) 
+        return res.status(422).json({ error: error.array()[0] });
+      const hikerId = req.user.userId;
+      let slecteHike = await SelectedHikeManager.loadStartedHike(hikerId);
+      return res.status(201).send(slecteHike);
+    } catch (exception) {
+      console.log(exception);
+      const errorCode = exception.code ?? 503;
+      const errorMessage =
+        exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
+
+
 // PUT endTime and update status for a given :selectedHIke
 router.put(
   "/:selectedHikeId/terminate",

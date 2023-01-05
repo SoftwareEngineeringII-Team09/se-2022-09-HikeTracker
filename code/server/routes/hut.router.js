@@ -47,7 +47,7 @@ router.post(
         return res.status(422).json({ error: error.array()[0] });
         
       
-      await HutManager.defineHut({
+      const hutId = await HutManager.defineHut({
         hutName: req.body.hutName,
         writerId: writerId,
         city: req.body.city,
@@ -64,7 +64,7 @@ router.post(
         fileName: fileName
       });
       
-      return res.status(201).end();
+      return res.status(201).send({hutId});
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =

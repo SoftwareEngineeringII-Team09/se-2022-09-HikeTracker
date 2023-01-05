@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS "Hut" (
     "phone" TEXT NOT NULL CHECK(typeof(phone) == "text"),
     "email" TEXT NOT NULL CHECK(typeof(email) == "text"),
     "website" TEXT CHECK(typeof(website) == "text" OR typeof(website) == NULL),
-    "hutImage" TEXT,
+    "hutImage" TEXT CHECK(typeof(hutImage) == "text" OR typeof(hutImage) == NULL),
     PRIMARY KEY("hutId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS "Hike" (
     "description" TEXT NOT NULL CHECK(typeof(description) == "text"),
     "startPoint" INTEGER NOT NULL CHECK(typeof(startPoint) == "integer"),
     "endPoint" INTEGER NOT NULL CHECK(typeof(endPoint) == "integer"),
-    "hikeImage" TEXT ,
+    "hikeImage" TEXT CHECK(typeof(hikeImage) == "text" OR typeof(hikeImage) == NULL),
     PRIMARY KEY("hikeId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId"),
     FOREIGN KEY("startPoint") REFERENCES "Point"("pointId"),
@@ -417,7 +417,7 @@ VALUES (131, "hut", 0, 1, NULL, 45.15153628982408, 7.237884940218075);
 
 
 
-/* Hike table data */		
+/* Hike table data 	*/	
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint","hikeImage")
 VALUES (1, "Trail to Monte Ferra", 2, "gpx/Monte_Ferra.gpx", 4017, 4, 1, 13.1, "01:20", 237.7, 3094.14, "Professional hiker", "Leaving the car in the large parking lot, we pass the Meleze' Refuge and enter the small group of houses above the church of Sant''Anna, leaving behind the imposing building of the Excelsior holiday home. We take the clearly visible path which, with numerous hairpin bends, climbs rapidly on the grassy side up to a plateau where there are some ruins called Grange Reisassa. Here we find a crossroads with signs for Monte Ferra on the right and the hill of Fiutrusa on the left. We continue towards Monte ferra which now looks majestic in front of us, but still too far away. We gain altitude by reaching Lake Reisassa which can still be frozen at the beginning of the season. At this point we just have to go up the very steep path that winds through the debris until we reach the rocky ridge, where we turn left (westbound) and walk it up to the small iron cross placed to indicate our destination. The return path is the same as that of the ascent. NOTES: Poles are essential especially in the descent from Monte Ferra to Lake Reisassa. The only point of support is the Meleze' refuge at the beginning of the itinerary (we recommend that you contact the hotel directly to check days and opening times).", 1, 2,"1"); 
 INSERT INTO "Hike"("hikeId", "title", "writerId", "trackPath", "city", "province", "region", "length", "expectedTime", "ascent", "maxElevation", "difficulty", "description", "startPoint", "endPoint","hikeImage")
@@ -567,7 +567,7 @@ VALUES (3, "Monte Ferra Parking 3", 21, 2, 250, NULL);
 -- INSERT INTO "HikeParkingLot"("hikeId", "parkingLotId")
 -- VALUES (1, 3);
 
-/* HikeRefPoint data */
+/* HikeRefPoint data*/
 INSERT INTO "HikeRefPoint"("hikeId", "pointId")
 VALUES(1, 13);
 INSERT INTO "HikeRefPoint"("hikeId", "pointId")
