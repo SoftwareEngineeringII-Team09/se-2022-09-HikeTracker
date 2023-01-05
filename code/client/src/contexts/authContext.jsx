@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect, createContext, useMemo } from 'react';
 import { Spinner } from 'react-bootstrap';
 import api from '../services/api';
 
@@ -10,6 +10,7 @@ const AuthProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [dirty, setDirty] = useState(true);
+    const userInfo = useMemo([{ ...user, loggedIn }, setDirty]);
 
     useEffect(() => {
         if (dirty) {
@@ -36,7 +37,7 @@ const AuthProvider = ({ children }) => {
         </div>
     )
     else return (
-        <AuthContext.Provider value={[{ ...user, loggedIn }, setDirty]}>
+        <AuthContext.Provider value={userInfo}>
             {children}
         </AuthContext.Provider>
     )

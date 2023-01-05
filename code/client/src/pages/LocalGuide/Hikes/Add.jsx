@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import api from '@services/api';
@@ -20,7 +20,7 @@ const AddHike = () => {
     const navigate = useNavigate();
 
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
 
         const data = new FormData();
@@ -47,12 +47,16 @@ const AddHike = () => {
                     theme: "colored",
                 });
             });
-    };
+    });
 
-    const handleFileChange = (event) => {
+    const updateDescription = useCallback((event) => {
+        setDescription(event.target.value);
+    });
+
+    const handleFileChange = useCallback((event) => {
         if (event.target.files && event.target.files[0])
             setGpxFile(event.target.files[0]);
-    };
+    });
 
     return (
         <>
@@ -108,7 +112,7 @@ const AddHike = () => {
                     </Form.Group>
                     <Form.Group required className='mb-2'>
                         <Form.Label htmlFor='description'>Description:</Form.Label>
-                        <Form.Control id="description" required type='text-area' onChange={event => setDescription(event.target.value)} />
+                        <Form.Control id="description" required type='text-area' onChange={updateDescription} />
                     </Form.Group>
                     <Form.Group required className='mb-2'>
                         <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>

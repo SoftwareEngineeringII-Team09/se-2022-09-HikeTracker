@@ -28,7 +28,7 @@ const Details = ({ hike }) => {
             return toast.error("End time must be after start time", { theme: 'colored' });
 
         setLoading(true);
-        api.selectedHikes.terminateHike(selectedHikeId, terminateTime.toLocaleString("it-IT"))
+        api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
             .then(() => {
                 setHikeStarted(false);
                 toast.success("Hike terminated", { theme: 'colored' });

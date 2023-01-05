@@ -2,7 +2,7 @@ import { Spinner, Alert, Container, Row, Col, Button } from 'react-bootstrap';
 import HikeEndpoint from '@components/features/HikeDetails/HikeEndpoint';
 import TrackMap from '@components/features/HikeDetails/TrackMap';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@contexts/authContext'
 import api from '@services/api';
@@ -89,7 +89,7 @@ const UpdateEndpoints = () => {
         }
     }, [hikeId, trackUpdated]); // eslint-disable-line
 
-    const savePoints = () => {
+    const savePoints = useCallback(() => {
 
         const pointsUpdated = !startPoint.hasOwnProperty('original') || !endPoint.hasOwnProperty('original');
 
@@ -122,7 +122,7 @@ const UpdateEndpoints = () => {
             .finally(() => {
                 setLoadingUpdate(false);
             });
-    };
+    });
 
     if (loading)
         return <Spinner />;
