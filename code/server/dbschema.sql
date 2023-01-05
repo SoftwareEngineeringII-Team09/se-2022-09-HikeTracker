@@ -130,7 +130,6 @@ CREATE TABLE IF NOT EXISTS "SelectedHike" (
     PRIMARY KEY("selectedHikeId"),
     FOREIGN KEY("hikerId") REFERENCES "User"("userId"),
     FOREIGN KEY("hikeId") REFERENCES "Hike"("hikeId")
-   
 );
 
 
@@ -593,3 +592,14 @@ INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
 VALUES(3, 2, "10:00", "21:00");
 INSERT INTO "HutDailySchedule"("hutId", "day","openTime","closeTime")
 VALUES(3, 5, "8:15", "18:00");
+
+INSERT INTO "SelectedHike"("selectedHikeId", "hikeId", "hikerId", "status", "startTime", "endTime")
+VALUES(1, 1, 1, "finished", "01/01/2023, 01:01:01", "01/01/2023, 02:02:02");
+INSERT INTO "SelectedHike"("selectedHikeId", "hikeId", "hikerId", "status", "startTime", "endTime")
+VALUES(2, 2, 1, "finished", "02/02/2023, 03:03:03", "02/02/2023, 04:04:04");
+INSERT INTO "SelectedHike"("selectedHikeId", "hikeId", "hikerId", "status", "startTime", "endTime")
+VALUES(3, 3, 1, "finished", "03/03/2023, 05:05:05", "03/03/2023, 06:06:06");
+INSERT INTO "SelectedHike"("selectedHikeId", "hikeId", "hikerId", "status", "startTime", "endTime")
+VALUES(4, 4, 1, "ongoing", "01/01/2023, 01:01:01", "01/01/2023, 02:02:02");
+INSERT INTO "SelectedHike"("selectedHikeId", "hikeId", "hikerId", "status", "startTime", "endTime")
+VALUES(5, 5, 1, "ongoing", "01/01/2023, 01:01:01", "01/01/2023, 02:02:02");
