@@ -5,8 +5,9 @@ const PersistentManager = require("../dao/PersistentManager");
 const Hike = require("../dao/model/Hike");
 const User = require("../dao/model/User");
 const dayjs = require('dayjs');
-const customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
+const customParseFormat = require('dayjs/plugin/customParseFormat');
+dayjs.extend(customParseFormat);
+
 
 
 class SelectedHikeManager {
@@ -160,6 +161,24 @@ class SelectedHikeManager {
 
 
 async startHike(hikeId, startTime,hikerId) {
+  
+  console.log("LM:")
+  const startTimeObject = dayjs(startTime,['D/M/yyyy, HH:mm:ss','DD/MM/yyyy, HH:mm:ss' ]);
+  const NowObject =  dayjs();
+    if (startTimeObject.isAfter(NowObject)) {
+      return ({
+        code: 422,
+        result: `startTime = ${startTime} is after current Time`
+      });
+    }
+    const selectedHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
+    //console.log(selectedHike)
+    if (selectedHike != null) {
+      return Promise.reject({
+        code: 400,
+        result: `This hiker already had a started hike`
+      });
+    }
     const newSelectedHike =  new SelectedHike(
       null,
       hikeId,

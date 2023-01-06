@@ -21,7 +21,8 @@ router.post(
       const error = validationResult(req);
       if (!error.isEmpty()) 
         return res.status(422).json({ error: error.array()[0] });
-      const hikerId = req.user.userId;
+      //const hikerId = req.user.userId;
+      const hikerId = 1;
       let selectedHikeId = await SelectedHikeManager.startHike(req.body.hikeId, req.body.time, hikerId);
 
       return res.status(201).send({ selectedHikeId });;
