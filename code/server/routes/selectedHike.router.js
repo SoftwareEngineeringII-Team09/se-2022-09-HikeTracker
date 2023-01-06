@@ -15,7 +15,6 @@ router.post(
   auth.withRole(["Hiker"]),
   body("time").isString(),
   async (req, res) => {
-
     try {
       // Validation of body and/or parameters
       const error = validationResult(req);
@@ -23,10 +22,6 @@ router.post(
         return res.status(422).json({ error: error.array()[0] });
       const hikerId = req.user.userId;
       let selectedHikeId = await SelectedHikeManager.startHike(req.body.hikeId, req.body.time, hikerId);
-      // if (selectedHikeId.code)
-      // return res.status(selectedHikeId.code ).send(selectedHikeId.result);
-      // else
-      // return res.status(201).send({ selectedHikeId });
       return res.status(201).send({ selectedHikeId });
     } catch (exception) {
       const errorCode = exception.code ?? 503;
