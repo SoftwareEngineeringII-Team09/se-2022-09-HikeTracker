@@ -620,60 +620,18 @@ class HikeManager {
     let newMaxElevation = 0;
     let newMinElevation = 10000;
     gpx.tracks[0].points.forEach((point, index) => {
-      if (index !== 0 && point.ele > newMaxElevation) {
-        newMaxElevation = point.ele;
-      }
-      if (index !== 0 && point.ele < newMinElevation) {
-        newMinElevation = point.ele;
+      if (index != 0) {
+        if (point.ele > newMaxElevation) {
+          newMaxElevation = point.ele;
+        }
+        if (point.ele < newMinElevation) {
+          newMinElevation = point.ele;
+        }
       }
     });
 
-    // Check if the start point is a hut or a parking lot and update the hike
-    if (newStartPoint.type === "hut") {
-      const hut = await HutManager.loadOneByAttributeHut("hutId", newStartPoint.id);
-      const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      await PointManager.updatePoint({ ...hutPoint, type: "start point" }, "pointId", hutPoint.pointId);
-
-      // Compute new length
-      const distHutPointSecondPoint = geodist({ lat: hutPoint.latitude, lon: hutPoint.longitude }, { lat: secondTrackPoint.lat, lon: secondTrackPoint.lon }, { exact: true, unit: 'km' });
-      const newLength = hike.length - distOldStartPointSecondPoint + distHutPointSecondPoint;
-
-      // Compute new ascent and new maxElevation
-      if (hut.altitude > newMaxElevation) {
-        newMaxElevation = hut.altitude;
-      } else if (hut.altitude < newMinElevation) {
-        newMinElevation = hut.altitude;
-      }
-      const newAscent = newMaxElevation - newMinElevation;
-
-      // Compute new expectedTime
-      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
-      const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
-
-      await this.updateHike({ ...hike, startPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId);
-    } else if (newStartPoint.type === "parking lot") {
-      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newStartPoint.id);
-      const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      await PointManager.updatePoint({ ...parkingLotPoint, type: "start point" }, "pointId", parkingLotPoint.pointId);
-
-      // Compute new length
-      const distParkingLotPointSecondPoint = geodist({ lat: parkingLotPoint.latitude, lon: parkingLotPoint.longitude }, { lat: secondTrackPoint.lat, lon: secondTrackPoint.lon }, { exact: true, unit: 'km' });
-      const newLength = hike.length - distOldStartPointSecondPoint + distParkingLotPointSecondPoint;
-
-      // Compute new ascent and newMaxElevation
-      if (parkingLot.altitude && parkingLot.altitude > newMaxElevation) {
-        newMaxElevation = parkingLot.altitude;
-      } else if (parkingLot.altitude && parkingLot.altitude < newMinElevation) {
-        newMinElevation = parkingLot.altitude;
-      }
-      const newAscent = newMaxElevation - newMinElevation;
-
-      // Compute new expectedTime
-      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
-      const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
-
-      await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId)
-    }
+    // Update hike data after linking of a new start point
+    await this.updateHikeDataAfterLinking(newStartPoint, secondTrackPoint, "start point", distOldStartPointSecondPoint, hike, { minElevation: newMinElevation, maxElevation: newMaxElevation }, expectedTimeMinutes)
 
     // Update the old start point
     if (!oldStartPoint.parkingLot && !oldStartPoint.hut) {
@@ -702,24 +660,44 @@ class HikeManager {
     let newMaxElevation = 0;
     let newMinElevation = 10000;
     gpx.tracks[0].points.forEach((point, index, array) => {
-      if (index != array.length - 1 && point.ele > newMaxElevation) {
-        newMaxElevation = point.ele;
-      }
-      if (index != array.length - 1 && point.ele < newMinElevation) {
-        newMinElevation = point.ele;
+      if (index != array.length - 1) {
+        if (point.ele > newMaxElevation) {
+          newMaxElevation = point.ele;
+        }
+        if (point.ele < newMinElevation) {
+          newMinElevation = point.ele;
+        }
       }
     });
 
+    // Update hike data after linking of a new end point
+    await this.updateHikeDataAfterLinking(newEndPoint, secondLastTrackPoint, "end point", distOldEndPointSecondLastPoint, hike, { minElevation: newMinElevation, maxElevation: newMaxElevation }, expectedTimeMinutes);
+
+    // Update the old end point
+    if (!oldEndPoint.parkingLot && !oldEndPoint.hut) {
+      await PointManager.deletePoint("pointId", oldEndPoint.pointId);
+    } else if (oldEndPoint.parkingLot) {
+      await PointManager.updatePoint({ ...oldEndPoint, type: "parking lot" }, "pointId", oldEndPoint.pointId);
+    } else if (oldEndPoint.hut) {
+      await PointManager.updatePoint({ ...oldEndPoint, type: "hut" }, "pointId", oldEndPoint.pointId);
+    }
+
+    return Promise.resolve();
+  }
+
+  async updateHikeDataAfterLinking(newLinkedPoint, distanceFrom, type, oldDist, hike, actualElevations, expectedTimeMinutes) {
+    let newMinElevation = actualElevations.minElevation;
+    let newMaxElevation = actualElevations.maxElevation;
 
     // Check if the end point is a hut or a parking lot and update the hike
-    if (newEndPoint.type === "hut") {
-      const hut = await HutManager.loadOneByAttributeHut("hutId", newEndPoint.id);
+    if (newLinkedPoint.type === "hut") {
+      const hut = await HutManager.loadOneByAttributeHut("hutId", newLinkedPoint.id);
       const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      await PointManager.updatePoint({ ...hutPoint, type: "end point" }, "pointId", hutPoint.pointId);
+      await PointManager.updatePoint({ ...hutPoint, type: type }, "pointId", hutPoint.pointId);
 
       // Compute new length
-      const distHutPointSecondLastPoint = geodist({ lat: hutPoint.latitude, lon: hutPoint.longitude }, { lat: secondLastTrackPoint.lat, lon: secondLastTrackPoint.lon }, { exact: true, unit: 'km' });
-      const newLength = hike.length - distOldEndPointSecondLastPoint + distHutPointSecondLastPoint;
+      const newDist = geodist({ lat: hutPoint.latitude, lon: hutPoint.longitude }, { lat: distanceFrom.lat, lon: distanceFrom.lon }, { exact: true, unit: 'km' });
+      const newLength = hike.length - oldDist + newDist;
 
       // Compute new ascent and new maxElevation
       if (hut.altitude > newMaxElevation) {
@@ -733,38 +711,35 @@ class HikeManager {
       const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
       const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
 
-      await this.updateHike({ ...hike, endPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId);
-    } else if (newEndPoint.type === "parking lot") {
-      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newEndPoint.id);
+      let newHike = type === "start point" ? { ...hike, startPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString } :
+        { ...hike, endPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString };
+      await this.updateHike(newHike, "hikeId", hike.hikeId);
+    } else if (newLinkedPoint.type === "parking lot") {
+      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newLinkedPoint.id);
       const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      await PointManager.updatePoint({ ...parkingLotPoint, type: "end point" }, "pointId", parkingLotPoint.pointId);
+      await PointManager.updatePoint({ ...parkingLotPoint, type: type }, "pointId", parkingLotPoint.pointId);
 
       // Compute new length
-      const distParkingLotPointSecondLastPoint = geodist({ lat: parkingLotPoint.latitude, lon: parkingLotPoint.longitude }, { lat: secondLastTrackPoint.lat, lon: secondLastTrackPoint.lon }, { exact: true, unit: 'km' });
-      const newLength = hike.length - distOldEndPointSecondLastPoint + distParkingLotPointSecondLastPoint;
+      const newDist = geodist({ lat: parkingLotPoint.latitude, lon: parkingLotPoint.longitude }, { lat: distanceFrom.lat, lon: distanceFrom.lon }, { exact: true, unit: 'km' });
+      const newLength = hike.length - oldDist + newDist;
 
       // Compute new ascent and new maxElevation
-      if (parkingLot.altitude && parkingLot.altitude > newMaxElevation) {
-        newMaxElevation = parkingLot.altitude;
-      } else if (parkingLot.altitude && parkingLot.altitude < newMinElevation) {
-        newMinElevation = parkingLot.altitude;
+      if (parkingLot.altitude) {
+        if (parkingLot.altitude > newMaxElevation) {
+          newMaxElevation = parkingLot.altitude;
+        } else if (parkingLot.altitude < newMinElevation) {
+          newMinElevation = parkingLot.altitude;
+        }
       }
       const newAscent = newMaxElevation - newMinElevation;
 
       // Compute new expectedTime
-      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length; 
+      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
       const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
 
-      await this.updateHike({ ...hike, endPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId)
-    }
-
-    // Update the old end point
-    if (!oldEndPoint.parkingLot && !oldEndPoint.hut) {
-      await PointManager.deletePoint("pointId", oldEndPoint.pointId);
-    } else if (oldEndPoint.parkingLot) {
-      await PointManager.updatePoint({ ...oldEndPoint, type: "parking lot" }, "pointId", oldEndPoint.pointId);
-    } else if (oldEndPoint.hut) {
-      await PointManager.updatePoint({ ...oldEndPoint, type: "hut" }, "pointId", oldEndPoint.pointId);
+      let newHike = type === "start point" ? { ...hike, startPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString } :
+        { ...hike, endPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString };
+      await this.updateHike(newHike, "hikeId", hike.hikeId);
     }
 
     return Promise.resolve();
