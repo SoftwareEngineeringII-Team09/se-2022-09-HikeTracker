@@ -164,7 +164,7 @@ async startHike(hikeId, startTime,hikerId) {
   const startTimeObject = dayjs(startTime,['D/M/YYYY, HH:mm:ss','DD/MM/YYYY, HH:mm:ss' ],true);
   const NowObject =  dayjs();
     if (startTimeObject.isAfter(NowObject)) {
-      return ({
+      return Promise.reject({
         code: 422,
         result: `startTime = ${startTime} is after current Time`
       });
