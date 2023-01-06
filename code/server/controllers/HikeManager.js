@@ -619,14 +619,12 @@ class HikeManager {
     const expectedTimeMinutes = dayjs.duration({ hours: expectedTimeObject.hour(), minutes: expectedTimeObject.minute() }).asMinutes();
     let newMaxElevation = 0;
     let newMinElevation = 10000;
-    gpx.tracks[0].points.forEach((point, index) => { 
-      if (index != 0) {
-        if (point.ele > newMaxElevation) {
-          newMaxElevation = point.ele;
-        }
-        if (point.ele < newMinElevation) {
-          newMinElevation = point.ele;
-        }
+    gpx.tracks[0].points.forEach((point, index) => {
+      if (index !== 0 && point.ele > newMaxElevation) {
+        newMaxElevation = point.ele;
+      }
+      if (index !== 0 && point.ele < newMinElevation) {
+        newMinElevation = point.ele;
       }
     });
 
@@ -649,7 +647,7 @@ class HikeManager {
       const newAscent = newMaxElevation - newMinElevation;
 
       // Compute new expectedTime
-      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length; 
+      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
       const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
 
       await this.updateHike({ ...hike, startPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId);
@@ -663,17 +661,15 @@ class HikeManager {
       const newLength = hike.length - distOldStartPointSecondPoint + distParkingLotPointSecondPoint;
 
       // Compute new ascent and newMaxElevation
-      if (parkingLot.altitude) {
-        if (parkingLot.altitude > newMaxElevation) {
-          newMaxElevation = parkingLot.altitude;
-        } else if (parkingLot.altitude < newMinElevation) {
-          newMinElevation = parkingLot.altitude;
-        }
+      if (parkingLot.altitude && parkingLot.altitude > newMaxElevation) {
+        newMaxElevation = parkingLot.altitude;
+      } else if (parkingLot.altitude && parkingLot.altitude < newMinElevation) {
+        newMinElevation = parkingLot.altitude;
       }
       const newAscent = newMaxElevation - newMinElevation;
 
       // Compute new expectedTime
-      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length; 
+      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
       const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
 
       await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId)
@@ -705,14 +701,12 @@ class HikeManager {
     const expectedTimeMinutes = dayjs.duration({ hours: expectedTimeObject.hour(), minutes: expectedTimeObject.minute() }).asMinutes();
     let newMaxElevation = 0;
     let newMinElevation = 10000;
-    gpx.tracks[0].points.forEach((point, index, array) => { 
-      if (index != array.length - 1) {
-        if (point.ele > newMaxElevation) {
-          newMaxElevation = point.ele;
-        }
-        if (point.ele < newMinElevation) {
-          newMinElevation = point.ele;
-        }
+    gpx.tracks[0].points.forEach((point, index, array) => {
+      if (index != array.length - 1 && point.ele > newMaxElevation) {
+        newMaxElevation = point.ele;
+      }
+      if (index != array.length - 1 && point.ele < newMinElevation) {
+        newMinElevation = point.ele;
       }
     });
 
@@ -736,7 +730,7 @@ class HikeManager {
       const newAscent = newMaxElevation - newMinElevation;
 
       // Compute new expectedTime
-      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length; 
+      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
       const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
 
       await this.updateHike({ ...hike, endPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString }, "hikeId", hike.hikeId);
@@ -750,12 +744,10 @@ class HikeManager {
       const newLength = hike.length - distOldEndPointSecondLastPoint + distParkingLotPointSecondLastPoint;
 
       // Compute new ascent and new maxElevation
-      if (parkingLot.altitude) {
-        if (parkingLot.altitude > newMaxElevation) {
-          newMaxElevation = parkingLot.altitude;
-        } else if (parkingLot.altitude < newMinElevation) {
-          newMinElevation = parkingLot.altitude;
-        }
+      if (parkingLot.altitude && parkingLot.altitude > newMaxElevation) {
+        newMaxElevation = parkingLot.altitude;
+      } else if (parkingLot.altitude && parkingLot.altitude < newMinElevation) {
+        newMinElevation = parkingLot.altitude;
       }
       const newAscent = newMaxElevation - newMinElevation;
 
@@ -801,7 +793,7 @@ class HikeManager {
           title: hike.title,
           writer: {
             writerId: writer.userId,
-            writerName: `${writer.firstname} ${writer.lastname}`, 
+            writerName: `${writer.firstname} ${writer.lastname}`,
           },
           city: hike.city,
           province: hike.province,
@@ -822,7 +814,7 @@ class HikeManager {
           }
         };
         return hike;
-      })      
+      })
     )
 
     return Promise.resolve(hikes);
