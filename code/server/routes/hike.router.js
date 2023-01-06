@@ -309,5 +309,22 @@ router.put(
   }
 );
 
+// GET the list of all hikes completed
+router.get("/all/completed", 
+  auth.withAuth,
+  auth.withRole(["Hiker"]), 
+  async (req, res) => {
+  try {
+    const hikerId = req.user.userId;
+    const hikes = await HikeManager.getAllCompletedHikes(hikerId);
+    return res.status(200).json(hikes);
+  } catch (exception) {
+    console.log(exception);
+    const errorCode = exception.code ?? 500;
+    const errorMessage = exception.result ?? "Something went wrong, try again";
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+});
+
 
 module.exports = router;
