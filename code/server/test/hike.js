@@ -1,6 +1,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const Hike = require("../dao/model/Hike");
+const SelectedHike = require("../dao/model/SelectedHike");
 const Point = require("../dao/model/Point");
 const Hut = require("../dao/model/Hut");
 const ParkingLot = require("../dao/model/ParkingLot");
@@ -22,7 +23,9 @@ const testHutImage = "hut1.jpg";
 const testEditableGpx = "test_editable.gpx";
 const testUser = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
 const notAuthorizedUser = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
+const testUserHiker = new User(3, "test3@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
 const credentials = { username: testUser.email, password: "Password1234." };
+const credentialsHiker = { username: testUserHiker.email, password: "Password1234." };
 const wrongCredentials = { username: testUser.email, password: "wrongPassword" };
 const notAuthorizedCredentials = { username: notAuthorizedUser.email, password: "Password1234." };
 const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.0, 10.0);
@@ -49,6 +52,11 @@ const testRefPointList = [{ name: "testRefname1", coords: [111,222]},{name: "tes
 const testHutList = [1,2]
 const testRefPoint = new Point(10, "reference point", 0, 0, null, 10.0, 10.0);
 const testHikeRefPoint = new HikeRefPoint(testHike2.hikeId,testRefPoint.pointId);
+const testSelectedHike1 = new SelectedHike(1, testHike1.hikeId, testUserHiker.userId, "finished", "01/01/2023, 01:01:01", "01/01/2023, 02:02:02");
+const testSelectedHike2 = new SelectedHike(2, testHike1.hikeId, testUserHiker.userId, "finished", "01/01/2023, 03:03:03", "01/01/2023, 04:04:04");
+const testSelectedHike3 = new SelectedHike(3, testHike1.hikeId, testUserHiker.userId, "ongoing", "01/01/2023, 01:01:01", null);
+const testSelectedHike4 = new SelectedHike(4, testHike1.hikeId, testUserHiker.userId, "ongoing", "01/01/2023, 02:02:02", null);
+const testFinishedHikes = [testSelectedHike1, testSelectedHike2];
 
 
 /*****************************************************************************************************
@@ -361,6 +369,48 @@ describe("GET /api/hikes/:hikeId/linkable-huts", function () {
 
 	Utils.getPotentialHut(agent, "return all potential huts", 200, credentials, testHike1.hikeId);
 	
+});
+
+/*****************************************************************************************************
+*              GET /api/hikes/all/completed
+*****************************************************************************************************/
+describe("GET /api/hikes/all/completed", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, testUserHiker)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+			PersistentManager.store(Point.tableName, testStartPoint3),
+			PersistentManager.store(Point.tableName, testEndPoint3)
+		]);
+		await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+			PersistentManager.store(Hike.tableName, testHike3)
+		]);
+		await Promise.all([
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike1),
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike2),
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike3),
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike4)
+		]);
+	});
+
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.getAllCompletedHikes(agent, "return the list of completed hikes", 200, credentialsHiker, testFinishedHikes.length);
+	Utils.getAllCompletedHikes(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testFinishedHikes.length);
+	Utils.getAllCompletedHikes(agent, "return 401 because of not authorized user", 401, credentials, testFinishedHikes.length);
 });
 
 

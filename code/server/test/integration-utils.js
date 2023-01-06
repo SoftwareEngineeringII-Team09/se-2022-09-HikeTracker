@@ -177,6 +177,25 @@ exports.getPotentialHut = function (agent, itShould, expectedHTTPStatus, credent
 		}).catch(loginError => console.log(loginError));
 	})
 }
+
+exports.getAllCompletedHikes = function (agent, itShould, expectedHTTPStatus, credentials, expectedLength) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/hikes/all/completed`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					if (expectedHTTPStatus !== 401) {
+						res.body.should.be.a("array");
+						res.body.length.should.be.eql(expectedLength);
+					}
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
 /*****************************************************************************************************
 *              Hut
 *****************************************************************************************************/
