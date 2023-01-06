@@ -193,7 +193,45 @@ describe("GET /api/hikes", function () {
 	});
 
 	Utils.getAllHikes(agent, "return the list of hikes", 200, testHikes.length);
+
 });
+
+
+
+/*****************************************************************************************************
+*              GET /api/hikes/writers/:writerId
+*****************************************************************************************************/
+describe("GET /api/writers/:writerId", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await PersistentManager.store(User.tableName, testUser);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+			PersistentManager.store(Point.tableName, testStartPoint3),
+			PersistentManager.store(Point.tableName, testEndPoint3)
+		]);
+		await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+			PersistentManager.store(Hike.tableName, testHike3)
+		]);
+	});
+
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.getHikeByWriterId(agent, "return all hikes written by user", 200, credentials, testUser.userId);	
+	Utils.getHikeByWriterId(agent, "return 401 because of not authenticated user", 401, wrongCredentials,testUser.userId);
+	Utils.getHikeByWriterId(agent, "return 422 because of wrong userId formate", 422, credentials, "wrongUserIdFormat");
+});
+
+
 
 
 /*****************************************************************************************************
@@ -224,7 +262,7 @@ describe("GET /api/hikes/:hikeId", function () {
 		await Utils.clearAll();
 	});
 
-	Utils.getHikeById(agent, "return the hike with hikeId = :hikeId", 200, testHike1.hikeId, testHike1);
+	Utils.getHikeById(agent, "return the hike with hikeId = :hikeId", 200, testHike1.hikeId, testHike1);	
 	Utils.getHikeById(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, notExistingHike);
 	Utils.getHikeById(agent, "return 422 because of wrong :hikeId format", 422, "wrongHikeIdFormat");
 });
