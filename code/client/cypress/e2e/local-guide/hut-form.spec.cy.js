@@ -17,7 +17,7 @@ describe('Create new hut', () => {
       cy.findByLabelText(/name/i).type(json.hutName)
       cy.findByLabelText(/region/i).select(json.region)
       cy.findByLabelText(/province/i).select(json.province)
-      //cy.findByLabelText(/city/i).select(json.city)
+      cy.findByLabelText(/city/i).select(1)
       cy.findByLabelText(/altitude/i).type(json.altitude)
       cy.findByLabelText(/phone number/i).type(json.phone)
       cy.findByLabelText(/number of beds/i).type(json.numOfBeds)
@@ -26,7 +26,7 @@ describe('Create new hut', () => {
       cy.get("div.leaflet-container").click({ force: true })
 
       cy.findByRole('button', { name: /create new hut/i }).click()
-      //cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', `Hut ${json.hutName} has been correctly added`);
+      cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', `The new hut has been correctly added`);
   })
 
   });
