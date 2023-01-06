@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import { Formik, Form } from 'formik'
 
 import { MarkerOnPoint } from '@components/features/Map'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import { Select, Input } from '@components/form'
+import { Select, Input, LoadingButton } from '@components/form'
 import { HutSchema } from '@lib/validations'
 
 import regions from '@data/locations/regioni'
@@ -18,29 +17,37 @@ import api from '@services/api'
 const AddHut = () => {
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
+    const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate()
 
-    const handleSubmit = (values) => {
-        api.huts.createHut({
-            hutName: values.hutName,
-            city: values.city,
-            province: values.province,
-            region: values.region,
-            numOfBeds: values.numOfBeds,
-            cost: values.cost,
-            latitude,
-            longitude,
-            altitude: values.altitude,
-            phone: values.phone,
-            email: values.email,
-            website: values.website
-        })
-            .then(() => {
-                toast.success("The new hut has been correctly added", { theme: 'colored' })
-                navigate('/', { replace: true })
+    const handleSubmit = useCallback(
+        (values) => {
+            setLoading(true);
+            api.huts.createHut({
+                hutName: values.hutName,
+                city: values.city,
+                province: values.province,
+                region: values.region,
+                numOfBeds: values.numOfBeds,
+                cost: values.cost,
+                latitude,
+                longitude,
+                altitude: values.altitude,
+                phone: values.phone,
+                email: values.email,
+                website: values.website
             })
-            .catch(err => console.log(err))
-    }
+                .then(() => {
+                    toast.success("The new hut has been correctly added", { theme: 'colored' })
+                    navigate('/', { replace: true })
+                })
+                .catch(err => toast.error(err, { theme: 'colored' }))
+                .finally(() => {
+                    setLoading(false);
+                })
+        }
+    );
 
     const handleClickOnMap = (point) => {
         setLatitude(point.latitude)
@@ -68,7 +75,7 @@ const AddHut = () => {
                 <div className='mb-5'>
                     <h1 className='fw-black m-0 display-1'>Insert hut data</h1>
                 </div>
-                <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={(values) => handleSubmit(values)}>
+                <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={handleSubmit}>
                     {({ values }) => {
                         return (<Form data-testid="hut-form">
                             <Input id="hutName" name="hutName" type="text" label="Name:" placeholder="Hut name" className="mb-3" />
@@ -95,15 +102,12 @@ const AddHut = () => {
                                     <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png" />
                                 </MapContainer>
                             </div>
-
                             <Input id="altitude" name="altitude" type="number" label="Altitude: (m)" placeholder="Hut name" min={0} max={10000} step={1} className="mb-3" />
                             <Input id="numOfBeds" name="numOfBeds" type="number" label="Number of beds:" placeholder="Hut name" min={0} step={1} className="mb-3" />
                             <Input id="phone" name="phone" type="string" label="Phone number:" placeholder="Phone number" className="mb-3" />
                             <Input id="email" name="email" type="email" label="Email:" placeholder="Email" className="mb-3" />
                             <Input id="website" name="website" type="string" label="Website: (optional)" placeholder="Website" className="mb-3" />
-                            <Button variant="primary-dark fw-bold" type="submit" size='lg' className="w-100 py-3 fw-bold my-3">
-                                Create new hut
-                            </Button>
+                            <LoadingButton type="submit" text="Create new hut" loading={loading} />
                         </Form>
                         )
                     }}

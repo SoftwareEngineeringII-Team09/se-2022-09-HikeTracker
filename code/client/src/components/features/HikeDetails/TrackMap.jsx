@@ -31,8 +31,8 @@ const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], p
                         </Popup>
                     </Marker>
                 ))}
-                {potentials.map((potential, idx) => (
-                    <Marker key={`potential-${idx}`} position={potential.coords}>
+                {potentials.map((potential) => (
+                    <Marker key={potential.id + potential.pointType + (potential.potential || "")} position={potential.coords}>
                         <Popup className='text-center'>
                             <span className='fw-bold'>{potential.name}</span>
                             <Button className='d-block mt-2' onClick={() => handleSetAsStartEndPoint(potential)}>

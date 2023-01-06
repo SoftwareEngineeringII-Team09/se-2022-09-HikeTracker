@@ -130,7 +130,6 @@ CREATE TABLE IF NOT EXISTS "SelectedHike" (
     PRIMARY KEY("selectedHikeId"),
     FOREIGN KEY("hikerId") REFERENCES "User"("userId"),
     FOREIGN KEY("hikeId") REFERENCES "Hike"("hikeId")
-   
 );
 
 

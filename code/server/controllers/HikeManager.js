@@ -15,6 +15,7 @@ const ParkingLotManager = require("./ParkingLotManager");
 const HutManager = require("./HutManager");
 const HikeRefPointManager = require("./HikeRefPointManager");
 const HikeHutManager = require("./HikeHutManager");
+const SelectedHikeManager = require("./SelectedHikeManager");
 
 dayjs.extend(duration);
 const gpx = new gpxParser();
@@ -775,6 +776,56 @@ class HikeManager {
     }
 
     return Promise.resolve();
+  }
+
+  // Return the list of all the completed hikes
+  async getAllCompletedHikes(hikerId) {
+    let hikes = await SelectedHikeManager.loadAllByAttributeSelectedHike("hikerId", hikerId).then((hikes) => hikes.filter((hike) => hike.status === "finished"));
+    hikes = await Promise.all(
+      hikes.map(async (h) => {
+        let hike = await this.loadOneByAttributeHike("hikeId", h.hikeId);
+        const writer = await UserManager.loadOneByAttributeUser(
+          "userId",
+          hike.writerId
+        );
+        const startPoint = await PointManager.loadOneByAttributePoint(
+          "pointId",
+          hike.startPoint
+        );
+        const expectedTime = hike.expectedTime.split(":");
+        const hours = expectedTime[0];
+        const minutes = expectedTime[1];
+
+        hike = {
+          hikeId: hike.hikeId,
+          title: hike.title,
+          writer: {
+            writerId: writer.userId,
+            writerName: `${writer.firstname} ${writer.lastname}`, 
+          },
+          city: hike.city,
+          province: hike.province,
+          region: hike.region,
+          length: hike.length,
+          expectedTime: {
+            hours: hours,
+            minutes: minutes,
+          },
+          startTime: h.startTime,
+          endTime: h.endTime,
+          ascent: hike.ascent,
+          maxElevation: hike.maxElevation,
+          difficulty: hike.difficulty,
+          description: hike.description,
+          startPoint: {
+            coords: [startPoint.latitude, startPoint.longitude]
+          }
+        };
+        return hike;
+      })      
+    )
+
+    return Promise.resolve(hikes);
   }
 }
 
