@@ -5,7 +5,7 @@ const SelectedHikeManager = require("../controllers/SelectedHikeManager");
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-
+const sanitizeHtml = require('sanitize-html');
 
 
 // POST add startTime for a given selectedHIke
@@ -22,7 +22,7 @@ router.post(
         return res.status(422).json({ error: error.array()[0] });
       const hikerId = req.user.userId;
       let selectedHikeId = await SelectedHikeManager.startHike(req.body.hikeId, req.body.time, hikerId);
-      return res.status(201).send({ selectedHikeId });
+      return res.status(201).send(sanitizeHtml({ selectedHikeId }));
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =
