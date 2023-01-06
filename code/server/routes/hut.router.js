@@ -6,16 +6,18 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 const multer = require("multer");
-const storageImage = multer.diskStorage({
-  destination: "./hutImage",
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
-  },
-});
-const uploadImage = multer({
-  storage: storageImage,
-});
 
+const uploadImage = multer({
+  storage: multer.diskStorage({
+    destination: "./hutImage",
+    filename: function (req, file, callback) {
+      callback(null, file.originalname);
+    }
+  }),
+  limits: {
+    fileSize: 8000000
+  }
+});
 
 
 // POST a hut
