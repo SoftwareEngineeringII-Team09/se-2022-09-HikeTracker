@@ -1,6 +1,7 @@
 const PersistentManager = require("../../dao/PersistentManager");
 const Point = require("../../dao/model/Point");
 const Hike = require("../../dao/model/Hike");
+const SelectedHike = require("../../dao/model/SelectedHike");
 const User = require("../../dao/model/User");
 const Hut = require("../../dao/model/Hut");
 const ParkingLot = require("../../dao/model/ParkingLot");
@@ -52,6 +53,13 @@ const testNewStartEndPointHut = { type: "hut", id: testHut1.hutId };
 const testNewStartEndPointParkingLot = { type: "parking lot", id: testParkingLot1.parkingLotId };
 const expectedGetPotentialStartEndPointsProperties = ["potentialStartPoints", "potentialEndPoints"];
 const expectedGetPotentialHutProperties = ["potentialHuts"];
+const testSelectedHike1 = new SelectedHike(1, testHike1.hikeId, testUser.userId, "finished", "01/01/2023, 01:01:01", "01/01/2023, 02:02:02");
+const testSelectedHike2 = new SelectedHike(2, testHike1.hikeId, testUser.userId, "finished", "01/01/2023, 03:03:03", "01/01/2023, 04:04:04");
+const testSelectedHike3 = new SelectedHike(3, testHike1.hikeId, testUser.userId, "ongoing", "01/01/2023, 01:01:01", null);
+const testSelectedHike4 = new SelectedHike(4, testHike1.hikeId, testUser.userId, "ongoing", "01/01/2023, 02:02:02", null);
+const testFinishedHikes = [testSelectedHike1, testSelectedHike2];
+const expectedGetAllCompletedHikesProperties = [ "hikeId", "title", "writer", "city", "province", "region", "length", "expectedTime", "startTime", "endTime", "ascent", "maxElevation", "difficulty", "description", "startPoint"];
+
 
 /*****************************************************************************************************
  *              storeHike()
@@ -708,4 +716,46 @@ describe("Test updateEndPoint", () => {
   Utils.testUpdateEndPoint("set the parking lot as end point", testHike1.hikeId, testNewStartEndPointParkingLot);
   Utils.testUpdateEndPoint("set end point and update old hut end point", testHike2.hikeId, testNewStartEndPointHut);
   Utils.testUpdateEndPoint("set end point and update old parking lot end point", testHike3.hikeId, testNewStartEndPointHut);
+});
+
+/*****************************************************************************************************
+ *              getAllCompletedHikes()
+ *****************************************************************************************************/
+describe("Test getAllCompletedHikes", () => {
+  /* Test Setup */
+  beforeAll(async () => {
+    await Utils.clearAll();
+		await PersistentManager.store(User.tableName, testUser);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+			PersistentManager.store(Point.tableName, testStartPoint3),
+			PersistentManager.store(Point.tableName, testEndPoint3)
+		]);
+		await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+			PersistentManager.store(Hike.tableName, testHike3)
+		]);
+		await Promise.all([
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike1),
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike2),
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike3),
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike4)
+		]);
+  });
+
+  /* Test Teardown */
+  afterAll(async () => {
+    await Utils.clearAll();
+  });
+
+  Utils.testGetAllCompletedHikes(
+    "get all completed hikes",
+    testUser.userId,
+    testFinishedHikes.length,
+    expectedGetAllCompletedHikesProperties
+  );
 });
