@@ -51,7 +51,7 @@ const notExistingHike = testHike1.hikeId + testHike2.hikeId + testHike3.hikeId;
 const testRefPointList = [{ name: "testRefname1", coords: [111,222]},{name: "testRefname2",coords: [111,222]}];
 const testHutList = [1,2]
 const testRefPoint = new Point(10, "reference point", 0, 0, null, 10.0, 10.0);
-const testHikeRefPoint = new HikeRefPoint(testHike2.hikeId,testRefPoint.pointId);
+const testHikeRefPoint = new HikeRefPoint(testHike1.hikeId,testRefPoint.pointId);
 const testSelectedHike1 = new SelectedHike(1, testHike1.hikeId, testUserHiker.userId, "finished", "01/01/2023, 01:01:01", "01/01/2023, 02:02:02");
 const testSelectedHike2 = new SelectedHike(2, testHike1.hikeId, testUserHiker.userId, "finished", "01/01/2023, 03:03:03", "01/01/2023, 04:04:04");
 const testSelectedHike3 = new SelectedHike(3, testHike1.hikeId, testUserHiker.userId, "ongoing", "01/01/2023, 01:01:01", null);
@@ -104,15 +104,14 @@ describe("PUT /api/hikes/:hikeId/refPoints", function () {
 			PersistentManager.store(Point.tableName, testEndPoint1),
 			PersistentManager.store(Point.tableName, testStartPoint2),
 			PersistentManager.store(Point.tableName, testEndPoint2),
+			PersistentManager.store(Point.tableName, testRefPoint),	
 		]);
 		await Promise.all([			
 			PersistentManager.store(Hike.tableName, testHike1),
-			PersistentManager.store(Hike.tableName, testHike2),	
-			
+			//PersistentManager.store(Hike.tableName, testHike2),	
 		]);
 		
-		await Promise.all([
-			PersistentManager.store(Point.tableName, testRefPoint),		
+		await Promise.all([				
 			PersistentManager.store(HikeRefPoint.tableName, testHikeRefPoint),
 		]);
 	
@@ -122,10 +121,11 @@ describe("PUT /api/hikes/:hikeId/refPoints", function () {
 	this.afterAll(async () => {
 		await Utils.clearAll();
 	});
-	//add refpoint first time (post)
-	//Utils.putRefPoint(agent, "put a reference point list", 201, credentials, testHike1.hikeId, testRefPointList);
+	
+	Utils.putRefPoint(agent, "put a reference point list", 201, credentials, testHike1.hikeId, testRefPointList);
+	Utils.putRefPoint(agent, "return 401 because of not authenticated user", 401, wrongCredentials,  testHike1.hikeId, testRefPointList);
 	//update refpoint
-	//Utils.putRefPoint(agent, "delete existing data and put a reference point list", 201, credentials, testHike2.hikeId, testRefPointList);
+	Utils.putRefPoint(agent, "should return 422 as wrong hikeId format",422, credentials, "wrongHikeIdFormat", testRefPointList);
 });
 
 
@@ -159,6 +159,8 @@ describe("PUT /api/hikes/:hikeId/huts", function () {
 	});
 
 	Utils.putHutList(agent, "put a hut list", 201, credentials, testHike1.hikeId, testHutList);
+	Utils.putHutList(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId, testHutList);
+	Utils.putHutList(agent, "should return 422 as wrong hikeId format", 422, credentials, "wrongHikeIdFormat", testHutList);
 });
 
 
@@ -368,7 +370,8 @@ describe("GET /api/hikes/:hikeId/linkable-huts", function () {
 	});
 
 	Utils.getPotentialHut(agent, "return all potential huts", 200, credentials, testHike1.hikeId);
-	
+	Utils.getPotentialHut(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId);
+	Utils.getPotentialHut(agent, "return 422 as wronghikeIdFormat", 422, credentials, "wrongHikeIdFormat");
 });
 
 /*****************************************************************************************************
