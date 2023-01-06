@@ -161,9 +161,7 @@ class SelectedHikeManager {
 
 
 async startHike(hikeId, startTime,hikerId) {
-  
-  console.log("LM:")
-  const startTimeObject = dayjs(startTime,['D/M/yyyy, HH:mm:ss','DD/MM/yyyy, HH:mm:ss' ]);
+  const startTimeObject = dayjs(startTime,['D/M/YYYY, HH:mm:ss','DD/MM/YYYY, HH:mm:ss' ],true);
   const NowObject =  dayjs();
     if (startTimeObject.isAfter(NowObject)) {
       return ({
@@ -171,9 +169,9 @@ async startHike(hikeId, startTime,hikerId) {
         result: `startTime = ${startTime} is after current Time`
       });
     }
-    const selectedHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
-    //console.log(selectedHike)
-    if (selectedHike != null) {
+    const selectedHike = await this.existsSelectedHike("hikeId", hikeId);
+ 
+    if (selectedHike && selectedHike.endTime == null) {
       return Promise.reject({
         code: 400,
         result: `This hiker already had a started hike`

@@ -72,8 +72,8 @@ describe("POST /api/selectedHikes/start", function () {
 	Utils.startSelectedHike(agent, "start selected hike", 201, credentials, testHike1.hikeId, testSelectedHike1.startTime);
 	Utils.startSelectedHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId, testSelectedHike1.startTime);
 	Utils.startSelectedHike(agent, "return 401 because of not authenticated user", 401, notAuthorizedCredentials, testHike1.hikeId, testSelectedHike1.startTime);
-	
-
+	Utils.startSelectedHike(agent, "return 422 because start time is after the current time", 422, credentials,testHike1.hikeId, "2/1/2025, 14:25:34" );
+	Utils.startSelectedHike(agent, "return 400 because this hiker already has a ongoing hike", 400, credentials,testHike1.hikeId, "2/1/2023, 14:25:34" );
 	
 });
 
@@ -155,6 +155,7 @@ describe("PUT /api/selectedHikes/:selectedHikeId/terminate", function () {
 	Utils.putTerminateSelectedHike(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingSelectedHike, testSelectedHike3.endTime);
 	Utils.putTerminateSelectedHike(agent, "return 422 because of wrong :selectedHikeId format", 422, credentials, "wrongSelectedHikeIdFormat", testSelectedHike3.endTime);
 	Utils.putTerminateSelectedHike(agent, "return 422 because of wrong time type format", 422, credentials, testSelectedHike1.selectedHikeId, 1);
+	Utils.putTerminateSelectedHike(agent, "return 422 because of end time is early than start time", 422, credentials, testSelectedHike1.selectedHikeId, "01/01/1999, 01:01:01");
 });
 
 

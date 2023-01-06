@@ -66,6 +66,7 @@ router.post(
 
       return res.status(201).send({ hikeId });
     } catch (exception) {
+
       const errorCode = exception.code ?? 503;
       const errorMessage =
         exception.result ?? "Something went wrong, please try again";

@@ -21,13 +21,13 @@ router.post(
       const error = validationResult(req);
       if (!error.isEmpty()) 
         return res.status(422).json({ error: error.array()[0] });
-      //const hikerId = req.user.userId;
-      const hikerId = 1;
+      const hikerId = req.user.userId;
       let selectedHikeId = await SelectedHikeManager.startHike(req.body.hikeId, req.body.time, hikerId);
-
-      return res.status(201).send({ selectedHikeId });;
+      if (selectedHikeId.code)
+      return res.status(selectedHikeId.code ).send(selectedHikeId.result);
+      else
+      return res.status(201).send({ selectedHikeId });
     } catch (exception) {
-      console.log(exception);
       const errorCode = exception.code ?? 503;
       const errorMessage =
         exception.result ?? "Something went wrong, please try again";
@@ -51,8 +51,8 @@ router.get(
         return res.status(422).json({ error: error.array()[0] });
         const hikerId = req.user.userId;
 
-      let slecteHike = await SelectedHikeManager.loadStartedHike(hikerId);
-      return res.status(201).send(slecteHike);
+      let selecteHike = await SelectedHikeManager.loadStartedHike(hikerId);
+      return res.status(201).send(selecteHike);
     } catch (exception) {
       console.log(exception);
       const errorCode = exception.code ?? 503;
