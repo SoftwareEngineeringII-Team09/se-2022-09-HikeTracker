@@ -131,6 +131,7 @@ class SelectedHikeManager {
    * @param {any} value 
    * @returns a Promise with the list of SelectedHikes that satisfy the condition  
    */
+  
   async loadAllByAttributeSelectedHike(attributeName, value) {
     const exists = await this.existsSelectedHike(attributeName, value);
     if (!exists) {

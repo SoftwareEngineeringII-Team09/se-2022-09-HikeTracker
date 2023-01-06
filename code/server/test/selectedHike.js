@@ -72,6 +72,7 @@ describe("POST /api/selectedHikes/start", function () {
 	Utils.startSelectedHike(agent, "start selected hike", 201, credentials, testHike1.hikeId, testSelectedHike1.startTime);
 	Utils.startSelectedHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId, testSelectedHike1.startTime);
 	Utils.startSelectedHike(agent, "return 401 because of not authenticated user", 401, notAuthorizedCredentials, testHike1.hikeId, testSelectedHike1.startTime);
+	Utils.startSelectedHike(agent, "return 422 because wrong time format", 422, credentials,testHike1.hikeId, 12345 );
 	Utils.startSelectedHike(agent, "return 422 because start time is after the current time", 422, credentials,testHike1.hikeId, "2/1/2025, 14:25:34" );
 	Utils.startSelectedHike(agent, "return 400 because this hiker already has a ongoing hike", 400, credentials,testHike1.hikeId, "2/1/2023, 14:25:34" );
 	
@@ -111,7 +112,7 @@ describe("GET /api/selectedHikes/", function () {
 		await Utils.clearAll();
 	});
 
-	Utils.getSelectedHike(agent, "get selected hike", 201, credentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
+	Utils.getSelectedHike(agent, "get selected hike", 200, credentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
 	Utils.getSelectedHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
 	Utils.getSelectedHike(agent, "return 401 because of not authenticated user", 401, notAuthorizedCredentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
 	Utils.getSelectedHike(agent, "return 404 because of not existing hike with hikeId = :hikeId", 401, notAuthorizedCredentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);

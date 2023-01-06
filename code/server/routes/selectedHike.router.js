@@ -40,15 +40,9 @@ router.get(
   auth.withRole(["Hiker"]),
   async (req, res) => {
     const hikerId = req.user.userId;
-    try {
-      // Validation of body and/or parameters
-      const error = validationResult(req);
-      if (!error.isEmpty()) 
-        return res.status(422).json({ error: error.array()[0] });
-      
-      
+    try {     
       let selecteHike = await SelectedHikeManager.loadStartedHike(hikerId);
-      return res.status(201).send(selecteHike);
+      return res.status(200).send(selecteHike);
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =
