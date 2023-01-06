@@ -92,7 +92,7 @@ router.get(
     }
   });
 
-// GET hut by Id
+// GET hut by the Id
 router.get(
   "/:hutId",
   auth.withAuth,
