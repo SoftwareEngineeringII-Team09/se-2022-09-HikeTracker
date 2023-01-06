@@ -12,14 +12,14 @@ const Utils = require("../unit-utils");
 const testGpx = "test.gpx";
 const testEditableGpx = "test_editable.gpx";
 const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
-const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.000, 10.000);
-const testEndPoint1 = new Point( 2,"end point",0,0,"End point of testHike1", 10.010, 10.010);
+const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 45.177786001, 7.083372001);
+const testEndPoint1 = new Point( 2,"end point",0,0,"End point of testHike1", 45.177786002, 7.083372002);
 const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHike2", 30.0, 30.0);
 const testEndPoint2 = new Point(4, "end point", 0, 0, "End point of testHike2", 40.0, 40.0);
 const testStartPoint3 = new Point(5, "start point", 0, 0, "Start point of testHike3", 50.0, 50.0);
 const testEndPoint3 = new Point(6, "end point", 0, 0, "End point of testHike3", 60.0, 60.0);
-const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId);
-const testHike2 = new Hike(2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 2, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId);
+const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1154, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId);
+const testHike2 = new Hike(2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 1272, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId);
 const testHike3 = new Hike(3, "testTitle3", testUser.userId, `gpx/${testGpx}`, 3, 3, 3, 30.0, "03:03", 30.0, 30.0, "testDifficulty3", "testDescription3", testStartPoint3.pointId, testEndPoint3.pointId);
 const testHikes = [testHike1, testHike2, testHike3];
 const notExistingHike = testHike1.hikeId + testHike2.hikeId + testHike3.hikeId;
@@ -391,7 +391,19 @@ describe("Test defineHike", () => {
     testHike1.region,
     testGpx
   );
-
+  Utils.testDefineHike(
+    "reject because of location inconsistency",
+    testHike1.writerId,
+    testHike1.title,
+    testHike1.expectedTime,
+    testHike1.difficulty,
+    testHike1.description,
+    testHike2.city,
+    testHike1.province,
+    testHike1.region,
+    testGpx,
+    422
+  );
   Utils.testDefineHike(
     "reject because of not existing writerId foreign key",
     notExistingUser,
