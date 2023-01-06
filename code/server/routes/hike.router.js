@@ -41,7 +41,7 @@ router.post(
   const writerId = req.user.userId;
 
     const fileName = req.files.gpx[0].originalname;
-    const hikeImageName = req.files.hikeImage[0].originalname;
+    const hikeImageName = req.files.hikeImage ?.[0].originalname || 'default.jpg';
     try {
       // Validation of body and/or parameters
       
