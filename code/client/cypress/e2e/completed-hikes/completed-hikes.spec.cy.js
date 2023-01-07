@@ -4,7 +4,7 @@ describe('List of completed hikes for an hiker', () => {
         cy.createUserWithDetails({ role: "Hiker" })
         cy.createHike({ writer: 1 })
         cy.loginAsHiker()
-        cy.addCompletedHike({ hiker: 1, hike: 1 })
+        cy.addCompletedHike({ selectedHike: 1, hike: 1, hiker: 1, status: 'finished', startTime: '01/01/2023, 01:01:01', endTime: '02/02/2023, 02:02:02'})
     })
 
     beforeEach(() => cy.visit('/hikes/completed'))
