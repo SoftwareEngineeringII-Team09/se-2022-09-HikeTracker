@@ -157,7 +157,7 @@ class HutManager {
     }
 
     // Defining hut point
-   
+
     const hutImage = `hutImage/${hutData.fileName}`;
     const newPoint = new Point(
       null,
@@ -187,7 +187,7 @@ class HutManager {
       hutData.website,
       hutImage
     );
-   
+
     return this.storeHut(newHut);
   }
 

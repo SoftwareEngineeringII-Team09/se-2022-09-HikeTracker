@@ -7,11 +7,16 @@ import { GiHut } from 'react-icons/gi'
 import DateTimePicker from 'react-datetime-picker';
 import { useStopwatch } from 'react-timer-hook'
 import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
 import { HutCard } from '@components/features'
+
+import api from '@services/api'
+
+dayjs.extend(customParseFormat)
 
 const Timewatch = ({ days, hours, minutes, seconds }) => (
     <div className='fs-3 my-3'>
@@ -37,27 +42,39 @@ const Details = ({ hike }) => {
         days,
         reset
     } = useStopwatch({ autoStart: false, stopwatchOffset: new Date() });
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(user?.role === "Hiker")
 
     useEffect(() => {
         if (loading) {
-            // TODO: Adding API call to get current hike status (started or not)
-            setLoading(false)
-            setStartedHike(null)
+            api.hikes.getStartedHike()
+                .then((startedHike) => {
+                    setStartedHike(startedHike)
+                    if (startedHike.hikeId === hike.hikeId) {
+                        const start = dayjs(startedHike.startTime, 'DD/MM/YYYY, HH:mm:ss').format('DD/MM/YYYY, HH:mm:ss')
+                        const currentTime = dayjs().format('DD/MM/YYYY, HH:mm:ss');
+                        const diff = dayjs(currentTime).diff(start, 's')
+                        const stopwatchOffset = new Date();
+                        stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + diff);
+                        reset(stopwatchOffset, true);
+                    }
+                })
+                .catch((err) => err.status === 404 ?
+                    setStartedHike(null) :
+                    toast.error(err.data.error, { theme: "colored" }))
+                .finally(() => setLoading(false))
 
-            const currentTime = dayjs().format('DD/MM/YYYY, HH:mm:ss');
-            const diff = dayjs(currentTime).diff(dayjs('5/1/2023, 11:00:00'), 's')
-            const stopwatchOffset = new Date();
-            stopwatchOffset.setSeconds(stopwatchOffset.getSeconds() + diff);
-            reset(stopwatchOffset, true);
         }
-    }, []) // eslint-disable-line
+    }, [loading]) // eslint-disable-line
 
-    // TODO: Adding API call
     function handleStartHike() {
-        console.log(value.toLocaleString('it-IT'))
         if (value > new Date())
             toast.error("Start time cannot be in the future!", { theme: 'colored' })
+        else {
+            const startTime = dayjs(value).format('DD/MM/YYYY, HH:mm:ss')
+            api.hikes.startHike(hike.hikeId, startTime)
+                .then(() => setLoading(true))
+                .catch(err => toast.error(err, { theme: 'colored' }))
+        }
 
     }
 

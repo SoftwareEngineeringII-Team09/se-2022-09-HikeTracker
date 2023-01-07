@@ -18,7 +18,6 @@ const AddHike = () => {
 
     const handleSubmit = (values) => {
         setLoading(true)
-        // TODO: Adding image to the API
         const data = new FormData();
         data.append('gpx', values.gpx);
         data.append('title', values.title);
@@ -28,6 +27,7 @@ const AddHike = () => {
         data.append('expectedTime', values.expectedTime);
         data.append('difficulty', values.difficulty);
         data.append('description', values.description);
+        data.append('hikeImage', values.image);
 
         api.hikes.createHike(data)
             .then((res) => {

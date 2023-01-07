@@ -17,30 +17,16 @@ import cities from '@data/locations/comuni'
 import api from '@services/api'
 
 const AddHut = () => {
-    const [latitude, setLatitude] = useState(0);
-    const [longitude, setLongitude] = useState(0);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate()
 
     const handleSubmit = (values) => {
-        // TODO: Adding image to the API
         setLoading(true)
-        api.geolocalization.checkPointCity({ longitude, latitude }, values.city)
-            .then(() => api.huts.createHut({
-                hutName: values.hutName,
-                city: values.city,
-                province: values.province,
-                region: values.region,
-                numOfBeds: values.numOfBeds,
-                cost: values.cost,
-                latitude,
-                longitude,
-                altitude: values.altitude,
-                phone: values.phone,
-                email: values.email,
-                website: values.website
-            })
+        const data = new FormData();
+        Object.entries(values).forEach(([k, v]) => data.append(k, v))
+        api.geolocalization.checkPointCity({ longitude: values.longitude, latitude: values.latitude }, values.city)
+            .then(() => api.huts.createHut(data)
                 .then(() => {
                     toast.success("The new hut has been correctly added", { theme: 'colored' })
                     navigate('/', { replace: true })
@@ -51,11 +37,6 @@ const AddHut = () => {
             .catch(err => toast.error(err, { theme: 'colored' }))
             .finally(() => setLoading(false))
 
-    }
-
-    const handleClickOnMap = (point) => {
-        setLatitude(point.latitude)
-        setLongitude(point.longitude)
     }
 
     const initialValues = {
@@ -71,7 +52,7 @@ const AddHut = () => {
         latitude: 0,
         longitude: 0,
         altitude: 0,
-        image: ""
+        hutImage: ""
     };
 
     return (
@@ -82,6 +63,11 @@ const AddHut = () => {
             </div>
             <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={(values) => handleSubmit(values)}>
                 {({ values, setFieldValue }) => {
+                    const handleClickOnMap = (point) => {
+                        setFieldValue('latitude', point.latitude)
+                        setFieldValue('longitude', point.longitude)
+                    }
+
                     return (<Form data-testid="hut-form">
                         <Input id="hutName" name="hutName" type="text" label="Name" placeholder="Hut name" className="mb-3" />
                         <Select id="region" name="region" defaultLabel="Select a region" label="Region" className="mb-3">
@@ -103,7 +89,7 @@ const AddHut = () => {
                         <div className='my-3'>
                             <p className='mb-2'>Click a point on the map to set the hut position</p>
                             <MapContainer center={[45.073811155764005, 7.687027960554972]} zoom={13} scrollWheelZoom style={{ height: 480 }}>
-                                <MarkerOnPoint point={{ latitude, longitude }} setPoint={handleClickOnMap} />
+                                <MarkerOnPoint point={{ latitude: values.latitude, longitude: values.longitude }} setPoint={handleClickOnMap} />
                                 <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png" />
                             </MapContainer>
                         </div>
@@ -114,8 +100,8 @@ const AddHut = () => {
                         <Input id="email" name="email" type="email" label="Email" placeholder="Email" className="mb-3" />
                         <Input id="website" name="website" type="text" label="Website (optional)" placeholder="Website" className="mb-3" />
 
-                        <File id="image" name="image" type="file" accept="image/*" label="Cover image" className="mb-3" onChange={(e) => {
-                            setFieldValue('image', e.currentTarget.files[0])
+                        <File id="hutImage" name="hutImage" type="file" accept="image/*" label="Cover image" className="mb-3" onChange={(e) => {
+                            setFieldValue('hutImage', e.currentTarget.files[0])
                         }} />
 
                         <LoadingButton type="submit" text="Create new hut" loading={loading} />

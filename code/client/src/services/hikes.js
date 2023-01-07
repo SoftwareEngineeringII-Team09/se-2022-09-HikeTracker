@@ -86,13 +86,13 @@ const hikes = {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/selectedHikes`, { withCredentials: true })
         .then((res) => resolve(res.data))
-        .catch(err => reject(err.response ? err.response.data : err.message));
+        .catch(err => reject(err.response ? err.response : err.message));
     })
   },
 
   startHike: (hikeId, time) => {
     return new Promise((resolve, reject) => {
-      axios.post(`${SERVER_URL}/selectedHikes`, { hikeId, time }, { withCredentials: true })
+      axios.post(`${SERVER_URL}/selectedHikes/start`, { hikeId, time }, { withCredentials: true })
         .then((res) => resolve(res.data))
         .catch(err => reject(err.response ? err.response.data.error : err.message));
     })
