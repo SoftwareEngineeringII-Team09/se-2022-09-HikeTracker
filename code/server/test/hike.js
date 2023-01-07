@@ -447,6 +447,7 @@ describe("GET /api/hikes/writers/:writerId", function () {
 	Utils.getAllHikesByWriter(agent, "return 422 because of wrong :writerId format", 422, credentials, "wrongWriterIdFormat", testHikes.length);
 	Utils.getAllHikesByWriter(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testUser.userId, testHikes.length);
 	Utils.getAllHikesByWriter(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testUser.userId, testHikes.length);
+	Utils.getAllHikesByWriter(agent, "return 401 because of :hikerId !== req.user.userId", 401, credentials, notAuthorizedUser.userId, testHikes.length);
 });
 
 

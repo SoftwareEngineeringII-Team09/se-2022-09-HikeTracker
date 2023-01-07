@@ -352,7 +352,7 @@ exports.getOneHut = function (
 					.get(`/api/huts/${hutId}`)
 					.then(function (res) {
 						res.should.have.status(expectedHTTPStatus);
-						if (expectedHTTPStatus !== 401) {
+						if (expectedHTTPStatus !== 401 && expectedHTTPStatus !== 404) {
 							res.body.hutId.should.be.eql(hutId);
 						}
 						agent.delete("/api/auth/logout").then(function () {
