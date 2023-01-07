@@ -170,14 +170,21 @@ async startHike(hikeId, startTime,hikerId) {
         result: `startTime = ${startTime} is after current Time`
       });
     }
-    const selectedHike = await this.existsSelectedHike("hikeId", hikeId);
- 
-    if (selectedHike && selectedHike.endTime == null) {
-      return Promise.reject({
-        code: 400,
-        result: `This hiker already had a started hike`
-      });
+
+
+    if (await this.existsSelectedHike("hikerId", hikerId)){  
+      const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
+      for (let i = 0; i < hikerAllhikes.length; i++){
+        if (hikerAllhikes[i].status == "ongoing"){
+          return Promise.reject({
+            code: 400,
+            result: `This hiker already had a started hike`
+          });
+        }
+      }
+
     }
+    
     const newSelectedHike =  new SelectedHike(
       null,
       hikeId,
