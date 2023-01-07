@@ -8,7 +8,8 @@ import HikeCard from './HikeCard'
 jest.mock("react-bootstrap", () => {
     const Col = ({ children }) => <div>{children}</div>
     const Button = ({ children, ...props }) => <button {...props}>{children}</button>
-    return ({ Col, Button })
+    const Image = ({ src, alt }) => <img src={src} alt={alt} />
+    return ({ Col, Button, Image })
 })
 
 const testHike = {
@@ -19,7 +20,8 @@ const testHike = {
     description: "description",
     maxElevation: 1200,
     length: 1,
-    ascent: 300
+    ascent: 300,
+    hikeImage: 'hikeImage/hike1.jpg'
 }
 
 const expected = {
@@ -31,7 +33,7 @@ const expected = {
         { label: "description", value: testHike.description },
         { label: "elevation", value: /1200 m/i },
         { label: "length", value: /1 km/i },
-        { label: "ascent", value: /300 m/i }
+        { label: "ascent", value: /300 m/i },
     ]
 }
 
