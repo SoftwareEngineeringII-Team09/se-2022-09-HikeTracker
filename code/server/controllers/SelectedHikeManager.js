@@ -5,8 +5,9 @@ const PersistentManager = require("../dao/PersistentManager");
 const Hike = require("../dao/model/Hike");
 const User = require("../dao/model/User");
 const dayjs = require('dayjs');
-const customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
+const customParseFormat = require('dayjs/plugin/customParseFormat');
+dayjs.extend(customParseFormat);
+
 
 
 class SelectedHikeManager {
@@ -33,8 +34,8 @@ class SelectedHikeManager {
         result: `No available hiker with userId = ${newSelectedHike.hikerId}`
       });
     }
-
-    return PersistentManager.store(SelectedHike.tableName, newSelectedHike);
+    let lastId = PersistentManager.store(SelectedHike.tableName, newSelectedHike);
+    return lastId
   } 
 
   /**
@@ -130,7 +131,9 @@ class SelectedHikeManager {
    * @param {any} value 
    * @returns a Promise with the list of SelectedHikes that satisfy the condition  
    */
+  
   async loadAllByAttributeSelectedHike(attributeName, value) {
+  
     return PersistentManager.loadAllByAttribute(SelectedHike.tableName, attributeName, value);
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
@@ -150,6 +153,50 @@ class SelectedHikeManager {
 
     return this.updateSelectedHike({ ...selectedHike, endTime: endTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString(), status: "finished"}, "selectedHikeId", selectedHikeId);
   }
+
+
+async startHike(hikeId, startTime,hikerId) {
+  const startTimeObject = dayjs(startTime,['D/M/YYYY, HH:mm:ss','DD/MM/YYYY, HH:mm:ss' ],true);
+  const NowObject =  dayjs();
+    if (startTimeObject.isAfter(NowObject)) {
+      return Promise.reject({
+        code: 422,
+        result: `startTime = ${startTime} is after current Time`
+      });
+    }
+ 
+  const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
+  for (let hike of hikerAllhikes){
+    if (hike.status == "ongoing"){
+      return Promise.reject({
+        code: 400,
+        result: `This hiker already had a started hike`
+      });
+    }
+  }
+
+  const newSelectedHike =  new SelectedHike(
+    null,
+    hikeId,
+    hikerId,
+    "ongoing",
+    startTime,
+    null
+  )
+
+    return this.storeSelectedHike(newSelectedHike);
+  }
+
+
+
+
+async loadStartedHike(hikerId) {
+  let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
+      return {
+        hikeId : startHike.hikeId,
+        startTime: startHike.startTime
+      } 
+}
 }
 
 module.exports = new SelectedHikeManager();

@@ -1,8 +1,6 @@
 "use strict";
 
-const location = require("../lib/helpers/locations");
 const fs = require("fs");
-const fetch = require('node-fetch');
 const gpxParser = require("gpxparser");
 const geodist = require('geodist')
 const dayjs = require("dayjs");
@@ -185,26 +183,20 @@ class HikeManager {
     hikeData
   ) {
     // Parse the gpx to extract: length, ascent, maxElevation, startPoint, endPoint
+    
     let gpxString = fs.readFileSync(`gpx/${hikeData.fileName}`).toString();
+
     gpx.parse(gpxString);
     const track = gpx.tracks[0];
+    
     const ascent = track.elevation.max - track.elevation.min;
     const length = track.distance.total / 1000;
     const startPoint = track.points[0];
     const endPoint = track.points[track.points.length - 1];
     const maxElevation = track.elevation.max;
     const trackPath = `gpx/${hikeData.fileName}`;
-
-    const URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
-
-    const apires = await (await fetch(URL + `${startPoint.lon},${startPoint.lat}`)).json();
-    if (apires.address.City.toUpperCase() !== location.getCityName(parseInt(hikeData.city))) {
-      return Promise.reject({
-        code: 422,
-        result: `Location must be consistent!`,
-      });
-    }
-
+    const imagePath = `hikeImage/${hikeData.hikeImageName}`;
+    
     // Store the startPoint and retrieve the startPointId
     const startPointId = await PointManager.storePoint(
       new Point(
@@ -247,7 +239,8 @@ class HikeManager {
         hikeData.difficulty,
         hikeData.description,
         startPointId,
-        endPointId
+        endPointId,
+        imagePath
       )
     );
   }
@@ -291,7 +284,8 @@ class HikeManager {
           description: h.description,
           startPoint: {
             coords: [startPoint.latitude, startPoint.longitude]
-          }
+          },
+          hikeImage: h.hikeImage,
         };
 
         return hike;
@@ -421,6 +415,7 @@ class HikeManager {
         name: endPoint.nameOfLocation,
         coords: [endPoint.latitude, endPoint.longitude]
       },
+      hikeImage:hike.hikeImage,
       huts: huts,
       referencePoints: referencePoints,
       track: track

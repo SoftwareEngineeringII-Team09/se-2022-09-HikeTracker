@@ -10,6 +10,7 @@ const UserManager = require("./UserManager");
 const PersistentManager = require("../dao/PersistentManager");
 const HutDailyScheduleManager = require("./HutDailyScheduleManager");
 
+
 class HutManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
   /**
@@ -156,6 +157,8 @@ class HutManager {
     }
 
     // Defining hut point
+   
+    const hutImage = `hutImage/${hutData.fileName}`;
     const newPoint = new Point(
       null,
       "hut",
@@ -181,9 +184,10 @@ class HutManager {
       hutData.altitude,
       hutData.phone,
       hutData.email,
-      hutData.website
+      hutData.website,
+      hutImage
     );
-
+   
     return this.storeHut(newHut);
   }
 
@@ -226,6 +230,7 @@ class HutManager {
             };
             return time;
           }),
+          hutImage: h.hutImage
         };
 
         return hut;

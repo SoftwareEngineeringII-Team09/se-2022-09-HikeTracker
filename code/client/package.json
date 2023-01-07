@@ -57,7 +57,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "bootstrap": "^5.2.2",
     "classnames": "^2.3.2",
-    "cypress": "^11.1.0",
+    "cypress": "^11.2.0",
     "cypress-dark": "^1.8.3",
     "cypress-file-upload": "^5.0.8",
     "dayjs": "^1.11.7",

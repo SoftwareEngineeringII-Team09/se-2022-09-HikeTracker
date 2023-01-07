@@ -28,7 +28,7 @@ const pointHut3 = new Point(
 );
 
 const Hut1DailySchedule = new HutDailySchedule(1, 1, "9:00", "13:00");
-
+const testHutImage = "hut1.jpg";
 const testHut1 = new Hut(
   1,
   "hutTestName1",
@@ -42,7 +42,8 @@ const testHut1 = new Hut(
   1000.0,
   "391012345678", 
   "testHutEmail1@email1.com", 
-  "www.testHutWebSite1.com"
+  "www.testHutWebSite1.com",
+  `hutImage/${testHutImage}`
 );
 
 const testHut2 = new Hut(
@@ -58,7 +59,8 @@ const testHut2 = new Hut(
   2000.0,
   "392012345678", 
   "testHutEmail1@email2.com", 
-  "www.testHutWebSite2.com"
+  "www.testHutWebSite2.com",
+  `hutImage/${testHutImage}`
 );
 
 const testHut3 = new Hut(
@@ -74,7 +76,8 @@ const testHut3 = new Hut(
   3000.0,
   "393012345678", 
   "testHutEmail1@email3.com", 
-  "www.testHutWebSite3.com"
+  "www.testHutWebSite3.com",
+  `hutImage/${testHutImage}`
 );
 const testInconsistentHutPoint = new Point(4, "start point", 0, 1, null, 1.0, 1.0);
 const testHuts = [testHut1, testHut2, testHut3];
@@ -96,6 +99,7 @@ const expectedGetAllHutsProperties = [
   "email",
   "website",
   "schedule",
+  "hutImage"
 ];
 
 /*****************************************************************************************************
