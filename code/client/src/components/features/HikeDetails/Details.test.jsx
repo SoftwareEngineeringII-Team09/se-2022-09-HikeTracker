@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { AuthContext } from '@contexts/authContext'
@@ -96,13 +96,16 @@ describe("HikeDetails.Details component", () => {
 
 describe("Terminate Hike", () => {
 
+    let container;
+
     beforeEach(() => {
-        render(
+        let component = render(
             <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
                 <Details hike={testHike} />
             </AuthContext.Provider>,
             { wrapper: MemoryRouter }
-        )
+        );
+        container = component.container;
     })
 
     // TODO: Uncomment this when the start hike is implemented
@@ -116,51 +119,74 @@ describe("Terminate Hike", () => {
         expect(screen.queryByText("Select end time")).toBeInTheDocument()
     })
 
-    // it("Hike is correctly terminated", async () => {
-    //     // TODO: Start hike
-    //     const mockEndTime = '2021-01-01T12:00:00';
+    it("Shows error message if terminating hike with a timestamp from the future", async () => {
+        // TODO: Start hike
 
-    //     api.selectedHikes.terminateHike.mockResolvedValueOnce({});
+        const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
+        const terminateHikeTime = container.querySelector("input[name=terminateTime]");
+    
+        // Insert a timestamp from the future
+        const nextYear = new Date().getFullYear() + 1;
+        fireEvent.change(terminateHikeTime, {target: {value: nextYear + "-01-01T12:00:00"}})
+        await userEvent.click(termintateButton);
 
-    //     const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-    //     const terminateHikeTime = await screen.findByRole('textbox', { name: "datetime" })
+        // Check that the error message is shown
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledTimes(1)
+            expect(toast.error).toHaveBeenCalledWith("End time cannot be in the future", { theme: "colored" })
+        });
+    });
 
-    //     await userEvent.type(terminateHikeTime, mockEndTime);
-    //     userEvent.click(termintateButton);
+    it("Hike is correctly terminated", async () => {
+        // TODO: Start hike
+        const mockEndTime = '2021-01-01T12:00:00';
+        const endTimeFormatted = '1/1/2021, 12:00:00';
+        const mockHikeId = 1;
 
-    //     await waitFor(() => {
-    //         expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
-    //         expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, mockEndTime);
-    //     });
+        api.selectedHikes.terminateHike.mockResolvedValueOnce({});
 
-    //     /* Check success message is shown */
-    //     await waitFor(() => {
-    //         expect(toast.success).toHaveBeenCalledTimes(1);
-    //         expect(toast.success).toHaveBeenCalledWith("", { "theme": "colored" });
-    //     });
-    // })
+        const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
+        const terminateHikeTime = container.querySelector("input[name=terminateTime]");
 
-    // it("Shows error message if terminate hike fails", async () => {
-    //     // TODO: Start hike
-    //     const mockEndTime = '2021-01-01T12:00:00';
+        fireEvent.change(terminateHikeTime, {target: {value: mockEndTime}})
+        userEvent.click(termintateButton);
 
-    //     api.selectedHikes.terminateHike.mockRejectedValueOnce({});
+        await waitFor(() => {
+            expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
+            expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, endTimeFormatted);
+        });
 
-    //     const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-    //     const terminateHikeTime = await screen.findByRole('textbox', { name: /terminateTime/i, hidden: true });
+        /* Check success message is shown */
+        await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledTimes(1);
+            expect(toast.success).toHaveBeenCalledWith("Hike terminated", { "theme": "colored" });
+        });
+    })
 
-    //     await userEvent.type(terminateHikeTime, mockEndTime);
-    //     await userEvent.click(termintateButton);
+    it("Shows error message if terminate hike fails", async () => {
+        // TODO: Start hike
+        const mockEndTime = '2021-01-01T12:00:00';
+        const endTimeFormatted = '1/1/2021, 12:00:00';
+        const mockErrorMessage = "Error terminating hike";
+        const mockHikeId = 1;
 
-    //     await waitFor(() => {
-    //         expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
-    //         expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, mockEndTime);
-    //     });
+        api.selectedHikes.terminateHike.mockRejectedValueOnce(mockErrorMessage);
 
-    //     /* Check error message is shown */
-    //     await waitFor(() => {
-    //         expect(toast.error).toHaveBeenCalledTimes(1);
-    //         expect(toast.error).toHaveBeenCalledWith("", { "theme": "colored" });
-    //     });
-    // })
+        const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
+        const terminateHikeTime = container.querySelector("input[name=terminateTime]");
+
+        fireEvent.change(terminateHikeTime, {target: {value: mockEndTime}})
+        await userEvent.click(termintateButton);
+
+        await waitFor(() => {
+            expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
+            expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, endTimeFormatted);
+        });
+
+        /* Check error message is shown */
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledTimes(1);
+            expect(toast.error).toHaveBeenCalledWith(mockErrorMessage, { "theme": "colored" });
+        });
+    })
 })

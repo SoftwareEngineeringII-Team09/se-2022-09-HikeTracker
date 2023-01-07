@@ -23,11 +23,14 @@ const Details = ({ hike }) => {
     function handleTerminateHike() {
 
         if (!startedHike) 
-            return toast.error("You need to start a hike first", { theme: 'colored' });
-
+        return toast.error("You need to start a hike first", { theme: 'colored' });
+        
         const startTime = terminateTime; // TODO: Remove this line once startTime is set
         if (terminateTime > startTime)
-            return toast.error("End time must be after start time", { theme: 'colored' });
+        return toast.error("End time must be after start time", { theme: 'colored' });
+        
+        if (terminateTime > new Date())
+            return toast.error("End time cannot be in the future", { theme: 'colored' });
 
         setLoading(true);
         api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
