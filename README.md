@@ -48,41 +48,44 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [Route `/account/parking-lots/add`](#accountparking-lotsadd)
     - [Route `/*`](#page-not-found-route)
 5. [API Server](#api-server)
-   - [Session Routes](#session-routes)
-     - [`POST /api/auth/signup`](#post-apiauthsignup)
-     - [`PUT /api/auth/sendVerificationCode`](#put-apiauthsendverificationcode)
-     - [`PUT /api/auth/verifyEmail`](#put-apiauthverifyemail)
-     - [`POST /api/auth/login/password`](#post-apiauthloginpassword)
-     - [`DELETE /api/auth/logout`](#delete-apiauthlogout)
-     - [`GET /api/auth/current`](#get-apiauthcurrent)
-   - [Hike Routes](#hike-routes)
-     - [`POST /api/hikes`](#post-apihikes)
-     - [`GET /api/hikes`](#get-apihikes)
-     - [`GET /api/hikes/:hikeId`](#get-apihikeshikeid)
-     - [`GET /api/hikes/:hikeId/download`](#get-apihikeshikeiddownload)
-     - [`POST /api/hikes/refPoints/:hikeId`](#post-apihikesrefpointshikeid)
-     - [`GET /api/hikes/writers/:writerId`](#get-apihikeswriterswriterid)
-     - [`GET /api/hikes/:hikeId/potentialStartEndPoints`](#get-apihikeshikeidpotentialstartendpoints)
-     - [`GET /api/hikes/:hikeId/linkable-huts`](#get-apihikeshikeidlinkable-huts)
-     - [`PUT /api/hikes/:hikeId/refPoints`](#put-apihikeshikeidrefpoints)
-     - [`PUT /api/hikes/:hikeId/startEndPoints`](#put-apihikeshikeidstartendpoints)
-     - [`PUT /api/hikes/:hikeId/huts`](#put-apihikeshikeidhuts)
-   - [Hut Routes](#hut-routes)
-     - [`POST /api/huts`](#post-apihuts)
-     - [`GET /api/huts`](#get-apihuts)
-     - [`GET /api/huts/:hutId`](#get-apihutshutid)
-   - [Parking Lot Routes](#parking-lot-routes)
-     - [`POST /api/parkingLots`](#post-apiparkinglots)
+    - [Session Routes](#session-routes)
+	    - [`POST /api/auth/signup`](#post-apiauthsignup)
+	    - [`PUT /api/auth/sendVerificationCode`](#put-apiauthsendverificationcode)
+	    - [`PUT /api/auth/verifyEmail`](#put-apiauthverifyemail)
+	    - [`POST /api/auth/login/password`](#post-apiauthloginpassword)
+	    - [`DELETE /api/auth/logout`](#delete-apiauthlogout)
+	    - [`GET /api/auth/current`](#get-apiauthcurrent)
+    - [Hike Routes](#hike-routes)
+	    - [`POST /api/hikes`](#post-apihikes)
+	    - [`GET /api/hikes`](#get-apihikes)
+	    - [`GET /api/hikes/:hikeId`](#get-apihikeshikeid)
+	    - [`GET /api/hikes/:hikeId/download`](#get-apihikeshikeiddownload)
+	    - [`POST /api/hikes/refPoints/:hikeId`](#post-apihikesrefpointshikeid)
+       - [`GET /api/hikes/writers/:writerId`](#get-apihikeswriterswriterid)
+       - [`GET /api/hikes/:hikeId/potentialStartEndPoints`](#get-apihikeshikeidpotentialstartendpoints)
+       - [`GET /api/hikes/:hikeId/linkable-huts`](#get-apihikeshikeidlinkable-huts)
+       - [`PUT /api/hikes/:hikeId/refPoints`](#put-apihikeshikeidrefpoints)
+       - [`PUT /api/hikes/:hikeId/startEndPoints`](#put-apihikeshikeidstartendpoints)
+       - [`PUT /api/hikes/:hikeId/huts`](#put-apihikeshikeidhuts)
+    - [Hut Routes](#hut-routes)
+	    - [`POST /api/huts`](#post-apihuts)
+	    - [`GET /api/huts`](#get-apihuts)
+       - [`GET /api/huts/:hutId`](#get-apihutshutid)
+    - [ParkingLot Routes](#parkinglot-routes)
+	    - [`POST /api/parkingLots`](#post-apiparkinglots)
+    - [SelectedHike Routes](#selectedhike-routes)
+	    - [`PUT /api/selectedHikes/:selectedHikeId/terminate`](#put-apiselectedhikesselectedhikeidterminate)
 6. [Database Tables](#database-tables)
-   - [Table `User`](#user)
-   - [Table `Hike`](#hike)
-   - [Table `Point`](#point)
-   - [Table `Hut`](#hut)
-   - [Table `HutDailySchedule`](#hutdailyschedule)
-   - [Table `HikeHut`](#hikehut)
-   - [Table `ParkingLot`](#parkinglot)
-   - [Table `HikeParkingLot`](#hikeparkinglot)
-   - [Table `HikeRefPoint`](#hikerefpoint)
+    - [Table `User`](#user)
+    - [Table `Hike`](#hike)
+    - [Table `Point`](#point)
+    - [Table `Hut`](#hut)
+    - [Table `HutDailySchedule`](#hutdailyschedule)
+    - [Table `HikeHut`](#hikehut)
+    - [Table `ParkingLot`](#parkinglot)
+    - [Table `HikeParkingLot`](#hikeparkinglot)
+    - [Table `HikeRefPoint`](#hikerefpoint)
+    - [Table `SelectedHike`](#selectedhike)
 7. [Testing](#testing)
    - [Testing Frontend](#testing-frontend)
    - [Testing Backend](#testing-backend)
@@ -1312,7 +1315,8 @@ Get a specific hut by Id.
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 - `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
 
-### **Parking Lot Routes**
+
+### **ParkingLot Routes**
 
 #### `POST /api/parkingLots`
 
@@ -1349,6 +1353,40 @@ Post a new parking lot.
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
 - `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+### **SelectedHike Routes**
+
+#### `PUT /api/selectedHikes/:selectedHikeId/terminate`
+
+Update status and endTime for a specific selected hike.
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.selectedHikeId of the selected hike.`
+
+**Request body:**
+```json
+{
+   "time": "3/1/2023, 14:25:34"
+}
+```
+
+**Response header:**
+- `HTTP status code 201 Created(success)`
+
+**Response body:**
+`None`
+
+**Permission allowed:**
+`Hiker, Manager`
+
+**Error responses**
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
 
 ## Database Tables
 
@@ -1483,6 +1521,19 @@ It connects the hikes with their reference points.
 ```
 hikeId
 pointId
+```
+
+### `SelectedHike`
+
+It tracks ongoing and completed hikes of a hiker.
+
+```
+selectedHikeId
+hikeId
+hikerId
+status
+startTime
+endTime
 ```
 
 ## Testing
