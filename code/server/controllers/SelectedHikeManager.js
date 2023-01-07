@@ -133,13 +133,7 @@ class SelectedHikeManager {
    */
   
   async loadAllByAttributeSelectedHike(attributeName, value) {
-    const exists = await this.existsSelectedHike(attributeName, value);
-    if (!exists) {
-      return Promise.reject({
-        code: 404,
-        result: `No available SelectedHike with ${attributeName} = ${value}`,
-      });
-    }
+  
     return PersistentManager.loadAllByAttribute(SelectedHike.tableName, attributeName, value);
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
@@ -170,29 +164,25 @@ async startHike(hikeId, startTime,hikerId) {
         result: `startTime = ${startTime} is after current Time`
       });
     }
-
-
-    if (await this.existsSelectedHike("hikerId", hikerId)){  
-      const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
-      for (let hike of hikerAllhikes){
-        if (hike.status == "ongoing"){
-          return Promise.reject({
-            code: 400,
-            result: `This hiker already had a started hike`
-          });
-        }
-      }
-
+ 
+  const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
+  for (let hike of hikerAllhikes){
+    if (hike.status == "ongoing"){
+      return Promise.reject({
+        code: 400,
+        result: `This hiker already had a started hike`
+      });
     }
-    
-    const newSelectedHike =  new SelectedHike(
-      null,
-      hikeId,
-      hikerId,
-      "ongoing",
-      startTime,
-      null
-    )
+  }
+
+  const newSelectedHike =  new SelectedHike(
+    null,
+    hikeId,
+    hikerId,
+    "ongoing",
+    startTime,
+    null
+  )
 
     return this.storeSelectedHike(newSelectedHike);
   }
