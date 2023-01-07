@@ -50,17 +50,7 @@ router.post(
   "/addHike",
   async (req, res) => {
     try {
-      await HikeManager.defineHike(
-        req.body.writerId,
-        req.body.title,
-        req.body.expectedTime,
-        req.body.difficulty,
-        req.body.description,
-        req.body.city,
-        req.body.province,
-        req.body.region,
-        req.body.filename,
-      )
+      await HikeManager.defineHike(req.body)
       return res.status(204).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;
@@ -74,22 +64,7 @@ router.post(
   "/addHut",
   async (req, res) => {
     try {
-      await HutManager.defineHut(
-        req.body.hutName,
-        req.body.writerId,
-        req.body.city,
-        req.body.province,
-        req.body.region,
-        req.body.numOfBeds,
-        req.body.cost,
-        req.body.latitude,
-        req.body.longitude,
-        req.body.altitude,
-        req.body.phone,
-        req.body.email,
-        req.body.website,
-      )
-
+      await HutManager.defineHut(req.body)
       return res.status(204).end();
     } catch (exception) {
       const errorCode = exception.code ?? 503;
@@ -103,14 +78,7 @@ router.post(
   "/addParkingLot",
   async (req, res) => {
     try {
-      await ParkingLotManager.defineParkingLot(
-        req.body.writerId,
-        req.body.parkingLotName,
-        req.body.latitude,
-        req.body.longitude,
-        req.body.altitude,
-        req.body.capacity,
-      )
+      await ParkingLotManager.defineParkingLot(req.body)
 
       return res.status(204).end();
     } catch (exception) {

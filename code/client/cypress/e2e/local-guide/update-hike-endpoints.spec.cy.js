@@ -12,7 +12,6 @@ describe('Update hike start/end points', () => {
   });
 
   beforeEach(() => cy.visit('/hikes/1'))
-
   after(() => cy.clearAll())
 
   const setStartPoint = () => {

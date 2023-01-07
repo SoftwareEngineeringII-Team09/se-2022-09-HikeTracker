@@ -16,7 +16,7 @@ sections:
   - Number of stories done: 4 
 - Total points committed vs. done
   - Total of stories committed: 12
-  - Total of stories done: 8
+  - Total of stories done: 12
 - Nr of hours planned vs. spent (as a team)
   - Nr of hours planned: 74 hours 40 minutes 
   - Nr of hours spent: 78 hours 39 minutes

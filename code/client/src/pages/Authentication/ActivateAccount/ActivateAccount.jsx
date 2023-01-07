@@ -24,7 +24,7 @@ const ActivateAccount = () => {
     };
 
     /* Request new token */
-    const requestNewToken = async () => {
+    async function requestNewToken() {
         try {
             await api.users.sendVerificationCode(userId);
             toast.success("We have sent you a new activation email", {
@@ -35,7 +35,7 @@ const ActivateAccount = () => {
                 theme: "colored",
             });
         }
-    };
+    }
 
     useEffect(() => {
         /* Redirect to Home if activation token or userId are missing */

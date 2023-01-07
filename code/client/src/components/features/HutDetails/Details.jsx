@@ -16,7 +16,7 @@ const Details = ({ hut }) => {
                             { label: "Cost per night", value: `${hut.cost} €` },
                             { label: "Number of beds", value: `${hut.numOfBeds}` },
                         ].map((info, idx) => (
-                            <div key={idx} className='d-flex mb-2'>
+                            <div key={`info-${idx}`} className='d-flex mb-2'>
                                 <dt className='me-2'>{info.label} |</dt>
                                 <dd className='m-0'>{info.value}</dd>
                             </div>

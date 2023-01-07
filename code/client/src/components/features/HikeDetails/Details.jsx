@@ -54,7 +54,7 @@ const Details = ({ hike }) => {
                     { label: "Start", ...hike.startPoint },
                     { label: "End", ...hike.endPoint }
                 ].map((point, idx) => (
-                    <div key={idx} className="mb-5 w-100 w-lg-50 px-lg-3">
+                    <div key={`point-${idx}`} className="mb-5 w-100 w-lg-50 px-lg-3">
                         <h4 className='me-2 m-0'>{point.label} point</h4>
                         <p className='m-0'>{point.name}</p>
                     </div>
@@ -65,7 +65,7 @@ const Details = ({ hike }) => {
                     <h4>Reference points</h4>
                     <div className='d-flex flex-column'>
                         {hike.referencePoints.map((point, idx) => (
-                            <span key={idx} className='m-0'>{point.name}</span>
+                            <span key={`reference-point-${idx}`} className='m-0'>{point.name}</span>
                         ))}
                     </div>
                 </div>
@@ -78,7 +78,7 @@ const Details = ({ hike }) => {
                             { label: "Ascent", value: `${hike.ascent} m` },
                             { label: "Expected RT time", value: `${hike.expectedTime.hours}h : ${hike.expectedTime.minutes}m` },
                         ].map((info, idx) => (
-                            <div key={idx} className='d-flex mb-2'>
+                            <div key={`info-${idx}`} className='d-flex mb-2'>
                                 <dt className='me-2'>{info.label} |</dt>
                                 <dd className='m-0'>{info.value}</dd>
                             </div>

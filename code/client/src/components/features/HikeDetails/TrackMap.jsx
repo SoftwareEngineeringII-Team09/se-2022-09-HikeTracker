@@ -3,34 +3,39 @@ import { AuthContext } from '@contexts/authContext';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-const TrackMap = ({ hikeId, start, end, references = [], track, potentials = [], linkedHuts = [] }) => {
+const TrackMap = ({ hikeId, start = {}, end = {}, references = [], track = [], potentials = [], linkedHuts = [] }) => {
 
     const closePopup = () => {
         document.querySelector(".leaflet-popup-close-button")?.click();
     };
 
+    const handleSetAsStartEndPoint = function (potential) {
+        closePopup()
+        potential.updatePoint(potential)
+    }
+
     return (
         <div className="track-map mb-5 mb-xl-0">
             <MapContainer center={start.coords} zoom={12} scrollWheelZoom style={{ height: "100%", zIndex: 90 }}>
-                {linkedHuts.map((hut, idx) => (
-                    <Marker key={idx} position={hut.coords}>
+                {linkedHuts.map((hut) => (
+                    <Marker key={hut.hutId} position={hut.coords}>
                         <Popup>
                             <span className='fw-bold'>{hut.hutName}</span>
                         </Popup>
                     </Marker>
                 ))}
                 {references.map((ref, idx) => (
-                    <Marker key={idx} position={ref.coords}>
+                    <Marker key={`reference-point-${idx}`} position={ref.coords}>
                         <Popup>
                             <span className='fw-bold'>{ref.name}</span>
                         </Popup>
                     </Marker>
                 ))}
-                {potentials.map((potential, idx) => (
-                    <Marker key={idx} position={potential.coords}>
+                {potentials.map((potential) => (
+                    <Marker key={potential.id + potential.pointType + (potential.potential || "")} position={potential.coords}>
                         <Popup className='text-center'>
                             <span className='fw-bold'>{potential.name}</span>
-                            <Button className='d-block mt-2' onClick={() => { closePopup(); potential.updatePoint(potential) }}>
+                            <Button className='d-block mt-2' onClick={() => handleSetAsStartEndPoint(potential)}>
                                 Set as {potential.pointType} point
                             </Button>
                         </Popup>

@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === "test") {
 
 const authRouter = require("./routes/auth.router");
 const hikeRouter = require("./routes/hike.router");
+const selectedHikeRouter = require("./routes/selectedHike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
 const userRouter = require("./routes/user.router");
@@ -39,6 +40,7 @@ auth.deserializeUser();
 
 // server modules
 const app = express();
+app.disable("x-powered-by");
 app.use(logger("dev"));
 
 /** Set up and enable Cross-Origin Resource Sharing (CORS) **/
@@ -71,6 +73,7 @@ if (process.env.NODE_ENV === "test")
   app.use(`${API_PREFIX}/tests`, testRouter)
 
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
+app.use(`${API_PREFIX}/selectedHikes`, selectedHikeRouter);
 app.use(`${API_PREFIX}/users`, userRouter);
 app.use(`${API_PREFIX}/huts`, hutRouter);
 app.use(`${API_PREFIX}/parkingLots`, parkingLotRouter);

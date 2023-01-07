@@ -9,14 +9,13 @@ const multer = require("multer");
 const auth = require("../middlewares/auth");
 const HikeHutManager = require("../controllers/HikeHutManager");
 
-const storage = multer.diskStorage({
-  destination: "./gpx",
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
-  },
-});
 const upload = multer({
-  storage: storage,
+  storage: multer.diskStorage({
+    destination: "./gpx",
+    filename: function (req, file, callback) {
+      callback(null, file.originalname);
+    }
+  }),
   limits: {
     fileSize: 8000000
   }
@@ -309,6 +308,23 @@ router.put(
     }
   }
 );
+
+// GET the list of all hikes completed
+router.get("/all/completed", 
+  auth.withAuth,
+  auth.withRole(["Hiker"]), 
+  async (req, res) => {
+  try {
+    const hikerId = req.user.userId;
+    const hikes = await HikeManager.getAllCompletedHikes(hikerId);
+    return res.status(200).json(hikes);
+  } catch (exception) {
+    console.log(exception);
+    const errorCode = exception.code ?? 500;
+    const errorMessage = exception.result ?? "Something went wrong, try again";
+    return res.status(errorCode).json({ error: errorMessage });
+  }
+});
 
 
 module.exports = router;

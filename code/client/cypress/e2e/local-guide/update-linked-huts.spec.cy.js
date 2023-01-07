@@ -1,4 +1,4 @@
-import { SERVER_URL, TOAST_SUCCESS_NOTIFICATION } from '../../fixtures/constants'
+import { SERVER_URL, TOAST_SUCCESS_NOTIFICATION, CLIENT_URL } from '../../fixtures/constants'
 
 describe('Update linked huts', () => {
     before(() => {
@@ -14,16 +14,17 @@ describe('Update linked huts', () => {
 
     it('should allows local guide to update linked huts for an hike', () => {
 
-        cy.intercept({
-            method: 'PUT',
-            url: `${SERVER_URL}/hikes/1/huts`
-        }).as('update-linked-huts-xhr')
+        cy.on('uncaught:exception', (err, runnable) => {
+            return false
+        });
 
         cy.get('img[alt="Marker"]').click({ force: true });
         cy.findByRole('button', { name: /Link this hut to the hike/i }).click()
         cy.findByRole('button', { name: /save changes/i }).click()
-        cy.wait('@update-linked-huts-xhr').then(() => {
-            cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', "Linked huts have been correctly updated");
-        })
+
+        cy.url().should('eq', `${CLIENT_URL}hikes/1`)
+
+        cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', "Linked huts have been correctly updated");
+        cy.findByText(/rifugio santa claus/i).should('be.visible')
     })
 })

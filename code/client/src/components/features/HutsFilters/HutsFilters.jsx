@@ -8,12 +8,12 @@ import FiltersForm from "./FiltersForm"
 const HutsFilters = ({ isOpen, close }) => {
     const { apply, reset } = useContext(FiltersContextHuts)
 
-    const handleSubmit = (filters) => {
+    const handleSubmit = function (filters) {
         if (apply(filters))
             close()
     }
 
-    const handleReset = () => {
+    const handleReset = function () {
         reset()
         close()
     }

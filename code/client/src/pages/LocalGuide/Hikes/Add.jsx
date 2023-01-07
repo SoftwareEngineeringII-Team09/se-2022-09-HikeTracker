@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import api from '@services/api';
 import { useNavigate } from "react-router-dom";
+import { LoadingButton } from '@components/form';
 
 import regions from '@data/locations/regioni'
 import provinces from '@data/locations/province'
@@ -17,11 +18,13 @@ const AddHike = () => {
     const [difficulty, setDifficulty] = useState('Tourist');
     const [description, setDescription] = useState('');
     const [gpxFile, setGpxFile] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         const data = new FormData();
         data.append('gpx', gpxFile);
@@ -40,19 +43,22 @@ const AddHike = () => {
                     theme: "colored"
                 });
                 // Redirect to the newly created hike
-                navigate(`/reference-points/${res.hikeId}`);
+                navigate(`/account/hikes/${res.hikeId}/update/reference-points`);
             })
             .catch((error) => {
                 toast.error(error.message, {
                     theme: "colored",
                 });
+            })
+            .finally(() => {
+                setLoading(true);
             });
     };
 
-    const handleFileChange = (event) => {
+    function handleFileChange(event) {
         if (event.target.files && event.target.files[0])    
             setGpxFile(event.target.files[0]);
-    };
+    }
 
     return (
         <>
@@ -79,10 +85,10 @@ const AddHike = () => {
                         <Form.Select id='province' required onChange={(e) => setProvince(parseInt(e.target.value))}>
                             <option value={0}>Select a provice</option>
                             {provinces
-                            .filter(province => province.regione === region)
-                            .map(province => (
-                                <option key={province.provincia} value={province.provincia}>{province.nome}</option>
-                            ))}
+                                .filter(province => province.regione === region)
+                                .map(province => (
+                                    <option key={province.provincia} value={province.provincia}>{province.nome}</option>
+                                ))}
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className='mb-2'>
@@ -114,9 +120,7 @@ const AddHike = () => {
                         <Form.Label htmlFor='gpxFile'>Insert your gpx file:</Form.Label>
                         <Form.Control id="gpxFile" type='file' required onChange={handleFileChange} />
                     </Form.Group>
-                    <Button variant='primary-light fw-bold my-3 mx-auto d-block' size='lg' type='submit' className='mb-3'>
-                        Create new hike
-                    </Button>
+                    <LoadingButton type="submit" text="Create new hike" loading={loading}/>
                 </Form>
             </div>
         </>

@@ -9,14 +9,6 @@
 </Maps3D:TrackExtensions>
 </extensions>
 <trkseg>
-<trkpt lat="10.001" lon="10.001">
-   <ele>2147.107666</ele>
-   <time>2021-07-02T07:18:42Z</time>
-</trkpt>
-<trkpt lat="45.177913" lon="7.083268">
-   <ele>2148.453125</ele>
-   <time>2021-07-02T07:18:58Z</time>
-</trkpt>
 <trkpt lat="45.178044" lon="7.083159">
    <ele>2149.821045</ele>
    <time>2021-07-02T07:19:14Z</time>
@@ -1172,9 +1164,5 @@
 <trkpt lat="45.203388" lon="7.077354">
    <ele>3498.269287</ele>
    <time>2021-07-02T11:45:46Z</time>
-</trkpt>
-<trkpt lat="10.001" lon="10.001">
-   <ele>3500.161133</ele>
-   <time>2021-07-02T11:49:04Z</time>
 </trkpt>
 </trkseg></trk></gpx>
