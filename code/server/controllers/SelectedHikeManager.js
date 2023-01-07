@@ -174,8 +174,8 @@ async startHike(hikeId, startTime,hikerId) {
 
     if (await this.existsSelectedHike("hikerId", hikerId)){  
       const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
-      for (let i = 0; i < hikerAllhikes.length; i++){
-        if (hikerAllhikes[i].status == "ongoing"){
+      for (let hike of hikerAllhikes){
+        if (hike.status == "ongoing"){
           return Promise.reject({
             code: 400,
             result: `This hiker already had a started hike`
