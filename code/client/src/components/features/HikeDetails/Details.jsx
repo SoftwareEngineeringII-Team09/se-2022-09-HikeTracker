@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { FaMapMarkerAlt, FaStop, FaCrosshairs } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
@@ -20,7 +20,7 @@ const Details = ({ hike }) => {
     const [terminateTime, setTerminateTime] = useState(new Date());
     const [loading, setLoading] = useState(false);
 
-    function handleTerminateHike() {
+    const handleTerminateHike = useCallback(() => {
 
         if (!startedHike) 
         return toast.error("You need to start a hike first", { theme: 'colored' });
@@ -42,7 +42,8 @@ const Details = ({ hike }) => {
                 toast.error(err, { theme: 'colored' });
             })
             .finally(() => setLoading(false));
-    }
+
+    }, [startedHike, terminateTime]);
 
     return (
         <div className=''>

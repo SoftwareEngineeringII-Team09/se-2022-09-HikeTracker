@@ -137,6 +137,24 @@ describe("Terminate Hike", () => {
         });
     });
 
+    // it("Shows error message if terminating hike with a timestamp lower than the start timestamp", async () => {
+    //     // TODO: Start hike
+
+    //     const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
+    //     const terminateHikeTime = container.querySelector("input[name=terminateTime]");
+    
+    //     // Insert a timestamp from the future
+    //     const nextYear = new Date().getFullYear() + 1;
+    //     fireEvent.change(terminateHikeTime, {target: {value: nextYear + "-01-01T12:00:00"}})
+    //     await userEvent.click(termintateButton);
+
+    //     // Check that the error message is shown
+    //     await waitFor(() => {
+    //         expect(toast.error).toHaveBeenCalledTimes(1)
+    //         expect(toast.error).toHaveBeenCalledWith("End time cannot be in the future", { theme: "colored" })
+    //     });
+    // });
+
     it("Hike is correctly terminated", async () => {
         // TODO: Start hike
         const mockEndTime = '2021-01-01T12:00:00';
