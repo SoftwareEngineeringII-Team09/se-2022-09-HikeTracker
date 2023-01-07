@@ -5,7 +5,6 @@ const gpxParser = require("gpxparser");
 const geodist = require('geodist')
 const dayjs = require("dayjs");
 const duration = require("dayjs/plugin/duration");
-const {lastIndexOfRegex } = require('index-of-regex');
 const Hike = require("../dao/model/Hike");
 const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
@@ -269,7 +268,7 @@ class HikeManager {
           title: h.title,
           writer: {
             writerId: writer.userId,
-            writerName: `${writer.firstname} ${writer.lastname}`, 
+            writerName: `${writer.firstname} ${writer.lastname}`,
           },
           city: h.city,
           province: h.province,
@@ -299,7 +298,7 @@ class HikeManager {
   // Load a hike by hikeId
   async getHikeById(hikeId) {
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
-   
+
     const writer = await UserManager.loadOneByAttributeUser(
       "userId",
       hike.writerId
@@ -312,7 +311,7 @@ class HikeManager {
       "pointId",
       hike.endPoint
     );
-    
+
     if (startPoint.hut) {
       const hutName = await HutManager.loadOneByAttributeHut(
         "pointId",
@@ -371,10 +370,10 @@ class HikeManager {
         return {
           hutId: hut.hutId,
           hutName: hut.hutName,
-          coords: [hutPoint.latitude, hutPoint.longitude] 
+          coords: [hutPoint.latitude, hutPoint.longitude]
         };
       })
-    ); 
+    );
 
     // Retrieving expected time
     const expectedTime = hike.expectedTime.split(":");
@@ -394,7 +393,7 @@ class HikeManager {
       title: hike.title,
       writer: {
         writerId: writer.userId,
-        writerName: `${writer.firstname} ${writer.lastname}`, 
+        writerName: `${writer.firstname} ${writer.lastname}`,
       },
       city: hike.city,
       province: hike.province,
@@ -435,7 +434,7 @@ class HikeManager {
   }
 
   //Return the list of potential huts info for a given hike
-  async getPotentialHuts(hikeId){
+  async getPotentialHuts(hikeId) {
     const maxDiameter = 5;
     // get all coor in file
     let hike = await this.loadOneByAttributeHike("hikeId", hikeId);
@@ -443,55 +442,55 @@ class HikeManager {
     const gpxString = fs.readFileSync(hike.trackPath).toString();
     gpx.parse(gpxString);
     let tracks = gpx.tracks[0].points.map((p) => [p.lat, p.lon]);
-   
+
     //get all huts coordinate
-    let hutsInfo = await PointManager.loadAllByAttributePoint("hut",1);
-  
+    let hutsInfo = await PointManager.loadAllByAttributePoint("hut", 1);
+
 
     //calculate and add all possible huts in list
     let HutPointInfo = new Set();
-    let res =[] ;
-  
-    function rad(d){
+    let res = [];
+
+    function rad(d) {
       return d * Math.PI / 180.0;
     }
 
     tracks.map((tr) => {
       let lon1 = tr[1];
       let lat1 = tr[0];
-     
-      hutsInfo.map(async (h) =>{
+
+      hutsInfo.map(async (h) => {
         let R = 6371;
         let dLat = rad(h.latitude - lat1);
         let dLon = rad(h.longitude - lon1);
 
         let radlat1 = rad(lat1);
-        let radlat2 = rad(h.latitude);  
-       
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radlat1 ) * Math.cos(radlat2 ) * Math.sin(dLon/2) * Math.sin(dLon/2);
-	      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	      let d = R * c;    
-        if(!HutPointInfo.has(h) && d < maxDiameter){          
+        let radlat2 = rad(h.latitude);
+
+        let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        let d = R * c;
+        if (!HutPointInfo.has(h) && d < maxDiameter) {
           HutPointInfo.add(h);
         }
-      }) 
-            
-    }) 
+      })
 
-  
-  
-   let candiArray = Array.from(HutPointInfo);
-    await Promise.all(candiArray.map(async(h) =>{
-      let hutAllInfo = await HutManager.getHutByPointId(h.pointId);   
+    })
+
+
+
+    let candiArray = Array.from(HutPointInfo);
+    await Promise.all(candiArray.map(async (h) => {
+      let hutAllInfo = await HutManager.getHutByPointId(h.pointId);
       res.push(hutAllInfo);
-      
-    }) )
+
+    }))
     let potentialHuts = {
       potentialHuts: res
-      
-    };   
+
+    };
     return potentialHuts;
-    
+
   }
 
   // Return the list of potential start and end points for a given hike
@@ -618,18 +617,28 @@ class HikeManager {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldStartPoint = await PointManager.loadOneByAttributePoint("pointId", hike.startPoint);
 
-    // Check if the start point is a hut or a parking lot and update the hike
-    if (newStartPoint.type === "hut") {
-      const hut = await HutManager.loadOneByAttributeHut("hutId", newStartPoint.id);
-      const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      await PointManager.updatePoint({ ...hutPoint, type: "start point" }, "pointId", hutPoint.pointId);
-      await this.updateHike({ ...hike, startPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
-    } else if (newStartPoint.type === "parking lot") {
-      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newStartPoint.id);
-      const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      await PointManager.updatePoint({ ...parkingLotPoint, type: "start point" }, "pointId", parkingLotPoint.pointId);
-      await this.updateHike({ ...hike, startPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
-    }
+    const gpx = new gpxParser();
+    const gpxString = fs.readFileSync(hike.trackPath).toString();
+    gpx.parse(gpxString);
+    const secondTrackPoint = gpx.tracks[0].points[1];
+    const distOldStartPointSecondPoint = geodist({ lat: oldStartPoint.latitude, lon: oldStartPoint.longitude }, { lat: secondTrackPoint.lat, lon: secondTrackPoint.lon }, { exact: true, unit: 'km' });
+    const expectedTimeObject = dayjs(hike.expectedTime, "HH:mm");
+    const expectedTimeMinutes = dayjs.duration({ hours: expectedTimeObject.hour(), minutes: expectedTimeObject.minute() }).asMinutes();
+    let newMaxElevation = 0;
+    let newMinElevation = 10000;
+    gpx.tracks[0].points.forEach((point, index) => {
+      if (index != 0) {
+        if (point.ele > newMaxElevation) {
+          newMaxElevation = point.ele;
+        }
+        if (point.ele < newMinElevation) {
+          newMinElevation = point.ele;
+        }
+      }
+    });
+
+    // Update hike data after linking of a new start point
+    await this.updateHikeDataAfterLinking(newStartPoint, secondTrackPoint, "start point", distOldStartPointSecondPoint, hike, { minElevation: newMinElevation, maxElevation: newMaxElevation }, expectedTimeMinutes)
 
     // Update the old start point
     if (!oldStartPoint.parkingLot && !oldStartPoint.hut) {
@@ -647,19 +656,29 @@ class HikeManager {
   async updateEndPoint(hikeId, newEndPoint) {
     const hike = await this.loadOneByAttributeHike("hikeId", hikeId);
     const oldEndPoint = await PointManager.loadOneByAttributePoint("pointId", hike.endPoint);
-    
-    // Check if the end point is a hut or a parking lot and update the hike
-    if (newEndPoint.type === "hut") {
-      const hut = await HutManager.loadOneByAttributeHut("hutId", newEndPoint.id);
-      const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
-      await PointManager.updatePoint({ ...hutPoint, type: "end point" }, "pointId", hutPoint.pointId);
-      await this.updateHike({ ...hike, endPoint: hutPoint.pointId }, "hikeId", hike.hikeId);
-    } else if (newEndPoint.type === "parking lot") {
-      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newEndPoint.id);
-      const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
-      await PointManager.updatePoint({ ...parkingLotPoint, type: "end point" }, "pointId", parkingLotPoint.pointId);
-      await this.updateHike({ ...hike, endPoint: parkingLotPoint.pointId }, "hikeId", hike.hikeId)
-    }
+
+    const gpx = new gpxParser();
+    const gpxString = fs.readFileSync(hike.trackPath).toString();
+    gpx.parse(gpxString);
+    const secondLastTrackPoint = gpx.tracks[0].points[1];
+    const distOldEndPointSecondLastPoint = geodist({ lat: oldEndPoint.latitude, lon: oldEndPoint.longitude }, { lat: secondLastTrackPoint.lat, lon: secondLastTrackPoint.lon }, { exact: true, unit: 'km' });
+    const expectedTimeObject = dayjs(hike.expectedTime, "HH:mm");
+    const expectedTimeMinutes = dayjs.duration({ hours: expectedTimeObject.hour(), minutes: expectedTimeObject.minute() }).asMinutes();
+    let newMaxElevation = 0;
+    let newMinElevation = 10000;
+    gpx.tracks[0].points.forEach((point, index, array) => {
+      if (index != array.length - 1) {
+        if (point.ele > newMaxElevation) {
+          newMaxElevation = point.ele;
+        }
+        if (point.ele < newMinElevation) {
+          newMinElevation = point.ele;
+        }
+      }
+    });
+
+    // Update hike data after linking of a new end point
+    await this.updateHikeDataAfterLinking(newEndPoint, secondLastTrackPoint, "end point", distOldEndPointSecondLastPoint, hike, { minElevation: newMinElevation, maxElevation: newMaxElevation }, expectedTimeMinutes);
 
     // Update the old end point
     if (!oldEndPoint.parkingLot && !oldEndPoint.hut) {
@@ -668,6 +687,66 @@ class HikeManager {
       await PointManager.updatePoint({ ...oldEndPoint, type: "parking lot" }, "pointId", oldEndPoint.pointId);
     } else if (oldEndPoint.hut) {
       await PointManager.updatePoint({ ...oldEndPoint, type: "hut" }, "pointId", oldEndPoint.pointId);
+    }
+
+    return Promise.resolve();
+  }
+
+  async updateHikeDataAfterLinking(newLinkedPoint, distanceFrom, type, oldDist, hike, actualElevations, expectedTimeMinutes) {
+    let newMinElevation = actualElevations.minElevation;
+    let newMaxElevation = actualElevations.maxElevation;
+
+    // Check if the end point is a hut or a parking lot and update the hike
+    if (newLinkedPoint.type === "hut") {
+      const hut = await HutManager.loadOneByAttributeHut("hutId", newLinkedPoint.id);
+      const hutPoint = await PointManager.loadOneByAttributePoint("pointId", hut.pointId);
+      await PointManager.updatePoint({ ...hutPoint, type: type }, "pointId", hutPoint.pointId);
+
+      // Compute new length
+      const newDist = geodist({ lat: hutPoint.latitude, lon: hutPoint.longitude }, { lat: distanceFrom.lat, lon: distanceFrom.lon }, { exact: true, unit: 'km' });
+      const newLength = hike.length - oldDist + newDist;
+
+      // Compute new ascent and new maxElevation
+      if (hut.altitude > newMaxElevation) {
+        newMaxElevation = hut.altitude;
+      } else if (hut.altitude < newMinElevation) {
+        newMinElevation = hut.altitude;
+      }
+      const newAscent = newMaxElevation - newMinElevation;
+
+      // Compute new expectedTime
+      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
+      const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
+
+      let newHike = type === "start point" ? { ...hike, startPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString } :
+        { ...hike, endPoint: hutPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString };
+      await this.updateHike(newHike, "hikeId", hike.hikeId);
+    } else if (newLinkedPoint.type === "parking lot") {
+      const parkingLot = await ParkingLotManager.loadOneByAttributeParkingLot("parkingLotId", newLinkedPoint.id);
+      const parkingLotPoint = await PointManager.loadOneByAttributePoint("pointId", parkingLot.pointId);
+      await PointManager.updatePoint({ ...parkingLotPoint, type: type }, "pointId", parkingLotPoint.pointId);
+
+      // Compute new length
+      const newDist = geodist({ lat: parkingLotPoint.latitude, lon: parkingLotPoint.longitude }, { lat: distanceFrom.lat, lon: distanceFrom.lon }, { exact: true, unit: 'km' });
+      const newLength = hike.length - oldDist + newDist;
+
+      // Compute new ascent and new maxElevation
+      if (parkingLot.altitude) {
+        if (parkingLot.altitude > newMaxElevation) {
+          newMaxElevation = parkingLot.altitude;
+        } else if (parkingLot.altitude < newMinElevation) {
+          newMinElevation = parkingLot.altitude;
+        }
+      }
+      const newAscent = newMaxElevation - newMinElevation;
+
+      // Compute new expectedTime
+      const newExpectedTime = (expectedTimeMinutes * newLength) / hike.length;
+      const newExpectedTimeString = dayjs.duration(newExpectedTime, "minutes").format("HH:mm");
+
+      let newHike = type === "start point" ? { ...hike, startPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString } :
+        { ...hike, endPoint: parkingLotPoint.pointId, length: newLength, ascent: newAscent, maxElevation: newMaxElevation, expectedTime: newExpectedTimeString };
+      await this.updateHike(newHike, "hikeId", hike.hikeId);
     }
 
     return Promise.resolve();
@@ -696,7 +775,7 @@ class HikeManager {
           title: hike.title,
           writer: {
             writerId: writer.userId,
-            writerName: `${writer.firstname} ${writer.lastname}`, 
+            writerName: `${writer.firstname} ${writer.lastname}`,
           },
           city: hike.city,
           province: hike.province,
@@ -717,7 +796,7 @@ class HikeManager {
           }
         };
         return hike;
-      })      
+      })
     )
 
     return Promise.resolve(hikes);

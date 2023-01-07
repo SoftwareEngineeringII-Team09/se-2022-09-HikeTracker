@@ -15,8 +15,10 @@ let agent = chai.request.agent(app);
 const testHutImage = "hut1.jpg";
 const testUserLocalGuide = new User(1, "test1@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristName", "testLastName", "390123456789", "Local Guide", 1);
 const testUserHiker = new User(2, "test2@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, null, null, null, "Hiker", 1);
+const testUserEmergencyOperator = new User(3, "test3@email.com", "4bb8105ea6fa6e3530cfda3d25fea37f", "72fc8865b5ea227c621e54e7b9872c48da0fff8b25fe9a8394ce5438f9f7de45", null, "testFristNameEmergencyOperator", "testLastNameEmergencyOperator", "390223456789", "Emergency Operator", 1);
 const credentialsLocalGuide = { username: testUserLocalGuide.email, password: "Password1234." };
 const credentialsHiker = { username: testUserHiker.email, password: "Password1234." };
+const credentialsEmergencyOperator = { username: testUserEmergencyOperator.email, password: "Password1234." };
 const wrongCredentials = { username: testUserLocalGuide.email, password: "wrongPassword" };
 const testHutPoint1 = new Point(1, "hut", 0, 1, null, 10.0, 10.0);
 const testHutPoint2 = new Point(2, "hut", 0, 1, null, 20.0, 20.0);
@@ -26,6 +28,7 @@ const testHut2 = new Hut(2, "testName2", testHutPoint2.pointId, testUserLocalGui
 const testHut3 = new Hut(3, "testName3", testHutPoint3.pointId, testUserLocalGuide.userId, 3, 3, 3, 3, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com",`hutImage/${testHutImage}`);
 const testHuts = [testHut1, testHut2, testHut3];
 const notExistingUser = testUserLocalGuide.userId + 1;
+const notExistingHut = testHut1.hutId + testHut2.hutId + testHut3.hutId; 
 
 /*****************************************************************************************************
  *              POST /api/huts/
@@ -321,6 +324,7 @@ describe("GET /api/huts/:hutId", function () {
     await Promise.all([
       PersistentManager.store(User.tableName, testUserLocalGuide),
       PersistentManager.store(User.tableName, testUserHiker),
+      PersistentManager.store(User.tableName, testUserEmergencyOperator)
     ]);
     await Promise.all([
       PersistentManager.store(Point.tableName, testHutPoint1),
@@ -347,8 +351,14 @@ describe("GET /api/huts/:hutId", function () {
     testHut1.hutId,
     wrongCredentials
   );
-
-
+  Utils.getOneHut(
+    agent,
+    "return 401 because of not authorized user",
+    401,
+    testHut1.hutId,
+    credentialsEmergencyOperator
+  );
+  Utils.getOneHut(agent, "return 404 because of not existing hut with hutId = :hutId", 404, notExistingHut, credentialsHiker);
 });
 
 

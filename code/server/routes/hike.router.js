@@ -336,7 +336,6 @@ router.get("/all/completed",
     const hikes = await HikeManager.getAllCompletedHikes(hikerId);
     return res.status(200).json(hikes);
   } catch (exception) {
-    console.log(exception);
     const errorCode = exception.code ?? 500;
     const errorMessage = exception.result ?? "Something went wrong, try again";
     return res.status(errorCode).json({ error: errorMessage });

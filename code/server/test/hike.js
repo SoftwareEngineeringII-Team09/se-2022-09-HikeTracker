@@ -81,13 +81,13 @@ describe("POST /api/hikes", function () {
 	Utils.postHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx,testHikeImage);
 	Utils.postHike(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx,testHikeImage);
 	/* Add these tests with wrong body data format after solving body validation issue */
-	// Utils.postHike(agent, "should return 422 because of wrong title format", 422, credentials, 1, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region), testGpx;
-	// Utils.postHike(agent, "should return 422 because of wrong expectedTime format", 422, credentials, testHike1.title, 1, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
-	// Utils.postHike(agent, "should return 422 because of wrong difficulty format", 422, credentials, testHike1.title, testHike1.expectedTime, 1, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
-	// Utils.postHike(agent, "should return 422 because of wrong description format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, 1, testHike1.city, testHike1.province, testHike1.region, testGpx);
-	// Utils.postHike(agent, "should return 422 because of wrong city format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, "wrongCityFormat", testHike1.province, testHike1.region, testGpx);
-	// Utils.postHike(agent, "should return 422 because of wrong province format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, "wrongCityProvince", testHike1.region, testGpx);
-	// Utils.postHike(agent, "should return 422 because of wrong region format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, "wrongRegionFormat", testGpx);
+	// Utils.postHike(agent, "return 422 because of wrong title format", 422, credentials, 1, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region), testGpx;
+	// Utils.postHike(agent, "return 422 because of wrong expectedTime format", 422, credentials, testHike1.title, 1, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
+	// Utils.postHike(agent, "return 422 because of wrong difficulty format", 422, credentials, testHike1.title, testHike1.expectedTime, 1, testHike1.description, testHike1.city, testHike1.province, testHike1.region, testGpx);
+	// Utils.postHike(agent, "return 422 because of wrong description format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, 1, testHike1.city, testHike1.province, testHike1.region, testGpx);
+	// Utils.postHike(agent, "return 422 because of wrong city format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, "wrongCityFormat", testHike1.province, testHike1.region, testGpx);
+	// Utils.postHike(agent, "return 422 because of wrong province format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, "wrongCityProvince", testHike1.region, testGpx);
+	// Utils.postHike(agent, "return 422 because of wrong region format", 422, credentials, testHike1.title, testHike1.expectedTime, testHike1.difficulty, testHike1.description, testHike1.city, testHike1.province, "wrongRegionFormat", testGpx);
 });
 
 
@@ -452,6 +452,45 @@ describe("GET /api/hikes/all/completed", function () {
 	Utils.getAllCompletedHikes(agent, "return the list of completed hikes", 200, credentialsHiker, testFinishedHikes.length);
 	Utils.getAllCompletedHikes(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testFinishedHikes.length);
 	Utils.getAllCompletedHikes(agent, "return 401 because of not authorized user", 401, credentials, testFinishedHikes.length);
+});
+
+
+/*****************************************************************************************************
+*              GET /api/hikes/writers/:writerId
+*****************************************************************************************************/
+describe("GET /api/hikes/writers/:writerId", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			await PersistentManager.store(User.tableName, testUser),
+			await PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+			PersistentManager.store(Point.tableName, testStartPoint3),
+			PersistentManager.store(Point.tableName, testEndPoint3)
+		]);
+		await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+			PersistentManager.store(Hike.tableName, testHike3)
+		]);
+	});
+
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.getAllHikesByWriter(agent, "return the list of hikes of the writer", 200, credentials, testUser.userId, testHikes.length);
+	Utils.getAllHikesByWriter(agent, "return 422 because of wrong :writerId format", 422, credentials, "wrongWriterIdFormat", testHikes.length);
+	Utils.getAllHikesByWriter(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testUser.userId, testHikes.length);
+	Utils.getAllHikesByWriter(agent, "return 401 because of not authorized user", 401, notAuthorizedCredentials, testUser.userId, testHikes.length);
+	Utils.getAllHikesByWriter(agent, "return 401 because of :hikerId !== req.user.userId", 401, credentials, notAuthorizedUser.userId, testHikes.length);
 });
 
 
