@@ -69,8 +69,10 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 	    - [`POST /api/huts`](#post-apihuts)
 	    - [`GET /api/huts`](#get-apihuts)
        - [`GET /api/huts/:hutId`](#get-apihutshutid)
-    - [Parking Lot Routes](#parking-lot-routes)
+    - [ParkingLot Routes](#parkinglot-routes)
 	    - [`POST /api/parkingLots`](#post-apiparkinglots)
+    - [SelectedHike Routes](#selectedhike-routes)
+	    - [`PUT /api/selectedHikes/:selectedHikeId/terminate`](#put-apiselectedhikesselectedhikeidterminate)
 6. [Database Tables](#database-tables)
     - [Table `User`](#user)
     - [Table `Hike`](#hike)
@@ -81,6 +83,7 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [Table `ParkingLot`](#parkinglot)
     - [Table `HikeParkingLot`](#hikeparkinglot)
     - [Table `HikeRefPoint`](#hikerefpoint)
+    - [Table `SelectedHike`](#selectedhike)
 7. [Testing](#testing)
 	  - [Testing Frontend](#testing-frontend)
 	  - [Testing Backend](#testing-backend)
@@ -231,6 +234,7 @@ Here the list of dependencies installed:
     "express-validator": "^6.14.2",
     "geodist": "^0.2.1",
     "gpxparser": "^3.0.8",
+    "memorystore": "^1.6.7",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.8.0",
@@ -1307,7 +1311,7 @@ Get a specific hut by Id.
 - `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
 
 
-### **Parking Lot Routes**
+### **ParkingLot Routes**
 
 #### `POST /api/parkingLots`
 
@@ -1340,6 +1344,39 @@ Post a new parking lot.
 
 **Error responses**
 
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+### **SelectedHike Routes**
+
+#### `PUT /api/selectedHikes/:selectedHikeId/terminate`
+
+Update status and endTime for a specific selected hike.
+
+**Request header:**
+`Content-Type: application/json`
+`Params: req.params.selectedHikeId of the selected hike.`
+
+**Request body:**
+```json
+{
+   "time": "3/1/2023, 14:25:34"
+}
+```
+
+**Response header:**
+- `HTTP status code 201 Created(success)`
+
+**Response body:**
+`None`
+
+**Permission allowed:**
+`Hiker, Manager`
+
+**Error responses**
 - `HTTP status code 503 Internal Server Error` (generic server error)
 - `HTTP status code 404 Not Found` (resource not found error)
 - `HTTP status code 422 Unprocessable Entity` (validation error)
@@ -1479,6 +1516,19 @@ It connects the hikes with their reference points.
 ```
 hikeId
 pointId
+```
+
+### `SelectedHike`
+
+It tracks ongoing and completed hikes of a hiker.
+
+```
+selectedHikeId
+hikeId
+hikerId
+status
+startTime
+endTime
 ```
 
 ## Testing
