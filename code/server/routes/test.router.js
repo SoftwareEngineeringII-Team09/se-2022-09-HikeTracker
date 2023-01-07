@@ -7,6 +7,7 @@ const HutManager = require("../controllers/HutManager");
 const ParkingLotManager = require("../controllers/ParkingLotManager");
 const router = express.Router();
 const TestUtils = require("../test/integration-utils");
+const SelectedHikeManager = require("../controllers/SelectedHikeManager");
 
 router.delete(
   "/clearAll",
@@ -88,6 +89,20 @@ router.post(
       return res.status(errorCode).json({ error: errorMessage });
     }
   });
+
+router.post(
+  "/addCompletedSelectedHike",
+  async (req, res) => {
+    try {
+      await SelectedHikeManager.storeSelectedHike(req.body);
+      return res.status(204).end();
+    } catch (exception) {
+      const errorCode = exception.code ?? 503;
+      const errorMessage = exception.result ?? "Something went wrong, please try again";
+      return res.status(errorCode).json({ error: errorMessage });
+    }
+  }
+);
 
 // router.post(
 //   "/verifyUser",
