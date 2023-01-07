@@ -114,13 +114,15 @@ exports.getCurrent = function (agent, itShould, expectedHTTPStatus, credentials)
 /*****************************************************************************************************
 *              Hike
 *****************************************************************************************************/
-exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx) {
+
+exports.postHike = function (agent, itShould, expectedHTTPStatus, credentials, title, expectedTime, difficulty, description, city, province, region, testGpx,testImage) {
 	const testHikeData = { title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/hikes")
 				.field(testHikeData)
 				.attach("gpx", fs.readFileSync(`gpx/${testGpx}`), testGpx)
+				.attach("hikeImage", fs.readFileSync(`hikeImage/${testImage}`), testImage)
 				.then(function (res) {
 					res.should.have.status(expectedHTTPStatus);
 					agent.delete("/api/auth/logout").then(function () {
@@ -184,6 +186,21 @@ exports.getHikeGpxById = function (agent, itShould, expectedHTTPStatus, credenti
 		}).catch(loginError => console.log(loginError));
 	})
 }
+
+exports.getHikeByWriterId = function (agent, itShould, expectedHTTPStatus, credentials, hikerId) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/hikes/writers/${hikerId}`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
 
 exports.getHikePotentialStartEndPoints = function (agent, itShould, expectedHTTPStatus, credentials, hikeId) {
 	it(`Should ${itShould}`, function (done) {
@@ -302,12 +319,13 @@ exports.getAllHikesByWriter = function (agent, itShould, expectedHTTPStatus, cre
 /*****************************************************************************************************
 *              Hut
 *****************************************************************************************************/
-exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude, phone, email, website) {
+exports.postHut = function (agent, itShould, expectedHTTPStatus, credentials, hutName, city, province, region, numOfBeds, cost, latitude, longitude, altitude, phone, email, website,hutImage) {
 	const testHutData = { hutName: hutName, city: city, province: province, region: region, numOfBeds: numOfBeds, cost: cost, latitude: latitude, longitude: longitude, altitude: altitude, phone: phone, email: email, website: website };
 	it(`Should ${itShould}`, function (done) {
 		agent.post('/api/auth/login/password').send(credentials).then(function () {
 			agent.post("/api/huts")
-				.send(testHutData)
+				.field(testHutData)
+				.attach("hutImage", fs.readFileSync(`hutImage/${hutImage}`), hutImage)
 				.then(function (res) {
 					res.should.have.status(expectedHTTPStatus);
 					agent.delete("/api/auth/logout").then(function () {
@@ -389,6 +407,41 @@ exports.postParkingLot = function (agent, itShould, expectedHTTPStatus, credenti
 /*****************************************************************************************************
 *              SelectedHike
 *****************************************************************************************************/
+
+exports.startSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, time) {
+	const newSelectedHike = { hikeId: hikeId, time: time }
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.post(`/api/selectedHikes/start`)
+				.send(newSelectedHike)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
+exports.getSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, hikeId, time) {
+	it(`Should ${itShould}`, function (done) {
+		agent.post('/api/auth/login/password').send(credentials).then(function () {
+			agent.get(`/api/selectedHikes/`)
+				.then(function (res) {
+					res.should.have.status(expectedHTTPStatus);
+					if (expectedHTTPStatus !== 401){
+						res.body.hikeId.should.be.eql(hikeId);
+						res.body.startTime.should.be.eql(time);
+					}
+					agent.delete("/api/auth/logout").then(function () {
+						done();
+					}).catch(logoutError => console.log(logoutError))
+				}).catch(e => console.log(e));
+		}).catch(loginError => console.log(loginError));
+	})
+}
+
 exports.putTerminateSelectedHike = function (agent, itShould, expectedHTTPStatus, credentials, selectedHikeId, time) {
 	const testNewEndTime = { time: time }
 	it(`Should ${itShould}`, function (done) {

@@ -3,7 +3,7 @@
 class Hut {
   static tableName = "Hut";
   
-  constructor(hutId, hutName, pointId, writerId, city, province, region, numOfBeds, cost, altitude, phone, email, website) {
+  constructor(hutId, hutName, pointId, writerId, city, province, region, numOfBeds, cost, altitude, phone, email, website,hutImage) {
     this.hutId = hutId;
     this.hutName = hutName;
     this.pointId = pointId;
@@ -17,6 +17,7 @@ class Hut {
     this.phone = phone;
     this.email = email;
     this.website = website;
+    this.hutImage = hutImage;
   }
 }
 

@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS "Hut" (
     "phone" TEXT NOT NULL CHECK(typeof(phone) == "text"),
     "email" TEXT NOT NULL CHECK(typeof(email) == "text"),
     "website" TEXT CHECK(typeof(website) == "text" OR typeof(website) == NULL),
+    "hutImage" TEXT CHECK(typeof(hutImage) == "text" OR typeof(hutImage) == NULL),
     PRIMARY KEY("hutId"),
     FOREIGN KEY("pointId") REFERENCES "Point"("pointId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId")
@@ -86,6 +87,7 @@ CREATE TABLE IF NOT EXISTS "Hike" (
     "description" TEXT NOT NULL CHECK(typeof(description) == "text"),
     "startPoint" INTEGER NOT NULL CHECK(typeof(startPoint) == "integer"),
     "endPoint" INTEGER NOT NULL CHECK(typeof(endPoint) == "integer"),
+    "hikeImage" TEXT CHECK(typeof(hikeImage) == "text" OR typeof(hikeImage) == NULL),
     PRIMARY KEY("hikeId"),
     FOREIGN KEY("writerId") REFERENCES "User"("userId"),
     FOREIGN KEY("startPoint") REFERENCES "Point"("pointId"),

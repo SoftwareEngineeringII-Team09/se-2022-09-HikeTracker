@@ -290,4 +290,3 @@ describe("Test terminateHike", () => {
     422
   );
 });
-

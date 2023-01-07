@@ -5,14 +5,14 @@
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "web-vitals": "^2.1.4",
-    "yup": "^0.32.11",
-    "babel-plugin-transform-class-properties": "^6.24.1"
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "craco start",
@@ -46,8 +46,8 @@
   "devDependencies": {
     "@craco/craco": "^7.0.0",
     "@cypress/code-coverage": "^3.10.0",
-    "@testing-library/cypress": "^8.0.7",
     "@cypress/instrument-cra": "^1.4.0",
+    "@testing-library/cypress": "^8.0.7",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/react-toastify": "^4.1.0",
@@ -57,7 +57,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "bootstrap": "^5.2.2",
     "classnames": "^2.3.2",
-    "cypress": "^11.1.0",
+    "cypress": "^11.2.0",
     "cypress-dark": "^1.8.3",
     "cypress-file-upload": "^5.0.8",
     "geolib": "^3.3.3",

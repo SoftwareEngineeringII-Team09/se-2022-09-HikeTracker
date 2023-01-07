@@ -237,10 +237,11 @@ exports.testDefineHike = function (
   province,
   region,
   fileName,
+  imageName,
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
-    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, fileName: fileName };
+    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, fileName: fileName, hikeImageName: imageName };
     if (!expectedRejectionCode) {
       await HikeManager.defineHike(
         hikeData
@@ -261,6 +262,7 @@ exports.testDefineHike = function (
       expect(definedHike.province).toEqual(province);
       expect(definedHike.region).toEqual(region);
       expect(definedHike.trackPath).toEqual(`gpx/${fileName}`);
+      expect(definedHike.hikeImage).toEqual(`hikeImage/${imageName}`);
     } else {
       await expect(
         HikeManager.defineHike(

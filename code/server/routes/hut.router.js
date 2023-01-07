@@ -5,12 +5,27 @@ const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const multer = require("multer");
+
+const uploadImage = multer({
+  storage: multer.diskStorage({
+    destination: "./hutImage",
+    filename: function (req, file, callback) {
+      callback(null, file.originalname);
+    }
+  }),
+  limits: {
+    fileSize: 8000000
+  }
+});
+
 
 // POST a hut
 router.post(
   "/",
   auth.withAuth,
   auth.withRole(["Local Guide"]),
+  uploadImage.single("hutImage"),
   body("hutName").isString(),
   body("city").isInt({ min: 0 }),
   body("province").isInt({ min: 0 }),
@@ -23,14 +38,18 @@ router.post(
   body("phone").isString(),
   body("email").isEmail(),
   body("website").optional().isString(),
+  
   async (req, res) => {
-    const writerId = req.user.userId;
+   const fileName = req.file.originalname;
+   const writerId = req.user.userId;
+   
     try {
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-
-      await HutManager.defineHut({
+        
+      
+      const hutId = await HutManager.defineHut({
         hutName: req.body.hutName,
         writerId: writerId,
         city: req.body.city,
@@ -43,9 +62,11 @@ router.post(
         altitude: req.body.altitude,
         phone: req.body.phone,
         email: req.body.email,
-        website: req.body.website ?? null
+        website: req.body.website ?? null,
+        fileName: fileName
       });
-      return res.status(201).end();
+      
+      return res.status(201).send({hutId});
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =
@@ -71,7 +92,7 @@ router.get(
     }
   });
 
-// GET hut by Id
+// GET hut by the Id
 router.get(
   "/:hutId",
   auth.withAuth,
