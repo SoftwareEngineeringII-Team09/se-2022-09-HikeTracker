@@ -95,8 +95,9 @@ router.post(
 router.post(
   "/addCompletedSelectedHike",
   async (req, res) => {
+    console.log(req)
     try {
-      await PersistentManager.store(SelectedHike.table, new SelectedHike(req.selectedHikeId, req.hikeId, req.hikerId, req.status, req.startTime, req.endTime));
+      await PersistentManager.store(SelectedHike.tableName, new SelectedHike(req.selectedHikeId, req.hikeId, req.hikerId, req.status, req.startTime, req.endTime));
       return res.status(204).end();
     } catch (exception) {
       console.log(exception)

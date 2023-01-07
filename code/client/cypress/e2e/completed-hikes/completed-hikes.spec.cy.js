@@ -8,7 +8,7 @@ describe('List of completed hikes for an hiker', () => {
     })
 
     beforeEach(() => cy.visit('/hikes/completed'))
-    after(() => cy.clearAll())
+    //after(() => cy.clearAll())
 
     it('should allows hiker to see the list of completed hikes', () => {
         cy.findAllByText(/Started/i).should('have.length', 1)
