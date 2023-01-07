@@ -29,7 +29,7 @@ Cypress.Commands.add('loginAsLocalGuide', () => {
 })
 
 Cypress.Commands.add('loginAsHiker', () => {
-    cy.request('POST', `${SERVER_URL}/auth/login/password`, { username: user.hiker.email, password: user.hiker.password })
+    cy.request('POST', `${SERVER_URL}/auth/login/password`, { username: user.base.email, password: user.base.password })
 })
 
 /* Create hikes */

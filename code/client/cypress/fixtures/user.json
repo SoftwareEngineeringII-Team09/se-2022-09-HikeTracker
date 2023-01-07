@@ -9,9 +9,5 @@
         "firstname": "Tony",
         "lastname": "Stark",
         "mobile": "3931234567"
-    },
-    "hiker": {
-        "email": "testHiker@email.com",
-        "password": "Password1234.",
     }
 }
