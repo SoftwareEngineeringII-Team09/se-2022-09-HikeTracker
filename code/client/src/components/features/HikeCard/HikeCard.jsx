@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom"
-import { Col, Button } from "react-bootstrap"
+import { Col, Button, Image } from "react-bootstrap"
+
+import { SERVER_PORT } from '@services/config'
 
 const HikeCard = ({ hike }) => {
     return (
         <Col xs={12} lg={6} xl={4}>
             <div className='bg-base-light p-4 h-100 rounded-3 d-flex flex-column justify-content-between'>
+                <Image fluid src={`http://localhost:${SERVER_PORT}/${hike.hikeImage}`} alt="Hike cover" className="rounded-3 mb-3" style={{ objectFit: 'cover' }} />
                 <div className='mb-3'>
                     <h3 className='fw-bold'>{hike.title}</h3>
                     <span>

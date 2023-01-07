@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Row, Button } from 'react-bootstrap'
+import { Row, Button, Image } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 import { FaMapMarkerAlt, FaCrosshairs, FaPlay } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
@@ -15,6 +15,7 @@ import { Tooltip } from '@components/ui-core'
 import { HutCard } from '@components/features'
 
 import api from '@services/api'
+import { SERVER_PORT } from '@services/config'
 
 dayjs.extend(customParseFormat)
 
@@ -103,6 +104,7 @@ const Details = ({ hike }) => {
                                     </Button>
                                 </div >
                             ))}
+                    <Image fluid src={`http://localhost:${SERVER_PORT}/${hike.hikeImage}`} alt="Hike cover" className="rounded-3 mb-3" style={{ objectFit: 'cover' }} />
                     <h1 className='fw-black'>
                         {hike.title}
                         {(user.role === "Local Guide" && hike.writer.writerId === user.userId) &&

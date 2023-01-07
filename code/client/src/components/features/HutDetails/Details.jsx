@@ -1,8 +1,12 @@
+import { Image } from 'react-bootstrap'
+
 import { getLocationFullName } from '@lib/helpers/location'
+import { SERVER_PORT } from '@services/config'
 
 const Details = ({ hut }) => {
     return (
         <div className=''>
+            <Image fluid src={`http://localhost:${SERVER_PORT}/${hut.hutImage}`} alt="Hut cover" className="rounded-3 mb-3" style={{ objectFit: 'cover' }} />
             <div className='mb-5'>
                 <h1 className='fw-black'>{hut.hutName}</h1>
                 <span>{getLocationFullName(hut.province, hut.city)}</span>

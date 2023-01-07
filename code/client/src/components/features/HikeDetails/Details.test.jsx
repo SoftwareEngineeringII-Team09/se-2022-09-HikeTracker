@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 
 import { AuthContext } from '@contexts/authContext'
@@ -105,14 +105,17 @@ describe("HikeDetails.Details component", () => {
         expect(screen.queryByRole('button', { name: /start this hike/i })).not.toBeInTheDocument()
     })
 
-    it('Start hike button is correctly rendered if a user is logged in as an hiker', () => {
+    it('Start hike button is correctly rendered if a user is logged in as an hiker', async () => {
+        api.hikes.getStartedHike.mockRejectedValueOnce({ status: 404 })
+
         render(
             <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
                 <Details hike={testHike} />
             </AuthContext.Provider>,
             { wrapper: MemoryRouter })
 
-        expect(screen.getByRole('button', { name: /start this hike/i })).toBeInTheDocument()
+        expect(api.hikes.getStartedHike).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(screen.getByRole('button', { name: /start this hike/i })).toBeInTheDocument())
     })
 
     it('Datetime picker for start time is not showed if a user is not logged in as an hiker', () => {
@@ -135,13 +138,16 @@ describe("HikeDetails.Details component", () => {
         expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
     })
 
-    it('Datetime picker for start time is correctly rendered if a user is logged in as an hiker', () => {
+    it('Datetime picker for start time is correctly rendered if a user is logged in as an hiker', async () => {
+        api.hikes.getStartedHike.mockRejectedValueOnce({ status: 404 })
+
         render(
             <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
                 <Details hike={testHike} />
             </AuthContext.Provider>,
             { wrapper: MemoryRouter })
 
-        expect(screen.queryByTestId(/datetime-picker/i)).toBeInTheDocument()
+        expect(api.hikes.getStartedHike).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(screen.getByTestId(/datetime-picker/i)).toBeInTheDocument())
     })
 })
