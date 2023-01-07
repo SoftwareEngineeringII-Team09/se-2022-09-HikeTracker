@@ -334,6 +334,24 @@ exports.testUpdateEndPoint = function (
   });
 };
 
+exports.testGetAllCompletedHikes = function (
+  itShould,
+  hikerId,
+  expectedLength,
+  expectedGetAllCompletedHikesProperties
+) {
+  test(`Should ${itShould}`, async () => {
+    const res = await HikeManager.getAllCompletedHikes(hikerId);
+
+    expect(res.length).toEqual(expectedLength);
+    for (const r of res) {
+      for (const p of expectedGetAllCompletedHikesProperties) {
+        expect(r).toHaveProperty(p);
+      }
+    }
+  });
+};
+
 
 /*****************************************************************************************************
  *              HikeHut
