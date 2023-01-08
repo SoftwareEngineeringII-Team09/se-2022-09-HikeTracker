@@ -1,6 +1,6 @@
 import { TOAST_SUCCESS_NOTIFICATION } from '../../fixtures/constants'
 
-const coverImage = "../fixtures/images/cover.jpeg";
+const coverImage = "../fixtures/images/test.jpeg";
 
 describe('Create new hut', () => {
 

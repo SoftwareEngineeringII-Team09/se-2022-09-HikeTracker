@@ -24,7 +24,7 @@ describe('Create new hike', () => {
     const hikeDifficulty = "Tourist";
     const hikeDescription = "Test description";
     const gpxTestTrack = "../fixtures/tracks/gpxTestTrack.gpx";
-    const coverImage = "../fixtures/images/cover.jpeg";
+    const coverImage = "../fixtures/images/test.jpeg";
 
     cy.get('input[id="title"]').type(hikeTitle);
     cy.get('select[id="region"]').select(hikeRegion);
