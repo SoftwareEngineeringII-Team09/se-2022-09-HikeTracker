@@ -70,8 +70,7 @@ const Signup = () => {
                 actions.setSubmitting(false);
                 setLoading(false);
             }
-        }
-    );
+        }, []); // eslint-disable-line
 
     return (
         <div className='my-5'>

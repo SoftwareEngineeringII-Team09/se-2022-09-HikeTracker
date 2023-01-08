@@ -7,15 +7,15 @@ const Hut = require("../../dao/model/Hut");
 
 /* Some useful data to use for tests */
 const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
-const pointHut1 = new Point(1, "start point", 0, 1, null, 10.0, 10.0);
+const pointHut1 = new Point(1, "start point", 0, 1, null, 45.1001, 7.6601);
 const pointHut2 = new Point(
   2,
   "reference point",
   0,
   1,
   null,
-  13.3245,
-  24.678
+  45.1002, 
+  7.6602
 );
 const pointHut3 = new Point(
   3,
@@ -23,8 +23,8 @@ const pointHut3 = new Point(
   0,
   1,
   null,
-  24.768,
-  35.87968
+  45.1003, 
+  7.6603
 );
 
 const Hut1DailySchedule = new HutDailySchedule(1, 1, "9:00", "13:00");
@@ -34,8 +34,8 @@ const testHut1 = new Hut(
   "hutTestName1",
   pointHut1.pointId,
   testUser.userId,
-  4017,
-  2,
+  1272,
+  1,
   1,
   50,
   20,
@@ -51,8 +51,8 @@ const testHut2 = new Hut(
   "hutTestName1",
   pointHut2.pointId,
   testUser.userId,
-  4017,
-  2,
+  1272,
+  1,
   1,
   50,
   20,
@@ -68,8 +68,8 @@ const testHut3 = new Hut(
   "hutTestName1",
   pointHut3.pointId,
   testUser.userId,
-  4017,
-  2,
+  1272,
+  1,
   1,
   50,
   20,
@@ -79,6 +79,7 @@ const testHut3 = new Hut(
   "www.testHutWebSite3.com",
   `hutImage/${testHutImage}`
 );
+const testInconsistentHutPoint = new Point(4, "start point", 0, 1, null, 1.0, 1.0);
 const testHuts = [testHut1, testHut2, testHut3];
 const notExistingPoint = pointHut1.pointId + pointHut2.pointId + pointHut3.pointId;
 const notExistingUser = testUser.userId + 66;
@@ -233,6 +234,23 @@ describe("Test defineHut", () => {
     testHut1.phone,
     testHut1.email,
     testHut1.website, 
+  );
+  Utils.testDefineHut(
+    "reject because of location inconsistency",
+    testHut1.hutName,
+    testUser.userId,
+    testHut1.city,
+    testHut1.province,
+    testHut1.region,
+    testHut1.numOfBeds,
+    testHut1.cost,
+    testInconsistentHutPoint.latitude,
+    testInconsistentHutPoint.longitude,
+    testHut1.altitude,
+    testHut1.phone,
+    testHut1.email,
+    testHut1.website,
+    422
   );
   Utils.testDefineHut(
     "reject because of not existing writerId foreign key",

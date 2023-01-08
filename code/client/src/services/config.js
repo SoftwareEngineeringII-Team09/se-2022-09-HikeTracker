@@ -5,5 +5,7 @@ const CLIENT_URL = `http://localhost:${CLIENT_PORT}/`;
 
 module.exports = {
     SERVER_URL,
-    CLIENT_URL
+    CLIENT_URL,
+    SERVER_PORT,
+    CLIENT_PORT
 }

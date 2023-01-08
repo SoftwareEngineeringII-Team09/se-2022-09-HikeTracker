@@ -14,6 +14,18 @@ import { AuthContext } from '@contexts/authContext'
 import { Input } from '@components/form'
 import api from '@services/api'
 
+const RemoveButton = ({ point, onClick }) => {
+    function handleClick() {
+        onClick(point)
+    }
+
+    return (
+        <Button variant="link" size="sm" className="p-0 mt-2" onClick={handleClick}>
+            Remove reference point
+        </Button>
+    )
+}
+
 const UpdateReferencePoints = () => {
     const [user] = useContext(AuthContext)
     const [points, setPoints] = useState([])
@@ -45,13 +57,13 @@ const UpdateReferencePoints = () => {
         }
     }
 
-    const handleAddPoint = (values, { resetForm }) => {
+    function handleAddPoint(values, { resetForm }) {
         const { latitude, longitude } = values.point
         setPoints(old => [...old, { name: values.referencePointName, coords: [latitude, longitude] }])
         resetForm()
     }
 
-    const handleSaveChanges = () => {
+    function handleSaveChanges() {
         api.hikes.updateReferencePoints(hikeId, points)
             .then(() => {
                 toast.success("Reference points have been correctly updated!", { theme: 'colored' })
@@ -73,13 +85,13 @@ const UpdateReferencePoints = () => {
                     <p className="fw-bold">
                         Have you already done? Click on Save changes button on the bottom!
                     </p>
-                    <Formik initialValues={initialValues} validationSchema={ReferencePointSchema} onSubmit={(values, { resetForm }) => handleAddPoint(values, { resetForm })}>
+                    <Formik initialValues={initialValues} validationSchema={ReferencePointSchema} onSubmit={handleAddPoint}>
                         {({ values, touched, isValid, setFieldValue, setFieldTouched }) => {
                             const disabled = (!touched.referencePointName
                                 && (!touched.point || (touched.point && !touched.point.latitude && !touched.point.longitude)))
                                 || !isValid
 
-                            const handleClick = (point) => {
+                            function handleClick(point) {
                                 if (hike.track.some(trackPoint => {
                                     const { latitude, longitude } = point
                                     return isPointWithinRadius(
@@ -93,7 +105,7 @@ const UpdateReferencePoints = () => {
                                 }
                             }
 
-                            const handleRemovePoint = (point) => {
+                            function handleRemovePoint(point) {
                                 setPoints(old => old.filter(p => p !== point))
                             }
 
@@ -111,13 +123,11 @@ const UpdateReferencePoints = () => {
                                     </Row>
                                     <MapContainer data-testid="map" center={hike.startPoint.coords} zoom={12} scrollWheelZoom style={{ height: 480 }} className="mt-5">
                                         <MarkerOnPoint point={values.point} setPoint={handleClick} />
-                                        {points.map((point, idx) => (
-                                            <Marker key={idx} position={point.coords}>
+                                        {points.map((point) => (
+                                            <Marker key={`point-${point.name}`} position={point.coords}>
                                                 <Popup>
                                                     <p className='m-0'>{point.name}</p>
-                                                    <Button variant="link" size="sm" className="p-0 mt-2" onClick={() => handleRemovePoint(point)}>
-                                                        Remove reference point
-                                                    </Button>
+                                                    <RemoveButton point={point} onClick={handleRemovePoint} />
                                                 </Popup>
                                             </Marker>
                                         ))}

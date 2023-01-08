@@ -10,10 +10,10 @@ import * as Filters from './Filters'
 const FiltersForm = ({ onSubmit, onReset }) => {
     const { filters } = useContext(FiltersContext)
 
-    const handleSubmit = function (values) { onSubmit(values) }
+    function handleSubmit(values) { onSubmit(values) }
 
     return (
-        <Formik initialValues={filters} validationSchema={FiltersSchema} onSubmit={(values) => handleSubmit(values)} onReset={onReset}>
+        <Formik initialValues={filters} validationSchema={FiltersSchema} onSubmit={handleSubmit} onReset={onReset}>
             {() => {
                 return (
                     <Form>

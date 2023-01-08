@@ -8,12 +8,12 @@ import FiltersForm from "./FiltersForm"
 const HikesFilters = ({ isOpen, close }) => {
     const { apply, reset } = useContext(FiltersContext)
 
-    const handleSubmit = (filters) => {
+    function handleSubmit(filters) {
         if (apply(filters))
             close()
     }
 
-    const handleReset = () => {
+    function handleReset() {
         reset()
         close()
     }

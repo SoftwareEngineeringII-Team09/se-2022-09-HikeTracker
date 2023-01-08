@@ -38,17 +38,17 @@ router.post(
   body("phone").isString(),
   body("email").isEmail(),
   body("website").optional().isString(),
-  
+
   async (req, res) => {
-   const fileName = req.file.originalname;
-   const writerId = req.user.userId;
-   
+    const fileName = req.file.originalname;
+    const writerId = req.user.userId;
+
     try {
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-        
-      
+
+
       const hutId = await HutManager.defineHut({
         hutName: req.body.hutName,
         writerId: writerId,
@@ -65,8 +65,8 @@ router.post(
         website: req.body.website ?? null,
         fileName: fileName
       });
-      
-      return res.status(201).send({hutId});
+
+      return res.status(201).send({ hutId });
     } catch (exception) {
       const errorCode = exception.code ?? 503;
       const errorMessage =

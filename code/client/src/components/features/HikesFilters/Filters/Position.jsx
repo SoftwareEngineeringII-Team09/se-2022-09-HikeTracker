@@ -21,7 +21,7 @@ const Position = ({ isOpen, close }) => {
         else return [point.lat, point.lng]
     }
 
-    const handleConfirm = function() {
+    function handleConfirm() {
         if (touched.geoArea && touched.geoArea.position)
             setPoint({ lat, lng })
         else setFieldValue('geoArea.position.point', point)
@@ -43,8 +43,8 @@ const Position = ({ isOpen, close }) => {
                         {[
                             { coord: "lat", label: "Latitude" },
                             { coord: "lng", label: "Longitude" }
-                        ].map((item, idx) => (
-                            <Col key={`coord-${idx}`} xs={6} >
+                        ].map((item) => (
+                            <Col key={`coord-${item.coord}`} xs={6} >
                                 <Input id={`point-${item.coord}`} name={`geoArea.position.point.${item.coord}`} type="text" label={item.label} />
                             </Col>
                         ))}
