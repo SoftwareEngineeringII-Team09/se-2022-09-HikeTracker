@@ -8,7 +8,8 @@ import HutCard from './HutCard'
 jest.mock("react-bootstrap", () => {
     const Col = ({ children }) => <div>{children}</div>
     const Button = ({ children, ...props }) => <button {...props}>{children}</button>
-    return ({ Col, Button })
+    const Image = ({ src, alt }) => <img src={src} alt={alt} />
+    return ({ Col, Button, Image })
 })
 
 const testHut = {
@@ -21,7 +22,8 @@ const testHut = {
     region: 1,
     altitude: 1200,
     cost: 10,
-    numOfBeds: 300
+    numOfBeds: 300,
+    hutImage: 'hutImage/hut1.jpg'
 }
 
 const expected = {
