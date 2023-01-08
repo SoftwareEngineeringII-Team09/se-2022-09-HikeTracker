@@ -9,7 +9,7 @@ const roles = [
 ];
 
 const rolesRequiringAdditionalInfo = roles.filter((r) => r.requiresAdditionalInfo).map((r) => r.name);
-const mobileRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/;
+const mobileRegExp = /^(\+[1-9]{1,4}\s?)?\d{3,12}$/;
 
 YupPassword(Yup);
 
