@@ -1,8 +1,9 @@
 describe('Search huts', () => {
     before(() => {
         cy.clearAll()
-        cy.createUserWithDetails({ role: "Hiker" })
+        cy.createUserWithDetails({ role: "Local Guide" })
         cy.createHut({ writer: 1 })
+        cy.loginAsLocalGuide()
     })
 
     beforeEach(() => cy.visit('/huts'))
