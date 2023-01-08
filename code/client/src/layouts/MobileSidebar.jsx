@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Offcanvas, Alert, Button } from "react-bootstrap";
@@ -15,7 +15,7 @@ const MobileSidebar = ({ isOpen, close }) => {
     const [user, updateUser] = useContext(AuthContext)
     const navigate = useNavigate()
 
-    function handleLogout() {
+    const handleLogout = useCallback(() => {
         api.users.logout()
             .then(() => {
                 close()
@@ -24,7 +24,7 @@ const MobileSidebar = ({ isOpen, close }) => {
                 navigate('/', { replace: true })
             })
             .catch(err => toast.error(err, { theme: 'colored' }))
-    }
+    }, [])
 
     return (
         <Offcanvas show={isOpen} onHide={close} placement="end" className="bg-light">

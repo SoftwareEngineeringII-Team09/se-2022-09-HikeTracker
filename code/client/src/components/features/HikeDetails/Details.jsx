@@ -69,7 +69,7 @@ const Details = ({ hike }) => {
         }
     }, [loading]) // eslint-disable-line
 
-    function handleStartHike() {
+    const handleStartHike = useCallback(() => {
         if (value > new Date())
             toast.error("Start time cannot be in the future!", { theme: 'colored' })
         else {
@@ -81,7 +81,7 @@ const Details = ({ hike }) => {
                 })
                 .catch(err => toast.error(err, { theme: 'colored' }))
         }
-    }
+    }, [value])
 
     const handleTerminateHike = useCallback(() => {
         const start = dayjs(startedHike.startTime, 'DD/MM/YYYY, HH:mm:ss')

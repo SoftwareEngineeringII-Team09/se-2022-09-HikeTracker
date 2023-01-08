@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useCallback, useContext } from "react"
 import { Offcanvas } from "react-bootstrap"
 import { RiCloseLine } from 'react-icons/ri'
 
@@ -8,15 +8,15 @@ import FiltersForm from "./FiltersForm"
 const HikesFilters = ({ isOpen, close }) => {
     const { apply, reset } = useContext(FiltersContext)
 
-    function handleSubmit(filters) {
+    const handleSubmit = useCallback((filters) => {
         if (apply(filters))
             close()
-    }
+    }, []) // eslint-disable-line
 
-    function handleReset() {
+    const handleReset = useCallback(() => {
         reset()
         close()
-    }
+    }, []) // eslint-disable-line
 
     return (
         <Offcanvas show={isOpen} onHide={close} placement="end" className="bg-light text-primary-dark" style={{ width: "100%" }}>

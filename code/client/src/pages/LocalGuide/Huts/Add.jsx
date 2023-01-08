@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Formik, Form } from 'formik'
@@ -21,7 +21,7 @@ const AddHut = () => {
 
     const navigate = useNavigate()
 
-    const handleSubmit = (values) => {
+    const handleSubmit = useCallback((values) => {
         setLoading(true)
         const data = new FormData();
         Object.entries(values).forEach(([k, v]) => data.append(k, v))
@@ -36,8 +36,7 @@ const AddHut = () => {
 
             .catch(err => toast.error(err, { theme: 'colored' }))
             .finally(() => setLoading(false))
-
-    }
+    }, [])
 
     const initialValues = {
         hutName: "",
@@ -61,7 +60,7 @@ const AddHut = () => {
                 <h1 className="fw-bold">Add a new hut</h1>
                 <p>Add a new hut so that hiker can see its info and better plan his hikes.</p>
             </div>
-            <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={(values) => handleSubmit(values)}>
+            <Formik className="my-2" initialValues={initialValues} validationSchema={HutSchema} onSubmit={handleSubmit}>
                 {({ values, setFieldValue }) => {
                     const handleClickOnMap = (point) => {
                         setFieldValue('latitude', point.latitude)

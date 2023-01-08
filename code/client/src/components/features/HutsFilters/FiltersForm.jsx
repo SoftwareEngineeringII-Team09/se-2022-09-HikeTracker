@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useCallback } from "react"
 import { Button } from "react-bootstrap"
 import { Formik, Form } from "formik"
 
@@ -10,7 +10,7 @@ import * as Filters from './Filters'
 const FiltersForm = ({ onSubmit, onReset }) => {
     const { filters } = useContext(FiltersContextHuts)
 
-    function handleSubmit(values) { onSubmit(values) }
+    const handleSubmit = useCallback((values) => onSubmit(values))
 
     return (
         <Formik initialValues={filters} validationSchema={FiltersSchema} onSubmit={handleSubmit} onReset={onReset}>
