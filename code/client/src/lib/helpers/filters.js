@@ -88,7 +88,6 @@ export const filterHuts = (huts, filters, active) => {
 
     if (active)
         return huts.filter(hut => {
-            console.log(hut)
             return (
                 // Altitude filter
                 (hut.altitude >= altitude.min && hut.altitude <= altitude.max)

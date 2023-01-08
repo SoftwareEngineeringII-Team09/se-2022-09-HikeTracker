@@ -8,7 +8,8 @@ import HutCard from './HutCard'
 jest.mock("react-bootstrap", () => {
     const Col = ({ children }) => <div>{children}</div>
     const Button = ({ children, ...props }) => <button {...props}>{children}</button>
-    return ({ Col, Button })
+    const Image = ({ src, alt }) => <img src={src} alt={alt} />
+    return ({ Col, Button, Image })
 })
 
 const testHut = {
@@ -21,11 +22,12 @@ const testHut = {
     region: 1,
     altitude: 1200,
     cost: 10,
-    numOfBeds: 300
+    numOfBeds: 300,
+    hutImage: 'hutImage/hut1.jpg'
 }
 
 const expected = {
-    url: `/search/${testHut.hutId}`,
+    url: `/huts/${testHut.hutId}`,
 
     info: [
         { label: "hutName", value: /name/i },
@@ -39,21 +41,21 @@ const expected = {
 }
 
 describe("HutCard component", () => {
-    // it.each(expected.info)
-    //     ("Hut card $label is correctly rendered", (item) => {
-    //         render(<HutCard hut={testHut} />, { wrapper: MemoryRouter })
-    //         expect(screen.getByText(item.value)).toBeInTheDocument()
-    //     })
+    it.each(expected.info)
+        ("Hut card $label is correctly rendered", (item) => {
+            render(<HutCard hut={testHut} />, { wrapper: MemoryRouter })
+            expect(screen.getByText(item.value)).toBeInTheDocument()
+        })
 
     it("User is able to navigate to hut details when the card is clicked", async () => {
-        // const history = createMemoryHistory()
-        // render(
-        //     <Router location={history.location} navigator={history}>
-        //         <HutCard hut={testHut} />
-        //     </Router>
-        // )
-        // expect(screen.getByRole("link")).toHaveAttribute("href", expected.url)
-        // await userEvent.click(screen.getByRole("link"))
-        // expect(history.location.pathname).toBe(expected.url)
+        const history = createMemoryHistory()
+        render(
+            <Router location={history.location} navigator={history}>
+                <HutCard hut={testHut} />
+            </Router>
+        )
+        expect(screen.getByRole("link")).toHaveAttribute("href", expected.url)
+        await userEvent.click(screen.getByRole("link"))
+        expect(history.location.pathname).toBe(expected.url)
     })
 })
