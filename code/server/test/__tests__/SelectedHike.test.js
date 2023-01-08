@@ -11,6 +11,7 @@ const dayjs = require("dayjs");
 const testGpx = "test.gpx";
 const testUser1 = new User(1, "test1@email.it", "testSalt1", "testPassword1", null, "testFirstname1", "testLastname1", "390123456789", "Hiker", 1);
 const testUser2 = new User(2, "test2@email.it", "testSalt2", "testPassword2", null, "testFirstname2", "testLastname2", "390223456789", "Hiker", 1);
+const testUser3 = new User(3, "test3@email.it", "testSalt3", "testPassword3", null, "testFirstname3", "testLastname3", "390323456789", "Hiker", 1);
 const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.000, 10.000);
 const testEndPoint1 = new Point(2, "end point", 0, 0, "End point of testHike1", 10.010, 10.010);
 const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHike2", 30.0, 30.0);
@@ -24,7 +25,8 @@ const testSelectedHike1 = new SelectedHike(1, testHike1.hikeId, testUser1.userId
 const testSelectedHike2 = new SelectedHike(2, testHike2.hikeId, testUser1.userId, "ongoing", "02/01/2023, 02:02:02", null);
 const testSelectedHike3 = new SelectedHike(3, testHike3.hikeId, testUser1.userId, "finished", "03/01/2023, 03:03:03", "03/01/2023, 04:04:04");
 const testSelectedHike4 = new SelectedHike(4, testHike3.hikeId, testUser2.userId, "ongoing", "04/01/2023, 04:04:04", null);
-const testSelectedHikes = [testSelectedHike1, testSelectedHike2, testSelectedHike3];
+const testSelectedHike5 = new SelectedHike(5, testHike3.hikeId, testUser2.userId, "ongoing", "05/05/2023, 05:05:05", null);
+const testSelectedHikes = [testSelectedHike1, testSelectedHike2, testSelectedHike3, testSelectedHike4, testSelectedHike5];
 const notExistingSelectedHike = testSelectedHike1.selectedHikeId + testSelectedHike2.selectedHikeId + testSelectedHike3.selectedHikeId;
 const notExistingHike = testHike1.hikeId + testHike2.hikeId + testHike3.hikeId;
 const notExistingUser = testUser1.userId + 1;
@@ -293,6 +295,12 @@ describe("Test terminateHike", () => {
     dayjs(testSelectedHike1.startTime, "DD/MM/YYYY, HH:mm:ss").subtract(1, "hours").format('DD/MM/YYYY, HH:mm:ss').toString(),
     422
   );
+  Utils.testTerminateHike(
+    "reject because of endTime after current time",
+    testSelectedHike1.selectedHikeId,
+    dayjs().add(1, "hours").format('DD/MM/YYYY, HH:mm:ss').toString(),
+    422
+  );
 });
 
 
@@ -358,7 +366,11 @@ describe("Test loadStartedHike", () => {
   /* Test Setup */
   beforeAll(async () => {
     await Utils.clearAll();
-    await PersistentManager.store(User.tableName, testUser1);
+    await Promise.all([
+      PersistentManager.store(User.tableName, testUser1),
+      PersistentManager.store(User.tableName, testUser2),
+      PersistentManager.store(User.tableName, testUser3)
+    ]);
     await Promise.all([
       PersistentManager.store(Point.tableName, testStartPoint1),
       PersistentManager.store(Point.tableName, testEndPoint1),
@@ -375,6 +387,8 @@ describe("Test loadStartedHike", () => {
     await Promise.all([
       PersistentManager.store(SelectedHike.tableName, testSelectedHike1),
       PersistentManager.store(SelectedHike.tableName, testSelectedHike3),
+      PersistentManager.store(SelectedHike.tableName, testSelectedHike4),
+      PersistentManager.store(SelectedHike.tableName, testSelectedHike5)
     ]);
   });
 
@@ -385,8 +399,20 @@ describe("Test loadStartedHike", () => {
 
   Utils.testLoadStartedHike(
     "load a started hike",
-    testSelectedHike1.selectedHikeId,
+    testUser1.userId,
     expectedLoadStarteHikeProperties
+  );
+  Utils.testLoadStartedHike(
+    "reject because there are more than 1 started hike",
+    testUser2.userId,
+    expectedLoadStarteHikeProperties,
+    400
+  );
+  Utils.testLoadStartedHike(
+    "reject because there are no started hikes",
+    testUser3.user,
+    expectedLoadStarteHikeProperties,
+    404
   );
 });
 

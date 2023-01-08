@@ -1,10 +1,7 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Row, Button, Image } from 'react-bootstrap'
-import { toast } from 'react-toastify'
-import { FaMapMarkerAlt, FaCrosshairs, FaPlay } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaStop, FaCrosshairs, FaPlay } from 'react-icons/fa'
 import { GiHut } from 'react-icons/gi'
-import DateTimePicker from 'react-datetime-picker';
 import { useStopwatch } from 'react-timer-hook'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -13,8 +10,11 @@ import { getLocationFullName } from '@lib/helpers/location'
 import { AuthContext } from '@contexts/authContext'
 import { Tooltip } from '@components/ui-core'
 import { HutCard } from '@components/features'
-
+import { Row, Button, Image, Spinner } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 import api from '@services/api'
+import DateTimePicker from 'react-datetime-picker';
+
 import { SERVER_PORT } from '@services/config'
 
 dayjs.extend(customParseFormat)
@@ -36,6 +36,8 @@ const Details = ({ hike }) => {
     const [user] = useContext(AuthContext)
     const [value, onChange] = useState(new Date());
     const [startedHike, setStartedHike] = useState(null)
+    const [terminateTime, setTerminateTime] = useState(null);
+    const [loading, setLoading] = useState(user?.role === "Hiker")
     const {
         seconds,
         minutes,
@@ -43,13 +45,13 @@ const Details = ({ hike }) => {
         days,
         reset
     } = useStopwatch({ autoStart: false, stopwatchOffset: new Date() });
-    const [loading, setLoading] = useState(user?.role === "Hiker")
 
     useEffect(() => {
         if (loading) {
             api.hikes.getStartedHike()
                 .then((startedHike) => {
                     setStartedHike(startedHike)
+                    setTerminateTime(new Date())
                     if (startedHike.hikeId === hike.hikeId) {
                         const start = dayjs(startedHike.startTime, 'DD/MM/YYYY, HH:mm:ss').format('DD/MM/YYYY, HH:mm:ss')
                         const currentTime = dayjs().format('DD/MM/YYYY, HH:mm:ss');
@@ -79,8 +81,32 @@ const Details = ({ hike }) => {
                 })
                 .catch(err => toast.error(err, { theme: 'colored' }))
         }
-
     }
+
+    const handleTerminateHike = useCallback(() => {
+
+        if (!startedHike)
+            return toast.error("You need to start a hike first", { theme: 'colored' });
+
+        if (terminateTime > startedHike.startTime)
+            return toast.error("End time must be after start time", { theme: 'colored' });
+
+        if (terminateTime > new Date())
+            return toast.error("End time cannot be in the future", { theme: 'colored' });
+
+        setLoading(true);
+        console.log(startedHike)
+        api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
+            .then(() => {
+                setStartedHike(undefined);
+                toast.success("Hike terminated", { theme: 'colored' });
+            })
+            .catch(err => {
+                toast.error(err, { theme: 'colored' });
+            })
+            .finally(() => setLoading(false));
+
+    }, [startedHike, terminateTime]);
 
     if (!loading)
         return (
@@ -88,8 +114,18 @@ const Details = ({ hike }) => {
                 <div className='mb-5'>
                     {(user.loggedIn && user.role === "Hiker") && (
                         startedHike?.hikeId === hike.hikeId ?
-                            /* TODO: terminate hike here */
-                            <Timewatch days={days} hours={hours} minutes={minutes} seconds={seconds} />
+                            <>
+                                <Timewatch days={days} hours={hours} minutes={minutes} seconds={seconds} />
+                                <div className='d-flex flex-column align-items-start mb-3'>
+                                    <div className='d-flex flex-column mb-3'>
+                                        <label htmlFor='terminateTime' className='fw-bold'>Select end time</label>
+                                        <DateTimePicker name="terminateTime" id='terminateTime' onChange={setTerminateTime} value={terminateTime} />
+                                    </div>
+                                    <Button disabled={loading} variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
+                                        {loading ? <Spinner /> : <><FaStop size={14} className="me-2" /> Terminate hike</>}
+                                    </Button>
+                                </div>
+                            </>
                             :
                             (startedHike ?
                                 <div className='mb-3'>

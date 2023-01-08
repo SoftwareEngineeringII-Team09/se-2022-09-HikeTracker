@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -14,17 +14,17 @@ const ActivateAccount = () => {
     const navigate = useNavigate();
 
     /* Activation request */
-    const activateAccount = async () => {
+    const activateAccount = useCallback(async () => {
         try {
             await api.users.verifyEmail({ userId, token });
             setStatus("success");
         } catch (error) {
             setStatus("error");
         }
-    };
+    }, [token, userId]);
 
     /* Request new token */
-    async function requestNewToken() {
+    const requestNewToken = useCallback(async () => {
         try {
             await api.users.sendVerificationCode(userId);
             toast.success("We have sent you a new activation email", {
@@ -35,7 +35,7 @@ const ActivateAccount = () => {
                 theme: "colored",
             });
         }
-    }
+    }, [userId]);
 
     useEffect(() => {
         /* Redirect to Home if activation token or userId are missing */

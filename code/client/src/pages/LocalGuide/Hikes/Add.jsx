@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { Formik, Form } from 'formik'
@@ -16,7 +16,7 @@ const AddHike = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
 
-    const handleSubmit = (values) => {
+    const handleSubmit = useCallback((values) => {
         setLoading(true)
         const data = new FormData();
         data.append('gpx', values.gpx);
@@ -44,8 +44,7 @@ const AddHike = () => {
                 });
             })
             .finally(() => setLoading(false))
-
-    };
+    }, [navigate]);
 
     const initialValues = {
         title: "",

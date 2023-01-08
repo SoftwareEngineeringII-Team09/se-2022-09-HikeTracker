@@ -1,9 +1,28 @@
-import { render, screen } from '@testing-library/react'
+
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Router } from 'react-router-dom'
 const { createMemoryHistory } = require("history");
+import { toast } from "react-toastify"
+import api from '@services/api';
+
+
+/* Mocking the login api and libraries */
+jest.mock('@services/api');
+
+jest.mock("axios");
+jest.mock('react-toastify', () => {
+    return {
+        toast: {
+            success: jest.fn(),
+            error: jest.fn()
+        }
+    };
+});
 
 import AddHut from './Add'
+const hutImage = require("@data/test/hut.jpg");
+const gpxTestTrack = require("@data/test/gpxTestTrack.gpx");
 
 jest.mock('react-leaflet', () => {
     const MapContainer = ({ children }) => <div>{children}</div>
@@ -33,6 +52,10 @@ describe("Hut form page", () => {
             </Router>
         )
 
+        /* Mock api calls */
+        api.huts.createHut.mockResolvedValueOnce({ hutId: 1 });
+        api.geolocalization.checkPointCity.mockResolvedValueOnce({ city: "Alpette", province: "Torino", region: "Piemonte" });
+
         await userEvent.type(screen.getByLabelText("Name"), 'Rifugio1')
         expect(screen.getByDisplayValue("Rifugio1")).toBeInTheDocument()
 
@@ -49,13 +72,42 @@ describe("Hut form page", () => {
         await userEvent.type(screen.getByLabelText("Number of beds"), '25')
         expect(screen.getByDisplayValue("25")).toBeInTheDocument()
 
-        await userEvent.type(screen.getByLabelText("Phone number"), '392 1234567')
-        expect(screen.getByDisplayValue("392 1234567")).toBeInTheDocument()
+        await userEvent.type(screen.getByLabelText("Phone number"), '3921234567')
+        expect(screen.getByDisplayValue("3921234567")).toBeInTheDocument()
 
         await userEvent.type(screen.getByLabelText("Email"), 'email@example.com')
         expect(screen.getByDisplayValue("email@example.com")).toBeInTheDocument()
 
         await userEvent.type(screen.getByLabelText("Website (optional)"), 'www.example.com')
         expect(screen.getByDisplayValue("www.example.com")).toBeInTheDocument()
+
+        await userEvent.upload(screen.getByLabelText("Cover image"), hutImage, { applyAccept: false })
+
+        await userEvent.click(screen.getByRole("button"))
+
+        await waitFor(() => {
+            expect(api.geolocalization.checkPointCity).toHaveBeenCalledTimes(1)
+            expect(api.huts.createHut).toHaveBeenCalledTimes(1)
+        })
+        await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledTimes(1)
+            expect(toast.success).toHaveBeenCalledWith("The new hut has been correctly added", { theme: "colored" })
+        })
+    })
+
+    it("Shows wrong format error message if uploaded image has wrong format", async() => {
+        const history = createMemoryHistory();
+        render(
+            <Router location={history.location} navigator={history}>
+                <AddHut />
+            </Router>
+        )
+
+        await userEvent.upload(screen.getByLabelText("Cover image"), gpxTestTrack, { applyAccept: false })
+        await userEvent.click(screen.getByRole("button"))
+
+        await waitFor(() => {
+            expect(screen.getByText("Provide a valid image")).toBeInTheDocument();
+        })
     })
 })

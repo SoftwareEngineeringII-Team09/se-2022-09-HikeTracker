@@ -120,4 +120,20 @@ describe("Page for adding new hike", () => {
         })
     })
 
+    it("Shows wrong format error message if uploaded image has wrong format", async() => {
+        const history = createMemoryHistory();
+        render(
+            <Router location={history.location} navigator={history}>
+                <AddHike />
+            </Router>
+        )
+
+        await userEvent.upload(screen.getByLabelText("Cover image"), gpxTestTrack, { applyAccept: false })
+        await userEvent.click(screen.getByRole("button"))
+
+        await waitFor(() => {
+            expect(screen.getByText("Provide a valid image")).toBeInTheDocument();
+        })
+    })
+
 })
