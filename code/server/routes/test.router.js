@@ -95,12 +95,10 @@ router.post(
 router.post(
   "/addCompletedSelectedHike",
   async (req, res) => {
-    console.log(req)
     try {
       await PersistentManager.store(SelectedHike.tableName, new SelectedHike(req.body.selectedHikeId, req.body.hikeId, req.body.hikerId, req.body.status, req.body.startTime, req.body.endTime));
       return res.status(204).end();
     } catch (exception) {
-      console.log(exception)
       const errorCode = exception.code ?? 503;
       const errorMessage = exception.result ?? "Something went wrong, please try again";
       return res.status(errorCode).json({ error: errorMessage });

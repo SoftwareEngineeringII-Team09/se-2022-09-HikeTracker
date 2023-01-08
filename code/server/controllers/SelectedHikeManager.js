@@ -196,7 +196,11 @@ class SelectedHikeManager {
 
 
   async loadStartedHike(hikerId) {
+
+    console.log("SELECTING")
     let selectedHikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId).then((selectedHikes) => selectedHikes.filter((sh) => sh.status === "ongoing"));
+
+    console.log("SELECTED HIKE", selectedHikes)
 
     // Check if exists a started hike for this hikerId
     if (selectedHikes.length === 0) {
@@ -217,6 +221,7 @@ class SelectedHikeManager {
     const startedHike = selectedHikes[0];
 
     return {
+      selectedHikeId: startedHike.selectedHikeId,
       hikeId: startedHike.hikeId,
       startTime: startedHike.startTime
     }
