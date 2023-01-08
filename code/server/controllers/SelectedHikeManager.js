@@ -17,7 +17,7 @@ class SelectedHikeManager {
    * @param {SelectedHike} newSelectedHike 
    * @returns a Promise with the rowId value of the stored SelectedHike 
    */
-   async storeSelectedHike(newSelectedHike) {
+  async storeSelectedHike(newSelectedHike) {
     // Check if foreign key hikeId exists
     const hikeExists = await PersistentManager.exists(Hike.tableName, "hikeId", newSelectedHike.hikeId);
     if (!hikeExists) {
@@ -36,7 +36,7 @@ class SelectedHikeManager {
     }
     let lastId = PersistentManager.store(SelectedHike.tableName, newSelectedHike);
     return lastId
-  } 
+  }
 
   /**
    * Update a SelectedHike
@@ -131,9 +131,9 @@ class SelectedHikeManager {
    * @param {any} value 
    * @returns a Promise with the list of SelectedHikes that satisfy the condition  
    */
-  
+
   async loadAllByAttributeSelectedHike(attributeName, value) {
-  
+
     return PersistentManager.loadAllByAttribute(SelectedHike.tableName, attributeName, value);
   }
   /* ------------------------------------------------------------------------------------------------------------------- */
@@ -143,7 +143,7 @@ class SelectedHikeManager {
   async terminateHike(selectedHikeId, endTime) {
     const selectedHike = await this.loadOneByAttributeSelectedHike("selectedHikeId", selectedHikeId);
     const startTimeObject = dayjs(selectedHike.startTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
-    const endTimeObject =  dayjs(endTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
+    const endTimeObject = dayjs(endTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
     if (startTimeObject.isAfter(endTimeObject)) {
       return Promise.reject({
         code: 422,
@@ -151,52 +151,50 @@ class SelectedHikeManager {
       });
     }
 
-    return this.updateSelectedHike({ ...selectedHike, endTime: endTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString(), status: "finished"}, "selectedHikeId", selectedHikeId);
+    return this.updateSelectedHike({ ...selectedHike, endTime: endTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString(), status: "finished" }, "selectedHikeId", selectedHikeId);
   }
 
 
-async startHike(hikeId, startTime,hikerId) {
-  const startTimeObject = dayjs(startTime,['D/M/YYYY, HH:mm:ss','DD/MM/YYYY, HH:mm:ss' ],true);
-  const NowObject =  dayjs();
+  async startHike(hikeId, startTime, hikerId) {
+    const startTimeObject = dayjs(startTime, ['D/M/YYYY, HH:mm:ss', 'DD/MM/YYYY, HH:mm:ss'], true);
+    const NowObject = dayjs();
     if (startTimeObject.isAfter(NowObject)) {
       return Promise.reject({
         code: 422,
         result: `startTime = ${startTime} is after current Time`
       });
     }
- 
-  const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
-  for (let hike of hikerAllhikes){
-    if (hike.status == "ongoing"){
-      return Promise.reject({
-        code: 400,
-        result: `This hiker already had a started hike`
-      });
-    }
-  }
 
-  const newSelectedHike =  new SelectedHike(
-    null,
-    hikeId,
-    hikerId,
-    "ongoing",
-    startTime,
-    null
-  )
+    const hikerAllhikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId);
+    for (let hike of hikerAllhikes) {
+      if (hike.status == "ongoing") {
+        return Promise.reject({
+          code: 400,
+          result: `This hiker already had a started hike`
+        });
+      }
+    }
+
+    const newSelectedHike = new SelectedHike(
+      null,
+      hikeId,
+      hikerId,
+      "ongoing",
+      startTime,
+      null
+    )
 
     return this.storeSelectedHike(newSelectedHike);
   }
 
 
-
-
-async loadStartedHike(hikerId) {
-  let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
-      return {
-        hikeId : startHike.hikeId,
-        startTime: startHike.startTime
-      } 
-}
+  async loadStartedHike(hikerId) {
+    let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
+    return {
+      hikeId: startHike.hikeId,
+      startTime: startHike.startTime
+    }
+  }
 }
 
 module.exports = new SelectedHikeManager();
