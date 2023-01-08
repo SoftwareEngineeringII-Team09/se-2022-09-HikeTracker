@@ -84,18 +84,20 @@ const Details = ({ hike }) => {
     }
 
     const handleTerminateHike = useCallback(() => {
+        const start = dayjs(startedHike.startTime, 'DD/MM/YYYY, HH:mm:ss')
+        const end = dayjs(terminateTime)
+        const now = dayjs()
 
         if (!startedHike)
             return toast.error("You need to start a hike first", { theme: 'colored' });
 
-        if (terminateTime > startedHike.startTime)
+        if (dayjs(end).isBefore(start))
             return toast.error("End time must be after start time", { theme: 'colored' });
 
-        if (terminateTime > new Date())
+        if (dayjs(end).isAfter(now))
             return toast.error("End time cannot be in the future", { theme: 'colored' });
 
         setLoading(true);
-        console.log(startedHike)
         api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
             .then(() => {
                 setStartedHike(undefined);
@@ -121,7 +123,7 @@ const Details = ({ hike }) => {
                                         <label htmlFor='terminateTime' className='fw-bold'>Select end time</label>
                                         <DateTimePicker name="terminateTime" id='terminateTime' onChange={setTerminateTime} value={terminateTime} />
                                     </div>
-                                    <Button disabled={loading} variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
+                                    <Button disabled={loading} variant='danger' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>
                                         {loading ? <Spinner /> : <><FaStop size={14} className="me-2" /> Terminate hike</>}
                                     </Button>
                                 </div>
