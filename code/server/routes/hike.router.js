@@ -9,13 +9,21 @@ const multer = require("multer");
 const auth = require("../middlewares/auth");
 const HikeHutManager = require("../controllers/HikeHutManager");
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: "./gpx",
+const storage = multer.diskStorage({
+  
+  destination: function (req, file, callback) {
+    const dir = "./"+ file.fieldname;    
+      callback(null, dir);    
+  },
     filename: function (req, file, callback) {
-      callback(null, file.originalname);
-    }
-  }),
+    callback(null, file.originalname);
+   },
+  })
+
+
+
+const upload = multer({
+  storage: storage,
   limits: {
     fileSize: 8000000
   }
@@ -26,16 +34,21 @@ router.post(
   "/",
   auth.withAuth,
   auth.withRole(["Local Guide"]),
-  upload.single("gpx"),
+  upload.fields([{name: "gpx", maxCount : 1},
+                 {name: "hikeImage", maxCount : 1}]),
+
   async (req, res) => {
-    const writerId = req.user.userId;
-    const fileName = req.file.originalname;
+  const writerId = req.user.userId;
+
+    const fileName = req.files.gpx[0].originalname;
+    const hikeImageName = req.files.hikeImage ?.[0].originalname || 'default.jpg';
     try {
       // Validation of body and/or parameters
+      
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-
+        
       const hikeId = await HikeManager.defineHike({
         writerId: writerId,
         title: req.body.title,
@@ -45,11 +58,15 @@ router.post(
         city: req.body.city,
         province: req.body.province,
         region: req.body.region,
-        fileName: fileName
+        fileName: fileName,
+        hikeImageName: hikeImageName,
+
+
       });
 
       return res.status(201).send({ hikeId });
     } catch (exception) {
+
       const errorCode = exception.code ?? 503;
       const errorMessage =
         exception.result ?? "Something went wrong, please try again";
@@ -319,7 +336,6 @@ router.get("/all/completed",
     const hikes = await HikeManager.getAllCompletedHikes(hikerId);
     return res.status(200).json(hikes);
   } catch (exception) {
-    console.log(exception);
     const errorCode = exception.code ?? 500;
     const errorMessage = exception.result ?? "Something went wrong, try again";
     return res.status(errorCode).json({ error: errorMessage });

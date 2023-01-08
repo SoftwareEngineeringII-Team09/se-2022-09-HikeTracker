@@ -18,8 +18,8 @@ const Header = () => {
     const [open, setOpen] = useState(false)
     const location = useLocation();
 
-    const closeSidebar = () => setOpen(false)
-    const openSidebar = () => setOpen(true)
+    function closeSidebar() { setOpen(false) }
+    function openSidebar() { setOpen(true) }
 
     return (
         <Navbar bg={location.pathname !== "/" ? "light" : ""} className="px-4 px-lg-5 py-4 sticky-top flex justify-content-between align-items-center" style={{ zIndex: 99 }}>
@@ -38,8 +38,8 @@ const Header = () => {
 
                 {/* Navigation for desktop devices */}
                 {!user.loggedIn && <div className="d-none d-lg-flex align-items-center">
-                    {navigation("Visitor").map((link, idx) => (
-                        <NavLink key={idx} url={link.url} variant={link.variant} className={`${location.pathname !== "/" ? "text-primary-dark" : "text-primary-light"} ps-5`}>
+                    {navigation("Visitor").map((link) => (
+                        <NavLink key={`link-${link.label}`} url={link.url} variant={link.variant} className={`${location.pathname !== "/" ? "text-primary-dark" : "text-primary-light"} ps-5`}>
                             {link.label}
                         </NavLink>
                     ))}

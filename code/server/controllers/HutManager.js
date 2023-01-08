@@ -1,5 +1,7 @@
 "use strict";
 
+const location = require("../lib/helpers/locations");
+const fetch = require('node-fetch');
 const Hut = require("../dao/model/Hut");
 const Point = require("../dao/model/Point");
 const User = require("../dao/model/User");
@@ -7,6 +9,7 @@ const PointManager = require("./PointManager");
 const UserManager = require("./UserManager");
 const PersistentManager = require("../dao/PersistentManager");
 const HutDailyScheduleManager = require("./HutDailyScheduleManager");
+
 
 class HutManager {
   /* -------------------------------------------------- DAO functions -------------------------------------------------- */
@@ -143,7 +146,19 @@ class HutManager {
   /* --------------------------------------------- Other functions ----------------------------------------------------- */
   // Define a new hut
   async defineHut(hutData) {
+    const URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
+
+    const apires = await (await fetch(URL + `${hutData.longitude},${hutData.latitude}`)).json();
+    if (apires.address.City.toUpperCase() !== location.getCityName(parseInt(hutData.city))) {
+      return Promise.reject({
+        code: 422,
+        result: `Location must be consistent!`,
+      });
+    }
+
     // Defining hut point
+
+    const hutImage = `hutImage/${hutData.fileName}`;
     const newPoint = new Point(
       null,
       "hut",
@@ -169,7 +184,8 @@ class HutManager {
       hutData.altitude,
       hutData.phone,
       hutData.email,
-      hutData.website
+      hutData.website,
+      hutImage
     );
 
     return this.storeHut(newHut);
@@ -214,6 +230,7 @@ class HutManager {
             };
             return time;
           }),
+          hutImage: h.hutImage
         };
 
         return hut;

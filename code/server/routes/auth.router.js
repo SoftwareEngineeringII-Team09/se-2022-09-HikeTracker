@@ -41,7 +41,7 @@ router.post("/signup", authValidation.signup, async (req, res) => {
 	}
 })
 
-// PUT /auth/send-verification-code
+// PUT /auth/sendVerificationCode
 // Route to generate and send by email a new verification code for the registration email
 // of a user to activate his account
 router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (req, res) => {
@@ -54,7 +54,8 @@ router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (
 
 		await UserManager.updateVerificationCode(req.body.userId, verificationCode);
 		const user = await UserManager.loadOneByAttributeUser("userId", req.body.userId);
-		await UserManager.sendVerificationCode(user.email, req.body.userId, verificationCode);
+		if (process.env.NODE_ENV !== "test")
+			await UserManager.sendVerificationCode(user.email, req.body.userId, verificationCode);
 
 		return res.status(201).end();
 	} catch (exception) {
@@ -65,7 +66,7 @@ router.put('/sendVerificationCode', authValidation.sendVerificationCode, async (
 	}
 })
 
-// PUT /auth/verify-email
+// PUT /auth/verifyEmail
 // Route to verify the registration email of a user and to activate his account
 router.put('/verifyEmail', authValidation.verifyEmail, async (req, res) => {
 	try {

@@ -8,6 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 //import modules
 const express = require("express");
+const path = require('path');
 const logger = require("morgan");
 const session = require("express-session");
 const MemoryStore = require('memorystore')(session);
@@ -28,7 +29,6 @@ const hikeRouter = require("./routes/hike.router");
 const selectedHikeRouter = require("./routes/selectedHike.router");
 const hutRouter = require("./routes/hut.router");
 const parkingLotRouter = require("./routes/parkingLot.router");
-const userRouter = require("./routes/user.router");
 
 const API_PREFIX = "/api";
 const PORT = 3001;
@@ -74,10 +74,13 @@ if (process.env.NODE_ENV === "test")
 
 app.use(`${API_PREFIX}/hikes`, hikeRouter);
 app.use(`${API_PREFIX}/selectedHikes`, selectedHikeRouter);
-app.use(`${API_PREFIX}/users`, userRouter);
 app.use(`${API_PREFIX}/huts`, hutRouter);
 app.use(`${API_PREFIX}/parkingLots`, parkingLotRouter);
 app.use(`${API_PREFIX}/auth`, authRouter);
+
+//to make public the server images
+app.use('/hikeImage', express.static(path.join(__dirname, `./hikeImage`)));
+app.use('/hutImage', express.static(path.join(__dirname, `./hutImage`)));
 
 // Activating the server
 app.listen(PORT, () =>
