@@ -15,7 +15,7 @@ import { Input } from '@components/form'
 import api from '@services/api'
 
 const RemoveButton = ({ point, onClick }) => {
-    const handleClick = useCallback(() => onClick(point), [])
+    const handleClick = useCallback(() => onClick(point), []) // eslint-disable-line
 
     return (
         <Button variant="link" size="sm" className="p-0 mt-2" onClick={handleClick}>
@@ -68,7 +68,7 @@ const UpdateReferencePoints = () => {
                 navigate(`/hikes/${hikeId}`, { replace: true })
             })
             .catch(err => toast.error(err, { theme: 'colored' }))
-    }, [points])
+    }, [points]) // eslint-disable-line
 
     if (!loading && hike)
         return (

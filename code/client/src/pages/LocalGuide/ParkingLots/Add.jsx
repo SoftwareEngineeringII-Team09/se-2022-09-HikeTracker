@@ -45,7 +45,7 @@ const AddParkingLot = () => {
                 navigate('/')
             })
             .catch(err => toast.error(err, { theme: "colored" }))
-    })
+    }, []) // eslint-disable-line
 
     return (
         <div className='my-5'>

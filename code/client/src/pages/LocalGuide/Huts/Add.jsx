@@ -36,7 +36,7 @@ const AddHut = () => {
 
             .catch(err => toast.error(err, { theme: 'colored' }))
             .finally(() => setLoading(false))
-    }, [])
+    }, []) // eslint-disable-line
 
     const initialValues = {
         hutName: "",

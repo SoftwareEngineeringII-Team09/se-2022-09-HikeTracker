@@ -45,7 +45,7 @@ const Signup = () => {
                 theme: "colored",
             });
         }
-    }, [])
+    }, []) // eslint-disable-line
 
     /* Signup submission */
     const submitSignup = useCallback(

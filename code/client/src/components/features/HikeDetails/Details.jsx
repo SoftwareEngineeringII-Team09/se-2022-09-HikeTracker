@@ -81,7 +81,7 @@ const Details = ({ hike }) => {
                 })
                 .catch(err => toast.error(err, { theme: 'colored' }))
         }
-    }, [value])
+    }, [value]) // eslint-disable-line
 
     const handleTerminateHike = useCallback(() => {
         const start = dayjs(startedHike.startTime, 'DD/MM/YYYY, HH:mm:ss')

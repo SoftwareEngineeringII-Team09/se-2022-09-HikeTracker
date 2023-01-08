@@ -62,7 +62,7 @@ const UpdateLinkedHuts = () => {
                 navigate(`/hikes/${hikeId}`, { replace: true })
             })
             .catch(err => toast.error(err, { theme: 'colored' }))
-    }, [huts])
+    }, [huts]) // eslint-disable-line
 
     if (!loading && linkableHuts)
         return (

@@ -10,7 +10,7 @@ import * as Filters from './Filters'
 const FiltersForm = ({ onSubmit, onReset }) => {
     const { filters } = useContext(FiltersContextHuts)
 
-    const handleSubmit = useCallback((values) => onSubmit(values))
+    const handleSubmit = useCallback((values) => onSubmit(values), []) // eslint-disable-line
 
     return (
         <Formik initialValues={filters} validationSchema={FiltersSchema} onSubmit={handleSubmit} onReset={onReset}>

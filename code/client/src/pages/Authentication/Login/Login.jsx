@@ -43,7 +43,7 @@ const LoginForm = () => {
             setSubmitting(false);
             setLoading(false);
         }
-    }, [])
+    }, []) // eslint-disable-line
     
     const initialValues = {
         username: '',

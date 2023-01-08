@@ -24,7 +24,7 @@ const MobileSidebar = ({ isOpen, close }) => {
                 navigate('/', { replace: true })
             })
             .catch(err => toast.error(err, { theme: 'colored' }))
-    }, [])
+    }, []) // eslint-disable-line
 
     return (
         <Offcanvas show={isOpen} onHide={close} placement="end" className="bg-light">
