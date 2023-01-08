@@ -73,7 +73,10 @@ const Details = ({ hike }) => {
         else {
             const startTime = dayjs(value).format('DD/MM/YYYY, HH:mm:ss')
             api.hikes.startHike(hike.hikeId, startTime)
-                .then(() => setLoading(true))
+                .then(() => {
+                    setLoading(true)
+                    toast.success("Hike correctly started!", { theme: 'colored' })
+                })
                 .catch(err => toast.error(err, { theme: 'colored' }))
         }
 

@@ -1,0 +1,20 @@
+{
+    "response": {
+        "Unauthorized": {
+            "statusCode": 401,
+            "body": {
+                "error": "Not authenticated"
+            }
+        },
+        "Success": {
+            "statusCode": 200,
+            "body": {
+                "userId": 1,
+                "role": "Hiker",
+                "firstname": "Steve",
+                "lastname": "Rogers",
+                "email": "steve.rogers@hiker.test"
+            }
+        }
+    }
+}
