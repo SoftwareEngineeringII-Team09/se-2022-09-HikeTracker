@@ -20,7 +20,7 @@ import { SERVER_PORT } from '@services/config'
 dayjs.extend(customParseFormat)
 
 const Timewatch = ({ days, hours, minutes, seconds }) => (
-    <div className='fs-3 my-3'>
+    <div data-testid="timewatch" className='fs-3 my-3'>
         <h3 className='fw-bold fs-5 mb-3'>Timewatch</h3>
         <span className='p-2 rounded-3 bg-primary-light me-1'>{days}</span>
         :
