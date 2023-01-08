@@ -196,11 +196,29 @@ class SelectedHikeManager {
 
 
   async loadStartedHike(hikerId) {
-    let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
+    let selectedHikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId).then((selectedHikes) => selectedHikes.filter((sh) => sh.status === "ongoing"));
+
+    // Check if exists a started hike for this hikerId
+    if (selectedHikes.length === 0) {
+      return Promise.reject({
+        code: 404,
+        result: `There is no started hike for this hiker`
+      });
+    }
+
+    // Check if there are more than 1 started hikes
+    if (selectedHikes.length > 1) {
+      return Promise.reject({
+        code: 400,
+        result: `There are more than 1 started hike for this hiker`
+      });
+    } 
+
+    const startedHike = selectedHikes[0];
+
     return {
-      selectedHikeId: startHike.selectedHikeId,
-      hikeId: startHike.hikeId,
-      startTime: startHike.startTime
+      hikeId: startedHike.hikeId,
+      startTime: startedHike.startTime
     }
   }
 }
