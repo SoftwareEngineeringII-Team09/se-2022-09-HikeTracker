@@ -9,6 +9,7 @@ const navigation = {
     ],
     Hiker: [
         { label: "Search huts", url: "/huts", variant: "link" },
+        { label: "Completed hikes", url: "/hikes/completed", variant: "link" },
     ],
     LocalGuide: [
         { label: "Search huts", url: "/huts", variant: "link" },
