@@ -27,6 +27,11 @@ const HikeSchema = Yup.object().shape({
     description: Yup.string().required(),
     gpx: Yup.mixed().required(),
     image: Yup.mixed().required()
+        .test('fileFormat', 'Provide a valid image', (value) => {
+            if (!value) return false;
+            const format = value.split('.').pop();
+            return ['jpg', 'jpeg', 'gif', 'png'].includes(format);
+})
 })
 
 export default HikeSchema;

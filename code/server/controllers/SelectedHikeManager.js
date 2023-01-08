@@ -144,10 +144,17 @@ class SelectedHikeManager {
     const selectedHike = await this.loadOneByAttributeSelectedHike("selectedHikeId", selectedHikeId);
     const startTimeObject = dayjs(selectedHike.startTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
     const endTimeObject = dayjs(endTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
+    const currentTimeObject = dayjs();
     if (startTimeObject.isAfter(endTimeObject)) {
       return Promise.reject({
         code: 422,
         result: `startTime = ${selectedHike.startTime} is after endTime = ${endTime}`
+      });
+    }
+    if (endTimeObject.isAfter(currentTimeObject)) {
+      return Promise.reject({
+        code: 422,
+        result: `endTime = ${endTime} is after current time = ${currentTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString()}`
       });
     }
 

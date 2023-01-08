@@ -45,7 +45,12 @@ const HutSchema = Yup.object().shape({
     email: Yup.string()
         .email('This is not a valid email address')
         .required('Insert your email address'),
-    hutImage: Yup.mixed().required(),
+    hutImage: Yup.mixed().required()
+        .test('fileFormat', 'Provide a valid image', (value) => {
+            if (!value) return false;
+            const format = value.split('.').pop();
+            return ['jpg', 'jpeg', 'gif', 'png'].includes(format);
+        })
 });
 
 export default HutSchema;
