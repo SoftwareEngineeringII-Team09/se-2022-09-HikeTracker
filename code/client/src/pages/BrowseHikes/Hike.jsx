@@ -26,7 +26,7 @@ const Hike = () => {
                 .finally(() => setLoading(false))
     }, [loading]) // eslint-disable-line
 
-    const handleDownload = () => {
+    function handleDownload() {
         api.hikes.getHikeGPXFile(hikeId)
             .then((res) => {
                 const url = window.URL.createObjectURL(new Blob([res]))

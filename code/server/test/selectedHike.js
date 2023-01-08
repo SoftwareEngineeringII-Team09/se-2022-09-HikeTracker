@@ -37,6 +37,90 @@ const notExistingSelectedHike = testSelectedHike1.selectedHikeId + testSelectedH
 const notExistingHike = testHike1.hikeId + testHike2.hikeId + testHike3.hikeId;
 const notExistingUser = testUser.userId + 1;
 
+
+
+
+/*****************************************************************************************************
+*              POST /api/selectedHikes/start
+*****************************************************************************************************/
+describe("POST /api/selectedHikes/start", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+		  ]);
+		  await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+		  ]);
+		
+	});
+
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.startSelectedHike(agent, "start selected hike", 201, credentials, testHike1.hikeId, testSelectedHike1.startTime);
+	Utils.startSelectedHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testHike1.hikeId, testSelectedHike1.startTime);
+	Utils.startSelectedHike(agent, "return 401 because of not authenticated user", 401, notAuthorizedCredentials, testHike1.hikeId, testSelectedHike1.startTime);
+	Utils.startSelectedHike(agent, "return 422 because wrong time format", 422, credentials,testHike1.hikeId, 12345 );
+	Utils.startSelectedHike(agent, "return 422 because start time is after the current time", 422, credentials,testHike1.hikeId, "2/1/2025, 14:25:34" );
+	Utils.startSelectedHike(agent, "return 400 because this hiker already has a ongoing hike", 400, credentials,testHike1.hikeId, "2/1/2023, 14:25:34" );
+	
+});
+
+
+/*****************************************************************************************************
+*              GET /api/selectedHikes/
+*****************************************************************************************************/
+describe("GET /api/selectedHikes/", function () {
+	/* Test Setup */
+	this.beforeAll(async () => {
+		await Utils.clearAll();
+		await Promise.all([
+			PersistentManager.store(User.tableName, testUser),
+			PersistentManager.store(User.tableName, notAuthorizedUser)
+		]);
+		await Promise.all([
+			PersistentManager.store(Point.tableName, testStartPoint1),
+			PersistentManager.store(Point.tableName, testEndPoint1),
+			PersistentManager.store(Point.tableName, testStartPoint2),
+			PersistentManager.store(Point.tableName, testEndPoint2),
+		  ]);
+		  await Promise.all([
+			PersistentManager.store(Hike.tableName, testHike1),
+			PersistentManager.store(Hike.tableName, testHike2),
+		  ]);
+		  await Promise.all([
+			PersistentManager.store(SelectedHike.tableName, testSelectedHike1),
+			
+		  ]);
+		
+	});
+
+	/* Test Teardown */
+	this.afterAll(async () => {
+		await Utils.clearAll();
+	});
+
+	Utils.getSelectedHike(agent, "get selected hike", 200, credentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
+	Utils.getSelectedHike(agent, "return 401 because of not authenticated user", 401, wrongCredentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
+	Utils.getSelectedHike(agent, "return 401 because of not authenticated user", 401, notAuthorizedCredentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
+	Utils.getSelectedHike(agent, "return 404 because of not existing hike with hikeId = :hikeId", 401, notAuthorizedCredentials, testSelectedHike1.selectedHikeId, testSelectedHike1.startTime);
+	
+	
+
+});
+
 /*****************************************************************************************************
 *              PUT /api/selectedHikes/:selectedHikeId/terminate
 *****************************************************************************************************/
@@ -72,6 +156,7 @@ describe("PUT /api/selectedHikes/:selectedHikeId/terminate", function () {
 	Utils.putTerminateSelectedHike(agent, "return 404 because of not existing hike with hikeId = :hikeId", 404, credentials, notExistingSelectedHike, testSelectedHike3.endTime);
 	Utils.putTerminateSelectedHike(agent, "return 422 because of wrong :selectedHikeId format", 422, credentials, "wrongSelectedHikeIdFormat", testSelectedHike3.endTime);
 	Utils.putTerminateSelectedHike(agent, "return 422 because of wrong time type format", 422, credentials, testSelectedHike1.selectedHikeId, 1);
+	Utils.putTerminateSelectedHike(agent, "return 422 because of end time is early than start time", 422, credentials, testSelectedHike1.selectedHikeId, "01/01/1999, 01:01:01");
 });
 
 

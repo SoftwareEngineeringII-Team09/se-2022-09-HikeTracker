@@ -8,8 +8,8 @@ import Position from "./Position"
 const GeoArea = () => {
     const [openMap, setOpenMap] = useState(false)
 
-    const handleCloseMap = function () { setOpenMap(false) }
-    const handleOpenMap = function () { setOpenMap(true) }
+    function handleCloseMap() { setOpenMap(false) }
+    function handleOpenMap() { setOpenMap(true) }
 
     return (
         <div className="mb-5">

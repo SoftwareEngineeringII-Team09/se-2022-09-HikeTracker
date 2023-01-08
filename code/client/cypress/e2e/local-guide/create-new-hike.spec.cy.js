@@ -19,20 +19,22 @@ describe('Create new hike', () => {
 
     const hikeRegion = "Piemonte";
     const hikeProvince = "Torino";
-    const hikeCity = "Maglione";
+    const hikeCity = "Mompantero";
     const hikeExpectedTime = "02:30";
     const hikeDifficulty = "Tourist";
     const hikeDescription = "Test description";
     const gpxTestTrack = "../fixtures/tracks/gpxTestTrack.gpx";
+    const coverImage = "../fixtures/images/cover.jpeg";
 
     cy.get('input[id="title"]').type(hikeTitle);
     cy.get('select[id="region"]').select(hikeRegion);
     cy.get('select[id="province"]').select(hikeProvince);
     cy.get('select[id="city"]').select(hikeCity);
-    cy.get('input[id="expTime"]').type(hikeExpectedTime);
-    cy.get('select[id="difficulty"]').type(hikeDifficulty);
-    cy.get('input[id="description"]').type(hikeDescription);
-    cy.get('input[id="gpxFile"]').attachFile(gpxTestTrack);
+    cy.get('input[id="expectedTime"]').type(hikeExpectedTime);
+    cy.get('select[id="difficulty"]').select(hikeDifficulty);
+    cy.get('textarea[id="description"]').type(hikeDescription);
+    cy.get('input[id="gpx"]').attachFile(gpxTestTrack);
+    cy.get('input[id="image"]').attachFile(coverImage);
     cy.get('button[type="submit"]').click();
 
     cy.get(TOAST_SUCCESS_NOTIFICATION).should('contain.text', `Hike created successfully`);

@@ -28,6 +28,9 @@ const BrowseHikes = () => {
                 .finally(() => setLoading(false))
     }, [loading])
 
+    function handleOpenFilters() { setOpenFilters(true) }
+    function handleCloseFilters() { setOpenFilters(false) }
+
     if (!loading)
         return (
             <div className='my-5'>
@@ -37,15 +40,15 @@ const BrowseHikes = () => {
                         <p>See our amazing filters from the sidebar on the right</p>
                     </div>
                     <div>
-                        <FaFilter role="button" size="28px" onClick={() => setOpenFilters(true)} />
-                        <HikesFilters isOpen={openFilters} close={() => setOpenFilters(false)} />
+                        <FaFilter role="button" size="28px" onClick={handleOpenFilters} />
+                        <HikesFilters isOpen={openFilters} close={handleCloseFilters} />
                     </div>
                 </div>
 
                 <Row className='g-5 pt-3 pb-5'>
                     {isFilteredHikesArrayEmpty(hikes, filters, active) ? <span className='fs-5'>No hikes here...</span> :
-                        filterHikes(hikes, filters, active).map((hike, idx) => (
-                            <HikeCard key={idx} hike={hike} />
+                        filterHikes(hikes, filters, active).map((hike) => (
+                            <HikeCard key={`hike-${hike.hikeId}`} hike={hike} />
                         ))}
                 </Row >
             </div>

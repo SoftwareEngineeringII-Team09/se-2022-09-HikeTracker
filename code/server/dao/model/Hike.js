@@ -18,7 +18,8 @@ class Hike {
     difficulty,
     description,
     startPoint,
-    endPoint
+    endPoint,
+    hikeImage,
   ) {
     this.hikeId = hikeId;
     this.title = title;
@@ -35,6 +36,7 @@ class Hike {
     this.description = description;
     this.startPoint = startPoint;
     this.endPoint = endPoint;
+    this.hikeImage = hikeImage;
   }
 }
 

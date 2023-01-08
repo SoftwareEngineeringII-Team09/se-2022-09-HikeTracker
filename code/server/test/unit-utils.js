@@ -237,10 +237,11 @@ exports.testDefineHike = function (
   province,
   region,
   fileName,
+  imageName,
   expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
-    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, fileName: fileName };
+    const hikeData = { writerId: writerId, title: title, expectedTime: expectedTime, difficulty: difficulty, description: description, city: city, province: province, region: region, fileName: fileName, hikeImageName: imageName };
     if (!expectedRejectionCode) {
       await HikeManager.defineHike(
         hikeData
@@ -261,6 +262,7 @@ exports.testDefineHike = function (
       expect(definedHike.province).toEqual(province);
       expect(definedHike.region).toEqual(region);
       expect(definedHike.trackPath).toEqual(`gpx/${fileName}`);
+      expect(definedHike.hikeImage).toEqual(`hikeImage/${imageName}`);
     } else {
       await expect(
         HikeManager.defineHike(
@@ -1043,7 +1045,7 @@ exports.testStoreSelectedHike = function (
       const storedSelectedHike = await PersistentManager.loadAll(SelectedHike.tableName).then(
         (selectedHikes) => selectedHikes[0]
       );
-      
+
       expect(res).toEqual(newSelectedHike.selectedHikeId);
       expect(storedSelectedHike).toEqual(newSelectedHike);
     } else {
@@ -1153,6 +1155,43 @@ exports.testTerminateHike = function (itShould, selectedHikeId, endTime, expecte
       await expect(
         SelectedHikeManager.terminateHike(selectedHikeId, endTime)
       ).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testStartHike = function (itShould, hikeId, startTime, hikerId, expectedRejectionCode = null) {
+  test(`Should ${itShould}`, async () => {
+    if (!expectedRejectionCode) {
+      const res = await SelectedHikeManager.startHike(
+        hikeId,
+        startTime,
+        hikerId
+      );
+
+      const storedSelectedHike = await PersistentManager.loadOneByAttribute(SelectedHike.tableName, "selectedHikeId", res);
+      expect(storedSelectedHike.status).toEqual("ongoing");
+      expect(storedSelectedHike.startTime).toEqual(startTime);
+      expect(storedSelectedHike.endTime).toEqual(null);
+    } else {
+      await expect(
+        SelectedHikeManager.startHike(hikeId,
+          startTime,
+          hikerId)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
+    }
+  });
+};
+
+exports.testLoadStartedHike = function (
+  itShould,
+  hikerId,
+  expectedLoadStarteHikeProperties
+) {
+  test(`Should ${itShould}`, async () => {
+    const res = await SelectedHikeManager.loadStartedHike(hikerId);
+
+    for (const p of expectedLoadStarteHikeProperties) {
+      expect(res).toHaveProperty(p);
     }
   });
 };

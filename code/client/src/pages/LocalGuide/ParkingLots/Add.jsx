@@ -24,7 +24,7 @@ const AddParkingLot = () => {
         }
     }
 
-    const handleSubmit = (values) => {
+    function handleSubmit(values) {
         const parkingLotData = Number.isNaN(parseFloat(values.altitude)) ? {
             parkingLotName: values.parkingLotName,
             capacity: parseInt(values.capacity),
@@ -48,16 +48,16 @@ const AddParkingLot = () => {
 
     return (
         <div className='my-5'>
-            <div>
+            <div className='mb-4'>
                 <h1 className="fw-bold">Add a new parking lot</h1>
             </div>
-            <Formik initialValues={initialValues} validationSchema={ParkingLotSchema} onSubmit={(values) => handleSubmit(values)} >
+            <Formik initialValues={initialValues} validationSchema={ParkingLotSchema} onSubmit={handleSubmit} >
                 {({ touched, isValid, values, setFieldValue, setFieldTouched }) => {
                     const disabled = (!touched.parkingLotName && !touched.capacity
                         && (!touched.point || (touched.point && !touched.point.latitude && !touched.point.longitude)))
                         || !isValid
 
-                    const handleClick = (point) => {
+                    function handleClick(point) {
                         setFieldValue('point', point)
                         setFieldTouched('point')
                     }

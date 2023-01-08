@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import api from '@services/api';
 
 const gpxTestTrack = require("@data/test/gpxTestTrack.gpx");
+const monteFerraImage = require("@data/test/monteFerra.jpeg");
 
 /* Mocking the login api and libraries */
 jest.mock('@services/api');
@@ -38,7 +39,7 @@ describe("Page for adding new hike", () => {
 
     it("Hike form page correctly rendered", () => {
         render(<AddHike />, { wrapper: MemoryRouter })
-        expect(screen.getByText("Insert hike data")).toBeInTheDocument();
+        expect(screen.getByText("Add a new hike")).toBeInTheDocument();
     })
 
     it("Hike form page renders a form for inserting data of a new hike", async () => {
@@ -49,10 +50,10 @@ describe("Page for adding new hike", () => {
             </Router>
         )
 
-        await userEvent.type(screen.getByLabelText("Title:"), 'My title!')
+        await userEvent.type(screen.getByLabelText("Title"), 'My title!')
         expect(screen.getByDisplayValue("My title!")).toBeInTheDocument()
 
-        await userEvent.type(screen.getByLabelText("Description:"), 'Prova!')
+        await userEvent.type(screen.getByLabelText("Description"), 'Prova!')
         expect(screen.getByDisplayValue("Prova!")).toBeInTheDocument()
     })
 
@@ -65,15 +66,16 @@ describe("Page for adding new hike", () => {
         )
 
         /* Mock api calls */
-        api.hikes.createHike.mockResolvedValueOnce({  hikeId: 1 });
+        api.hikes.createHike.mockResolvedValueOnce({ hikeId: 1 });
 
-        await userEvent.type(screen.getByLabelText("Title:"), 'My title!')
-        await userEvent.selectOptions(screen.getByLabelText("Region:"), "Piemonte")
-        await userEvent.selectOptions(screen.getByLabelText("Province:"), "Torino")
-        await userEvent.selectOptions(screen.getByLabelText("City:"), 'Alpette')
-        await userEvent.selectOptions(screen.getByLabelText("Difficulty:"), 'Tourist')
-        await userEvent.type(screen.getByLabelText("Description:"), 'Test description')
-        await userEvent.upload(screen.getByLabelText("Insert your gpx file:"), gpxTestTrack)
+        await userEvent.type(screen.getByLabelText("Title"), 'My title!')
+        await userEvent.selectOptions(screen.getByLabelText("Region"), "Piemonte")
+        await userEvent.selectOptions(screen.getByLabelText("Province"), "Torino")
+        await userEvent.selectOptions(screen.getByLabelText("City"), 'Alpette')
+        await userEvent.selectOptions(screen.getByLabelText("Difficulty"), 'Tourist')
+        await userEvent.type(screen.getByLabelText("Description"), 'Test description')
+        await userEvent.upload(screen.getByLabelText("Select your gpx file"), gpxTestTrack, { applyAccept: false })
+        await userEvent.upload(screen.getByLabelText("Cover image"), monteFerraImage, { applyAccept: false })
         await userEvent.click(screen.getByRole("button"))
 
         const expectedFormData = new FormData();
@@ -83,7 +85,7 @@ describe("Page for adding new hike", () => {
         expectedFormData.append('city', "Alpette");
         expectedFormData.append('difficulty', "Tourist");
         expectedFormData.append('description', "Test description");
-        expectedFormData.append('file', gpxTestTrack);
+        expectedFormData.append('gpx', gpxTestTrack);
 
         await waitFor(() => {
             expect(api.hikes.createHike).toHaveBeenCalledTimes(1)
@@ -106,17 +108,15 @@ describe("Page for adding new hike", () => {
         )
 
         /* Mock api calls */
-        const errorMessage = "There has been and error while creating the hike"
-        api.hikes.createHike.mockRejectedValueOnce(new Error(errorMessage));
+        const errorMessage = "title is a required field"
 
         await userEvent.click(screen.getByRole("button"))
 
         await waitFor(() => {
-            expect(api.hikes.createHike).toHaveBeenCalledTimes(1)
+            expect(api.hikes.createHike).toHaveBeenCalledTimes(0)
         })
         await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledTimes(1)
-            expect(toast.error).toHaveBeenCalledWith(errorMessage, { theme: "colored" })
+            expect(screen.getByText(errorMessage)).toBeInTheDocument();
         })
     })
 

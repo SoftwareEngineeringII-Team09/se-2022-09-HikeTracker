@@ -8,8 +8,8 @@ const Specs = () => (
             { label: "Length", ref: "length", unit: "kms" },
             { label: "Total Ascent", ref: "totalAscent", unit: "meters" },
             { label: "Expected Time", ref: "expectedTime", unit: "hours" }
-        ].map((item, idx) => (
-            <div key={`spec-${idx}`} className="mb-5">
+        ].map((item) => (
+            <div key={`spec-${item.label}`} className="mb-5">
                 <h4 className="fw-bold mb-3">
                     {item.label}
                     <span className="h6">{" "}in {item.unit}</span>

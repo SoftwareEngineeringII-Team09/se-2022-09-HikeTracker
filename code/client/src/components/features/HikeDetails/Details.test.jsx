@@ -1,15 +1,14 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
 import { AuthContext } from '@contexts/authContext'
 
 import Details from './Details'
-import api from '@services/api';
-import { toast } from "react-toastify";
 
-jest.mock('@services/api');
-jest.mock("axios");
+import api from '@services/api'
 
+jest.mock('@services/api')
+jest.mock('axios')
 jest.mock("@lib/helpers/location", () => ({
     getLocationFullName: (province, city) => `c${city}, p${province}`
 }))
@@ -26,6 +25,7 @@ jest.mock('react-toastify', () => {
         }
     };
 });
+jest.mock('react-datetime-picker', () => () => <div data-testid="datetime-picker" />)
 
 const testHike = {
     hikeId: 1,
@@ -92,119 +92,103 @@ describe("HikeDetails.Details component", () => {
             render(<Details hike={testHike} />, { wrapper: MemoryRouter })
             expect(screen.getByText(point.name)).toBeInTheDocument()
         })
-})
 
-describe("Terminate Hike", () => {
+    it('Start hike button is not showed if a user is not logged in', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: false }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
 
-    let container;
+        expect(screen.queryByRole('button', { name: /start this hike/i })).not.toBeInTheDocument()
+    })
 
-    beforeEach(() => {
-        let component = render(
+    it('Start hike button is not showed if a user is not logged in as an hiker', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Local Guide" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(screen.queryByRole('button', { name: /start this hike/i })).not.toBeInTheDocument()
+    })
+
+    it('Start hike button is correctly rendered if a user is logged in as an hiker and no hikes are already started', async () => {
+        api.hikes.getStartedHike.mockRejectedValue({ status: 404 })
+        api.hikes.startHike.mockResolvedValueOnce({})
+
+        render(
             <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
                 <Details hike={testHike} />
             </AuthContext.Provider>,
-            { wrapper: MemoryRouter }
-        );
-        container = component.container;
+            { wrapper: MemoryRouter })
+
+        expect(api.hikes.getStartedHike).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(screen.getByRole('button', { name: /start this hike/i })).toBeInTheDocument())
+        await userEvent.click(screen.getByRole('button', { name: /start this hike/i }))
+        expect(api.hikes.startHike).toHaveBeenCalledTimes(1)
     })
 
-    // TODO: Uncomment this when the start hike is implemented
-    // it("Doesn't show the terminate button if hike is not started", () => {
-    //     expect(screen.queryByRole('button', { name: /terminate hike/i })).not.toBeInTheDocument()
-    // })
+    it('Datetime picker for start time is not showed if a user is not logged in', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: false }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
 
-    it("Show the terminate button if hike is started", () => {
-        // TODO: Start hike
-        expect(screen.queryByRole('button', { name: /terminate hike/i })).toBeInTheDocument()
-        expect(screen.queryByText("Select end time")).toBeInTheDocument()
+        expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
     })
 
-    it("Shows error message if terminating hike with a timestamp from the future", async () => {
-        // TODO: Start hike
+    it('Datetime picker for start time is not showed if a user is not logged in as an hiker', () => {
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Local Guide" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
 
-        const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-        const terminateHikeTime = container.querySelector("input[name=terminateTime]");
-    
-        // Insert a timestamp from the future
-        const nextYear = new Date().getFullYear() + 1;
-        fireEvent.change(terminateHikeTime, {target: {value: nextYear + "-01-01T12:00:00"}})
-        await userEvent.click(termintateButton);
-
-        // Check that the error message is shown
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledTimes(1)
-            expect(toast.error).toHaveBeenCalledWith("End time cannot be in the future", { theme: "colored" })
-        });
-    });
-
-    // it("Shows error message if terminating hike with a timestamp lower than the start timestamp", async () => {
-    //     // TODO: Start hike
-
-    //     const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-    //     const terminateHikeTime = container.querySelector("input[name=terminateTime]");
-    
-    //     // Insert a timestamp from the future
-    //     const nextYear = new Date().getFullYear() + 1;
-    //     fireEvent.change(terminateHikeTime, {target: {value: nextYear + "-01-01T12:00:00"}})
-    //     await userEvent.click(termintateButton);
-
-    //     // Check that the error message is shown
-    //     await waitFor(() => {
-    //         expect(toast.error).toHaveBeenCalledTimes(1)
-    //         expect(toast.error).toHaveBeenCalledWith("End time cannot be in the future", { theme: "colored" })
-    //     });
-    // });
-
-    it("Hike is correctly terminated", async () => {
-        // TODO: Start hike
-        const mockEndTime = '2021-01-01T12:00:00';
-        const endTimeFormatted = '1/1/2021, 12:00:00';
-        const mockHikeId = 1;
-
-        api.selectedHikes.terminateHike.mockResolvedValueOnce({});
-
-        const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-        const terminateHikeTime = container.querySelector("input[name=terminateTime]");
-
-        fireEvent.change(terminateHikeTime, {target: {value: mockEndTime}})
-        userEvent.click(termintateButton);
-
-        await waitFor(() => {
-            expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
-            expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, endTimeFormatted);
-        });
-
-        /* Check success message is shown */
-        await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledTimes(1);
-            expect(toast.success).toHaveBeenCalledWith("Hike terminated", { "theme": "colored" });
-        });
+        expect(screen.queryByTestId(/datetime-picker/i)).not.toBeInTheDocument()
     })
 
-    it("Shows error message if terminate hike fails", async () => {
-        // TODO: Start hike
-        const mockEndTime = '2021-01-01T12:00:00';
-        const endTimeFormatted = '1/1/2021, 12:00:00';
-        const mockErrorMessage = "Error terminating hike";
-        const mockHikeId = 1;
 
-        api.selectedHikes.terminateHike.mockRejectedValueOnce(mockErrorMessage);
+    it('Datetime picker for start time is correctly rendered if a user is logged in as an hiker', async () => {
+        api.hikes.getStartedHike.mockRejectedValueOnce({ status: 404 })
 
-        const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-        const terminateHikeTime = container.querySelector("input[name=terminateTime]");
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
 
-        fireEvent.change(terminateHikeTime, {target: {value: mockEndTime}})
-        await userEvent.click(termintateButton);
+        expect(api.hikes.getStartedHike).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(screen.getByTestId(/datetime-picker/i)).toBeInTheDocument())
+    })
 
-        await waitFor(() => {
-            expect(api.selectedHikes.terminateHike).toHaveBeenCalledTimes(1);
-            expect(api.selectedHikes.terminateHike).toHaveBeenCalledWith(mockHikeId, endTimeFormatted);
-        });
+    it('Timewatch is correctly rendered if this hike is already started', async () => {
+        api.hikes.getStartedHike.mockResolvedValueOnce({ hikeId: 1, startTime: '08/01/2023, 09:00:00' })
 
-        /* Check error message is shown */
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledTimes(1);
-            expect(toast.error).toHaveBeenCalledWith(mockErrorMessage, { "theme": "colored" });
-        });
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(api.hikes.getStartedHike).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(screen.queryByTestId('button', { name: /start this hike/i })).not.toBeInTheDocument())
+        await waitFor(() => expect(screen.getByTestId(/timewatch/i)).toBeInTheDocument())
+    })
+
+    it('Warning message is correctly rendered if another hike is already started', async () => {
+        api.hikes.getStartedHike.mockResolvedValueOnce({ hikeId: 2, startTime: '08/01/2023, 09:00:00' })
+
+        render(
+            <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
+                <Details hike={testHike} />
+            </AuthContext.Provider>,
+            { wrapper: MemoryRouter })
+
+        expect(api.hikes.getStartedHike).toHaveBeenCalledTimes(1)
+        await waitFor(() => expect(screen.queryByTestId('button', { name: /start this hike/i })).not.toBeInTheDocument())
+        await waitFor(() => expect(screen.queryByTestId(/timewatch/i)).not.toBeInTheDocument())
+        await waitFor(() => expect(screen.getByText(/You cannot start this hike/i)).toBeInTheDocument())
     })
 })

@@ -127,9 +127,7 @@ const UpdateEndpoints = () => {
     const navigateBack = useCallback(
         () => {
             navigate(-1);
-        },
-        [navigate]
-    );
+        }, [navigate]); // eslint-disable-line
 
     if (loading)
         return <Spinner />;

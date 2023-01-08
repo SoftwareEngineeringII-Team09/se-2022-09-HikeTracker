@@ -12,6 +12,8 @@ const Utils = require("../unit-utils");
 /* Some useful data to use for tests */
 const testGpx = "test.gpx";
 const testEditableGpx = "test_editable.gpx";
+const testHikeImage = "hike1.jpg";
+const testHutImage = "hut1.jpg";
 const testUser = new User(1, "test@email.it", "testSalt", "testPassword", null, "testFirstname", "testLastname", "390123456789", "testRole", 1);
 const testStartPoint1 = new Point(1, "start point", 0, 0, "Start point of testHike1", 10.000, 10.000);
 const testEndPoint1 = new Point( 2,"end point",0,0,"End point of testHike1", 10.010, 10.010);
@@ -19,9 +21,9 @@ const testStartPoint2 = new Point(3, "start point", 0, 0, "Start point of testHi
 const testEndPoint2 = new Point(4, "end point", 0, 0, "End point of testHike2", 40.0, 40.0);
 const testStartPoint3 = new Point(5, "start point", 0, 0, "Start point of testHike3", 50.0, 50.0);
 const testEndPoint3 = new Point(6, "end point", 0, 0, "End point of testHike3", 60.0, 60.0);
-const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId);
-const testHike2 = new Hike(2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 2, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId);
-const testHike3 = new Hike(3, "testTitle3", testUser.userId, `gpx/${testGpx}`, 3, 3, 3, 30.0, "03:03", 30.0, 30.0, "testDifficulty3", "testDescription3", testStartPoint3.pointId, testEndPoint3.pointId);
+const testHike1 = new Hike(1, "testTitle1", testUser.userId, `gpx/${testGpx}`, 1, 1, 1, 10.0, "01:01", 10.0, 10.0, "testDifficulty1", "testDescription1", testStartPoint1.pointId, testEndPoint1.pointId,`hikeImage/${testHikeImage}`);
+const testHike2 = new Hike(2, "testTitle2", testUser.userId, `gpx/${testGpx}`, 2, 2, 2, 20.0, "02:02", 20.0, 20.0, "testDifficulty2", "testDescription2", testStartPoint2.pointId, testEndPoint2.pointId,`hikeImage/${testHikeImage}`);
+const testHike3 = new Hike(3, "testTitle3", testUser.userId, `gpx/${testGpx}`, 3, 3, 3, 30.0, "03:03", 30.0, 30.0, "testDifficulty3", "testDescription3", testStartPoint3.pointId, testEndPoint3.pointId,`hikeImage/${testHikeImage}`);
 const testHikes = [testHike1, testHike2, testHike3];
 const notExistingHike = testHike1.hikeId + testHike2.hikeId + testHike3.hikeId;
 const notExistingPoint = testStartPoint1.pointId + testStartPoint2.pointId + testStartPoint3.pointId + testEndPoint1.pointId + testEndPoint2.pointId + testEndPoint3.pointId;
@@ -36,10 +38,10 @@ const testParkingLotPoint1 = new Point(11, "parking lot", 1, 0, null, 10.001, 10
 const testParkingLotPoint2 = new Point(12, "parking lot", 1, 0, null, 10.005, 10.005);
 const testParkingLotPoint3 = new Point(13, "parking lot", 1, 0, null, 10.006, 10.006);
 const testParkingLotPoint4 = new Point(14, "parking lot", 1, 0, null, 10.009, 10.009);
-const testHut1 = new Hut(1, "testHutName1", testHutPoint1.pointId, testUser.userId, 1, 1, 1, 10, 10.0, 1.0, "391012345678", "testHutEmail1@email.com", "www.testHutWebSite1.com");
-const testHut2 = new Hut(2, "testHutName2", testHutPoint2.pointId, testUser.userId, 2, 2, 2, 20, 20.0, 10000.0, "392012345678", "testHutEmail2@email.com", "www.testHutWebSite2.com");
-const testHut3 = new Hut(3, "testHutName3", testHutPoint3.pointId, testUser.userId, 3, 3, 3, 30, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com");
-const testHut4 = new Hut(4, "testHutName4", testHutPoint4.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail4@email.com", "www.testHutWebSite4.com");
+const testHut1 = new Hut(1, "testHutName1", testHutPoint1.pointId, testUser.userId, 1, 1, 1, 10, 10.0, 1.0, "391012345678", "testHutEmail1@email.com", "www.testHutWebSite1.com",`hutImage/${testHutImage}`);
+const testHut2 = new Hut(2, "testHutName2", testHutPoint2.pointId, testUser.userId, 2, 2, 2, 20, 20.0, 10000.0, "392012345678", "testHutEmail2@email.com", "www.testHutWebSite2.com",`hutImage/${testHutImage}`);
+const testHut3 = new Hut(3, "testHutName3", testHutPoint3.pointId, testUser.userId, 3, 3, 3, 30, 30.0, 3000.0, "393012345678", "testHutEmail3@email.com", "www.testHutWebSite3.com",`hutImage/${testHutImage}`);
+const testHut4 = new Hut(4, "testHutName4", testHutPoint4.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail4@email.com", "www.testHutWebSite4.com",`hutImage/${testHutImage}`);
 const testPotHutPoint1 = new Point(15, "hut", 0, 1, null, 45.178591, 7.08);
 const testPotHut1 = new Hut(5, "testHutName5", testPotHutPoint1.pointId, testUser.userId, 4, 4, 4, 40, 40.0, 4000.0, "394012345678", "testHutEmail5@email.com", "www.testHutWebSite5.com");
 const testParkingLot1 = new ParkingLot(1, "testParkingLotName1", testParkingLotPoint1.pointId, testUser.userId, 1.0, 100);
@@ -397,7 +399,8 @@ describe("Test defineHike", () => {
     testHike1.city,
     testHike1.province,
     testHike1.region,
-    testGpx
+    testGpx,
+    testHikeImage,
   );
 
   Utils.testDefineHike(
@@ -411,6 +414,7 @@ describe("Test defineHike", () => {
     testHike1.province,
     testHike1.region,
     testGpx,
+    testHikeImage,
     404
   );
 });
