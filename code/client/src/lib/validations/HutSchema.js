@@ -48,6 +48,8 @@ const HutSchema = Yup.object().shape({
     hutImage: Yup.mixed().required()
         .test('fileFormat', 'Provide a valid image', (value) => {
             if (!value) return false;
+            if (value.type)
+                return ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(value.type);
             const format = value.split('.').pop();
             return ['jpg', 'jpeg', 'gif', 'png'].includes(format);
         })

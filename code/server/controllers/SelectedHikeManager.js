@@ -198,6 +198,7 @@ class SelectedHikeManager {
   async loadStartedHike(hikerId) {
     let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
     return {
+      selectedHikeId: startHike.selectedHikeId,
       hikeId: startHike.hikeId,
       startTime: startHike.startTime
     }

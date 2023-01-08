@@ -92,6 +92,7 @@ const Details = ({ hike }) => {
             return toast.error("End time cannot be in the future", { theme: 'colored' });
 
         setLoading(true);
+        console.log(startedHike)
         api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
             .then(() => {
                 setStartedHike(undefined);
@@ -114,7 +115,7 @@ const Details = ({ hike }) => {
                                 <Timewatch days={days} hours={hours} minutes={minutes} seconds={seconds} />
                                 <div className='d-flex flex-column align-items-start mb-3'>
                                     <div className='d-flex flex-column mb-3'>
-                                        <label for='terminateTime' className='fw-bold'>Select end time</label>
+                                        <label htmlFor='terminateTime' className='fw-bold'>Select end time</label>
                                         <DateTimePicker name="terminateTime" id='terminateTime' onChange={setTerminateTime} value={terminateTime} />
                                     </div>
                                     <Button disabled={loading} variant='success' className='fw-bold text-white d-flex align-items-center' onClick={handleTerminateHike}>

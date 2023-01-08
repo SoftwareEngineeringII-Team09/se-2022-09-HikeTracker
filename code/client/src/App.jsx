@@ -15,6 +15,7 @@ const App = () => {
         <Route element={<ProtectedRoute requiresLogin redirectPath='/login' />}>
           <Route path='/huts' element={<Pages.SearchHuts />} />
           <Route path='/huts/:hutId' element={<Pages.Hut />} />
+          <Route path='/hikes/completed' element={<Pages.CompletedHikes />} />
         </Route>
         <Route element={<ProtectedRoute requiresNoLogin={true} />}>
           <Route path='/signup' element={<Pages.Authentication.Signup />} />

@@ -46,3 +46,8 @@ Cypress.Commands.add('createHut', ({ writer }) => {
 Cypress.Commands.add('createParkingLot', ({ writer }) => {
     cy.request('POST', `${SERVER_URL}/tests/addParkingLot`, { ...parkingLot, writerId: writer })
 })
+
+/* Add completed hike */
+Cypress.Commands.add('addCompletedHike', ({ selectedHike, hike, hiker, status, startTime, endTime }) => {
+    cy.request('POST', `${SERVER_URL}/tests/addCompletedSelectedHike`, { slectedHikeId: selectedHike, hikeId: hike, hikerId: hiker, status: status, startTime: startTime, endTime: endTime})
+})
