@@ -74,7 +74,9 @@ This project has been developed by Team-09 for the course of "Software Engineeri
     - [ParkingLot Routes](#parkinglot-routes)
 	    - [`POST /api/parkingLots`](#post-apiparkinglots)
     - [SelectedHike Routes](#selectedhike-routes)
+       - [`POST /api/selectedHikes/start`](#post-apiselectedhikesstart)
 	    - [`PUT /api/selectedHikes/:selectedHikeId/terminate`](#put-apiselectedhikesselectedhikeidterminate)
+       - [`GET /api/selectedHikes`](#get-apiselectedhikes)]
 6. [Database Tables](#database-tables)
     - [Table `User`](#user)
     - [Table `Hike`](#hike)
@@ -1357,6 +1359,39 @@ Post a new parking lot.
 
 ### **SelectedHike Routes**
 
+#### `POST /api/selectedHikes/start`
+
+A hiker start a hike with specific startTime
+
+**Request header:**
+`Content-Type: application/json`
+
+
+**Request body:**
+```json
+{ 
+    "hikeId": 1,
+    "time": "2/1/2022, 14:25:34" 
+}
+```
+
+**Response header:**
+- `HTTP status code 201 Created(success)`
+
+**Response body:**
+`None`
+
+**Permission allowed:**
+`Hiker, Manager`
+
+**Error responses**
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+
 #### `PUT /api/selectedHikes/:selectedHikeId/terminate`
 
 Update status and endTime for a specific selected hike.
@@ -1377,6 +1412,39 @@ Update status and endTime for a specific selected hike.
 
 **Response body:**
 `None`
+
+**Permission allowed:**
+`Hiker, Manager`
+
+**Error responses**
+- `HTTP status code 503 Internal Server Error` (generic server error)
+- `HTTP status code 404 Not Found` (resource not found error)
+- `HTTP status code 422 Unprocessable Entity` (validation error)
+- `HTTP status code 401 Unauthorized` (not logged in or wrong permissions)
+
+
+#### `GET /api/selectedHikes/`
+
+Retrive the hike which already started
+
+**Request header:**
+`Content-Type: application/json`
+
+
+**Request body:**
+`None`
+
+**Response header:**
+- `HTTP status code 200 OK`
+
+**Response body:**
+```json
+{ 
+    "selectedHikeId": 1,
+    "hikeId":1,
+    "startTime": "2/1/2022, 14:25:34" 
+}
+```
 
 **Permission allowed:**
 `Hiker, Manager`
