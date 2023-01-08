@@ -104,7 +104,7 @@ const Details = ({ hike }) => {
                                     </Button>
                                 </div >
                             ))}
-                    <Image fluid src={`http://localhost:${SERVER_PORT}/${hike.hikeImage}`} alt="Hike cover" className="rounded-3 mb-3" style={{ objectFit: 'cover' }} />
+                    <Image fluid src={`http://localhost:${SERVER_PORT}/${hike.hikeImage}`} alt="Hike cover" className="rounded-3 mb-5" style={{ objectFit: 'cover', maxHeight: '25rem', width: '100%' }} />
                     <h1 className='fw-black'>
                         {hike.title}
                         {(user.role === "Local Guide" && hike.writer.writerId === user.userId) &&

@@ -542,7 +542,7 @@ VALUES (60, "Trail to Rocca Calascio", 6, "gpx/Rocca_Calascio.gpx", 66082, 66, 1
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
 VALUES (1, "Rifugio Meleze'", 1, 2, 4017, 4, 1, 50, 50.0, 1757.43, "0175 956410", "meleze@meleze.it", "www.meleze.it", "hutImage/hut1.jpg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
-VALUES (2, "Rifugio Blitz", 5, 2, 103024, 103, 1, 60, 60.0, 1265.85, "331 457 2614", "rifugiodelblitz@gmail.com", "www.vallevigezzo.eu","hutImage/hut2.jpg");
+VALUES (2, "Rifugio Blitz", 5, 2, 103024, 103, 1, 60, 60.0, 1265.85, "331 457 2614", "rifugiodelblitz@gmail.com", "www.vallevigezzo.eu","hutImage/hut2.jpeg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
 VALUES (3, "Rifugio Aleve'", 11, 2, 4172, 4, 1, 60, 50.0, 1500.76, "347 719 3878", "rifugioaleve2021@gmail.com", "www.facebook.com/rifugioaleve","hutImage/hut3.jpg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
