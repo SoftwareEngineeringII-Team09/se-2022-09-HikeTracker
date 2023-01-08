@@ -97,7 +97,7 @@ router.post(
   async (req, res) => {
     console.log(req)
     try {
-      await PersistentManager.store(SelectedHike.tableName, new SelectedHike(req.selectedHikeId, req.hikeId, req.hikerId, req.status, req.startTime, req.endTime));
+      await PersistentManager.store(SelectedHike.tableName, new SelectedHike(req.body.selectedHikeId, req.body.hikeId, req.body.hikerId, req.body.status, req.body.startTime, req.body.endTime));
       return res.status(204).end();
     } catch (exception) {
       console.log(exception)
