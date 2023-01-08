@@ -18,6 +18,14 @@ const hikes = {
     })
   },
 
+  getCompletedHikes: (userId) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${SERVER_URL}/hikes/all/completed`, { withCredentials: true })
+        .then(res => resolve(res.data))
+        .catch(err => reject(err.response.data.error));
+    })
+  },
+
   getHikeDetails: (hikeId) => {
     return new Promise((resolve, reject) => {
       axios.get(`${SERVER_URL}/hikes/${hikeId}`)

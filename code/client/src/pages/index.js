@@ -1,5 +1,6 @@
 export { default as Error } from './Error'
 export { default as Home } from './Home'
+export { CompletedHikes } from './CompletedHikes'
 
 export { BrowseHikes, Hike } from './BrowseHikes'
 export { SearchHuts, Hut } from './SearchHuts'
