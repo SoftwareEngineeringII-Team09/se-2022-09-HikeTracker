@@ -1185,13 +1185,20 @@ exports.testStartHike = function (itShould, hikeId, startTime, hikerId, expected
 exports.testLoadStartedHike = function (
   itShould,
   hikerId,
-  expectedLoadStarteHikeProperties
+  expectedLoadStarteHikeProperties,
+  expectedRejectionCode = null
 ) {
   test(`Should ${itShould}`, async () => {
-    const res = await SelectedHikeManager.loadStartedHike(hikerId);
+    if (!expectedRejectionCode) {
+      const res = await SelectedHikeManager.loadStartedHike(hikerId);
 
-    for (const p of expectedLoadStarteHikeProperties) {
-      expect(res).toHaveProperty(p);
+      for (const p of expectedLoadStarteHikeProperties) {
+        expect(res).toHaveProperty(p);
+      }
+    } else {
+      await expect(
+        SelectedHikeManager.loadStartedHike(hikerId)
+      ).rejects.toHaveProperty("code", expectedRejectionCode);
     }
   });
 };

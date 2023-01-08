@@ -144,10 +144,17 @@ class SelectedHikeManager {
     const selectedHike = await this.loadOneByAttributeSelectedHike("selectedHikeId", selectedHikeId);
     const startTimeObject = dayjs(selectedHike.startTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
     const endTimeObject = dayjs(endTime, ["DD/MM/YYYY, HH:mm:ss", "D/M/YYYY, HH:mm:ss"]);
+    const currentTimeObject = dayjs();
     if (startTimeObject.isAfter(endTimeObject)) {
       return Promise.reject({
         code: 422,
         result: `startTime = ${selectedHike.startTime} is after endTime = ${endTime}`
+      });
+    }
+    if (endTimeObject.isAfter(currentTimeObject)) {
+      return Promise.reject({
+        code: 422,
+        result: `endTime = ${endTime} is after current time = ${currentTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString()}`
       });
     }
 
@@ -189,10 +196,34 @@ class SelectedHikeManager {
 
 
   async loadStartedHike(hikerId) {
-    let startHike = await this.loadOneByAttributeSelectedHike("hikerId", hikerId);
+
+    console.log("SELECTING")
+    let selectedHikes = await this.loadAllByAttributeSelectedHike("hikerId", hikerId).then((selectedHikes) => selectedHikes.filter((sh) => sh.status === "ongoing"));
+
+    console.log("SELECTED HIKE", selectedHikes)
+
+    // Check if exists a started hike for this hikerId
+    if (selectedHikes.length === 0) {
+      return Promise.reject({
+        code: 404,
+        result: `There is no started hike for this hiker`
+      });
+    }
+
+    // Check if there are more than 1 started hikes
+    if (selectedHikes.length > 1) {
+      return Promise.reject({
+        code: 400,
+        result: `There are more than 1 started hike for this hiker`
+      });
+    } 
+
+    const startedHike = selectedHikes[0];
+
     return {
-      hikeId: startHike.hikeId,
-      startTime: startHike.startTime
+      selectedHikeId: startedHike.selectedHikeId,
+      hikeId: startedHike.hikeId,
+      startTime: startedHike.startTime
     }
   }
 }

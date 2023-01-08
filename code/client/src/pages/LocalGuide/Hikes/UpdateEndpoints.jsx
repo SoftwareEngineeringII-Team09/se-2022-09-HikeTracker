@@ -89,7 +89,7 @@ const UpdateEndpoints = () => {
         }
     }, [hikeId, trackUpdated]); // eslint-disable-line
 
-    function savePoints() {
+    const savePoints = useCallback(() => {
 
         const pointsUpdated = !startPoint.hasOwnProperty('original') || !endPoint.hasOwnProperty('original');
 
@@ -122,12 +122,12 @@ const UpdateEndpoints = () => {
             .finally(() => {
                 setLoadingUpdate(false);
             });
-    };
+    }, [startPoint, endPoint, hikeId, navigate]);
 
     const navigateBack = useCallback(
         () => {
             navigate(-1);
-        }, []); // eslint-disable-line
+        }, [navigate]); // eslint-disable-line
 
     if (loading)
         return <Spinner />;

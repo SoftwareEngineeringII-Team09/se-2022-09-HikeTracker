@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
-
 import { AuthContext } from '@contexts/authContext'
 
 import Details from './Details'
@@ -18,6 +17,14 @@ jest.mock("@components/features", () => ({
     HutCard: jest.fn()
 }))
 
+jest.mock('react-toastify', () => {
+    return {
+        toast: {
+            success: jest.fn(),
+            error: jest.fn()
+        }
+    };
+});
 jest.mock('react-datetime-picker', () => () => <div data-testid="datetime-picker" />)
 
 const testHike = {
