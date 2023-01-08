@@ -19,7 +19,7 @@ const testProps = {
 
 describe("TrackMap component", () => {
     it("Component is correctly rendered", () => {
-        // render(<TrackMap {...testProps} />, { wrapper: MemoryRouter })
-        // expect(screen.getByTestId("map")).toBeInTheDocument()
+        render(<TrackMap {...testProps} />, { wrapper: MemoryRouter })
+        expect(screen.getByTestId("map")).toBeInTheDocument()
     })
 })
