@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 import { __REGIONS, getProvincesForRegion, getCitiesForProvince } from '@lib/helpers/location'
 
-const mobileRegExp = /^(\+[1-9]{1,4}\s?)?[0-9]{3,12}$/;
+const mobileRegExp = /^(\+[1-9]{1,4}\s?)?\d{3,12}$/;
 
 const HutSchema = Yup.object().shape({
     hutName: Yup.string()

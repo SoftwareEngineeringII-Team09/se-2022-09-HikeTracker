@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Spinner } from 'react-bootstrap';
-import { FaMapMarkerAlt, FaInfoCircle, FaCrosshairs } from 'react-icons/fa'
-import { GiHut } from 'react-icons/gi'
+import { FaInfoCircle } from 'react-icons/fa'
 
 import { Tooltip } from '@components/ui-core';
 import api from '@services/api';
