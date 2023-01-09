@@ -1,7 +1,7 @@
 import { Col } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import api from '@services/api';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -26,7 +26,7 @@ const LoginForm = () => {
     });
 
     /* Login submission */
-    const submitLogin = async (values, { setSubmitting }) => {
+    const submitLogin = useCallback(async (values, { setSubmitting }) => {
         try {
             setLoading(true);
             const user = await api.users.login(values);
@@ -43,8 +43,8 @@ const LoginForm = () => {
             setSubmitting(false);
             setLoading(false);
         }
-    };
-
+    }, []) // eslint-disable-line
+    
     const initialValues = {
         username: '',
         password: ''

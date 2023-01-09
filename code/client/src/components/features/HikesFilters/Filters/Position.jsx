@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Row, Col, Button, Modal } from "react-bootstrap"
 
 import { Field, useFormikContext } from "formik"
@@ -21,12 +21,12 @@ const Position = ({ isOpen, close }) => {
         else return [point.lat, point.lng]
     }
 
-    function handleConfirm() {
+    const handleConfirm = useCallback(() => {
         if (touched.geoArea && touched.geoArea.position)
             setPoint({ lat, lng })
         else setFieldValue('geoArea.position.point', point)
         close()
-    }
+    }, [point]) // eslint-disable-line
 
     return (
         <Modal show={isOpen} onHide={close} size="xl">

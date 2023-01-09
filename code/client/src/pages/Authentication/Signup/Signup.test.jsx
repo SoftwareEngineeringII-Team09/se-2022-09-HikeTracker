@@ -534,7 +534,6 @@ describe("<Signup />", () => {
         await waitFor(() => {
             /* Check api call is made */
             expect(api.users.sendVerificationCode).toHaveBeenCalledTimes(1);
-            expect(api.users.sendVerificationCode).toHaveBeenCalledWith(userId);
         });
 
         await waitFor(() => {

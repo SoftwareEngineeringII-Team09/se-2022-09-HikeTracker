@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Row, Col, Button, Spinner } from 'react-bootstrap'
 import { toast } from "react-toastify"
@@ -15,9 +15,7 @@ import { Input } from '@components/form'
 import api from '@services/api'
 
 const RemoveButton = ({ point, onClick }) => {
-    function handleClick() {
-        onClick(point)
-    }
+    const handleClick = useCallback(() => onClick(point), []) // eslint-disable-line
 
     return (
         <Button variant="link" size="sm" className="p-0 mt-2" onClick={handleClick}>
@@ -57,20 +55,20 @@ const UpdateReferencePoints = () => {
         }
     }
 
-    function handleAddPoint(values, { resetForm }) {
+    const handleAddPoint = useCallback((values, { resetForm }) => {
         const { latitude, longitude } = values.point
         setPoints(old => [...old, { name: values.referencePointName, coords: [latitude, longitude] }])
         resetForm()
-    }
+    }, [])
 
-    function handleSaveChanges() {
+    const handleSaveChanges = useCallback(() => {
         api.hikes.updateReferencePoints(hikeId, points)
             .then(() => {
                 toast.success("Reference points have been correctly updated!", { theme: 'colored' })
                 navigate(`/hikes/${hikeId}`, { replace: true })
             })
             .catch(err => toast.error(err, { theme: 'colored' }))
-    }
+    }, [points]) // eslint-disable-line
 
     if (!loading && hike)
         return (

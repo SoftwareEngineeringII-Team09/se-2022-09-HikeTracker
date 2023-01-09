@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 import { Row, Spinner } from 'react-bootstrap'
 import { FaFilter } from 'react-icons/fa'
 import { toast } from 'react-toastify'
@@ -28,8 +28,8 @@ const BrowseHikes = () => {
                 .finally(() => setLoading(false))
     }, [loading])
 
-    function handleOpenFilters() { setOpenFilters(true) }
-    function handleCloseFilters() { setOpenFilters(false) }
+    const handleOpenFilters = useCallback(() => setOpenFilters(true), [])
+    const handleCloseFilters = useCallback(() => setOpenFilters(false), [])
 
     if (!loading)
         return (

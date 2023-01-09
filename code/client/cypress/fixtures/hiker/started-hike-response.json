@@ -1,0 +1,10 @@
+{
+    "response": {
+        "NotFound": {
+            "statusCode": 404,
+            "body": {
+                "error": "No started hike"
+            }
+        }
+    }
+}

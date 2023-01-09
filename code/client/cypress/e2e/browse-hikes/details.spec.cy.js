@@ -38,7 +38,7 @@ describe('Hike details', () => {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         const now = new Date();
         const hour = now.getHours();
-        const minutes =  now.getMinutes();
+        const minutes = now.getMinutes();
         const year = now.getFullYear();
         const month = now.getMonth();
         const day = now.getDate();
@@ -60,7 +60,6 @@ describe('Hike details', () => {
             // Select end time and terminate hike
             // Set date
             cy.get(".react-datetime-picker__calendar-button.react-datetime-picker__button").click({ force: true })
-            cy.get(`[aria-label="${todayExtended}"]`).click({ force: true })
 
             // Set time
             cy.get(".react-datetime-picker__inputGroup__input.react-datetime-picker__inputGroup__hour").type(hour, { force: true })

@@ -34,7 +34,7 @@ const Signup = () => {
     const rolesRequiringAdditionalInfo = roles.filter((r) => r.requiresAdditionalInfo).map((r) => r.name);
 
     /* Request new token */
-    const requestNewToken = async () => {
+    const requestNewToken = useCallback(async () => {
         try {
             await api.users.sendVerificationCode(userId);
             toast.success("We have sent you a new activation email", {
@@ -45,7 +45,7 @@ const Signup = () => {
                 theme: "colored",
             });
         }
-    };
+    }, []) // eslint-disable-line
 
     /* Signup submission */
     const submitSignup = useCallback(

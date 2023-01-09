@@ -7,7 +7,7 @@ const HikeCard = ({ hike }) => {
     return (
         <Col xs={12} lg={6} xl={4}>
             <div className='bg-base-light p-4 h-100 rounded-3 d-flex flex-column justify-content-between'>
-                <Image fluid src={`http://localhost:${SERVER_PORT}/${hike.hikeImage}`} alt="Hike cover" className="rounded-3 mb-3" style={{ objectFit: 'cover' }} />
+                <Image fluid src={`http://localhost:${SERVER_PORT}/${hike.hikeImage}`} alt="Hike cover" className="rounded-3 mb-3" style={{ objectFit: 'cover', maxHeight: '10rem' }} />
                 <div className='mb-3'>
                     <h3 className='fw-bold'>{hike.title}</h3>
                     <span>

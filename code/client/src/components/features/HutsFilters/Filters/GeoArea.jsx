@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Button } from "react-bootstrap"
 import { FaMapMarkedAlt } from 'react-icons/fa'
 
@@ -8,8 +8,8 @@ import Position from "./Position"
 const GeoArea = () => {
     const [openMap, setOpenMap] = useState(false)
 
-    function handleCloseMap() { setOpenMap(false) }
-    function handleOpenMap() { setOpenMap(true) }
+    const handleCloseMap = useCallback(() => setOpenMap(false), [])
+    const handleOpenMap = useCallback(() => setOpenMap(true), [])
 
     return (
         <div className="mb-5">

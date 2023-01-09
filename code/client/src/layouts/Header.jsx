@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useCallback } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Button, Navbar } from "react-bootstrap"
 import { RiMenu3Fill } from 'react-icons/ri'
@@ -18,8 +18,8 @@ const Header = () => {
     const [open, setOpen] = useState(false)
     const location = useLocation();
 
-    function closeSidebar() { setOpen(false) }
-    function openSidebar() { setOpen(true) }
+    const closeSidebar = useCallback(() => setOpen(false), [])
+    const openSidebar = useCallback(() => setOpen(true), [])
 
     return (
         <Navbar bg={location.pathname !== "/" ? "light" : ""} className="px-4 px-lg-5 py-4 sticky-top flex justify-content-between align-items-center" style={{ zIndex: 99 }}>

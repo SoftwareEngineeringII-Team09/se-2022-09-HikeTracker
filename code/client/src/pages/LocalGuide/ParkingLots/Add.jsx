@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { Button } from "react-bootstrap"
 import { Formik, Form } from 'formik'
@@ -24,7 +25,7 @@ const AddParkingLot = () => {
         }
     }
 
-    function handleSubmit(values) {
+    const handleSubmit = useCallback((values) => {
         const parkingLotData = Number.isNaN(parseFloat(values.altitude)) ? {
             parkingLotName: values.parkingLotName,
             capacity: parseInt(values.capacity),
@@ -44,7 +45,7 @@ const AddParkingLot = () => {
                 navigate('/')
             })
             .catch(err => toast.error(err, { theme: "colored" }))
-    }
+    }, []) // eslint-disable-line
 
     return (
         <div className='my-5'>
