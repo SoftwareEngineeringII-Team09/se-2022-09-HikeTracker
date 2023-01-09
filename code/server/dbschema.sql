@@ -542,13 +542,13 @@ VALUES (60, "Trail to Rocca Calascio", 6, "gpx/Rocca_Calascio.gpx", 66082, 66, 1
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
 VALUES (1, "Rifugio Meleze'", 1, 2, 4017, 4, 1, 50, 50.0, 1757.43, "0175 956410", "meleze@meleze.it", "www.meleze.it", "hutImage/hut1.jpg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
-VALUES (2, "Rifugio Blitz", 5, 2, 103024, 103, 1, 60, 60.0, 1265.85, "331 457 2614", "rifugiodelblitz@gmail.com", "www.vallevigezzo.eu","hutImage/hut2.jpg");
+VALUES (2, "Rifugio Blitz", 5, 2, 103024, 103, 1, 60, 60.0, 1265.85, "331 457 2614", "rifugiodelblitz@gmail.com", "www.vallevigezzo.eu","hutImage/hut2.jpeg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
 VALUES (3, "Rifugio Aleve'", 11, 2, 4172, 4, 1, 60, 50.0, 1500.76, "347 719 3878", "rifugioaleve2021@gmail.com", "www.facebook.com/rifugioaleve","hutImage/hut3.jpg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
 VALUES (4, "Rifugio Lou Saret'", 22, 2, 4017, 4, 1, 80, 70.0, 1756.76, "347 975 3899", "lousaret@libero.it", "www.agriturismolousaret.it","hutImage/hut4.jpg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
-VALUES (5, "Rifugio Amici Della Montagna Condove", 131, 2, 1093, 1, 1, 100, 80.0, 1254.22, "328 022 2365", "bronzinomarco@gmail.com", "www.amicidellamontagnacondove.it","hutImage/hut5.jpg");
+VALUES (5, "Rifugio Amici Della Montagna Condove", 131, 2, 1093, 1, 1, 100, 80.0, 1254.22, "328 022 2365", "bronzinomarco@gmail.com", "www.amicidellamontagnacondove.it","hutImage/hut5.JPG");
 
 /* ParkingLot table data */
 INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId", "capacity", "altitude")
