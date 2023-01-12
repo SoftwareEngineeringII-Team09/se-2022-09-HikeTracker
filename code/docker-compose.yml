@@ -24,41 +24,23 @@ services:
     build:
       context: ./server/
       target: development
+      args:
+        - NODE_ENV=production
+        - NODEMAILER_EMAIL=${NODEMAILER_EMAIL}
+        - NODEMAILER_PASSWORD=${NODEMAILER_PASSWORD}
+        - PORT=3001
+        - CLIENT_PORT=80
+        - TZ=Europe/Rome
     volumes:
       - ./server/:/app
       - /app/node_modules
     ports:
       - 3001:3001
     environment:
+      NODEMAILER_EMAIL: ${NODEMAILER_EMAIL}
+      NODEMAILER_PASSWORD: ${NODEMAILER_PASSWORD}
+      PORT: 3001
+      CLIENT_PORT: 3000
+      TZ: Europe/Rome
       NODE_ENV: development
-      CHOKIDAR_USEPOLLING: "true"
-  
-  # test services
-
-  client-tests:
-    profiles: ["test"]
-    stdin_open: true
-    tty: true
-    build:
-      context: ./client/
-      target: test
-    volumes:
-      - ./client/:/app
-      - /app/node_modules
-    environment:
-      NODE_ENV: test
-      CHOKIDAR_USEPOLLING: "true"
-
-  server-tests:
-    profiles: ["test"]
-    stdin_open: true
-    tty: true
-    build:
-      context: ./server/
-      target: test
-    volumes:
-      - ./server/:/app
-      - /app/node_modules
-    environment:
-      NODE_ENV: test
       CHOKIDAR_USEPOLLING: "true"

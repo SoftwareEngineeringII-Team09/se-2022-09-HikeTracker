@@ -11,7 +11,7 @@ FROM base as test
 RUN npm ci --silent
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 COPY . .
-CMD "npm" "test"
+CMD "npm" "run" "test:unit"
 
 # development target
 

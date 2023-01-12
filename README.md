@@ -23,11 +23,11 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 ## Table of Contents
 
 1. [Docker Documentation](#docker-documentation)
-   - [Development](#development)
-   - [Tests](#tests)
-   - [Production](#production)
-   - [Deploy on Docker Hub](#Deploy-on-Docker-Hub)
-   - [Pull from Docker Hub](#Pull-from-Docker-Hub)
+   - [How to pull production from Docker Hub](#how-to-pull-production-from-docker-hub)
+   - [How to run the production](#how-to-run-the-production)
+   - [How to run in development mode](#how-to-run-in-development-mode)
+   - [How to run tests](#how-to-run-tests)
+   - [Deploy on Docker Hub](#deploy-on-Docker-Hub)
 2. [Technical Dept Strategy](#technical-dept-strategy)
 3. [Technologies](#technologies)
    - [Frontend](#frontend)
@@ -95,32 +95,62 @@ This project has been developed by Team-09 for the course of "Software Engineeri
 
 ## Docker Documentation
 
-You must be in `/code` to be able to run docker commands.
+If you don't have access to the source code, you are able to pull production images for client and server and to run the production application.
+To see how to pull and run the production, take a look to:
+-  [How to pull production from Docker Hub](#how-to-pull-production-from-Docker-Hub)
+-  [How to run the production](#how-to-run-the-production)
 
-### Development
+On the other hand, if you have access to the source code, you are also able to run the application in development mode and to run both client and server tests.
+To see the available commands, take a look also to:
+- [How to run in development mode](#how-to-run-in-development-mode)
+- [How to run tests](#how-to-run-tests)
 
-This command allows to run both client and server in development mode.
+### How to pull production from Docker Hub
 
-```
-docker-compose up
-```
+This repo has two images, one for the user interface and one for the server logic. 
 
-### Tests
-
-You can run tests in interactive mode with commands:
-
-```
-docker-compose run --rm client-tests
-docker-compose run --rm server-tests
-```
-
-For running both tests and the app (suitable for a fast check, not for the real development):
+#### No source code
+Both images can be pulled with:
 
 ```
-docker-compose --profile test up
+docker pull andreadeluca/se_2022_09_hike_tracker:client
+docker pull andreadeluca/se_2022_09_hike_tracker:server
 ```
 
-### Production
+#### With source code using `docker-compose`
+
+_You must be in `/code` to be able to run this command._
+
+Both images can be pulled with:
+
+```
+docker-compose -f docker-compose.prod.yml pull 
+```
+
+### How to run the production
+
+Once you have pulled the production, you are able to run the application (see [How to pull production from Docker Hub](#how-to-pull-production-from-docker-hub)).
+
+#### No source code
+
+To run the application, you should use:
+
+```
+docker run -d -p 3001:3001 --name se09-server andreadeluca/se_2022_09_hike_tracker:server
+docker run -d -p 80:80 --name se09-client --link se09-server:server andreadeluca/se_2022_09_hike_tracker:client
+```
+
+The application will be reached to `http://localhost:80`, or `http://localhost`
+
+Note:
+- the images se09-client depends on the se09-server one, so this must be run first
+- in case of name conflicts, remove the containers with `docker rm <name>` and run again the commands above
+
+#### With source code using `docker-compose`
+
+_You must be in `/code` to be able to run this command._
+
+To run the application, you should use:
 
 ```
 docker-compose -f docker-compose.prod.yml stop && docker-compose -f docker-compose.prod.yml up --build -d
@@ -128,38 +158,47 @@ docker-compose -f docker-compose.prod.yml stop && docker-compose -f docker-compo
 
 the `-f` flag is for custom docker file path
 
+### How to run in development mode
+
+_You must be in `/code` to be able to run this command._
+
+This command allows to run both client and server in development mode.
+
+```
+docker-compose up
+```
+
+### How to run tests
+
+_You must be in `/code` to be able to run this command._
+
+You can run both frontend unit tests and backend unit and integrations tests with commands:
+
+```
+docker-compose -f docker-compose.test.yml run --rm client-tests
+docker-compose -f docker-compose.test.yml run --rm server-tests
+```
+
+_You can also use just one of them to run what you prefer._
+
+Moreover, if you want to run just one between backend unit tests and integration tests, you can use: 
+
+```
+docker-compose -f docker-compose.test.yml run --rm server-unit-tests
+docker-compose -f docker-compose.test.yml run --rm server-integration-tests
+```
+
 ### Deploy on Docker Hub
 
-Be sure that the .env file is in `/server` directory
+_You must be in `/code` to be able to run this command._
+
+Be sure that the .env file is in `/server` and in `/code` directory
 
 ```
 docker login
 docker-compose -f docker-compose.prod.yml build
 docker-compose -f docker-compose.prod.yml push
 ```
-
-### Pull from Docker Hub
-
-This repo has two images, one for the user interface and one for the server logic. Both images can be pulled with:
-
-```
-docker pull andreadeluca/se_2022_09_hike_tracker:client
-docker pull andreadeluca/se_2022_09_hike_tracker:server
-```
-
-When images are built, you can run them with:
-
-```
-docker run -d -p 3001:3001 --name se09-server andreadeluca/se_2022_09_hike_tracker:server
-docker run -d -p 3000:80 --name se09-client --link se09-server:server andreadeluca/se_2022_09_hike_tracker:client
-```
-
-The app can be reached on http://localhost:3000
-
-Note:
-
-- the images se09-client depends on the se09-server one, so this must be run first
-- in case of name conflicts, remove the containers with `docker rm <name>` and run again the commands above
 
 ## Technical Debt Strategy
 

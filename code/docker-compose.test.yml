@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  
+  # test services
+
+  client-tests:
+    profiles: ["test"]
+    stdin_open: true
+    tty: true
+    build:
+      context: ./client/
+      target: test
+    volumes:
+      - ./client/:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: test
+      CHOKIDAR_USEPOLLING: "true"
+
+  server-tests:
+    profiles: ["test"]
+    stdin_open: true
+    tty: true
+    build:
+      context: ./server/
+      target: test
+    volumes:
+      - ./server/:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: test
+      CHOKIDAR_USEPOLLING: "true"
+
+  server-unit-tests:
+    profiles: ["test"]
+    stdin_open: true
+    tty: true
+    build:
+      context: ./server/
+      target: unit
+    volumes:
+      - ./server/:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: test
+      CHOKIDAR_USEPOLLING: "true"
+
+  server-integration-tests:
+    profiles: ["test"]
+    stdin_open: true
+    tty: true
+    build:
+      context: ./server/
+      target: integration
+    volumes:
+      - ./server/:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: test
+      CHOKIDAR_USEPOLLING: "true"

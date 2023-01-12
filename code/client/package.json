@@ -19,11 +19,13 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "coverage": "craco test --coverage --watchAll=false",
+    "test:unit": "craco test --coverage --runInBand --watchAll=false",
+    "coverage": "craco test --coverage --silent --watchAll=false",
     "eject": "react-scripts eject",
     "cy:start": "concurrently -n \"CLIENT,CYPRESS\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run cy:client\" \"npm run cy:open\"",
     "cy:client": "craco -r @cypress/instrument-cra start",
     "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run",
     "cy:coverage": "npx nyc report --reporter=lcov --report-dir=coverage/e2e"
   },
   "eslintConfig": {

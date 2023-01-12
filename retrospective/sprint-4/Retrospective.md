@@ -45,10 +45,10 @@ sections:
 - Hours per task average, standard deviation (estimate and actual)
   - _Estimate:_
     - Average Hours per task: 73.33 / 45 = 1.63 hours
-    - Standard deviation per task:
+    - Standard deviation per task: 0.47
   - _Actual:_
     - Average Hours per task: 74.66 / 45 = 1.66 hours
-    - Standard deviation per task:
+    - Standard deviation per task: 0.59
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent - 1
   - Total task estimation error ratio: 73.33 / 74.66 - 1 = -0.01
 
