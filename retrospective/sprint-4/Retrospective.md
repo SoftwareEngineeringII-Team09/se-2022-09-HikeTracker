@@ -82,7 +82,7 @@ sections:
 - E2E and Integration testing:
   - Total hours estimated: 11 hours 45 minutes
   - Total hours spent: 11 hours 30 minutess
-  - Nr of automated e2e and integration test cases: 129
+  - Nr of automated e2e and integration test cases: 165
 - Code review
 
   - Total hours estimated: 9 hours 30 minutes
@@ -100,6 +100,7 @@ sections:
     - Security: A
     - Maintainability: A
     - Coverage: 83.4%
+  
   Since we had few code smells, we planned to fix all of them.
   Firstly, we focused on solving security hotspot, then we tried to fix code smells by severity level and in general we improved coverage.
 
