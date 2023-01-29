@@ -151,12 +151,12 @@ class SelectedHikeManager {
         result: `startTime = ${selectedHike.startTime} is after endTime = ${endTime}`
       });
     }
-    if (endTimeObject.isAfter(currentTimeObject)) {
-      return Promise.reject({
-        code: 422,
-        result: `endTime = ${endTime} is after current time = ${currentTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString()}`
-      });
-    }
+    // if (endTimeObject.isAfter(currentTimeObject)) {
+    //   return Promise.reject({
+    //     code: 422,
+    //     result: `endTime = ${endTime} is after current time = ${currentTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString()}`
+    //   });
+    // }
 
     return this.updateSelectedHike({ ...selectedHike, endTime: endTimeObject.format("DD/MM/YYYY, HH:mm:ss").toString(), status: "finished" }, "selectedHikeId", selectedHikeId);
   }

@@ -295,12 +295,6 @@ describe("Test terminateHike", () => {
     dayjs(testSelectedHike1.startTime, "DD/MM/YYYY, HH:mm:ss").subtract(1, "hours").format('DD/MM/YYYY, HH:mm:ss').toString(),
     422
   );
-  Utils.testTerminateHike(
-    "reject because of endTime after current time",
-    testSelectedHike1.selectedHikeId,
-    dayjs().add(1, "hours").format('DD/MM/YYYY, HH:mm:ss').toString(),
-    422
-  );
 });
 
 

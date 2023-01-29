@@ -223,6 +223,10 @@ class HikeManager {
       )
     );
 
+    const expectedTimeMs = dayjs.duration(hikeData.expectedTime * 60000);
+    const hours = (expectedTimeMs.days() * 24) + expectedTimeMs.hours();
+    const expectedTime = `${hours.toString().padStart(2, '0')}:${expectedTimeMs.minutes().toString().padStart(2, '0')}`;
+
     return this.storeHike(
       new Hike(
         null,
@@ -233,7 +237,7 @@ class HikeManager {
         hikeData.province,
         hikeData.region,
         length,
-        hikeData.expectedTime,
+        expectedTime,
         ascent,
         maxElevation,
         hikeData.difficulty,

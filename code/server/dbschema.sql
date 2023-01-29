@@ -414,6 +414,16 @@ VALUES (130, "end point", 0, 0, "End point of Trail to Rocca Calascio", 42.32794
 INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
 VALUES (131, "hut", 0, 1, NULL, 45.15153628982408, 7.237884940218075);
 
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (132, "hut", 0, 1, NULL, 45.81941081319932, 6.843393810640222);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (133, "hut", 0, 1, NULL, 44.69681444007365, 7.075996129447743);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (134, "hut", 0, 1, NULL, 44.70051914674029, 7.051580858894591);
+INSERT INTO "Point"("pointId", "type", "parkingLot", "hut", "nameOfLocation", "latitude", "longitude") 
+VALUES (135, "hut", 0, 1, NULL, 44.66566225182013, 7.064628832157386);
+
+
 
 
 /* Hike table data 	*/	
@@ -549,6 +559,15 @@ INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province",
 VALUES (4, "Rifugio Lou Saret'", 22, 2, 4017, 4, 1, 80, 70.0, 1756.76, "347 975 3899", "lousaret@libero.it", "www.agriturismolousaret.it","hutImage/hut4.jpg");
 INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
 VALUES (5, "Rifugio Amici Della Montagna Condove", 131, 2, 1093, 1, 1, 100, 80.0, 1254.22, "328 022 2365", "bronzinomarco@gmail.com", "www.amicidellamontagnacondove.it","hutImage/hut5.JPG");
+
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
+VALUES (6, "Quintino Sella", 132, 2, 4077, 4, 1, 20, 50.0, 2640, "0175 94943", "info@rifugiosella.it", "www.rifugiosella.it","hutImage/hut6.jpg");
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
+VALUES (7, "Giacoletti", 133, 2, 4077, 4, 1, 30, 60.0, 2741, "0175 940104", "rifugiogiacoletti@alpimedia.it", "www.giacoletti.it","hutImage/hut7.jpg");
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
+VALUES (8, "Viso", 134, 2, 4077, 4, 1, 20, 50.0, 2460, "33 4 92 46 81 81", "refugeviso@free.fr", "refugeduviso.ffcam.fr","hutImage/hut8.jpg");
+INSERT INTO "Hut"("hutId", "hutName", "pointId", "writerId", "city", "province", "region", "numOfBeds", "cost", "altitude", "phone", "email", "website","hutImage")
+VALUES (9, "Vallanta", 135, 2, 4172, 4, 1, 100, 60.0, 2450, "0175 956025", "rifugio.vallanta@gmail.com", "www.rifugiovallanta.it","hutImage/hut9.JPG");
 
 /* ParkingLot table data */
 INSERT INTO "ParkingLot"("parkingLotId", "parkingLotName", "pointId", "writerId", "capacity", "altitude")

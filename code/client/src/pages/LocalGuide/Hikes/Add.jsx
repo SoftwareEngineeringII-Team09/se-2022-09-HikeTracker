@@ -17,7 +17,7 @@ const AddHike = () => {
     const [loading, setLoading] = useState(false)
 
     const handleSubmit = useCallback((values) => {
-        setLoading(true)
+        setLoading(true);
         const data = new FormData();
         data.append('gpx', values.gpx);
         data.append('title', values.title);
@@ -85,7 +85,7 @@ const AddHike = () => {
                             ))}
                         </Select>
 
-                        <Input id="expectedTime" name="expectedTime" type="time" label="Expected time" placeholder="12:30" className="mb-3" />
+                        <Input id="expectedTime" name="expectedTime" type="number" label="Expected time (minutes)" placeholder="240" min="1" className="mb-3" />
 
                         <Select id="difficulty" name="difficulty" defaultLabel="Select a difficulty" label="Difficulty" className="mb-3">
                             {["Tourist", "Hiker", "Professional hiker"].map((difficulty, idx) => (

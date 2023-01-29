@@ -20,7 +20,7 @@ const HikeSchema = Yup.object().shape({
                 .map(c => c.comune)
                 .includes(value))
     ).integer().required(),
-    expectedTime: Yup.mixed(),
+    expectedTime: Yup.number().positive().min(0),
     difficulty: Yup.string().oneOf(
         ["Tourist", "Hiker", "Professional hiker"],
         "Value must match with one of selectable ones").required(),

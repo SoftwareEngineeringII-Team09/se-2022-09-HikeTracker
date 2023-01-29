@@ -94,9 +94,6 @@ const Details = ({ hike }) => {
         if (dayjs(end).isBefore(start))
             return toast.error("End time must be after start time", { theme: 'colored' });
 
-        if (dayjs(end).isAfter(now))
-            return toast.error("End time cannot be in the future", { theme: 'colored' });
-
         setLoading(true);
         api.selectedHikes.terminateHike(startedHike.selectedHikeId, terminateTime.toLocaleString("it-IT"))
             .then(() => {

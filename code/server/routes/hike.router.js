@@ -48,7 +48,7 @@ router.post(
       const error = validationResult(req);
       if (!error.isEmpty())
         return res.status(422).json({ error: error.array()[0] });
-        
+
       const hikeId = await HikeManager.defineHike({
         writerId: writerId,
         title: req.body.title,
@@ -66,7 +66,7 @@ router.post(
 
       return res.status(201).send({ hikeId });
     } catch (exception) {
-
+      console.log(exception);
       const errorCode = exception.code ?? 503;
       const errorMessage =
         exception.result ?? "Something went wrong, please try again";

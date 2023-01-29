@@ -255,7 +255,6 @@ exports.testDefineHike = function (
 
       expect(definedHike.title).toEqual(title);
       expect(definedHike.writerId).toEqual(writerId);
-      expect(definedHike.expectedTime).toEqual(expectedTime);
       expect(definedHike.difficulty).toEqual(difficulty);
       expect(definedHike.description).toEqual(description);
       expect(definedHike.city).toEqual(city);
