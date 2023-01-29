@@ -91,57 +91,5 @@ describe("Terminate Hike", () => {
         })
     })
 
-    // it("Shows error message if terminating hike with a timestamp from the future", async () => {
-
-    //     api.hikes.getStartedHike.mockResolvedValueOnce({ hikeId: 1, selectedHikeId: 1, startTime: '08/01/2023, 09:00:00' })
-
-    //     let { container } = render(
-    //         <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
-    //             <Details hike={testHike} />
-    //         </AuthContext.Provider>,
-    //         { wrapper: MemoryRouter }
-    //     );
-
-    //     const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-    //     const terminateHikeTime = container.querySelector("input[name=terminateTime]");
-
-    //     // Insert a timestamp from the future
-    //     const nextYear = new Date().getFullYear() + 1;
-    //     fireEvent.change(terminateHikeTime, { target: { value: nextYear + "-01-01T12:00:00" } })
-    //     await userEvent.click(termintateButton);
-
-    //     // Check that the error message is shown
-    //     await waitFor(() => {
-    //         expect(toast.error).toHaveBeenCalledTimes(1)
-    //         expect(toast.error).toHaveBeenCalledWith("End time cannot be in the future", { theme: "colored" })
-    //     });
-    // });
-
-    // it("Shows error message if terminating hike with a timestamp lower than the start timestamp", async () => {
-
-    //     api.hikes.getStartedHike.mockResolvedValueOnce({ hikeId: 1, selectedHikeId: 1, startTime: '08/01/2023, 09:00:00' })
-
-    //     let { container } = render(
-    //         <AuthContext.Provider value={[{ loggedIn: true, role: "Hiker" }]}>
-    //             <Details hike={testHike} />
-    //         </AuthContext.Provider>,
-    //         { wrapper: MemoryRouter }
-    //     );
-
-    //     const termintateButton = await screen.findByRole('button', { name: /terminate hike/i });
-    //     const terminateHikeTime = container.querySelector("input[name=terminateTime]");
-
-    //     // Insert a timestamp from the future
-    //     const nextYear = new Date().getFullYear() + 1;
-    //     fireEvent.change(terminateHikeTime, { target: { value: nextYear + "-01-01T12:00:00" } })
-    //     await userEvent.click(termintateButton);
-
-    //     // Check that the error message is shown
-    //     await waitFor(() => {
-    //         expect(toast.error).toHaveBeenCalledTimes(1)
-    //         expect(toast.error).toHaveBeenCalledWith("End time cannot be in the future", { theme: "colored" })
-    //     });
-    // });
-
 })
 

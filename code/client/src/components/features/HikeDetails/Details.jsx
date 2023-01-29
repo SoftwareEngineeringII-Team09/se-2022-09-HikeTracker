@@ -86,7 +86,6 @@ const Details = ({ hike }) => {
     const handleTerminateHike = useCallback(() => {
         const start = dayjs(startedHike.startTime, 'DD/MM/YYYY, HH:mm:ss')
         const end = dayjs(terminateTime)
-        const now = dayjs()
 
         if (!startedHike)
             return toast.error("You need to start a hike first", { theme: 'colored' });
