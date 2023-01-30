@@ -1519,7 +1519,9 @@ active
 | email                           | password      | role               |
 | :------------------------------ | :------------ | :----------------- |
 | testHiker@email.com             | Password1234. | Hiker              |
-| testLocalGuide@email.com        | Password1234. | Local Guide        |
+| bruno.rossi@email.com           | Password1234. | Local Guide        |
+| testLocalGuide2@email.com       | Password1234. | Local Guide        |
+| testLocalGuide3@email.com       | Password1234. | Local Guide        |
 | testHutWorker@email.com         | Password1234. | Hut Worker         |
 | testEmergencyOperator@email.com | Password1234. | Emergency Operator |
 
